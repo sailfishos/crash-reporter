@@ -1,0 +1,22 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+    <interface name="com.nokia.CrashReporter.Daemon">
+        <!--
+            Starts core dump monitoring in daemon process. 
+        -->
+        <method name="startCoreMonitoring"/>
+            
+        <!--
+            Stops core dump monitoring in daemon process. 
+        -->
+        <method name="stopCoreMonitoring"/>
+          
+        <!--
+            Return all core files available in the file system.
+        -->
+        <method name="getAllCoreFiles">
+            <arg type="as" direction="out"/>
+        </method>
+		            
+    </interface>
+</node>

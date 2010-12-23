@@ -1,0 +1,20 @@
+[Desktop Entry]
+Type=DUIApplet
+Name=Crash Reporter
+Icon=
+Exec=
+X-logical-id=qtn_dcp_applet_name
+X-translation-catalog=crash-reporter
+
+[DUI]
+X-DUIApplet-Applet=libcrashreportersettingsapplet.so
+X-DUIApplet-Identifier=
+X-DUIApplet-ImageLandscape=
+X-DUIApplet-ImagePortrait=
+
+[DCP]
+Category=Applications
+Order=1
+WidgetType=Label
+Text1=Crash Reporter
+Text2=

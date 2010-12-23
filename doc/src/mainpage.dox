@@ -1,0 +1,76 @@
+/*
+ * This file is part of crash-reporter
+ *
+ * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+ *
+ * Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
+ * Author: Riku Halonen <riku.halonen@nokia.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * version 2.1 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA
+ *
+ */
+
+/*! @mainpage Crash Reporter
+
+    @author Riku Halonen <riku.halonen@nokia.com>
+
+    @section copyright Copyright
+    Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+
+    @section license Licence
+    <pre>
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public License
+    version 2.1 as published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+  
+    You should have received a copy of the GNU Lesser General Public
+    License along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA
+    </pre>
+
+    <hr/>
+
+    @section intro Introduction
+    Crash Reporter is a tool for reporting application crashes, providing
+    developers with useful information for debugging, such as the core
+    dump. The collected crash data is sent to a post-processing server over
+    the network. It provides roughly similar functionality as tools such
+    as Bug-buddy and Apport do on desktop Linux distributions, although
+    Crash Reporter has a somewhat more minimal user interface.
+
+    @section getting_started Getting started
+    @li @subpage news
+    @li @subpage installation
+    @li @subpage architecture
+    @li <a href="https://dvcs.projects.maemo.org/git/?p=crash-reporter"><b>Code repository</b></a>
+ 
+    @section api_reference API Reference
+    @li <a href="classes.html"><b>All Classes</b></a>
+    @li <a href="namespaces.html"><b>All Namespaces</b></a>
+    @li <a href="functions.html"><b>Functions</b></a>
+    @li <a href="hierarchy.html"><b>Class hierarchy</b></a>
+    @li <a href="files.html"><b>Files</b></a>
+    
+    @section related_pages Related pages
+    @li @subpage conffiles
+    @li @subpage faq
+    @li @subpage copying
+*/

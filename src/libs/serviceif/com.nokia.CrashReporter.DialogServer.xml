@@ -1,0 +1,20 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+    <interface name="com.nokia.CrashReporter.DialogServer">
+        <!--
+            Request dialog from the server.
+        -->
+        <method name="requestDialog">
+            <arg name="dialogName" type="s" direction="in"/>
+            <arg name="arguments" type="av" direction="in"/>
+            <annotation name="com.trolltech.QtDBus.QtTypeName.In1" value="QList&lt; QVariant &gt; "/>
+            <arg type="b" direction="out"/>
+        </method>
+
+        <!--
+            Request server to exit from its main loop.
+        -->
+        <method name="quit"/>
+
+    </interface>
+</node>

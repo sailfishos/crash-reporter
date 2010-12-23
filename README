@@ -1,0 +1,101 @@
+What is Crash Reporter?
+==============
+
+Crash Reporter is a tool for reporting application crashes, providing
+developers with useful information for debugging, such as the core
+dump. The collected crash data is sent to a post-processing server over
+the network. It provides roughly similar functionality as tools such
+as Bug-buddy¹ and Apport² do on desktop Linux distributions, although
+Crash Reporter has a somewhat more minimal user interface.
+
+
+Basic usage:
+============
+
+Crash Reporter should usually come with a pre-set valid configuration,
+so after installation it should be immediately possible to start using
+it. Crash Reporter can be enabled or disabled with its own Control Panel
+applet that gets installed at the same time as the tool itself.
+
+If core dumps from previous application crashes are already available
+in the system when Crash Reporter is started, a notification is displayed.
+If user interacts with the notification dialog will pop up, listing
+the core files and gives and option to send or deleted selected files. If user
+decides to send, files are uploaded to the post-processing server for analysis. 
+If user decides to delete will be deleted from the system. Crash Reporter will
+ask this question each time it starts, including immediately after boot. If
+user merely wants to get rid of the cores without sending them, they
+can safely be removed from /home/user/MyDocs/core-dumps.
+
+When an application or a process crashes, user will see a notification, 
+containing a message roughly like the following:
+
+"The application 'Media Player' crashed.
+
+If user interacts with the notification, a dialog will pop-up.
+
+Options are fairly self-describing:
+
+- 'Send' will attempt to send the current core dump to the
+  post-processing server. After the core has been successfully sent, it
+  will be deleted from the system.
+
+- 'Delete' will remove the current core from the system.
+
+For system processes that are not applications launchable via the Task
+Navigator, Crash Reporter UI will be display the name of the actual
+(rich-)core dump file instead, i.e. something like 'icd2-11-3322.rcore.lzo',
+because it cannot map the name of crashed executable into a more
+human-readable application name.
+
+
+Configuration:
+==============
+
+For configuration settings related to communication between the
+Crash Reporter client and a post-processing server, see README
+contained in the approriate settings package 
+(probably 'crash-reporter-settings-public', when using a public release).
+
+For configuration settings related to privacy, see "Related tools"
+section in this document or the documentation contained by
+'sp-rich-core' package.
+
+
+Related tools:
+==============
+
+While Crash Reporter could also in principle work with ordinary core dumps,
+the crash data available for developers (only the traditional UNIX core
+dump) would be rather limited. Thus, Crash Reporter depends on 'sp-rich-core'
+package. When sp-rich-core is enabled (which happens by default when
+it's installed), additional information such as syslog (if available),
+memory usage information, process states and list of installed
+packages are also included in the data dump (which can be recognized
+from the .rcore.lzo suffix). Sp-rich-core package provides more
+information about this in the form of rich-core-dumper (1) manual
+page. The manual pages also describe how to configure the amount of
+collected data in order to adjust to individual privacy preferences.
+
+
+Short technical summary:
+========================
+
+The Crash Reporter client consists of two parts; the daemon and the UI. Of
+these, only the daemon will be running constantly when Crash Reporter is
+installed. The daemon monitors known locations for the cores
+(/home/user/MyDocs/core-dumps, /media/mmc1/core-dumps and 
+/media/mmc2/core-dumps directories) by using inotify. 
+
+The UI will be invoked by the daemon when it detects that system has
+new cores in the aforementioned locations ready to send to the
+post-processing server. After the step chosen by the user has been
+completed, the UI component will exit to conserve resources.
+The UI uses HTTPS for communication with the post-processing server.
+
+
+Links
+=====
+
+¹ http://directory.fsf.org/project/bugbuddy/
+² https://wiki.ubuntu.com/Apport

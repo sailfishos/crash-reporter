@@ -1,0 +1,114 @@
+<set name="crash-reporter-system-tests" description="Crash Reporter System Tests">
+  <pre_steps>
+    <step>if [ -e /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf ]; then cp -p /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf.bak; else true; fi</step>
+    <step>su - user -c "dbus-send --session --print-reply --dest=com.nokia.CrashReporter.DialogServer /com/nokia/crashreporter/dialogserver com.nokia.CrashReporter.DialogServer.quit"</step>
+    <step>su - user -c "dbus-send --session --print-reply --dest=com.nokia.CrashReporter.AutoUploader /com/nokia/crashreporter/autouploader com.nokia.CrashReporter.AutoUploader.quit"</step>
+    <step>rm -f /home/user/MyDocs/core-dumps/*.rcore.lzo</step>
+    <step>rm -f /tmp/crash-reporter.log</step>
+    <step>cp -p /usr/share/crash-reporter-settings/crash-reporter.conf /usr/share/crash-reporter-settings/crash-reporter.conf.bak</step>
+    <step>sed -ie "s/^logger_type=.*/logger_type=file/" /usr/share/crash-reporter-settings/crash-reporter.conf</step>
+  </pre_steps>
+
+  <case type="Functional" name="test-crash-reporter-daemon" description="Verify, crash-reporter-daemon is running and restarted.">
+    <step>if ! grep -q "^sending=true" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^sending=.*/sending=true/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
+    <step>if ! grep -q "^automaticsending=false" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^automaticsending=.*/automaticsending=false/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
+    <step>cat /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf</step>
+    <step>su - user -c "dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.GetConnectionUnixProcessID string:'com.nokia.CrashReporter.Daemon'"</step>
+    <step>pkill /usr/bin/crash-reporter-daemon</step>
+    <step>sleep 6</step>
+    <step>pgrep /usr/bin/crash-reporter-daemon</step>
+  </case>
+
+  <case type="Functional" name="test-crash-reporter-ui-notify-dialog" description="Verify that crash-reporter-ui is started, when crash occurs.">
+    <step>ls /home/user/MyDocs/core-dumps -A -l</step>
+    <step>if ! grep -q "^sending=true" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^sending=.*/sending=true/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
+    <step>if ! grep -q "^automaticsending=false" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^automaticsending=.*/automaticsending=false/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
+    <step>cat /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf</step>
+    <step expected_result="139">/usr/lib/crash-reporter-tests/testdata/crasher</step>
+    <step>sleep 2</step>
+    <step>ls /home/user/MyDocs/core-dumps -A -l</step>
+    <step>su - user -c "dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.GetConnectionUnixProcessID string:'com.nokia.CrashReporter.DialogServer'"</step>
+    <step expected_result="1">su - user -c "dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.GetConnectionUnixProcessID string:'com.nokia.CrashReporter.AutoUploader'"</step>
+    <step>su - user -c "dbus-send --session --print-reply --dest=com.nokia.CrashReporter.DialogServer /com/nokia/crashreporter/dialogserver com.nokia.CrashReporter.DialogServer.quit"</step>
+    <step>sleep 2</step>
+    <step expected_result="1">su - user -c "dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.GetConnectionUnixProcessID string:'com.nokia.CrashReporter.DialogServer'"</step>
+    <step>ls /home/user/MyDocs/core-dumps -A -l</step>
+    <step>rm -f /home/user/MyDocs/core-dumps/*.rcore.lzo</step>
+  </case>
+
+  <case type="Functional" name="test-crash-reporter-ui-send-selected-dialog" description="Verify that crash-reporter-ui is started, when unsent crash reports are found.">
+    <step>ls /home/user/MyDocs/core-dumps -A -l</step>
+    <step>if ! grep -q "^sending=true" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^sending=.*/sending=true/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
+    <step>if ! grep -q "^automaticsending=false" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^automaticsending=.*/automaticsending=false/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
+    <step>cat /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf</step>
+    <step>initctl stop xsession/crash-reporter-daemon</step>
+    <step expected_result="139">/usr/lib/crash-reporter-tests/testdata/crasher</step>
+    <step>sleep 2</step>
+    <step>ls /home/user/MyDocs/core-dumps -A -l</step>
+    <step>initctl start xsession/crash-reporter-daemon</step>
+    <step>sleep 2</step>
+    <step>xval=0; for i in $(seq 0 30); do su - user -c "dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.GetConnectionUnixProcessID string:'com.nokia.CrashReporter.DialogServer'"; if [ $xval -eq $? ]; then exit 0; fi; sleep .1; done; exit 1;</step>
+    <step expected_result="1">su - user -c "dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.GetConnectionUnixProcessID string:'com.nokia.CrashReporter.AutoUploader'"</step>
+    <step>su - user -c "dbus-send --session --print-reply --dest=com.nokia.CrashReporter.DialogServer /com/nokia/crashreporter/dialogserver com.nokia.CrashReporter.DialogServer.quit"</step>
+    <step>sleep 2</step>
+    <step expected_result="1">su - user -c "dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.GetConnectionUnixProcessID string:'com.nokia.CrashReporter.DialogServer'"</step>
+    <step>ls /home/user/MyDocs/core-dumps -A -l</step>
+    <step>rm -f /home/user/MyDocs/core-dumps/*.rcore.lzo</step>
+  </case>
+
+  <case type="Functional" name="test-crash-reporter-autouploader-new-crash-found" description="Verify that crash-reporter-autouploader is started, when crash occurs.">
+    <step>ls /home/user/MyDocs/core-dumps -A -l</step>
+    <step>if ! grep -q "^automaticsending=true" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^automaticsending=.*/automaticsending=true/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
+    <step>cat /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf</step>
+    <step>(/usr/lib/crash-reporter-tests/testdata/crasher&amp;); xval=0; for i in $(seq 0 50); do su - user -c "dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.GetConnectionUnixProcessID string:'com.nokia.CrashReporter.AutoUploader'"; if [ $xval -eq $? ]; then exit 0; fi; sleep .1; done; exit 1;</step>
+    <step expected_result="1">su - user -c "dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.GetConnectionUnixProcessID string:'com.nokia.CrashReporter.DialogServer'"</step>
+    <step>su - user -c "dbus-send --session --print-reply --dest=com.nokia.CrashReporter.AutoUploader /com/nokia/crashreporter/autouploader com.nokia.CrashReporter.AutoUploader.quit"</step>
+    <step>sleep 2</step>
+    <step expected_result="1">su - user -c "dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.GetConnectionUnixProcessID string:'com.nokia.CrashReporter.AutoUploader'"</step>
+    <step>ls /home/user/MyDocs/core-dumps -A -l</step>
+    <step>rm -f /home/user/MyDocs/core-dumps/*.rcore.lzo</step>
+  </case>
+
+  <case type="Functional" name="test-crash-reporter-autouploader-bootup" description="Verify that crash-reporter-autouploader is started, when unsent crash reports are found during boot-up.">
+    <step>ls /home/user/MyDocs/core-dumps -A -l</step>
+    <step>if ! grep -q "^automaticsending=true" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^automaticsending=.*/automaticsending=true/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
+    <step>cat /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf</step>
+    <step>initctl stop xsession/crash-reporter-daemon</step>
+    <step expected_result="139">/usr/lib/crash-reporter-tests/testdata/crasher</step>
+    <step>sleep 1</step>
+    <step>ls /home/user/MyDocs/core-dumps -A -l</step>
+    <step>initctl start xsession/crash-reporter-daemon</step>
+    <step>xval=0; for i in $(seq 0 50); do su - user -c "dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.GetConnectionUnixProcessID string:'com.nokia.CrashReporter.AutoUploader'"; if [ $xval -eq $? ]; then exit 0; fi; sleep .1; done; exit 1;</step>
+    <step expected_result="1">su - user -c "dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.GetConnectionUnixProcessID string:'com.nokia.CrashReporter.DialogServer'"</step>
+    <step>su - user -c "dbus-send --session --print-reply --dest=com.nokia.CrashReporter.AutoUploader /com/nokia/crashreporter/autouploader com.nokia.CrashReporter.AutoUploader.quit"</step>
+    <step>sleep 1</step>
+    <step expected_result="1">su - user -c "dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.GetConnectionUnixProcessID string:'com.nokia.CrashReporter.AutoUploader'"</step>
+    <step>ls /home/user/MyDocs/core-dumps -A -l</step>
+    <step>rm -f /home/user/MyDocs/core-dumps/*.rcore.lzo</step>
+  </case>
+
+  <case type="Functional" name="test-crash-reporter-sending-disabled" description="Verify that neither crash-reporter-ui nor crash-reporter-autouploader is started when sending and automaticsending are disabled.">
+    <step>ls /home/user/MyDocs/core-dumps -A -l</step>
+    <step>if ! grep -q "^sending=false" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^sending=.*/sending=false/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
+    <step>if ! grep -q "^automaticsending=false" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^automaticsending=.*/automaticsending=false/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
+    <step>cat /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf</step>
+    <step expected_result="1">(/usr/lib/crash-reporter-tests/testdata/crasher&amp;); xval=0; for i in $(seq 0 30); do su - user -c "dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.GetConnectionUnixProcessID string:'com.nokia.CrashReporter.AutoUploader'"; if [ $xval -eq $? ]; then exit 0; fi; sleep .1; done; exit 1;</step>
+    <step expected_result="1">su - user -c "dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.GetConnectionUnixProcessID string:'com.nokia.CrashReporter.DialogServer'"</step>
+    <step>ls /home/user/MyDocs/core-dumps -A -l</step>
+    <step>rm -f /home/user/MyDocs/core-dumps/*.rcore.lzo</step>
+  </case>
+
+  <post_steps>
+    <step>if [ -e /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf.bak ]; then mv /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf.bak /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; else true; fi</step>
+    <step>mv /usr/share/crash-reporter-settings/crash-reporter.conf.bak /usr/share/crash-reporter-settings/crash-reporter.conf</step>
+  </post_steps>
+
+  <environments>
+    <scratchbox>false</scratchbox>
+    <hardware>true</hardware>
+  </environments>
+  <get>
+    <file>/var/log/syslog</file>
+    <file>/tmp/crash-reporter.log</file>
+  </get>
+</set>

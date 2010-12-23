@@ -1,0 +1,107 @@
+.TH CRASH-REPORTER-UI 1 "June 2010" crash-reporter "Crash Reporter for MeeGo"
+
+.SH NAME
+crash-reporter-ui \- User interface for handling the rich-core dumps and modifying Crash Reporter
+Settings
+
+.SH SYNOPSIS
+crash-reporter-dui-dialogs
+
+.SH DESCRIPTION
+.SS "Crash Reporter UI"
+.br
+.B crash-reporter-ui
+provides an user-friendly GUI for sending and/ or deleting rich-core dumps. It is started by 
+\fIcrash-reporter-daemon(1)\fR after device boot up, if there are unsent rich-core dumps
+in the the system and triggers a notification. If user interacts with the notification 
+(within a certain amount of time) a dialog is displayed. User has the following options:
+.TP
+.BR Send selected
+Select rich-core dumps to be sent to a Crash Reporter server. Selected files are deleted from the
+system after a successful upload.
+.TP
+.BR Send All
+Send all rich-core dumps to the server. Successfully uploaded files will be deleted.
+.TP
+.BR Delete selected
+Select rich-core dumps to be deleted from the system. Other than the selected files will not be
+affected and they can be dealt with later.
+.TP
+.BR Ignore
+Do nothing. The UI will close down, leaving the dumps untouched. Unless the dumps are 
+destroyed manually, the UI will start up after next reboot and ask the user again what to do with
+the dump(s). The same dialog can also be accessed from the Control Panel.
+.PP
+The second use case when UI is started by \fIcrash-reporter-daemon(1)\fR is when rich-core dumps
+(or other supported kinds of dumps such as oopslogs) appear in the known dumping locations.
+When signal is received, it triggers a notification. If user interacts with the notification
+(within certain amount of time) a dialog is displayed. User has the following options:
+.TP
+.BR Send
+Uploads the current rich-core dump to a Crash Reporter server. File is deleted from the system 
+after a successful upload.
+.TP
+.BR Delete
+The current rich-core dump is deleted from the system.
+.TP
+.BR Options 
+Launches Crash Reporter Settings applet for modifying Crash Reporter settings.enabling/ disabling
+notifications. Additionally, some options controlling the information stored in the dumps by the
+rich-core-dumper can be configured here. These changes only affect subsequent dumps
+however. The same applet can be reached also via Control Panel.
+.TP  
+.BR Ignore
+Do nothing. The UI will close down, leaving the dump untouched. Unless the dump is destroyed 
+manually, the UI will start up after next reboot and ask the user again what to do with the dump(s).
+.P
+Additionally, the UI allows user to enter a brief note containing background information about
+the situation where the crash occurred.
+.SS "Crash Reporter Settings applet"
+.B libcrashreportersettingsapplet 
+is a Control Panel applet for enabling/ disabling notifications, enabling automatic uploading
+and sending or deleting rich-core dumps found on the system. Additionally, some options controlling
+the information stored in the dumps by the rich-core-dumper can be configured here. These changes
+only affect subsequent dumps however.
+
+.SH NOTES
+Sending rich-core dumps is not supported yet.
+
+.SH FILES
+.TP
+.IR $HOME/.config/crash-reporter-settings/crash-reporter.conf
+This file contains Crash Reporter application settings e.g. communication settings needed for 
+uploading the dumps to a Crash Reporter server.
+.TP
+.IR /usr/share/crash-reporter-settings/crash-reporter.conf
+The system-wide version of the application settings file described above.
+.TP
+.IR /usr/share/crash-reporter-settings/privacy.txt
+A document describing what kind of privacy user can expect when uploading dumps into a Crash
+Reporter server.
+
+.SH AUTHOR
+Riku Halonen <riku.halonen@nokia.com>
+
+.SH BUGS
+
+.SS "REPORTING BUGS"
+Report bugs to: https://projects.maemo.org/bugzilla/ 
+or test-tools-dev@projects.maemo.org
+
+.SS "KNOWN BUGS"
+None
+
+.SH CONTACT
+ville.p.ilvonen@nokia.com
+
+.SH "SEE ALSO"
+.BR rich-core-dumper(1),
+.BR crash-reporter-daemon(1),
+.BR crash-reporter-autouploader(1),
+
+.SH COPYRIGHT
+Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+.PP
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public License
+version 2.1 as published by the Free Software Foundation.

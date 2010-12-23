@@ -1,0 +1,69 @@
+/*
+ * This file is part of crash-reporter
+ *
+ * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+ *
+ * Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
+ * Author: Riku Halonen <riku.halonen@nokia.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * version 2.1 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA
+ *
+ */
+
+/*! @page crash-reporter-ui Crash Reporter UI
+
+    @section uiDescription Description
+    User interface for handling the rich-core dumps.
+    UI is implemented on top of MeeGo Touch Application Framework (M). Crash Reporter UI provides
+    an user-friendly GUI for sending and/ or deleting rich-core dumps.
+
+    It is started by crash-reporter-daemon after device boot up, if there are unsent rich-core dumps
+    in the the system and triggers a MNotification.  If user interacts with the notification
+    (within certain amount of time) a dialog is displayed. User has the following options:
+    @li @b Send @b selected - Uploads selected rich-core dumps to a Crash Reporter server. Files are deleted from
+    the system after successfull upload.
+    @li @b Delete @b selected - Selected rich-core dumps are deleted from the system.
+    @li @b Ignore - Do nothing. The UI will close down, leaving the dumps untouched.
+    Unless the dumps are destroyed manually, the UI will start up after next reboot and ask the
+    user again what to do with the dump(s).
+
+    The second use case when UI is started by the Crash Reporter daemon is when rich-core dumps
+    (or other supported kinds of dumps such as oopslogs) appear in the known dumping locations.
+    When call is received, it triggers a MNotification. If user interacts with the notification
+    (within certain amount of time) a dialog is displayed. User has the following options:
+    @li @b Send - Uploads the current rich-core dump to a Crash Reporter server. File is deleted
+    from the system after successfull upload.
+    @li @b Delete - The current rich-core dump is deleted from the system.
+    @li @b Options - Launches @ref dcpapplet for enabling/ disabling notifications.
+    Additionally, some options controlling the information stored in the dumps by the
+    rich-core-dumper can be configured here. These changes only affect subsequent dumps
+    however. The same applet can be reached also via Control Panel.
+    @li @b Ignore - Do nothing. The UI will close down, leaving the dump untouched.
+    Unless the dump is destroyed manually, the UI will start up after next reboot and ask the
+    user again what to do with the dump(s).
+
+    Additionally, the UI allows user to enter a brief note containing background information about
+    the situation where the crash occurred.
+
+    <hr/>
+
+    @section ui_sequence_diagram Dialog request sequence
+
+    @image html sequence_dialog_requested.png Dialog request sequence
+
+    <hr/>
+
+    @sa @ref crash-reporter-daemon
+*/

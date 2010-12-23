@@ -1,0 +1,112 @@
+/*
+ * This file is part of crash-reporter
+ *
+ * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+ *
+ * Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
+ * Author: Riku Halonen <riku.halonen@nokia.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * version 2.1 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA
+ *
+ */
+
+/*! @page conffiles Configuration files
+    
+    @section conf_files_intro Description
+    There are two kinds of setting groups used by the Crash Reporter; application and privacy settings.
+    Crash Reporter uses <a href="http://doc.qt.nokia.com/4.6/qsettings.html">QSettings</a> class for
+    read/ write operations and settings are stored as textual configuration files in INI format. For
+    each configuration file and key/ value pair there can be a user-specified and system-wide version.
+    Value is first tried to find from user-specific location and if no found, then system-wide 
+    location is tried.
+
+    For modifying settings, use @ref dcpapplet.
+
+    <hr/>
+
+    @section privacy_settings_desc Privacy settings
+    
+    @subsection priv_user $HOME/.config/crash-reporter-settings/crash-reporter-privacy.conf
+    This file contains the privacy settings for Crash Reporter, controlling what kind of information 
+    is included in the rich-core dumps.
+
+    @subsection priv_sys /usr/share/crash-reporter-settings/crash-reporter-privacy.conf
+    The system-wide version of the privacy settings file described above.
+
+    @subsection privacy_section_settings Section - Settings
+    <table>
+    <tr>
+    <td><b>Key</b></td><td><b>Value</b></td><td><b>Description</b></td>
+    </tr>
+    <tr>
+    <td>coredumping</td><td>true or false</td><td>If true, rich-core dumps are generated.</td>
+    </tr>
+    <tr>
+    <td>sending</td><td>true or false</td><td>If true, user is notified about new crash-reports.</td>
+    </tr>
+    <tr>
+    <td>avoid-dups</td><td>true or false</td><td>If true, duplicate core-dumps will be deleted automatically without notifying user.</td>
+    </tr>
+    </table>
+
+    @subsection privacy_section_privacy Section - Privacy
+    <table>
+    <tr>
+    <td><b>Key</b></td><td><b>Value</b></td><td><b>Description</b></td>
+    </tr>
+    <tr>
+    <td>INCLUDE_CORE</td><td>true or false</td><td>If true, core-dump is included into crash-report.</td>
+    </tr>
+    <tr>
+    <td>INCLUDE_SYSLOG</td><td>true or false</td><td>If true, /var/log/syslog is included into crash-report.</td>
+    </tr>
+    <tr>
+    <td>INCLUDE_PKGLIST</td><td>true or false</td><td>If true, list of installed packaged is included into crash-report.</td>
+    </tr>
+    <tr>
+    <td>REDUCE_CORE</td><td>true or false</td><td>If true, core-dump size is tried to shrink.</td>
+    </tr>
+    </table>
+
+    @subsection example_privacy_settings Example of privacy settings file:
+    @verbatim
+    [Settings]
+    coredumping=true
+    sending=true
+    avoid-dups=true
+    lifelog=true
+
+    [Privacy]
+    INCLUDE_CORE=true
+    INCLUDE_SYSLOG=true
+    INCLUDE_PKGLIST=true
+    REDUCE_CORE=true
+    @endverbatim
+
+    <hr/>
+
+    @section app_settings_desc Application settings
+
+    @subsection app_user $HOME/.config/crash-reporter-settings/crash-reporter.conf
+    This file contains Crash Reporter application settings e.g. communication settings needed for 
+    uploading the dumps to a Crash Reporter server.
+
+    @subsection app_sys /usr/share/crash-reporter-settings/crash-reporter.conf
+	The system-wide version of the application settings file described above.
+    
+    @section priv_disclaimer /usr/share/crash-reporter-settings/privacy.txt
+	A document describing what kind of privacy user can expect when uploading dumps into a Crash Reporter server.
+
+*/

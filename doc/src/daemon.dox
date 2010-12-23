@@ -1,0 +1,56 @@
+/*
+ * This file is part of crash-reporter
+ *
+ * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+ *
+ * Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
+ * Author: Riku Halonen <riku.halonen@nokia.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * version 2.1 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA
+ *
+ */
+
+/*!@page crash-reporter-daemon Crash Reporter Daemon
+   
+    @section daemonDecription Description
+    A daemon monitoring the creation of rich-core dumps. Daemon is written on 
+    <a href="http://qt.nokia.com/">Qt application framework</a> and it monitors the known 
+    rich-core dump locations. When daemon detects the appearance of a new dump, it launches
+    @ref crash-reporter-ui over D-Bus, so that the user gets notified about the event and can
+    decide what to do with the dump. Additionally,  daemon implements RPC interface for
+    controlling rich-core monitoring and fetching unsent dumps from the system. This daemon
+    has no commandline options. The preferred way of controlling whether notifications are
+    displayed or not (other than uninstalling) is to use the @ref dcpapplet in
+    <a href="http://qt.gitorious.org/maemo-6-ui-framework/duicontrolpanel">Harmattan control panel application</a>.
+    
+    <hr/>
+
+    @section daemon_sequence_diagram Sequence of an application crash
+
+    The below diagram illustrates the sequence, when application crash occurs.
+
+    @image html sequence_application_crashed.png Sequence of an application crash
+
+    @li When application crashes, core-dump is piped to rich-core-dumper (part of sp-rich-core)
+    based on /proc/sys/kernel/core_pattern.
+    @li rich-core-dumper produces rich core-dump in /home/user/MyDocs/core-dumps.
+    @li @ref crash-reporter-daemon detects that content of core-dump directory has changed. Signal received from 
+    <a href="http://doc.trolltech.com/4.6/qfilesystemwatcher.html">QFileSystemWatcher</a>.
+    @li If new rich-core dump is found, @crash-reporter-ui is launched via D-Bus (CReporterDialogServerProxy::requestDialog).
+
+    <hr/>
+
+    @sa @ref crash-reporter-ui
+*/

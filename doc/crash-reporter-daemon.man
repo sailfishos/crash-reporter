@@ -1,0 +1,57 @@
+.TH CRASH-REPORTER-DAEMON 1 "April 2010" crash-reporter "Crash Reporter for MeeGo"
+
+.SH NAME
+crash-reporter-daemon \- A daemon monitoring the creation of rich-core dumps.
+
+.SH SYNOPSIS
+crash-reporter-daemon
+
+.SH DESCRIPTION
+This daemon monitors the known rich-core dump locations. 
+When daemon detects the appearance of a new dump and notifications are enabled, it launches
+\fIcrash-reporter-ui(1)\fR so that the user gets notified about the event and 
+can decide what to do with the dump. When automatic uploading is enabled in the settings applet,
+\fIcrash-reporter-autouploader(1)\fR will be launched and the user will not be notified.
+Additionally, this daemon implements RPC interface 
+for controlling rich-core monitoring and fetching unsent dumps from the system. 
+This daemon has no commandline options. The preferred way of controlling whether 
+notifications are displayed or not (other than uninstalling) is to use the Crash Reporter Settings 
+applet in Control Panel.
+For more information about the rich-core dumps themselves and Crash Reporter UI, 
+please see \fIrich-core-dumper(1)\fR \fIcrash-reporter-ui(1)\fR manual pages.
+
+.SH FILES
+.TP
+.IR $HOME/.config/crash-reporter-settings/crash-reporter-privacy.conf
+This file contains the privacy settings for Crash Reporter, 
+controlling what kind of information is included in the rich-core dumps.
+.TP
+.IR /usr/share/crash-reporter-settings/crash-reporter-privacy.conf
+The system-wide version of the privacy settings file described above.
+
+.SH AUTHOR
+Riku Halonen <riku.halonen@nokia.com>
+
+.SH BUGS
+
+.SS "REPORTING BUGS"
+Report bugs to: https://projects.maemo.org/bugzilla/ 
+or test-tools-dev@projects.maemo.org
+
+.SS "KNOWN BUGS"
+None
+
+.SH CONTACT
+ville.p.ilvonen@nokia.com
+
+.SH "SEE ALSO"
+.BR rich-core-dumper(1),
+.BR crash-reporter-ui(1),
+.BR crash-reporter-autouploader(1),
+
+.SH COPYRIGHT
+Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+.PP
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public License
+version 2.1 as published by the Free Software Foundation.

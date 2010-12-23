@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+ <testdefinition version="0.1">
+  <suite name="crash-reporter-ui-tests" domain="AutomatedTesting">
+   <set name="acceptance_tests" description="Acceptance Tests">
+
+
+    <case type="Functional" name="crashreportnotification" description="crash-reporter-ui-tests:crashreportnotification.feature" timeout="3600">
+     <step>rm -f /home/user/MyDocs/core-dumps/*</step>
+     <step>cucumber /usr/share/crash-reporter-ui-tests/test-crash-reporter-ui/features/crashreportnotification.feature</step>
+    </case>
+    
+
+    <case type="Functional" name="sendallcrashreports" description="crash-reporter-ui-tests:sendallcrashreports.feature" timeout="3600">
+     <step>rm -f /home/user/MyDocs/core-dumps/*</step>
+     <step>cucumber /usr/share/crash-reporter-ui-tests/test-crash-reporter-ui/features/sendallcrashreports.feature</step>
+    </case>
+    
+
+    <case type="Functional" name="modifymonitorandprivacysettings" description="crash-reporter-ui-tests:modifymonitorandprivacysettings.feature" timeout="3600">
+     <step>rm -f /home/user/MyDocs/core-dumps/*</step>
+     <step>cucumber /usr/share/crash-reporter-ui-tests/test-dcpapplet/features/modifymonitorandprivacysettings.feature</step>
+    </case>
+    
+
+    <case type="Functional" name="sendall" description="crash-reporter-ui-tests:sendall.feature" timeout="3600">
+     <step>rm -f /home/user/MyDocs/core-dumps/*</step>
+     <step>cucumber /usr/share/crash-reporter-ui-tests/test-dcpapplet/features/sendall.feature</step>
+    </case>
+    
+
+    <case type="Functional" name="showprivacydisclaimer" description="crash-reporter-ui-tests:showprivacydisclaimer.feature" timeout="3600">
+     <step>rm -f /home/user/MyDocs/core-dumps/*</step>
+     <step>cucumber /usr/share/crash-reporter-ui-tests/test-dcpapplet/features/showprivacydisclaimer.feature</step>
+    </case>
+    
+
+    <environments>
+	 <scratchbox>false</scratchbox>
+	 <hardware>true</hardware>
+    </environments>
+
+   <get>
+    <file>/var/log/syslog</file>
+   </get>
+
+  </set>
+ </suite>
+</testdefinition>
+

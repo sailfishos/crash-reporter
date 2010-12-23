@@ -1,0 +1,79 @@
+/*
+ * This file is part of crash-reporter
+ *
+ * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+ *
+ * Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
+ * Author: Riku Halonen <riku.halonen@nokia.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * version 2.1 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA
+ *
+ */
+
+/*! @page installation Installation
+
+    @section installing_from_source_on_lixux Installing from source on Linux
+    @subsection install_requirements Requirements
+
+    Building crash-reporter requires:
+    @li Qt >= 4.7 <http://qt.nokia.com/>
+    @li The Harmattan Application Framework library <http://qt.gitorious.org/maemo-6-ui-framework/libdui>
+    @li The Harmattan control panel application <http://qt.gitorious.org/maemo-6-ui-framework/duicontrolpanel>
+
+    @section installing_from_source_building Building
+    After installing all dependencies run:
+    @verbatim
+    [sbox-TARGET: ~] > qmake crash-reporter.pro
+    [sbox-TARGET: ~] > make install
+    @endverbatim
+    
+    <hr/>
+
+    @section running_in_scratchbox Running in scratchbox
+    Crash Reporter can also be run in scratchbox with limitations (for testing purposes only).
+ 
+    @subsection scratchbox_requirements Requirements
+    @li xephyr 
+    @verbatim 
+    # sudo apt-get install xephyr
+    # Xephyr :1 -host-cursor -screen 864x480x24 -dpi 96 -ac -extension Composite &
+    @endverbatim
+    @li Harmattan UI Framework <http://qt.gitorious.org/maemo-6-ui-framework>
+    @li meego-sb-session
+    @verbatim 
+    [sbox-TARGET: ~] > apt-get install meego-sb-session
+    [sbox-TARGET: ~] > echo "export DISPLAY=:1" >> .bashrc
+    [sbox-TARGET: ~] > echo "source /usr/bin/meego-run" >> .bashrc 
+    @endverbatim
+   
+    @subsection scratchbox_building Building    
+    After installing all dependencies re-login to scratchbox and run:
+    @verbatim
+    [sbox-TARGET: ~] > qmake "DEFINES+=CREPORTER_SDK_HOST" crash-reporter.pro
+    [sbox-TARGET: ~] > make install
+    @endverbatim
+
+    @subsection scratchbox_running Running
+    @verbatim
+    [sbox-TARGET: ~] > /usr/bin/crash-reporter-daemon&
+    @endverbatim
+
+    In scratchbox crash-reporter-daemon monitors these locations:
+    @li ~/media/mmc1/core-dumps/
+    @li ~/media/mmc2/core-dumps/
+    @li ~/home/user/MyDocs/core-dumps/
+
+    By creating files with rcore.lzo to these locations, daemon will launch @ref crash-reporter-ui.
+*/
