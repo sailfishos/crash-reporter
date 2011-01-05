@@ -56,14 +56,10 @@ HEADERS += creporterprivacysettingswidget.h \
 
 TARGET = $$qtLibraryTarget(crashreportersettingsapplet)
 
-css.files = style/crashreportersettingsapplet.css
-css.path = $${CREPORTER_SYSTEM_SHARE}/duicontrolpanel/themes/style
-
 desktop.files = crashreportersettings.desktop
 desktop.path = $$[QT_INSTALL_LIBS]/duicontrolpanel
 
 target.path = $$[QT_INSTALL_LIBS]/duicontrolpanel/applets
 
 INSTALLS += target \
-            desktop \
-            css
+            desktop

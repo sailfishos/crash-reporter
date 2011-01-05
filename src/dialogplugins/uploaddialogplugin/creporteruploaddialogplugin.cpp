@@ -29,7 +29,6 @@
 
 #include <MApplicationWindow>
 #include <MApplicationPage>
-#include <MTheme>
 
 // User includes.
 

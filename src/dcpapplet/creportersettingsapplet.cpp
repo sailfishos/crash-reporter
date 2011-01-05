@@ -27,7 +27,6 @@
 #include <MAction>
 #include <QtGui>
 #include <QDebug>
-#include <MTheme>
 #include <MLocale>
 
 // User includes.
@@ -39,9 +38,6 @@
 #include "creporterprivacysettingswidget.h"
 
 Q_EXPORT_PLUGIN2(crashreportersettingsapplet, CReporterSettingsApplet)
-
-const QString cssDir  = "/usr/share/duicontrolpanel/themes/style/";
-const QString cssFile = "crashreportersettingsapplet.css";
 
 // ======== MEMBER FUNCTIONS ========
 

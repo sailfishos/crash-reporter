@@ -127,11 +127,6 @@ pkgconfig.CONFIG += no_check_exist
 pkgconfig.path = $$[QT_INSTALL_PREFIX]/lib/pkgconfig
 pkgconfig.depends = createpkgconfig
 
-STYLE_SHEET = style/libcrashreporter.css
-stylesheet.files = style/libcrashreporter.css
-stylesheet.path = $$[QT_INSTALL_PREFIX]/share/libcrashreporter/themes/style
-
 INSTALLS += target \
-            stylesheet \
             pkgconfig \
             headers \

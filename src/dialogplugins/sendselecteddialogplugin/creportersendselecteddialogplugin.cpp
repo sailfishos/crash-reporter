@@ -28,7 +28,6 @@
 #include <MWindow>
 #include <QDebug>
 #include <QFileInfo>
-#include <MTheme>
 
 // User includes.
 

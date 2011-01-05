@@ -43,8 +43,4 @@ SOURCES += creporteruploaddialogplugin.cpp \
 HEADERS += creporteruploaddialogplugin.h \
            creporteruploaddialog.h \
 
-css.files = style/$${TARGET}.css
-css.path = $${CREPORTER_SYSTEM_SHARE}/crash-reporter-ui/themes/style
-
-INSTALLS += target \
-            css \
+INSTALLS += target

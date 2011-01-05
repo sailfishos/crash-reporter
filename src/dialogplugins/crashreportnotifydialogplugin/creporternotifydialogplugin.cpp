@@ -28,7 +28,6 @@
 #include <QDebug>
 #include <QFileInfo>
 
-#include <MTheme>
 #include <MWindow>
 #include <DuiControlPanelIf>
 
@@ -43,9 +42,6 @@
 #include "creporterinfobanner.h"
 
 // Local constants.
-
-const QString pluginCSSFile =
-        "/usr/share/crash-reporter-ui/themes/style/crashreportnotifydialogplugin.css";
 
 const QString CrashReporterDcpApplet = "Crash Reporter";
 

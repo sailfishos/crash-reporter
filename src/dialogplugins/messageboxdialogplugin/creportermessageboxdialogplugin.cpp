@@ -27,7 +27,6 @@
 #include <QtPlugin> // For Q_EXPORT_PLUGIN2
 #include <QDebug>
 
-#include <MTheme>
 #include <MMessageBox>
 
 // User includes.

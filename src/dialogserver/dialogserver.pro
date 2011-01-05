@@ -53,12 +53,8 @@ HEADERS += creporterdialogserver.h \
 
 target.path = $$CREPORTER_SYSTEM_BIN
 
-css.files = style/$${TARGET}.css
-css.path = $${CREPORTER_SYSTEM_SHARE}/$${TARGET}/themes/style
-
 service.files = com.nokia.CrashReporter.DialogServer.service
 service.path = $$CREPORTER_SYSTEM_DBUS_SERVICES
 
 INSTALLS += target \
-            css \
             service \

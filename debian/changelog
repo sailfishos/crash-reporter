@@ -1,6 +1,6 @@
 crash-reporter (1.8.5-0) unstable; urgency=low
 
-  * Work in progress
+  * Fixes: NB#216440 - Remove custom style sheets
 
  -- Raimo Gratseff <ext-raimo.gratseff@nokia.com>  Fri, 10 Dec 2010 11:51:07 +0200
 
