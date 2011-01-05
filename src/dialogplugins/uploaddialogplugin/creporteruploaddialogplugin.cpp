@@ -180,7 +180,7 @@ void CReporterUploadDialogPlugin::actionPerformed(int buttonId)
     switch (buttonId) {
         case CReporter::CancelButton:
             qDebug() << __PRETTY_FUNCTION__ << "User requested to cancel upload.";
-            d_ptr->engine->cancelAll();
+            if (d_ptr->engine) d_ptr->engine->cancelAll();
             break;
         default:
             // Unknown button.
@@ -194,7 +194,7 @@ void CReporterUploadDialogPlugin::actionPerformed(int buttonId)
 void CReporterUploadDialogPlugin::dialogRejected()
 {
     qDebug() << __PRETTY_FUNCTION__ << "User has rejected the dialog.";
-    d_ptr->engine->cancelAll();
+    if (d_ptr->engine) d_ptr->engine->cancelAll();
 }
 
 // -----------------------------------------------------------------------------

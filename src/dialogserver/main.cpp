@@ -135,21 +135,8 @@ int main(int argc, char **argv)
     locale.installTrCatalog("crash-reporter");
     MLocale::setDefault(locale);
 
-    // Create a transparent window that cannot be minimized
-    /*MWindow win;
-    Qt::WindowFlags flags = 0;
-        flags |= Qt::FramelessWindowHint;
-    win.setWindowFlags(flags);
-    win.setWindowOpacity(0);
-    win.setTranslucentBackground(true);*/
-
-    // Create a regular application window that can be minimized
+    // Create an empty application window
     MApplicationWindow appwin;
-    MApplicationPage page;
-    page.setComponentsDisplayMode(MApplicationPage::NavigationBar, MApplicationPageModel::Hide);
-    page.setComponentsDisplayMode(MApplicationPage::EscapeButton, MApplicationPageModel::Hide);
-    page.setTitle("Crash Reporter");
-    page.appear();
 
     CReporterDialogServer server(PLUGINS_DIR, applicationService);
 

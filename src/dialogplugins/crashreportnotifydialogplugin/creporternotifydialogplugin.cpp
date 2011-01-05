@@ -134,6 +134,8 @@ bool CReporterNotifyDialogPlugin::requestDialog(const QVariantList &arguments)
         return false;
     }
 
+    d_ptr->active = true;
+
     // Parse crash report details from file name.
     d_ptr->details.clear();	
     d_ptr->details = CReporterUtils::parseCrashInfoFromFilename(d_ptr->filePath);
@@ -256,7 +258,7 @@ void CReporterNotifyDialogPlugin::notificationTimeout()
 
     delete d_ptr->notification;
     d_ptr->notification = 0;
-
+    d_ptr->active = false;
     emit requestCompleted();
 }
 
@@ -283,7 +285,6 @@ void CReporterNotifyDialogPlugin::notificationActivated()
 
     // Become visible.
     d_ptr->server->showDialog(d_ptr->dialog);
-    d_ptr->active = true;
 }
 
 Q_EXPORT_PLUGIN2(crashreportnotifydialogplugin, CReporterNotifyDialogPlugin)

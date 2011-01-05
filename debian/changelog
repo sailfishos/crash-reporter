@@ -1,6 +1,7 @@
 crash-reporter (1.8.5-0) unstable; urgency=low
 
   * Fixes: NB#216440 - Remove custom style sheets
+  * Fixes: NB#215804 - segmentation faults in CReporterDialogServerPrivate::processRequests()
 
  -- Raimo Gratseff <ext-raimo.gratseff@nokia.com>  Fri, 10 Dec 2010 11:51:07 +0200
 

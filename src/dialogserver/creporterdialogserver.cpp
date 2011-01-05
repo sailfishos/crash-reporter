@@ -107,7 +107,7 @@ void CReporterDialogServerPrivate::processRequests()
             CReporterInfoBanner::show(qtTrId("This Crash Reporter dialog was already open."));
             m_appService->launch();
             // Remove the request from the queue
-            m_requestQueue.takeFirst();
+            delete m_requestQueue.takeFirst();
             m_requestQueueMutex.unlock();
             return;
         }
@@ -125,6 +125,16 @@ void CReporterDialogServerPrivate::processRequests()
 
     // Take the first request from the queue and dispatch it.
     CReporterDialogRequest *request = m_requestQueue.takeFirst();
+
+    // Make sure the plugin is still loaded
+    if (!request->plugin ||
+        !request->plugin->iface)
+    {
+        qDebug() << __PRETTY_FUNCTION__ << "Requested plugin has already been destroyed.";
+        m_requestQueueMutex.unlock();
+        delete request;
+        return;
+    }
 
     // Request dialog from the plugin.
     if (!request->plugin->iface->requestDialog(request->arguments)) {
