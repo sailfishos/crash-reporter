@@ -2,8 +2,9 @@ crash-reporter (1.8.5-0) unstable; urgency=low
 
   * Fixes: NB#216440 - Remove custom style sheets
   * Fixes: NB#215804 - segmentation faults in CReporterDialogServerPrivate::processRequests()
+  * Fixes: NB#215310 - Moving crash tools under MeeGo Gitorious
 
- -- Raimo Gratseff <ext-raimo.gratseff@nokia.com>  Fri, 10 Dec 2010 11:51:07 +0200
+ -- Raimo Gratseff <ext-raimo.gratseff@nokia.com>  Mon, 10 Jan 2011 16:53:23 +0200
 
 crash-reporter (1.8.4-0) unstable; urgency=low
 
