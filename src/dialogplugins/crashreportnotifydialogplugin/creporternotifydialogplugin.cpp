@@ -80,6 +80,7 @@ void CReporterNotifyDialogPlugin::initialize(CReporterDialogServerInterface *ser
     d_ptr->server = server;
     d_ptr->notification = 0;
     d_ptr->active = false;
+    d_ptr->dialog = 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -115,7 +116,7 @@ QString CReporterNotifyDialogPlugin::name() const
 bool CReporterNotifyDialogPlugin::requestDialog(const QVariantList &arguments)
 {
     // Sanity check.
-    if (d_ptr == 0 || d_ptr->active == true) return false;
+    if (d_ptr == 0 || d_ptr->dialog) return false;
 
     // Resolve arguments.
     // arguments[0] = Path to rich-core (argument received from daemon).
