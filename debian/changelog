@@ -1,3 +1,15 @@
+crash-reporter (1.8.5-2) unstable; urgency=low
+
+  * Updated build number
+
+ -- Carol Rus <ext-carol.rus@nokia.com>  Thu, 17 Feb 2011 16:43:00 +0200
+
+crash-reporter (1.8.5-1) unstable; urgency=low
+
+  * Removed already closed bug from changelog (move to new repo)
+
+ -- Raimo Gratseff <ext-raimo.gratseff@nokia.com>  Wed, 19 Jan 2011 07:15:00 +0200
+
 crash-reporter (1.8.5-0) unstable; urgency=low
 
   * Fixes: NB#216440 - Remove custom style sheets
