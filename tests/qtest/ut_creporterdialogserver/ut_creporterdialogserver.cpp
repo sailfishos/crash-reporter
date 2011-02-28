@@ -87,6 +87,11 @@ bool TestPlugin::isActive() const
     return active;
 }
 
+bool TestPlugin::isVisible() const
+{
+    return active;
+}
+
 void TestPlugin::emitRequestCompleted()
 {
     emit requestCompleted();

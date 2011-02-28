@@ -171,6 +171,14 @@ bool CReporterUploadDialogPlugin::isActive() const
 }
 
 // -----------------------------------------------------------------------------
+// CReporterUploadDialogPlugin::isVisible
+// -----------------------------------------------------------------------------
+bool CReporterUploadDialogPlugin::isVisible() const
+{
+    return isActive();
+}
+
+// -----------------------------------------------------------------------------
 // CReporterUploadDialogPlugin::actionPerformed
 // -----------------------------------------------------------------------------
 void CReporterUploadDialogPlugin::actionPerformed(int buttonId)
@@ -253,9 +261,6 @@ void CReporterUploadDialogPlugin::engineFinished(int error, int sent, int total)
 
     d_ptr->engine->deleteLater();
     d_ptr->engine = 0;
-
-    // Complete the request.
-    emit requestCompleted();
 }
 
 // -----------------------------------------------------------------------------
@@ -267,6 +272,9 @@ void CReporterUploadDialogPlugin::dialogFinished()
 
     d_ptr->dialog = 0;
     d_ptr->active = false;
+
+    // Complete the request.
+    emit requestCompleted();
 }
 
 // -----------------------------------------------------------------------------

@@ -125,6 +125,14 @@ bool CReporterMessageBoxDialogPlugin::isActive() const
 }
 
 // -----------------------------------------------------------------------------
+// CReporterMessageBoxDialogPlugin::isVisible
+// -----------------------------------------------------------------------------
+bool CReporterMessageBoxDialogPlugin::isVisible() const
+{
+    return isActive();
+}
+
+// -----------------------------------------------------------------------------
 // CReporterMessageBoxDialogPlugin::dialogFinished
 // -----------------------------------------------------------------------------
 void CReporterMessageBoxDialogPlugin::dialogFinished()

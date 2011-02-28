@@ -146,22 +146,23 @@ bool CReporterNotifyDialogPlugin::requestDialog(const QVariantList &arguments)
     //% "Application %1 crashed."
     QString notificationSummary = qtTrId("qtn_application_%1_crashed_text").arg(d_ptr->details[0]);
 
-    if (d_ptr->notification != 0) {
-        // Update notification.
-        d_ptr->notification->update(notificationSummary);
-        d_ptr->notification->setTimeout(60);
-        return true;
+    if (d_ptr->notification != 0)
+    {
+        qDebug() << __PRETTY_FUNCTION__ << "Removing old notification.";
+        d_ptr->notification->remove();
+        d_ptr->notification->deleteLater();
     }
 
+    qDebug() << __PRETTY_FUNCTION__ << "Creating new notification.";
     // Create new notification.
     //% "Tap to send crash report."
     d_ptr->notification = new CReporterNotification("crash-reporter", notificationSummary,
-                                                              qtTrId("qtn_tab_to_send_crash_report_text"));
+                                                    qtTrId("qtn_tab_to_send_crash_report_text"));
     d_ptr->notification->setTimeout(60);
     d_ptr->notification->setParent(this);
-
     connect(d_ptr->notification, SIGNAL(timeouted()), SLOT(notificationTimeout()));
     connect(d_ptr->notification, SIGNAL(activated()), SLOT(notificationActivated()));
+
 
     return true;
 }
@@ -172,6 +173,14 @@ bool CReporterNotifyDialogPlugin::requestDialog(const QVariantList &arguments)
 bool CReporterNotifyDialogPlugin::isActive() const
 {
     return d_ptr->active;
+}
+
+// -----------------------------------------------------------------------------
+// CReporterNotifyDialogPlugin::isVisible
+// -----------------------------------------------------------------------------
+bool CReporterNotifyDialogPlugin::isVisible() const
+{
+    return (d_ptr->dialog != 0);
 }
 
 // -----------------------------------------------------------------------------
@@ -227,13 +236,6 @@ void CReporterNotifyDialogPlugin::actionPerformed(int buttonId)
             // Unknown button.
             break;
     };
-
-    d_ptr->active = false;
-    d_ptr->dialog = 0;
-
-    // Complete the request.
-    emit requestCompleted();
-    
 }
 
 // -----------------------------------------------------------------------------
@@ -241,9 +243,10 @@ void CReporterNotifyDialogPlugin::actionPerformed(int buttonId)
 // -----------------------------------------------------------------------------
 void CReporterNotifyDialogPlugin::dialogFinished()
 {
-    qDebug() << __PRETTY_FUNCTION__ << "Dialog was rejected.";    
+    qDebug() << __PRETTY_FUNCTION__ << "Dialog was closed.";
 
     d_ptr->active = false;
+    d_ptr->dialog->deleteLater();
     d_ptr->dialog = 0;
 
     // Complete the request.
@@ -282,7 +285,7 @@ void CReporterNotifyDialogPlugin::notificationActivated()
                                                          QVariant(DefaultApplicationSettings::ValueServerAddressDefault)).toString(),
                                                    CReporterUtils::fileSizeToString(fi.size()));
    connect(d_ptr->dialog, SIGNAL(actionPerformed(int)), this, SLOT(actionPerformed(int)));
-   connect(d_ptr->dialog, SIGNAL(rejected()), this, SLOT(dialogFinished()));
+   connect(d_ptr->dialog, SIGNAL(disappeared()), this, SLOT(dialogFinished()));
 
     // Become visible.
     d_ptr->server->showDialog(d_ptr->dialog);

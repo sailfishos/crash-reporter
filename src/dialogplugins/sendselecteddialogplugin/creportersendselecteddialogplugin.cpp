@@ -71,6 +71,7 @@ void CReporterSendSelectedDialogPlugin::initialize(CReporterDialogServerInterfac
     d_ptr->server = server;
     d_ptr->active = false;
     d_ptr->notification = 0;
+    d_ptr->dialog = 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -106,7 +107,7 @@ QString CReporterSendSelectedDialogPlugin::name() const
 bool CReporterSendSelectedDialogPlugin::requestDialog(const QVariantList &arguments)
 {
     // Sanity check.
-    if (d_ptr == 0 || d_ptr->files.isEmpty() == false || d_ptr->active == true) return false;
+    if (d_ptr == 0 || d_ptr->active == true) return false;
 
     if (arguments.count() !=  2) {
         qDebug() << __PRETTY_FUNCTION__ << "Invalid number of arguments. ";
@@ -157,6 +158,14 @@ bool CReporterSendSelectedDialogPlugin::requestDialog(const QVariantList &argume
 bool CReporterSendSelectedDialogPlugin::isActive() const
 {
     return d_ptr->active;
+}
+
+// -----------------------------------------------------------------------------
+// CReporterSendSelectedDialogPlugin::isVisible
+// -----------------------------------------------------------------------------
+bool CReporterSendSelectedDialogPlugin::isVisible() const
+{
+    return (d_ptr->dialog != 0);
 }
 
 // -----------------------------------------------------------------------------
@@ -227,7 +236,6 @@ void CReporterSendSelectedDialogPlugin::actionPerformed(int buttonId)
         // Unknown button.
         break;
     };
-    dialogFinished();
 }
 
 
@@ -239,6 +247,7 @@ void CReporterSendSelectedDialogPlugin::dialogFinished()
     qDebug() << __PRETTY_FUNCTION__ << "Dialog was closed.";
 
     d_ptr->active = false;
+    d_ptr->dialog->deleteLater();
     d_ptr->dialog = 0;
 
     // Complete the request.
@@ -279,7 +288,7 @@ void CReporterSendSelectedDialogPlugin::notificationActivated()
                                                QVariant(DefaultApplicationSettings::ValueServerAddressDefault)).toString());
 
     connect(d_ptr->dialog, SIGNAL(actionPerformed(int)), this, SLOT(actionPerformed(int)));
-    connect(d_ptr->dialog, SIGNAL(rejected()), this, SLOT(dialogFinished()));
+    connect(d_ptr->dialog, SIGNAL(disappeared()), this, SLOT(dialogFinished()));
 
     // Become visible.
     d_ptr->server->showDialog(d_ptr->dialog);

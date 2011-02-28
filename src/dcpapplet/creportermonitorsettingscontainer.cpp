@@ -56,8 +56,7 @@ class CReporterMonitorSettingsContainerPrivate
 // CReporterMonitorSettingsContainer::CReporterMonitorSettingsContainer
 // ----------------------------------------------------------------------------
 CReporterMonitorSettingsContainer::CReporterMonitorSettingsContainer(QGraphicsItem *parent) :
-        //% "Monitoring settings"
-        MContainer(qtTrId("qtn_dcp_monitoring_container_title"), parent),
+        MStylableWidget(parent),
         d_ptr(new CReporterMonitorSettingsContainerPrivate())
 {
     setObjectName("SettingsContainer");
@@ -115,15 +114,29 @@ void CReporterMonitorSettingsContainer::initWidget()
 
     bool dumpingEnabled = CReporterPrivacySettingsModel::instance()->coreDumpingEnabled();
 
-    // Main widget to layout items.
-    QGraphicsWidget *panel = centralWidget();
+    MLayout* mainLayout = new MLayout(this);
+    MLinearLayoutPolicy* mainPolicy = new MLinearLayoutPolicy(mainLayout, Qt::Vertical);
+    mainPolicy->setVerticalSpacing(0);
+    mainLayout->setPolicy(mainPolicy);
+    mainLayout->setContentsMargins(0,20,0,20);
+
+    //% "Monitoring settings"
+    MLabel* header = new MLabel(qtTrId("qtn_dcp_monitoring_container_title"));
+    header->setStyleName("CommonHeaderInverted");
+    header->setWordWrap(true);
+    mainPolicy->addItem(header);
+
+    MStylableWidget* separator = new MStylableWidget(this);
+    separator->setStyleName("CommonHeaderDividerInverted");
+    mainPolicy->addItem(separator);
 
     // Create layout and policy.
-    MLayout *layout = new MLayout(panel);
+    MLayout *layout = new MLayout(mainLayout);
     MGridLayoutPolicy *policy = new MGridLayoutPolicy(layout);
     policy->setVerticalSpacing(20.0);
     policy->setObjectName("Containerpolicy");
     layout->setPolicy(policy);
+    layout->setContentsMargins(0,0,0,0);
 
     // Group for buttons.
     d->m_buttons = new MButtonGroup(this);
@@ -131,16 +144,18 @@ void CReporterMonitorSettingsContainer::initWidget()
 
     // Label for save crash reports text.
     //% "Save crash reports"
-    MLabel *label = new MLabel(qtTrId("qtn_dcp_save_crash_reports_text"), panel);
+    MLabel *label = new MLabel(qtTrId("qtn_dcp_save_crash_reports_text"), this);
     label->setObjectName("SaveCrashReportsLabel");
-    label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    label->setStyleName("CommonSingleTitleInverted");
+    label->setWordWrap(true);
 
     // Toggle button for save crash reports option.
-    MButton *button = new MButton(panel);
+    MButton *button = new MButton(this);
     button->setObjectName("SaveCrashReportsSwitch");
     button->setViewType(MButton::switchType);
     button->setCheckable(true);
     button->setChecked(dumpingEnabled);
+    button->setStyleName("CommonSwitchInverted");
     d->m_buttons->addButton(button, SaveCrashReportsBtn);
 
     policy->addItem(label, 0, 0, Qt::AlignLeft | Qt::AlignVCenter);
@@ -148,15 +163,17 @@ void CReporterMonitorSettingsContainer::initWidget()
 
     // Label for monitor and send crash reports text.
     //% "Show notifications"
-    label = new MLabel(qtTrId("qtn_dcp_show_notifications_text"), panel);
+    label = new MLabel(qtTrId("qtn_dcp_show_notifications_text"), this);
     label->setObjectName("ShowNotificationsLabel");
-    label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    label->setStyleName("CommonSingleTitleInverted");
+    label->setWordWrap(true);
 
     // Toggle button for monitor and send crash reports option.
-    button = new MButton(panel);
+    button = new MButton(this);
     button->setObjectName("ShowNotificationsSwitch");
     button->setViewType(MButton::switchType);
     button->setCheckable(true);
+    button->setStyleName("CommonSwitchInverted");
 
     d->m_buttons->addButton(button, NotifyCrashReportsBtn);
 
@@ -165,15 +182,17 @@ void CReporterMonitorSettingsContainer::initWidget()
 
     // Label for automatic sending text.
     //% "Send crash reports automatically"
-    label = new MLabel(qtTrId("qtn_dcp_send_automatically_text"), panel);
+    label = new MLabel(qtTrId("qtn_dcp_send_automatically_text"), this);
     label->setObjectName("SendAutomaticallyLabel");
-    label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    label->setStyleName("CommonSingleTitleInverted");
+    label->setWordWrap(true);
 
     // Toggle button for monitor and send crash reports option.
-    button = new MButton(panel);
+    button = new MButton(this);
     button->setObjectName("SendAutomaticallySwitch");
     button->setViewType(MButton::switchType);
     button->setCheckable(true);
+    button->setStyleName("CommonSwitchInverted");
 
     d->m_buttons->addButton(button, AutomaticSendingBtn);
 
@@ -182,16 +201,18 @@ void CReporterMonitorSettingsContainer::initWidget()
 
     // Label for auto-delete option.
     //% "Auto-delete repeating duplicates"
-    label = new MLabel(qtTrId("qtn_dcp_auto_delete_dups_text"), panel);
+    label = new MLabel(qtTrId("qtn_dcp_auto_delete_dups_text"), this);
     label->setObjectName("AutoDeleteDupsLabel");
-    label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    label->setStyleName("CommonSingleTitleInverted");
+    label->setWordWrap(true);
 
     // Toggle button for auto-delete option.
-    button = new MButton(panel);
+    button = new MButton(this);
     button->setObjectName("AutoDeleteDupsSwitch");
     button->setViewType(MButton::switchType);
     button->setCheckable(true);
-    
+    button->setStyleName("CommonSwitchInverted");
+
     if (!dumpingEnabled) {
         // If dumping is not enabled, we cannot toggle auto-delete option.
         button->setEnabled(false);
@@ -200,6 +221,8 @@ void CReporterMonitorSettingsContainer::initWidget()
 
     policy->addItem(label, 3, 0, Qt::AlignLeft | Qt::AlignVCenter);
     policy->addItem(button, 3, 1, Qt::AlignRight | Qt::AlignVCenter );
+
+    mainPolicy->addItem(layout);
 
     updateButtons();
 

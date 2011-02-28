@@ -193,6 +193,7 @@ void CReporterSendSelectedDialog::createcontent()
 
     // Create layout and policy.
     MLayout *layout = new MLayout(panel);
+    layout->setContentsMargins(0,0,0,0);
     panel->setLayout(layout);
     MLinearLayoutPolicy  *policy = new MLinearLayoutPolicy(layout, Qt::Vertical);
     policy->setObjectName("DialogMainLayout");
@@ -202,6 +203,7 @@ void CReporterSendSelectedDialog::createcontent()
     messagelabel->setWordWrap(true);
     messagelabel->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
     messagelabel->setObjectName("DialogMessageLabel");
+    messagelabel->setStyleName("CommonBodyTextInverted");
 
     d->list = new MList(panel);
     d->cellCreator = new MContentItemCreator;

@@ -114,27 +114,30 @@ void CReporterNotificationDialog::createcontent()
     QGraphicsWidget *panel = centralWidget();
 
     QString message;
-    //% "Please help to improve the software by filling this report and describe what you we're doing."
-    //% "<br>Useful information include how to reproduce the error etc."
+    //% "Please help to improve the software by filling this report and describe what you we're doing. "
+    //% "Useful information include how to reproduce the error etc."
     message = qtTrId("qtn_notify_dialog_header_text");
 
     // Central widget content.
     MLabel *upperLabel = new MLabel(message, panel);
     upperLabel->setWordWrap(true);
     upperLabel->setObjectName("DialogUpperLabel");
+    upperLabel->setStyleName("CommonBodyTextInverted");
 
     d->commentField = new MTextEdit(MTextEditModel::MultiLine, "", panel);
     d->commentField->setObjectName("DialogCommentField");
 
-    //% "File size: %1, Receiving server: %2"
+    //% "File size: %1, Receiving server: %2. "
     QString details = qtTrId("qtn_receiving_server_and_filesize_text").arg(d->filesize).arg(d->server);
 
-    //% "The following technical information will be included in the report:<br> PID: %1, Signal: %2"
-    details += "<br>" + qtTrId("qtn_technical_infomation_included_text")
+    //% "The following technical information will be included in the report: PID: %1, Signal: %2"
+    details += qtTrId("qtn_technical_infomation_included_text")
                         .arg(d->details.at(3)).arg(d->details.at(2));
 
     MLabel *crashDetailsLabel = new MLabel(details, panel);
     crashDetailsLabel->setObjectName("CrashDetailsLabel");
+    crashDetailsLabel->setStyleName("CommonBodyTextInverted");
+    crashDetailsLabel->setWordWrap(true);
 
     QSignalMapper *mapper = new QSignalMapper(this);
 
@@ -143,27 +146,23 @@ void CReporterNotificationDialog::createcontent()
     optionsButton->setObjectName("DialogButton");
     optionsButton->setPreferredWidth(140);
     optionsButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
+    optionsButton->setStyleName("CommonSingleButtonInverted");
 
     connect(optionsButton, SIGNAL(clicked()), mapper, SLOT(map()));
     mapper->setMapping(optionsButton, static_cast<int>(CReporter::OptionsButton));
-
-    // Layout for displaying server etc. details and options button.
-    QGraphicsGridLayout *bottomLayout = new QGraphicsGridLayout;
-
-    bottomLayout->addItem(crashDetailsLabel, 0, 0, Qt::AlignLeft | Qt::AlignTop);
-    bottomLayout->addItem(optionsButton, 0, 1, Qt::AlignRight | Qt::AlignTop);
 
     // Create layout and policy.
     MLayout *layout = new MLayout(panel);
     panel->setLayout(layout);
     MLinearLayoutPolicy  *policy = new MLinearLayoutPolicy(layout, Qt::Vertical);
     policy->setObjectName("DialogMainLayout");
+    layout->setContentsMargins(0,0,0,0);
 
     // Add items to the layout.
     policy->addItem(upperLabel, Qt::AlignLeft | Qt::AlignTop);
     policy->addItem(d->commentField, Qt::AlignLeft  | Qt::AlignTop);
-    policy->addItem(bottomLayout);
-    //policy->addItem(crashDetailsLabel);
+    policy->addItem(crashDetailsLabel, Qt::AlignLeft);
+    policy->addItem(optionsButton, Qt::AlignCenter);
 
     // Add buttons to button area.
     //% "Send"
@@ -179,12 +178,6 @@ void CReporterNotificationDialog::createcontent()
 
     connect(dialogButton, SIGNAL(clicked()), mapper, SLOT(map()));
     mapper->setMapping(dialogButton, static_cast<int>(CReporter::DeleteButton));
-
-    /*//% "Options"
-    dialogButton = addButton(qtTrId("qtn_cr_options_button"));
-    dialogButton->setObjectName("DialogButton");
-    connect(dialogButton, SIGNAL(clicked()), mapper, SLOT(map()));
-    mapper->setMapping(dialogButton, static_cast<int>(CReporter::OptionsButton));*/
 
     connect(mapper, SIGNAL(mapped(int)), SIGNAL(actionPerformed(int)));
 }

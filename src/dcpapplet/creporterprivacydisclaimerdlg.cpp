@@ -88,9 +88,8 @@ void CReporterPrivacyDisclaimerDlg::initWidget(const QString &filePath)
         disclaimerLabel = new MLabel(qtTrId("qtn_dcp_cannot_open_file_text"));
     }
 
-    QGraphicsLinearLayout *mainLayout = new QGraphicsLinearLayout(Qt::Vertical, centralWidget());
-    centralWidget()->setLayout(mainLayout);
-    mainLayout->addItem(disclaimerLabel);
+    disclaimerLabel->setStyleName("CommonBodyTextInverted");
+    setCentralWidget(disclaimerLabel);
 }
 
 // End of file.

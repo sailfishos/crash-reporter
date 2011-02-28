@@ -27,7 +27,7 @@
 
 // System includes.
 
-#include <MContainer>
+#include <MStylableWidget>
 
 // Forward declarations.
 
@@ -40,7 +40,7 @@ class CReporterMonitorSettingsContainerPrivate;
   * This class groups widgets for editing settings, whether crash reports are saved,
   * monitored, auto-deleted, automatically sent or not in to MContainer.
   */
-class CReporterMonitorSettingsContainer : public MContainer
+class CReporterMonitorSettingsContainer : public MStylableWidget
 {
     Q_OBJECT
 

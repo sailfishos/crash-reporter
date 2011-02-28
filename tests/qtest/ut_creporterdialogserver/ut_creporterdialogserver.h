@@ -44,6 +44,7 @@ class TestPlugin : public CReporterDialogPluginInterface
         virtual QString name() const;
         virtual bool requestDialog(const QVariantList &arguments);
         virtual bool isActive() const;
+        virtual bool isVisible() const;
         void emitRequestCompleted();
 
     public:

@@ -84,6 +84,11 @@ int CReporterNotification::timeout() const
     return 0;
 }
 
+bool CReporterNotification::isPublished() const
+{
+    return notificationCreated || notificationUpdated;
+}
+
 // CReporterInfobanner mock object.
 CReporterInfoBanner* CReporterInfoBanner::show(const QString &message, const QString &bannerType,
                                                const QString &iconID)

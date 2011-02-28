@@ -99,6 +99,9 @@ class CReporterDialogServer : public QObject,
           */
         void quit();
 
+        //! Destroy all active notifications (e.g. when a window becomes visible)
+        void destroyNotifications();
+
     private: // data
 
         Q_DECLARE_PRIVATE(CReporterDialogServer)

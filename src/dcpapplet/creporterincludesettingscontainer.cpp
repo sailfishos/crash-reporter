@@ -56,8 +56,7 @@ class CReporterIncludeSettingsContainerPrivate
 // CReporterIncludeSettingsContainer::CReporterIncludeSettingsContainer
 // ----------------------------------------------------------------------------
 CReporterIncludeSettingsContainer::CReporterIncludeSettingsContainer(QGraphicsItem *parent) :
-        //% "Include into future crash reports"
-        MContainer(qtTrId("qtn_dcp_include_container_title_text"), parent),
+        MStylableWidget(parent),
          d_ptr(new CReporterIncludeSettingsContainerPrivate())
 {
     setObjectName("SettingsContainer");
@@ -82,31 +81,47 @@ void CReporterIncludeSettingsContainer::initWidget()
 
     bool dumpingEnabled = CReporterPrivacySettingsModel::instance()->coreDumpingEnabled();
 
-    // Get central widget for placing widgets.
-    QGraphicsWidget *panel = centralWidget();
+    MLayout* mainLayout = new MLayout(this);
+    MLinearLayoutPolicy* mainPolicy = new MLinearLayoutPolicy(mainLayout, Qt::Vertical);
+    mainPolicy->setVerticalSpacing(0);
+    mainLayout->setPolicy(mainPolicy);
+    mainLayout->setContentsMargins(0,20,0,20);
+
+    //% "Include into future crash reports"
+    MLabel* header = new MLabel(qtTrId("qtn_dcp_include_container_title_text"));
+    header->setStyleName("CommonHeaderInverted");
+    header->setWordWrap(true);
+    mainPolicy->addItem(header);
+
+    MStylableWidget* separator = new MStylableWidget(this);
+    separator->setStyleName("CommonHeaderDividerInverted");
+    mainPolicy->addItem(separator);
 
     // Create main layout and policy.
-    MLayout *layout = new MLayout(panel);
+    MLayout *layout = new MLayout(mainLayout);
     MGridLayoutPolicy *policy = new MGridLayoutPolicy(layout);
     policy->setVerticalSpacing(20.0);
     policy->setObjectName("ContainerLayout");
     layout->setPolicy(policy);
+    layout->setContentsMargins(0,0,0,0);
 
     // Group for buttons.
-    d->m_buttons = new MButtonGroup(panel);
+    d->m_buttons = new MButtonGroup(this);
     d->m_buttons->setExclusive(false);
 
     // Label for including Core dump text.
     //% "Core dump"
-    MLabel *label = new MLabel(qtTrId("qtn_dcp_include_core_dump_text"), panel);
+    MLabel *label = new MLabel(qtTrId("qtn_dcp_include_core_dump_text"), this);
     label->setObjectName("IncludeCoreDumpLabel");
-    label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    label->setStyleName("CommonSingleTitleInverted");
+    label->setWordWrap(true);
 
     // Toggle button for include core option.
-    MButton *button = new MButton(panel);
+    MButton *button = new MButton(this);
     button->setObjectName("IncludeCoreDumpSwitch");
     button->setCheckable(true);
     button->setViewType(MButton::switchType);
+    button->setStyleName("CommonSwitchInverted");
     d->m_buttons->addButton(button, IncludeCoreBtn);
 
     button->setChecked(CReporterPrivacySettingsModel::instance()->includeCore());
@@ -116,15 +131,17 @@ void CReporterIncludeSettingsContainer::initWidget()
 
     // Label for including syslog text.
     //% "System log (if exists)"
-    label = new MLabel(qtTrId("qtn_dcp_include_syslog_text"), panel);
+    label = new MLabel(qtTrId("qtn_dcp_include_syslog_text"), this);
     label->setObjectName("IncludeSyslogLabel");
-    label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    label->setStyleName("CommonSingleTitleInverted");
+    label->setWordWrap(true);
 
     // Toggle button for include system log option.
-    button = new MButton(panel);
+    button = new MButton(this);
     button->setObjectName("IncludeSyslogSwitch");
     button->setCheckable(true );
     button->setViewType(MButton::switchType);
+    button->setStyleName("CommonSwitchInverted");
     d->m_buttons->addButton(button, IncludeSyslogBtn);
     button->setChecked(CReporterPrivacySettingsModel::instance()->includeSystemLog());
 
@@ -133,15 +150,17 @@ void CReporterIncludeSettingsContainer::initWidget()
 
     // Label for including installed packages text.
     //% "List of installed packages"
-    label = new MLabel(qtTrId("qtn_dcp_include_installed_packages_text"), panel);
+    label = new MLabel(qtTrId("qtn_dcp_include_installed_packages_text"), this);
     label->setObjectName("IncludePackagesLabel");
-    label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter );
+    label->setStyleName("CommonSingleTitleInverted");
+    label->setWordWrap(true);
 
     // Toggle button for include package list option.
-    button = new MButton(panel);
+    button = new MButton(this);
     button->setObjectName("IncludePackagesSwitch");
     button->setCheckable(true);
     button->setViewType(MButton::switchType);
+    button->setStyleName("CommonSwitchInverted");
     d->m_buttons->addButton(button, IncludePackagesBtn);
     button->setChecked(CReporterPrivacySettingsModel::instance()->includePackageList());
 
@@ -150,21 +169,25 @@ void CReporterIncludeSettingsContainer::initWidget()
 
     // Label for reducing core size text.
     //% "Reduce core dump size"
-    label = new MLabel(qtTrId("qtn_dcp_reduce_core_dump_size"), panel);
+    label = new MLabel(qtTrId("qtn_dcp_reduce_core_dump_size"), this);
     label->setObjectName("ReduceCoreDumpLabel");
-    label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter );
+    label->setStyleName("CommonSingleTitleInverted");
+    label->setWordWrap(true);
 
     // Toggle button for reduce core option.
-    button = new MButton(panel);
+    button = new MButton(this);
     button->setObjectName("ReduceCoreDumpSwitch");
     button->setCheckable(true);
     button->setViewType(MButton::switchType);
+    button->setStyleName("CommonSwitchInverted");
     d->m_buttons->addButton(button, ReduceCoreSizeBtn);
 
     button->setChecked(CReporterPrivacySettingsModel::instance()->reduceCore());
 
     policy->addItem(label, 3, 0, Qt::AlignLeft | Qt::AlignVCenter);
     policy->addItem(button, 3, 1, Qt::AlignRight | Qt::AlignVCenter );
+
+    mainPolicy->addItem(layout);
 
     // Connect to receive notifications, when settings changes.
     connect(CReporterPrivacySettingsModel::instance(), SIGNAL(valueChanged(QString,QVariant)),
@@ -176,7 +199,7 @@ void CReporterIncludeSettingsContainer::initWidget()
 
     }
 
-    panel->setEnabled(dumpingEnabled);
+    setEnabled(dumpingEnabled);
 }
 
 // ----------------------------------------------------------------------------

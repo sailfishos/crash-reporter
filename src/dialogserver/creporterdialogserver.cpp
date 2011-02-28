@@ -34,6 +34,7 @@
 #include <MApplication>
 #include <MDialog>
 #include <MApplicationService>
+#include <MNotification>
 
 // User includes.
 
@@ -99,9 +100,15 @@ void CReporterDialogServerPrivate::processRequests()
 
     m_requestQueueMutex.lock();
     // If a plugin is active, simply show the previously opened dialog
-    if (isPluginActive()) {
+    if (isPluginActive())
+    {
         MWindow* win = MApplication::activeWindow();
-        if (m_appService && win != 0 && !win->isHidden())
+        if (m_requestQueue.isEmpty())
+        {
+            m_requestQueueMutex.unlock();
+            return;
+        }
+        else if (m_appService && win != 0 && isDialogVisible())
         {
             qDebug() << __PRETTY_FUNCTION__ << "UI was already open. Previously opened dialog is shown.";
             CReporterInfoBanner::show(qtTrId("This Crash Reporter dialog was already open."));
@@ -112,8 +119,7 @@ void CReporterDialogServerPrivate::processRequests()
             return;
         }
     }
-
-    if (m_requestQueue.isEmpty()) {
+    else if (m_requestQueue.isEmpty()) {
         // Return, if no requests to process.
         qDebug() << __PRETTY_FUNCTION__ << "No requests to process.";
         m_appService = 0;
@@ -271,6 +277,21 @@ bool CReporterDialogServerPrivate::isPluginActive()
     return false;
 }
 
+// ----------------------------------------------------------------------------
+// CReporterDialogServerPrivate::isDialogVisible
+// ----------------------------------------------------------------------------
+bool CReporterDialogServerPrivate::isDialogVisible()
+{
+    // Loop through plugins and check, if there active one.
+    foreach(CReporterLoadedPlugin *loadedPlugin, m_plugins) {
+        if (loadedPlugin->iface->isVisible()) {
+            qDebug() << __PRETTY_FUNCTION__ << "Plugin:" << loadedPlugin->iface->name()
+                    << "is visible.";
+            return true;
+        }
+    }
+    return false;
+}
 
 // ******** Class CReporterDialogServer ********
 
@@ -470,6 +491,14 @@ void CReporterDialogServer::quit()
     qDebug() << __PRETTY_FUNCTION__ << "Quit dialog server.";
     d_ptr->m_appService = 0;
     MApplication::instance()->quit();
+}
+
+// ----------------------------------------------------------------------------
+// CReporterDialogServer::destroyNotifications()
+// ----------------------------------------------------------------------------
+void CReporterDialogServer::destroyNotifications()
+{
+    CReporterNotification::removeAll();
 }
 
 // End of file.

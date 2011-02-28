@@ -139,6 +139,7 @@ int main(int argc, char **argv)
     MApplicationWindow appwin;
 
     CReporterDialogServer server(PLUGINS_DIR, applicationService);
+    QObject::connect(&appwin, SIGNAL(displayEntered()), &server, SLOT(destroyNotifications()));
 
     // Enter Qt main loop.
     int retVal = app.exec();

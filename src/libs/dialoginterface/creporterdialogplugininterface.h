@@ -84,7 +84,7 @@ public:
     virtual bool requestDialog(const QVariantList &arguments) = 0;
 
     /*!
-      * @brief Checks, if plugin is active (widget can be seen).
+      * @brief Checks, if plugin is active (widget or notification can be seen).
       *
       * This function is called, when server receives new request. When this function returns true,
       * requests won't reach this plugin.
@@ -92,6 +92,13 @@ public:
       * @return True, if plugin is active; otherwise false.
       */
     virtual bool isActive() const = 0;
+
+    //! Checks if plugin's dialog is visible.
+    /*!
+        Implies isActive() but is false when only a notification is shown.
+       @return True, if a dialog is visible.
+     */
+    virtual bool isVisible() const = 0;
 
 	Q_SIGNALS:
 

@@ -27,7 +27,7 @@
 
 // System includes.
 
-#include <MContainer>
+#include <MStylableWidget>
 
 // Forward declarations.
 
@@ -40,7 +40,7 @@ class CReporterIncludeSettingsContainerPrivate;
   * This class groups widgets for editing settings, what to include in crash reports
   * in to MContainer.
   */
-class CReporterIncludeSettingsContainer : public MContainer
+class CReporterIncludeSettingsContainer : public MStylableWidget
 {
     Q_OBJECT
 

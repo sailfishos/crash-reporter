@@ -128,10 +128,12 @@ void CReporterUploadDialog::createcontent()
     d->filenameLabel = new MLabel("", panel);
     d->filenameLabel->setAlignment(Qt::AlignLeft);
     d->filenameLabel->setObjectName("FileNameLabel");
+    d->filenameLabel->setStyleName("CommonBodyTextInverted");
 
     d->filesizeLabel = new MLabel("", panel);
     d->filesizeLabel->setAlignment(Qt::AlignRight);
     d->filesizeLabel->setObjectName("FileSizeLabel");
+    d->filesizeLabel->setStyleName("CommonBodyTextInverted");
 
     d->progressBar = new MProgressIndicator(panel, "bar");
     d->progressBar->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum));
@@ -141,23 +143,26 @@ void CReporterUploadDialog::createcontent()
 
     d->uploadStatusLabel->setAlignment(Qt::AlignLeft);
     d->uploadStatusLabel->setObjectName("UploadStatusLabel");
+    d->uploadStatusLabel->setStyleName("CommonBodyTextInverted");
 
     d->uploadProgressLabel = new MLabel("", panel);
     d->uploadProgressLabel->setAlignment(Qt::AlignRight);
     d->uploadProgressLabel->setObjectName("UploadProgressLabel");
+    d->uploadProgressLabel->setStyleName("CommonBodyTextInverted");
 
     // Create layout and policy.
     MLayout *layout = new MLayout(panel);
     panel->setLayout(layout);
     MGridLayoutPolicy  *policy = new MGridLayoutPolicy(layout);
     policy->setObjectName("DialogMainLayout");
+    layout->setContentsMargins(0,0,0,0);
 
     // Add items to layout.
-    policy->addItem(d->filenameLabel, 0, 0, Qt::AlignLeft);
-    policy->addItem(d->filesizeLabel, 0, 1, Qt::AlignRight);
-    policy->addItem(d->progressBar, 1, 0, 1, 2, Qt::AlignCenter);
-    policy->addItem(d->uploadStatusLabel, 2, 0, Qt::AlignLeft);
-    policy->addItem(d->uploadProgressLabel, 2, 1, Qt::AlignRight);
+    policy->addItem(d->filenameLabel, 0, 0, 1, 2, Qt::AlignLeft);
+    policy->addItem(d->filesizeLabel, 1, 0, 1, 2, Qt::AlignRight);
+    policy->addItem(d->progressBar, 2, 0, 1, 2, Qt::AlignCenter);
+    policy->addItem(d->uploadStatusLabel, 3, 0, Qt::AlignLeft);
+    policy->addItem(d->uploadProgressLabel, 3, 1, Qt::AlignRight);
 
     // Add buttons to button area.
     //% "Cancel"

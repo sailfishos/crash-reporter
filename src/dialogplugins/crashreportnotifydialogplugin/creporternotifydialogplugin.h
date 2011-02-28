@@ -58,6 +58,8 @@ class CReporterNotifyDialogPlugin : public CReporterDialogPluginInterface
         virtual bool requestDialog(const QVariantList &arguments);
         //! @reimp
         virtual bool isActive() const;
+        //! @reimp
+        virtual bool isVisible() const;
 
     private Q_SLOTS:
         /*!

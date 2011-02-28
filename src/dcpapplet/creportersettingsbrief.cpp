@@ -55,17 +55,17 @@ QString CReporterSettingsBrief::valueText() const
 {
     if (CReporterPrivacySettingsModel::instance()->sendingEnabled())
     {
-        //% "Showing notifications of new crash reports"
+        //% "Notify of new crash reports"
         return QString(qtTrId("qt_dcp_show_notitications_text"));
     }
     else if (CReporterPrivacySettingsModel::instance()->automaticSendingEnabled())
     {
-        //% "Sending all crash reports automatically"
+        //% "Send crash reports automatically"
         return QString(qtTrId("qt_dcp_sending_automatically_text"));
     }
     else
     {
-        //% "Notifications and automatic uploading disabled"
+        //% "Notifications and sending disabled"
         return QString(qtTrId("qt_dcp_notifications_and_automatic_uploading_disabled_text"));
     }
 }

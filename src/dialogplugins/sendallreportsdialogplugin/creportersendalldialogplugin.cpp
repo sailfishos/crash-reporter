@@ -71,6 +71,7 @@ void CReporterSendAllDialogPlugin::initialize(CReporterDialogServerInterface* se
     d_ptr->server = server;
     d_ptr->active = false;
     d_ptr->notification = 0;
+    d_ptr->dialog = 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -147,6 +148,14 @@ bool CReporterSendAllDialogPlugin::requestDialog(const QVariantList &arguments)
 bool CReporterSendAllDialogPlugin::isActive() const
 {
     return d_ptr->active;
+}
+
+// -----------------------------------------------------------------------------
+// CReporterSendAllDialogPlugin::isVisible
+// -----------------------------------------------------------------------------
+bool CReporterSendAllDialogPlugin::isVisible() const
+{
+    return (d_ptr->dialog != 0);
 }
 
 // -----------------------------------------------------------------------------

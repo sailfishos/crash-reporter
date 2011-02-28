@@ -81,8 +81,9 @@ bool CReporterPrivacySettingsWidget::back()
 // ----------------------------------------------------------------------------
 void CReporterPrivacySettingsWidget::initWidget()
 {    
-    //% "<b>Crash Reporter %1</b>"
+    //% "Crash Reporter %1"
     MLabel *titleLabel = new MLabel(qtTrId("qtn_dcp_crash_reporter_%1").arg(QString(CREPORTERVERSION)));
+    titleLabel->setStyleName("CommonApplicationHeaderInverted");
 
     // Create containers.
     CReporterMonitorSettingsContainer *monitorSettings =
@@ -94,35 +95,20 @@ void CReporterPrivacySettingsWidget::initWidget()
 	// Button for showing privacy statement.
     MButton *showPrivacyButton = new MButton(this);
     showPrivacyButton->setObjectName("ShowPrivacyButton");
+    showPrivacyButton->setStyleName("CommonSingleButtonInverted");
     //% "Privacy Disclaimer"
     showPrivacyButton->setText(qtTrId("qtn_dcp_privacy_statement_button"));
-    connect(showPrivacyButton, SIGNAL(clicked()), this, SLOT(openPrivacyDisclaimerDialog()));
 
-	// Button for sending all cores.
-    //MButton *sendAllButton = new MButton(this);
-    //sendAllButton->setObjectName("SendAllButton");
-    ////% "Send all"
-    //sendAllButton->setText(qtTrId("qtn_dcp_send_all_button_text"));
-    //connect(sendAllButton, SIGNAL(clicked()), this, SLOT (handleSendAllButtonClicked()));
+    connect(showPrivacyButton, SIGNAL(clicked()), this, SLOT(openPrivacyDisclaimerDialog()));
 
     // Button for sending cores via selection
     MButton *sendSelectButton = new MButton(this);
     sendSelectButton->setObjectName("SendSelectButton");
+    sendSelectButton->setStyleName("CommonSingleButtonInverted");
     //% "Send/Delete Reports"
     sendSelectButton->setText(qtTrId("qtn_dcp_send_delete_button_text"));
     connect(sendSelectButton, SIGNAL(clicked()), this, SLOT (handleSendSelectButtonClicked()), Qt::DirectConnection);
     connect(sendSelectButton, SIGNAL(clicked()), monitorSettings, SLOT(updateButtons()), Qt::QueuedConnection);
-
-    // Create bottom layout and policy for buttons.
-    MLayout *bottomLayout = new MLayout(0);
-    MLinearLayoutPolicy *bottomLayoutPolicy =
-            new MLinearLayoutPolicy(bottomLayout, Qt::Horizontal);
-    bottomLayoutPolicy->setObjectName("InnerLinearLayout");
-    bottomLayout->setPolicy(bottomLayoutPolicy);
-
-    bottomLayoutPolicy->addItem(showPrivacyButton);//, Qt::AlignLeft);
-    // bottomLayoutPolicy->addItem(sendAllButton,  Qt::AlignRight);
-    bottomLayoutPolicy->addItem(sendSelectButton);//,  Qt::AlignRight);
 
     // Create main layout and policy.
     MLayout *mainLayout = new MLayout(this);
@@ -130,11 +116,15 @@ void CReporterPrivacySettingsWidget::initWidget()
             new MLinearLayoutPolicy(mainLayout, Qt::Vertical);
     mainLayoutPolicy->setObjectName("PageMainLayout");
     mainLayout->setPolicy(mainLayoutPolicy);
+    mainLayout->setContentsMargins(0,0,0,0);
 
     mainLayoutPolicy->addItem(titleLabel, Qt::AlignLeft);
     mainLayoutPolicy->addItem(monitorSettings, Qt::AlignCenter);
     mainLayoutPolicy->addItem(includeSettings, Qt::AlignCenter);
-    mainLayoutPolicy->addItem(bottomLayout, Qt::AlignCenter);
+//    mainLayoutPolicy->addItem(bottomLayout, Qt::AlignCenter);
+    mainLayoutPolicy->addStretch();
+    mainLayoutPolicy->addItem(showPrivacyButton, Qt::AlignCenter);
+    mainLayoutPolicy->addItem(sendSelectButton, Qt::AlignCenter);
 }
 
 // ----------------------------------------------------------------------------

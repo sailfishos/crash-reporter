@@ -109,6 +109,13 @@ class CReporterDialogServerPrivate : public QObject
           */
         bool isPluginActive();
 
+        /*!
+          * @brief Checks, if there is a dialog open
+          *
+          * @return True, if there's an active plugin with an open dialog; otherwise false.
+          */
+        bool isDialogVisible();
+
     public:
         //! @arg Path, where plugins to be loaded are searched.
         QString m_pluginPath;
