@@ -256,7 +256,8 @@ void Ut_CReporterUploadDialogPlugin::testUploadFilesSuccessfully()
 
    QVERIFY(m_Server->createRequestCalled == true);
    QVERIFY(lastErrorCalled == false);
-   QVERIFY(requestedCompletedSpy.count() == 1);
+   // Now request is not completed until the dialog has disappeared so this cannot be tested here.
+   //QVERIFY(requestedCompletedSpy.count() == 1);
 }
 
 void Ut_CReporterUploadDialogPlugin::testUploadFilesFailed()
@@ -277,7 +278,8 @@ void Ut_CReporterUploadDialogPlugin::testUploadFilesFailed()
    m_Subject->engineFinished(static_cast<int>(CReporterUploadEngine::ProtocolError), 1, 2);
 
    errorString = "Error";
-   QVERIFY(requestedCompletedSpy.count() == 1);
+   // Now request is not completed until the dialog has disappeared so this cannot be tested here.
+   //QVERIFY(requestedCompletedSpy.count() == 1);
    QVERIFY(lastErrorCalled == true);
    QVERIFY(m_Server->createRequestCalled == true);
 }
@@ -303,7 +305,8 @@ void Ut_CReporterUploadDialogPlugin::testUploadCancelled()
    m_Subject->engineFinished(static_cast<int>(CReporterUploadEngine::ProtocolError), 1, 2);
 
    errorString = "Cancelled";
-   QVERIFY(requestedCompletedSpy.count() == 1);
+   // Now request is not completed until the dialog has disappeared so this cannot be tested here.
+   //QVERIFY(requestedCompletedSpy.count() == 1);
    QVERIFY(lastErrorCalled == true);
    QVERIFY(m_Server->createRequestCalled == true);
 }
@@ -328,7 +331,8 @@ void Ut_CReporterUploadDialogPlugin::testDialogRejected()
    m_Subject->engineFinished(static_cast<int>(CReporterUploadEngine::ProtocolError), 1, 2);
 
    errorString = "Cancelled";
-   QVERIFY(requestedCompletedSpy.count() == 1);
+   // Now request is not completed until the dialog has disappeared so this cannot be tested here.
+   //QVERIFY(requestedCompletedSpy.count() == 1);
    QVERIFY(lastErrorCalled == true);
    QVERIFY(m_Server->createRequestCalled == true);
 }

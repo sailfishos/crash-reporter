@@ -341,7 +341,8 @@ void Ut_CReporterNotifyDialogPlugin::testRequestHandledFileSent()
     QVERIFY(appendToLzoCalled == true);
     QVERIFY(m_Server->createRequestCalled == true);
 
-    QVERIFY(requestCompletedSpy.count() == 1);
+    // Now request is not completed until the dialog has disappeared so this cannot be tested here.
+    //QVERIFY(requestCompletedSpy.count() == 1);
 }
 
 void Ut_CReporterNotifyDialogPlugin::testRequestHandledFileDeleted()
@@ -370,7 +371,8 @@ void Ut_CReporterNotifyDialogPlugin::testRequestHandledFileDeleted()
     m_Subject->actionPerformed(button);
 
     QVERIFY(removeFileCalled == true);
-    QVERIFY(requestCompletedSpy.count() == 1);
+    // Now request is not completed until the dialog has disappeared so this cannot be tested here.
+    //QVERIFY(requestCompletedSpy.count() == 1);
 }
 
 void Ut_CReporterNotifyDialogPlugin::testRequestHandledSettingsOpened()
@@ -424,7 +426,8 @@ void Ut_CReporterNotifyDialogPlugin::testNotificationTimeout()
     m_Subject->notificationTimeout();
 
     QVERIFY(m_Subject->isActive() == false);
-    QVERIFY(requestCompletedSpy.count() == 1);
+    // Now request is not completed until the dialog has disappeared so this cannot be tested here.
+    //QVERIFY(requestCompletedSpy.count() == 1);
 }
 
 void Ut_CReporterNotifyDialogPlugin::testUpdateNotification()
@@ -452,13 +455,15 @@ void Ut_CReporterNotifyDialogPlugin::testUpdateNotification()
     retVal = m_Subject->requestDialog(args);
     QVERIFY(retVal == true);
 
-    QVERIFY(notificationUpdated == true);
+    // Notifications are no longer updated but removed and replaced with a new one
+    //QVERIFY(notificationUpdated == true);
     QVERIFY(notificationTimeoutSet == true);
 
     m_Subject->notificationTimeout();
 
     QVERIFY(m_Subject->isActive() == false);
-    QVERIFY(requestCompletedSpy.count() == 1);
+    // Now request is not completed until the dialog has disappeared so this cannot be tested here.
+    //QVERIFY(requestCompletedSpy.count() == 1);
 }
 
 void Ut_CReporterNotifyDialogPlugin::testDialogRejected()
@@ -484,7 +489,8 @@ void Ut_CReporterNotifyDialogPlugin::testDialogRejected()
 
     // Reject dialog.
     m_Server->dialog->reject();
-    QVERIFY(requestCompletedSpy.count() == 1);
+    // Now request is not completed until the dialog has disappeared so this cannot be tested here.
+    //QVERIFY(requestCompletedSpy.count() == 1);
 }
 
 QTEST_APPLESS_MAIN(Ut_CReporterNotifyDialogPlugin)

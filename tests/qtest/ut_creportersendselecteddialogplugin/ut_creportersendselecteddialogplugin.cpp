@@ -247,7 +247,8 @@ void Ut_CReporterSendSelectedDialogPlugin::testRequestHandledFilesSent()
 
     QVERIFY(m_Server->createRequestCalled == true);
 
-    QVERIFY(requestCompletedSpy.count() == 1);
+    // Now request is not completed until the dialog has disappeared so this cannot be tested here.
+    //QVERIFY(requestCompletedSpy.count() == 1);
 }
 
 
@@ -281,7 +282,8 @@ void Ut_CReporterSendSelectedDialogPlugin::testRequestHandledFilesDeleted()
     m_Subject->actionPerformed(button);
     QVERIFY(removeFileCalled == true);
 
-    QVERIFY(requestCompletedSpy.count() == 1);
+    // Now request is not completed until the dialog has disappeared so this cannot be tested here.
+    //QVERIFY(requestCompletedSpy.count() == 1);
 }
 
 void Ut_CReporterSendSelectedDialogPlugin::testRejectDialog()
@@ -304,7 +306,8 @@ void Ut_CReporterSendSelectedDialogPlugin::testRejectDialog()
     QVERIFY(m_Subject->isActive() == true);
 
     m_Server->dialog->reject();
-    QVERIFY(requestCompletedSpy.count() == 1);
+    // Now request is not completed until the dialog has disappeared so this cannot be tested here.
+    //QVERIFY(requestCompletedSpy.count() == 1);
 }
 
 void Ut_CReporterSendSelectedDialogPlugin::cleanupTestCase()
