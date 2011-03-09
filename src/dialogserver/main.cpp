@@ -146,14 +146,8 @@ int main(int argc, char **argv)
 
     qDebug() << __PRETTY_FUNCTION__ << "Returned from dialog server main loop";
 
-    try
-    {
-        CReporterNotification::removeAll();
-    }
-    catch (...)
-    {
-        // Don't really care if MNotifications bug here
-    }
+    CReporterNotification::removeAll();
+
 
     CReporterApplicationSettings::instance()->freeSingleton();
     return retVal;

@@ -203,9 +203,18 @@ void CReporterNotification::removeAll()
 {
     QList <MNotification*> notifications = MNotification::notifications();
 
-    foreach (MNotification* ntf, notifications) {
-        ntf->remove();
+    foreach (MNotification* ntf, notifications)
+    {
+        // this is prone to crashing so we just try and don't care
+        try
+        {
+            ntf->remove();
+        }
+        catch (...)
+        {
+        }
     }
+    qDeleteAll(notifications);
 
 }
 
