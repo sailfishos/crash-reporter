@@ -1,9 +1,16 @@
-crash-reporter (1.9.1-0) unstable; urgency=low
+crash-reporter (1.9.2-0) unstable; urgency=low
 
   * Fixes: NB#235438 - Crash reporter title doesnt fit int portrait
   * Fixes: NB#235430 - "!! crash reporter " is not localized
 
  -- Raimo Gratseff <ext-raimo.gratseff@nokia.com>  Fri, 11 Mar 2011 10:50:41 +0200
+
+crash-reporter (1.9.1-0) unstable; urgency=low
+
+  * Fixes: NB#224878 - Source packages still generating -docs packages for arm targets
+  * Moved a notification bug workaround from dialogserver main to crnotification
+  
+ -- Carol Rus <ext-carol.rus@nokia.com>  Thu, 10 Mar 2011 17:27:00 +0200
 
 crash-reporter (1.9.0-0) unstable; urgency=low
 

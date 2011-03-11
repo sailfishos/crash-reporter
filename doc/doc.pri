@@ -48,7 +48,7 @@ QMAKE_EXTRA_TARGETS += doccleantarget
 
 htmldocs.files = $${OUT_PWD}/$${HTML_DOCS_DIR}
 htmldocs.path = $${CREPORTER_SYSTEM_SHARE}/doc/crash-reporter
-htmldocs.depends = docs
+# htmldocs.depends = docs
 
 # Generate man pages.
 mantarget.target = man

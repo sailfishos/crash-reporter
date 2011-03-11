@@ -4,6 +4,9 @@
 # Uncomment this to turn on verbose mode.
 export DH_VERBOSE=1
 
+# by default make docs
+MAKEDOCS = 1
+
 # some commonly used local vars
 comma:= ,
 empty:=
@@ -13,6 +16,11 @@ space:= $(empty) $(empty)
 ifneq (,$(findstring nodebugoutput,$(DEB_BUILD_OPTIONS)))
 	QMAKE_OPTIONS += NO_DEBUG_OUTPUT=on
 	CONFIG += release
+endif
+
+# Don't build documentation by setting DEB_BUILD_OPTION=nodocs,...
+ifneq (,$(findstring nodocs,$(DEB_BUILD_OPTIONS)))
+     MAKEDOCS = 0
 endif
 
 # project specific
@@ -56,6 +64,10 @@ install: build
 	dh_clean -k
 	dh_installdirs
 
+ifneq (0,$(MAKEDOCS))
+	cd $(BUILD_DIR) && $(MAKE) docs 
+endif
+
 	# Add here commands to install the package into debian/tmp.
 	cd $(BUILD_DIR) && INSTALL_ROOT=$(CURDIR)/debian/tmp make $(MAKE) install
 
@@ -87,7 +99,7 @@ binary-arch: install
 	dh_link
 	dh_strip --dbg-package=crash-reporter-dbg \
 			 --dbg-package=libcrash-reporter0-dbg	
-	dh_compress
+	dh_compress 
 	dh_fixperms
 #	dh_perl
 	dh_makeshlibs
