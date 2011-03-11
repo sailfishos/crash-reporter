@@ -51,6 +51,11 @@ public:
      */
    ~CReporterSettingsBrief();
 
+   /*!
+    * @reimp
+    */
+   virtual QString titleText() const;
+
     /*!
      * @reimp
      */

@@ -1,3 +1,10 @@
+crash-reporter (1.9.1-0) unstable; urgency=low
+
+  * Fixes: NB#235438 - Crash reporter title doesnt fit int portrait
+  * Fixes: NB#235430 - "!! crash reporter " is not localized
+
+ -- Raimo Gratseff <ext-raimo.gratseff@nokia.com>  Fri, 11 Mar 2011 10:50:41 +0200
+
 crash-reporter (1.9.0-0) unstable; urgency=low
 
   * Fixes: NB#227742 - MNotification issues

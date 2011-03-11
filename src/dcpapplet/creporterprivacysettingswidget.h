@@ -27,7 +27,7 @@
 
 // System includes.
 
-#include <DcpWidget>
+#include <DcpStylableWidget>
 
 // Forward declarations.
 
@@ -36,7 +36,7 @@ class QDBusPendingCallWatcher;
 
 /*!
   * @class CReporterPrivacySettingsWidget
-  * @brief DcpWidget for editing crash-reporter privacy settings, displaying privacy
+  * @brief DcpStylableWidget for editing crash-reporter privacy settings, displaying privacy
   * settings dialog and sending crash reports.
   *
   * This view contains widgets for modifying following settings:
@@ -45,7 +45,7 @@ class QDBusPendingCallWatcher;
   * @li Auto delete crash reports
   * @li What information to include in crash reports.
   */
-class CReporterPrivacySettingsWidget : public DcpWidget
+class CReporterPrivacySettingsWidget : public DcpStylableWidget
 {
 	Q_OBJECT
 

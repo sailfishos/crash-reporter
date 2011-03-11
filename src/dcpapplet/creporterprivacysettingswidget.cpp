@@ -52,8 +52,9 @@
 // ----------------------------------------------------------------------------
 // CReporterPrivacySettingsWidget::CReporterPrivacySettingsWidget
 // ----------------------------------------------------------------------------
-CReporterPrivacySettingsWidget::CReporterPrivacySettingsWidget()
-    : waitingForCoreFilesReply(false)
+CReporterPrivacySettingsWidget::CReporterPrivacySettingsWidget():
+        DcpStylableWidget(0),
+        waitingForCoreFilesReply(false)
 {
 	initWidget();
 }
@@ -73,7 +74,7 @@ bool CReporterPrivacySettingsWidget::back()
     // Save settings, update view and go back.
     CReporterPrivacySettingsModel::instance()->writeSettings();
 
-    return DcpWidget::back();
+    return DcpStylableWidget::back();
 }
 
 // ----------------------------------------------------------------------------
@@ -81,9 +82,13 @@ bool CReporterPrivacySettingsWidget::back()
 // ----------------------------------------------------------------------------
 void CReporterPrivacySettingsWidget::initWidget()
 {    
-    //% "Crash Reporter %1"
-    MLabel *titleLabel = new MLabel(qtTrId("qtn_dcp_crash_reporter_%1").arg(QString(CREPORTERVERSION)));
+    //% "Crash Reporter"
+    MLabel *titleLabel = new MLabel(qtTrId("qtn_dcp_crash_reporter").arg(QString(CREPORTERVERSION)));
     titleLabel->setStyleName("CommonApplicationHeaderInverted");
+
+    //% "Version %1"
+    MLabel *versionLabel = new MLabel(qtTrId("qtn_dcp_version_%1").arg(QString(CREPORTERVERSION)));
+    versionLabel->setStyleName("CommonSingleTitleInverted");
 
     // Create containers.
     CReporterMonitorSettingsContainer *monitorSettings =
@@ -119,6 +124,7 @@ void CReporterPrivacySettingsWidget::initWidget()
     mainLayout->setContentsMargins(0,0,0,0);
 
     mainLayoutPolicy->addItem(titleLabel, Qt::AlignLeft);
+    mainLayoutPolicy->addItem(versionLabel, Qt::AlignLeft);
     mainLayoutPolicy->addItem(monitorSettings, Qt::AlignCenter);
     mainLayoutPolicy->addItem(includeSettings, Qt::AlignCenter);
 //    mainLayoutPolicy->addItem(bottomLayout, Qt::AlignCenter);

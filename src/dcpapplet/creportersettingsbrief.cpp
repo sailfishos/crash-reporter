@@ -49,6 +49,15 @@ CReporterSettingsBrief::~CReporterSettingsBrief()
 }
 
 // ----------------------------------------------------------------------------
+// CReporterSettingsBrief::titleText
+// ----------------------------------------------------------------------------
+QString CReporterSettingsBrief::titleText() const
+{
+    //% "Crash Reporter"
+    return QString(qtTrId("qtn_dcp_crash_reporter"));
+}
+
+// ----------------------------------------------------------------------------
 // CReporterSettingsBrief::valueText
 // ----------------------------------------------------------------------------
 QString CReporterSettingsBrief::valueText() const

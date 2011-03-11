@@ -56,7 +56,7 @@ void CReporterSettingsApplet::init()
 // ----------------------------------------------------------------------------
 // CReporterSettingsApplet::constructWidget
 // ----------------------------------------------------------------------------
-DcpWidget* CReporterSettingsApplet::constructWidget(int widgetId)
+DcpStylableWidget* CReporterSettingsApplet::constructStylableWidget(int widgetId)
 {
     switch (widgetId) {
 		case DcpCreporterSettings::Main:
@@ -70,15 +70,9 @@ DcpWidget* CReporterSettingsApplet::constructWidget(int widgetId)
 // ----------------------------------------------------------------------------
 // CReporterSettingsApplet::privacySettingsPage
 // ----------------------------------------------------------------------------
-DcpWidget* CReporterSettingsApplet::privacySettingsPage()
+DcpStylableWidget* CReporterSettingsApplet::privacySettingsPage()
 {
     return new CReporterPrivacySettingsWidget();
-}
-
-QString CReporterSettingsApplet::title() const
-{
-    //% "Crash Reporter"
-    return QString(qtTrId("qtn_dcp_applet_title_text"));
 }
 
 // ----------------------------------------------------------------------------

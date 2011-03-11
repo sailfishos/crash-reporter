@@ -51,12 +51,7 @@ public:
     /*!
       * @reimp
       */
-	virtual DcpWidget* constructWidget( int widgetId );
-
-    /*!
-      * @reimp
-      */
-    virtual QString title() const;
+        virtual DcpStylableWidget* constructStylableWidget( int widgetId );
 
     /*!
       * @reimp
@@ -73,7 +68,7 @@ public:
       *
       * @return Settings page.
       */
-    virtual DcpWidget* privacySettingsPage();
+    virtual DcpStylableWidget* privacySettingsPage();
 
 private:
 	int m_WidgetIndex;

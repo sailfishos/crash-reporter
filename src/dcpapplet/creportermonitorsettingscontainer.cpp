@@ -323,7 +323,7 @@ void CReporterMonitorSettingsContainer::showAutoUploaderMessage()
     msgText += "or an open internet connection. If none is available automatic uploading will ";
     msgText += "simply fail without notifying the user. However, every time automatic uploading is triggered ";
     msgText += "Crash Reporter will try to upload all crash reports that are found. If you have any questions ";
-    msgText += "regarding this feature you may contact <b>test-tools-dev@projects.maemo.org.</b></p>";
+    msgText += "regarding this feature you may contact <b>twux-dev@projects.maemo.org.</b></p>";
 
     MMessageBox *msgBox = new MMessageBox(msgText);
     msgBox->appear(0, MSceneWindow::DestroyWhenDone);
