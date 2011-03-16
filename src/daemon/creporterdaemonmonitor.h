@@ -101,6 +101,20 @@ class CReporterDaemonMonitor : public QObject
         void setAutoDelete(bool state);
 
         /*!
+          * @brief Returns auto-delete max similar cores property
+          *
+          * @return Number of similar cores to keep
+          */
+        int autoDeleteMaxSimilarCores();
+
+        /*!
+          * @brief Sets auto-delete max similar count.
+          *
+          * @param value number of similar cores to keep
+          */
+        void setAutoDeleteMaxSimilarCores(int value);
+
+        /*!
           * @brief Returns auto-upload property.
           *
           * @return True, if enabled; otherwise false.

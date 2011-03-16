@@ -98,7 +98,7 @@ bool CReporterHandledRichCore::operator==(const CReporterHandledRichCore &other)
 // CReporterDaemonMonitorPrivate::CReporterDaemonMonitorPrivate
 // ----------------------------------------------------------------------------
 CReporterDaemonMonitorPrivate::CReporterDaemonMonitorPrivate() :
-        autoDelete(false), autoUpload(false)
+        autoDelete(false), autoDeleteMaxSimilarCores(0), autoUpload(false)
 {
 }
 
@@ -223,7 +223,7 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
 bool CReporterDaemonMonitorPrivate::checkForDuplicates(const QString &path)
 {
     qDebug() << __PRETTY_FUNCTION__ << "Checking, if" << path << "has been handled for"
-            << CREPORTER_MAX_SIMILAR_RCORES << "times.";
+            << autoDeleteMaxSimilarCores << "times.";
 
     // Create new entry.
     CReporterHandledRichCore *rCore = new CReporterHandledRichCore(path);
@@ -239,7 +239,7 @@ bool CReporterDaemonMonitorPrivate::checkForDuplicates(const QString &path)
             // Duplicate found. Increment counter.
             qDebug() << __PRETTY_FUNCTION__  << "Matches. Count is now:" << handled->count;
 
-            if (handled->count >= CREPORTER_MAX_SIMILAR_RCORES) {
+            if (handled->count > autoDeleteMaxSimilarCores) {
                 // Maximum exeeded.
                 qDebug() << __PRETTY_FUNCTION__  << "Maximum number of duplicates exceeded.";
                 delete rCore;
@@ -389,6 +389,22 @@ bool CReporterDaemonMonitor::autoDeleteEnabled()
 void CReporterDaemonMonitor::setAutoDelete(bool state)
 {
     d_ptr->autoDelete = state;
+}
+
+// ----------------------------------------------------------------------------
+// CReporterDaemonMonitor::autoDeleteMaxSimilarCores
+// ----------------------------------------------------------------------------
+int CReporterDaemonMonitor::autoDeleteMaxSimilarCores()
+{
+    return d_ptr->autoDeleteMaxSimilarCores;
+}
+
+// ----------------------------------------------------------------------------
+// CReporterDaemonMonitor::setAutoDeleteMaxSimilarCores
+// ----------------------------------------------------------------------------
+void CReporterDaemonMonitor::setAutoDeleteMaxSimilarCores(int value)
+{
+    d_ptr->autoDeleteMaxSimilarCores = value;
 }
 
 // ----------------------------------------------------------------------------

@@ -219,6 +219,8 @@ void CReporterDaemon::startCoreMonitoring(const bool fromDBus)
             CReporterPrivacySettingsModel::instance()->writeSettings();
         }
         d->monitor->setAutoDelete(CReporterPrivacySettingsModel::instance()->autoDeleteDuplicates());
+        d->monitor->setAutoDeleteMaxSimilarCores(
+                CReporterPrivacySettingsModel::instance()->autoDeleteMaxSimilarCores());
         d->monitor->setAutoUpload(CReporterPrivacySettingsModel::instance()->automaticSendingEnabled());
     }
 }

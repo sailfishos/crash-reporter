@@ -304,7 +304,7 @@ void Ut_CReporterDaemonMonitor::testAutoDeleteDublicateCores()
     filePath.append("/crashapplication-0287-11-2260.rcore.lzo");
 
     int counter = 1;
-    while (counter <= CREPORTER_MAX_SIMILAR_RCORES) {
+    while (counter <= monitor->autoDeleteMaxSimilarCores()) {
         QFile::remove(filePath);
         QTest::qWait(100);
         QFile::copy("/usr/lib/crash-reporter-tests/testdata/crashapplication-0287-11-2260.rcore.lzo", filePath);

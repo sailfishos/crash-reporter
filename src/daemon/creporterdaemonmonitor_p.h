@@ -36,8 +36,6 @@
 class CReporterDaemonCoreRegistry;
 class CReporterDaemonMonitor;
 
-#define CREPORTER_MAX_SIMILAR_RCORES 10 // Maximum number of duplicate rich-core's accepted.
-
 /*!
   * @class CReporterHandledRichCore
   * @brief This class represent handled rich-core file.
@@ -155,6 +153,8 @@ class CReporterDaemonMonitorPrivate : public QObject
         QList <CReporterHandledRichCore *> handledRichCores;
         //! @arg State of auto-delete feature (enabled/ disabled).
         bool autoDelete;
+        //! @arg Number of similar cores to keep when auto-delete is enabled
+        int autoDeleteMaxSimilarCores;
         //! @arg State of auto-upload feature (enabled/ disabled).
         bool autoUpload;
 

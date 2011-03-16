@@ -52,6 +52,8 @@ namespace Settings {
     const QString ValueSending("Settings/sending");
     //! This setting affects to crash-reporter. If set to true, duplicate rich-core are deleted automatically.
     const QString ValueAutoDeleteDuplicates("Settings/avoid-dups");
+    //! Number of how many similar core dumps are kept when AutoDeleteDuplicates is enabled
+    const QString ValueAutoDeleteMaxSimilarCores("Settings/maxsimilarcores");
     //! This setting affects to crash-reporter. If set to true, lifelogging is enabled.
     const QString ValueLifelog("Settings/lifelog");
     //! This setting affects to crash-reporter. If set to true, crash-reporter tries to upload rich-core dumps automatically.
@@ -134,6 +136,14 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
         bool autoDeleteDuplicates() const;
 
         /*!
+          * @brief Reads setting value for how many similar core dumps are kept when auto delete is enabled
+          *
+          * @note This setting used by the crash-reporter.
+          * @return The amount of similar cores kept
+          */
+        int autoDeleteMaxSimilarCores() const;
+
+        /*!
           * @brief Reads setting value for lifelog functionality and returns it.
           *
           * @note This setting used by the crash-reporter.
@@ -210,6 +220,14 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
           * @param True to enable feature; false to disable.
           */
         void setAutoDeleteDuplicates(bool value);
+
+        /*!
+          * @brief Set the amount of cores kept when auto delete is enabled
+          *
+          * @note This setting used by the crash-reporter.
+          * @param value New value
+          */
+        void setAutoDeleteMaxSimilarCores(int value);
 
         /*!
            * @brief Enables or disables automatic sending.

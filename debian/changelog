@@ -2,6 +2,7 @@ crash-reporter (1.9.2-0) unstable; urgency=low
 
   * Fixes: NB#235438 - Crash reporter title doesnt fit int portrait
   * Fixes: NB#235430 - "!! crash reporter " is not localized
+  * Fixes: NB#237344 - [FEA] "Maximum similar cores" setting to config file
 
  -- Raimo Gratseff <ext-raimo.gratseff@nokia.com>  Fri, 11 Mar 2011 10:50:41 +0200
 
