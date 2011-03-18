@@ -176,7 +176,7 @@ void Ut_CReporterDaemon::init()
     settings = new QSettings(testSettingsFile, QSettings::NativeFormat);
 
     // Create test settings.
-    settings->setValue(Settings::ValueSending, true);
+    settings->setValue(Settings::ValueNotifications, true);
     settings->setValue(Settings::ValueCoreDumping, true);
     settings->setValue(Settings::ValueAutoDeleteDuplicates, true);
     settings->setValue(Settings::ValueAutomaticSending, false);
@@ -328,7 +328,7 @@ void Ut_CReporterDaemon::testMonitoringEnabledFromSettings()
 void Ut_CReporterDaemon::testMonitoringDisabledFromSettings()
 {
     // Disable monitoring.
-    settings->setValue(Settings::ValueSending, false);
+    settings->setValue(Settings::ValueNotifications, false);
     settings->sync();
 
     daemon = new CReporterDaemon;

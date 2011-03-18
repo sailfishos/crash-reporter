@@ -36,7 +36,7 @@ void Ut_CReporterSettingsObserver::init()
     m_settings = new QSettings(testSettingsFile, QSettings::NativeFormat);
 
     // Create test data.
-    m_settings->setValue(Settings::ValueSending, true);
+    m_settings->setValue(Settings::ValueNotifications, true);
     m_settings->setValue(Settings::ValueCoreDumping, true);
     m_settings->setValue(Settings::ValueAutoDeleteDuplicates, true);
 
@@ -56,9 +56,9 @@ void Ut_CReporterSettingsObserver::testSettingValueChangedSignal()
 {
     QSignalSpy valueChangedSpy(m_subject, SIGNAL(valueChanged(QString,QVariant)));
     // Add watcher to key.
-    m_subject->addWatcher(Settings::ValueSending);
+    m_subject->addWatcher(Settings::ValueNotifications);
     // Change setting value.
-    m_settings->setValue(Settings::ValueSending, false);
+    m_settings->setValue(Settings::ValueNotifications, false);
     m_settings->sync();
 
     QTest::qWait(50);
@@ -66,7 +66,7 @@ void Ut_CReporterSettingsObserver::testSettingValueChangedSignal()
 
     QVariantList arguments = valueChangedSpy.takeFirst();
 
-    QCOMPARE(arguments.at(0).toString(), Settings::ValueSending);
+    QCOMPARE(arguments.at(0).toString(), Settings::ValueNotifications);
     QCOMPARE(arguments.at(1).toBool(), false);
 }
 

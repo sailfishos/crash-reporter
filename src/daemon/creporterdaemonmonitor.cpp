@@ -41,6 +41,7 @@
 #include "creporterautouploaderproxy.h"
 #include "creporternamespace.h"
 #include "creporternotification.h"
+#include "creporterprivacysettingsmodel.h"
 
 // ******** Class CReporterHandledRichCore ********
 
@@ -168,9 +169,20 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
         if (!filePath.isEmpty()) {
             // New core found.
             qDebug() << __PRETTY_FUNCTION__ << "New rich-core file found: " << filePath;
+
+            QStringList details = CReporterUtils::parseCrashInfoFromFilename(filePath);
+
             if (autoDelete && checkForDuplicates(filePath)) {
                 // Check for dublicates, if auto-deleting is enabled. If Maximum number of duplicates
                 // exeeded, delete file.
+                if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
+                {
+                    CReporterNotification *notification = new CReporterNotification("crash-reporter",
+                                                                                    QString("%1 has crashed once again").arg(details.at(0)),
+                                                                                    QString("The crash report looked like a possible duplicate and was deleted"));
+                    notification->setTimeout(30);
+                    notification->setParent(this);
+                }
                 CReporterUtils::removeFile(filePath);
                 return;
             }
@@ -186,10 +198,9 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
                     // UI failed to launch. Try to show notification instead.
                     // Daemon is not a Meego Touch application, thus translation with MLocale
                     // won't work here.
-                    QStringList details = CReporterUtils::parseCrashInfoFromFilename(filePath);
 
                     QString notificationSummary("The application %1 crashed.");
-                    notificationSummary.arg(details.at(0));
+                    notificationSummary = notificationSummary.arg(details.at(0));
 
                     QString notificationBody("Unable to start Crash Reporter UI");
 
@@ -204,11 +215,27 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
             }
             else
             {
+                if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
+                {
+                    CReporterNotification *notification = new CReporterNotification("crash-reporter",
+                            QString("%1 has crashed").arg(details.at(0)),
+                            QString("Automatic uploading is triggered"));
+                    notification->setTimeout(30);
+                    notification->setParent(this);
+                }
                 // In AutoUpload-mode try to upload all core files each time a new one has appeared
                 QStringList fileList = registry->collectAllCoreFiles();
                 if (!q_ptr->notifyAutoUploader(fileList))
                 {
                     qWarning() << __PRETTY_FUNCTION__ << "Failed to start Auto Uploader.";
+                    if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
+                    {
+                        CReporterNotification *newnotification = new CReporterNotification("crash-reporter",
+                            QString("Auto Uploader failed to start").arg(details.at(0)),
+                            QString("Please send the crash reports manually"));
+                        newnotification->setTimeout(30);
+                        newnotification->setParent(this);
+                    }
                 }
             }
         }

@@ -35,6 +35,7 @@ INCLUDEPATH += ../libs/serviceif \
                ../libs/settings \
                ../libs/logger \
                ../libs/httpclient \
+               ../libs/notification \
                ../libs \
 
 LIBS += ../../lib/libcrashreporter.so \

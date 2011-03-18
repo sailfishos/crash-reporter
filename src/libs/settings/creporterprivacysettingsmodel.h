@@ -49,7 +49,7 @@ namespace Settings {
     //! This setting affects to sp-rich-core. If set to true, rich-core dumps are produced.
     const QString ValueCoreDumping("Settings/coredumping");
     //! This setting affects to crash-reporter. If set to true, user notifications are displayed.
-    const QString ValueSending("Settings/sending");
+    const QString ValueNotifications("Settings/notifications");
     //! This setting affects to crash-reporter. If set to true, duplicate rich-core are deleted automatically.
     const QString ValueAutoDeleteDuplicates("Settings/avoid-dups");
     //! Number of how many similar core dumps are kept when AutoDeleteDuplicates is enabled
@@ -118,13 +118,13 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
         bool coreDumpingEnabled() const;
 
         /*!
-          * @brief Reads setting value for core sending and returns it.
+          * @brief Reads setting value for notifications and returns it.
           *
           * @note This setting used by the crash-reporter.
-          * @return Returns true, if sending is enabled; otherwise false. If value doesn't
+          * @return Returns true, if notifications are enabled; otherwise false. If value doesn't
           *     exist, default value is returned.
           */
-        bool sendingEnabled() const;
+        bool notificationsEnabled() const;
 
         /*!
           * @brief Reads setting value for auto deleting dublicates and returns it.
@@ -206,12 +206,12 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
        void setCoreDumpingEnabled(bool value);
 
        /*!
-          * @brief Enables or disables core sending.
+          * @brief Enables or disables notifications.
           *
           * @note This setting used by the crash-reporter.
           * @param True to enable feature; false to disable.
           */
-        void setSendingEnabled(bool value);
+        void setNotificationsEnabled(bool value);
 
         /*!
           * @brief Enables or disables auto deleting crash reports.

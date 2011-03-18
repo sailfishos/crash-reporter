@@ -51,7 +51,7 @@ void Ut_CReporterPrivacySettingsModel::init()
 
     m_settings = new QSettings(settingsFile, QSettings::NativeFormat);
 
-    m_settings->setValue(Settings::ValueSending, false);
+    m_settings->setValue(Settings::ValueNotifications, false);
     m_settings->setValue(Settings::ValueCoreDumping, true);
     m_settings->setValue(Settings::ValueAutoDeleteDuplicates, true);
     m_settings->setValue(Settings::ValueLifelog, false);
@@ -70,7 +70,7 @@ void Ut_CReporterPrivacySettingsModel::testReadSettings()
     QVERIFY(CReporterPrivacySettingsModel::instance()->settingsFile() == settingsFile);
     QVERIFY(CReporterPrivacySettingsModel::instance()->isValid()== true);
 
-    enabled = CReporterPrivacySettingsModel::instance()->sendingEnabled();
+    enabled = CReporterPrivacySettingsModel::instance()->notificationsEnabled();
     QVERIFY(enabled == false);
 
     enabled = CReporterPrivacySettingsModel::instance()->coreDumpingEnabled();
@@ -100,7 +100,7 @@ void Ut_CReporterPrivacySettingsModel::testWriteSettings()
     QSignalSpy valueChangedSpy(CReporterPrivacySettingsModel::instance(),
                                SIGNAL(valueChanged(QString,QVariant)));
 
-    CReporterPrivacySettingsModel::instance()->setSendingEnabled(true);
+    CReporterPrivacySettingsModel::instance()->setNotificationsEnabled(true);
     CReporterPrivacySettingsModel::instance()->setCoreDumpingEnabled(false);
     CReporterPrivacySettingsModel::instance()->setAutoDeleteDuplicates(false);
     CReporterPrivacySettingsModel::instance()->setAutomaticSendingEnabled(false);
@@ -113,7 +113,7 @@ void Ut_CReporterPrivacySettingsModel::testWriteSettings()
 
     CReporterPrivacySettingsModel::instance()->writeSettings();
 
-    QVERIFY(m_settings->value(Settings::ValueSending).toBool() == true);
+    QVERIFY(m_settings->value(Settings::ValueNotifications).toBool() == true);
     QVERIFY(m_settings->value(Settings::ValueCoreDumping).toBool() == false);
     QVERIFY(m_settings->value(Settings::ValueAutoDeleteDuplicates).toBool() == false);
     QVERIFY(m_settings->value(Settings::ValueAutomaticSending).toBool() == false);

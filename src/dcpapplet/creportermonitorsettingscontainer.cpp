@@ -86,10 +86,10 @@ void CReporterMonitorSettingsContainer::updateButtons()
                 setChecked(CReporterPrivacySettingsModel::instance()->coreDumpingEnabled());
     }
     if (d->m_buttons->button(NotifyCrashReportsBtn)->isChecked()
-        != CReporterPrivacySettingsModel::instance()->sendingEnabled())
+        != CReporterPrivacySettingsModel::instance()->notificationsEnabled())
     {
         d->m_buttons->button(NotifyCrashReportsBtn)->
-                setChecked(CReporterPrivacySettingsModel::instance()->sendingEnabled());
+                setChecked(CReporterPrivacySettingsModel::instance()->notificationsEnabled());
     }
     if (d->m_buttons->button(AutomaticSendingBtn)->isChecked()
         != CReporterPrivacySettingsModel::instance()->automaticSendingEnabled())
@@ -257,11 +257,9 @@ void CReporterMonitorSettingsContainer::groupButtonToggled(bool checked)
     // Enable/ disable rich-core dumping. If enabled, possibility toggle sending and auto-delete
     // features on/ off.
     case SaveCrashReportsBtn:
-        // Disable auto-delete button, if core dumping is not enabled.
-        d->m_buttons->button(AutoDeleteCrashReportsBtn)->setEnabled(checked);
         if (!checked) {
             // If core dumping was disabled, disable notifications and automatic sending.
-            CReporterPrivacySettingsModel::instance()->setSendingEnabled(false);
+            CReporterPrivacySettingsModel::instance()->setNotificationsEnabled(false);
             CReporterPrivacySettingsModel::instance()->setAutomaticSendingEnabled(false);
         }
         // Set new core dumping settings.
@@ -269,26 +267,11 @@ void CReporterMonitorSettingsContainer::groupButtonToggled(bool checked)
         break;
     // Enable/ disable UI notifications for the new crash reports.
     case NotifyCrashReportsBtn:
-        // If notifications were enabled...
-        if (checked) {
-            // Enable other buttons based on settings.
-            d->m_buttons->button(AutoDeleteCrashReportsBtn)->setEnabled(true);
-            CReporterPrivacySettingsModel::instance()->setCoreDumpingEnabled(true);
-            CReporterPrivacySettingsModel::instance()->setAutomaticSendingEnabled(false);
-        }
         // Set new setting.
-        CReporterPrivacySettingsModel::instance()->setSendingEnabled(checked);
+        CReporterPrivacySettingsModel::instance()->setNotificationsEnabled(checked);
         break;
     // Enable/disable automatic sending of new crash reports
     case AutomaticSendingBtn:
-        if (checked)
-        {
-            // Enable other buttons based on settings.
-            d->m_buttons->button(AutoDeleteCrashReportsBtn)->setEnabled(true);
-            CReporterPrivacySettingsModel::instance()->setCoreDumpingEnabled(true);
-            CReporterPrivacySettingsModel::instance()->setSendingEnabled(false);
-            showAutoUploaderMessage();
-        }
         CReporterPrivacySettingsModel::instance()->setAutomaticSendingEnabled(checked);
         break;
     // Toggle auto-deletion on/off.

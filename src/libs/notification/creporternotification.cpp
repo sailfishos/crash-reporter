@@ -71,7 +71,7 @@ CReporterNotificationPrivate::CReporterNotificationPrivate(const QString &eventT
 // ----------------------------------------------------------------------------
 CReporterNotificationPrivate::~CReporterNotificationPrivate()
 {
-    notification->remove();
+    //notification->remove();
     delete notification;
     notification = 0;
 }

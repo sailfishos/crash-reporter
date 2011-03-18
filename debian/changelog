@@ -2,7 +2,9 @@ crash-reporter (1.9.2-0) unstable; urgency=low
 
   * Fixes: NB#235438 - Crash reporter title doesnt fit int portrait
   * Fixes: NB#235430 - "!! crash reporter " is not localized
-  * Fixes: NB#237344 - [FEA] "Maximum similar cores" setting to config file
+  * Fixes: NB#237344 - "Maximum similar cores" setting to config file
+  * Fixes: NB#216373 - Option to get information on Crash Reporter AutoUploader actions
+  * Fixes: NB#236185 - Showing of crash indicator cannot be set on when automatic sending of core dumps is on
 
  -- Raimo Gratseff <ext-raimo.gratseff@nokia.com>  Fri, 11 Mar 2011 10:50:41 +0200
 

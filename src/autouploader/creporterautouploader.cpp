@@ -36,6 +36,8 @@
 #include "creporteruploadqueue.h"
 #include "creporteruploaditem.h"
 #include "creporteruploadengine.h"
+#include "creporternotification.h"
+#include "creporterprivacysettingsmodel.h"
 
 // ******** Class CReporterAutoUploaderPrivate ********
 
@@ -114,6 +116,14 @@ bool CReporterAutoUploader::uploadFiles(const QStringList &fileList)
         d_ptr->queue.enqueue(new CReporterUploadItem(filename));
     }
 
+    if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
+    {
+        CReporterNotification *notification = new CReporterNotification("crash-reporter",
+            QString("Crash Reporter Auto Uploader started"),
+            QString("Uploading %1 crash report(s)").arg(fileList.count()));
+        notification->setTimeout(30);
+        notification->setParent(this);
+    }
 
     return true;
 }
@@ -191,6 +201,23 @@ void CReporterAutoUploader::engineFinished(int error, int sent, int total)
                 message += qtTrId("qtn_reason_unknown_text");
             }
         }
+    }
+
+    if (total > sent && CReporterPrivacySettingsModel::instance()->notificationsEnabled())
+    {
+        CReporterNotification *notification = new CReporterNotification("crash-reporter",
+                QString("Crash Reporter failed to send all reports"),
+                QString("%1 out of %2 sent").arg(sent).arg(total));
+        notification->setTimeout(30);
+        notification->setParent(this);
+    }
+    else if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
+    {
+        CReporterNotification *notification = new CReporterNotification("crash-reporter",
+                QString("Crash Reporter"),
+                QString("%1 crash report(s) sent successfully").arg(sent));
+        notification->setTimeout(30);
+        notification->setParent(this);
     }
 
     qDebug() << __PRETTY_FUNCTION__ << "Message: " << message;

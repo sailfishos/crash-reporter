@@ -62,7 +62,7 @@ QString CReporterSettingsBrief::titleText() const
 // ----------------------------------------------------------------------------
 QString CReporterSettingsBrief::valueText() const
 {
-    if (CReporterPrivacySettingsModel::instance()->sendingEnabled())
+    if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
     {
         //% "Notify of new crash reports"
         return QString(qtTrId("qt_dcp_show_notitications_text"));

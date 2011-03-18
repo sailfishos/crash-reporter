@@ -12,7 +12,8 @@ INCLUDEPATH += . \
                $${CREPORTER_SRC_DIR}/dialogserver \
                $${CREPORTER_SRC_DIR}/libs/serviceif \
                $${CREPORTER_SRC_DIR}/libs/notification \
-	
+               $${CREPORTER_SRC_DIR}/libs/settings \
+
 DEPENDPATH += $$INCLUDEPATH \
 
 # stubs
@@ -33,7 +34,13 @@ HEADERS += $${CREPORTER_STUBS_DIR}/mgconfitem_stub.h \
            $${CREPORTER_SRC_DIR}/libs/serviceif/creporterdialogserverproxy.h \
            $${CREPORTER_SRC_DIR}/libs/serviceif/creporterautouploaderproxy.h \
            $${CREPORTER_SRC_DIR}/libs/notification/creporternotification.h \
-		   ut_creporterdaemonmonitor.h \
+    $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsbase.h \
+    $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsbase_p.h \
+    $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsinit_p.h \
+    $${CREPORTER_SRC_DIR}/libs/settings/creporterprivacysettingsmodel.h \
+    $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsobserver.h \
+    $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsobserver_p.h \
+           ut_creporterdaemonmonitor.h \
 
 # unit test and sources
 SOURCES += $$TEST_SOURCES \
@@ -44,6 +51,10 @@ SOURCES += $$TEST_SOURCES \
            $${CREPORTER_SRC_DIR}/libs/utils/creporterutils.cpp \
            $${CREPORTER_SRC_DIR}/libs/serviceif/creporterdialogserverproxy.cpp \
            $${CREPORTER_SRC_DIR}/libs/serviceif/creporterautouploaderproxy.cpp \
+    $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsinit.cpp \
+    $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsbase.cpp \
+    $${CREPORTER_SRC_DIR}/libs/settings/creporterprivacysettingsmodel.cpp \
+    $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsobserver.cpp \
            ut_creporterdaemonmonitor.cpp \
 
 include(../ut_coverage.pri)

@@ -95,11 +95,11 @@ bool CReporterPrivacySettingsModel::coreDumpingEnabled() const
 }
 
 // ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::sendingEnabled
+// CReporterPrivacySettingsModel::notificationsEnabled
 // ----------------------------------------------------------------------------
-bool CReporterPrivacySettingsModel::sendingEnabled() const
+bool CReporterPrivacySettingsModel::notificationsEnabled() const
 {
-    return value(Settings::ValueSending, QVariant(true)).toBool();
+    return value(Settings::ValueNotifications, QVariant(true)).toBool();
 }
 
 // ----------------------------------------------------------------------------
@@ -175,11 +175,11 @@ void CReporterPrivacySettingsModel::setCoreDumpingEnabled(bool value)
 }
 
 // ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::setSendingEnabled
+// CReporterPrivacySettingsModel::setNotificationsEnabled
 // ----------------------------------------------------------------------------
-void CReporterPrivacySettingsModel::setSendingEnabled(bool value)
+void CReporterPrivacySettingsModel::setNotificationsEnabled(bool value)
 {
-    setValue(Settings::ValueSending, QVariant(value));
+    setValue(Settings::ValueNotifications, QVariant(value));
 }
 
 // ----------------------------------------------------------------------------

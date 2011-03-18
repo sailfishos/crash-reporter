@@ -208,7 +208,7 @@ void CReporterPrivacySettingsWidget::handleSendSelectButtonClicked()
     if (waitingForCoreFilesReply)
         return;
     CReporterPrivacySettingsModel::instance()->setAutomaticSendingEnabled(false);
-    CReporterPrivacySettingsModel::instance()->setSendingEnabled(true);
+    CReporterPrivacySettingsModel::instance()->setNotificationsEnabled(true);
 
     // Request cores from daemon.
     CReporterDaemonProxy daemonProxy(CReporter::DaemonServiceName,

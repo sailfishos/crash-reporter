@@ -30,6 +30,41 @@
 #include "creporterautouploader.h"
 #include "creporterautouploaderdbusadaptor.h"
 #include "creporternamespace.h"
+#include "creporternotification.h"
+
+// CReporterNotification mock object.
+CReporterNotification::CReporterNotification(const QString &eventType,
+                                             const QString &summary, const QString &body,
+                                             const QString &imageName, QObject *parent)
+{
+    Q_UNUSED(eventType);
+    Q_UNUSED(summary);
+    Q_UNUSED(body);
+    Q_UNUSED(imageName);
+    Q_UNUSED(parent);
+}
+
+CReporterNotification::~CReporterNotification()
+{}
+
+void CReporterNotification::update(const QString &summary, const QString &body)
+{
+    Q_UNUSED(summary);
+    Q_UNUSED(body);
+}
+
+void CReporterNotification::setTimeout(int timeout)
+{
+    Q_UNUSED(timeout);
+}
+
+void CReporterNotification::remove()
+{}
+
+int CReporterNotification::timeout() const
+{
+    return 0;
+}
 
 // CReporterUploadItem mock object.
 CReporterUploadItem::CReporterUploadItem(const QString &file)

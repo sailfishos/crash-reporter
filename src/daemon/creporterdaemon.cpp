@@ -124,7 +124,7 @@ bool CReporterDaemon::initiateDaemon()
 
     d->settingsObserver = new CReporterSettingsObserver(filename, this);
 
-    if (CReporterPrivacySettingsModel::instance()->sendingEnabled()
+    if (CReporterPrivacySettingsModel::instance()->notificationsEnabled()
         || CReporterPrivacySettingsModel::instance()->automaticSendingEnabled())
     {
         // Read from settings file, if monitor should be started.
@@ -132,7 +132,7 @@ bool CReporterDaemon::initiateDaemon()
     }
 
     // Add watcher to monitor changes in settings.
-    d->settingsObserver->addWatcher(Settings::ValueSending);
+    d->settingsObserver->addWatcher(Settings::ValueNotifications);
     d->settingsObserver->addWatcher(Settings::ValueAutomaticSending);
     d->settingsObserver->addWatcher(Settings::ValueAutoDeleteDuplicates);
 
@@ -148,9 +148,9 @@ bool CReporterDaemon::initiateDaemon()
             qDebug() << __PRETTY_FUNCTION__ << "Failed to add files to the queue.";
         }
     }
-    else if (CReporterPrivacySettingsModel::instance()->sendingEnabled())
+    else if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
     {
-        // Collect rich-cores from the system and notify UI, if sending is enabled.
+        // Collect rich-cores from the system and notify UI, if notifications are enabled.
         QStringList files = collectAllCoreFiles();
 
         if (!files.isEmpty())
@@ -215,7 +215,7 @@ void CReporterDaemon::startCoreMonitoring(const bool fromDBus)
         qDebug() << __PRETTY_FUNCTION__ << "Core monitoring started.";
 
         if (fromDBus) {
-            CReporterPrivacySettingsModel::instance()->setSendingEnabled(true);
+            CReporterPrivacySettingsModel::instance()->setNotificationsEnabled(true);
             CReporterPrivacySettingsModel::instance()->writeSettings();
         }
         d->monitor->setAutoDelete(CReporterPrivacySettingsModel::instance()->autoDeleteDuplicates());
@@ -240,7 +240,7 @@ void CReporterDaemon::stopCoreMonitoring(const bool fromDBus)
 		qDebug() << __PRETTY_FUNCTION__ << "Core monitoring stopped.";
 
           if (fromDBus) {
-              CReporterPrivacySettingsModel::instance()->setSendingEnabled(false);
+              CReporterPrivacySettingsModel::instance()->setNotificationsEnabled(false);
               CReporterPrivacySettingsModel::instance()->writeSettings();
         }
 	}
@@ -264,13 +264,13 @@ QStringList CReporterDaemon::collectAllCoreFiles()
 void CReporterDaemon::settingValueChanged(const QString &key, const QVariant &value)
 {
     qDebug() << __PRETTY_FUNCTION__ << "Setting:" << key << "has changed; value:" << value;
-    if (key == Settings::ValueSending || key == Settings::ValueAutomaticSending)
+    if (key == Settings::ValueNotifications || key == Settings::ValueAutomaticSending)
     {
         if (value.toBool())
         {
             startCoreMonitoring();
         }
-        else if (!CReporterPrivacySettingsModel::instance()->sendingEnabled()
+        else if (!CReporterPrivacySettingsModel::instance()->notificationsEnabled()
                && !CReporterPrivacySettingsModel::instance()->automaticSendingEnabled())
         {
             if (key == Settings::ValueAutomaticSending)
