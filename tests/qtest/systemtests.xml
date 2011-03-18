@@ -11,7 +11,7 @@
 
   <case type="Functional" name="test-crash-reporter-daemon" description="Verify, crash-reporter-daemon is running and restarted.">
     <step>if ! grep -q "^notifications=true" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^notifications=.*/notifications=true/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
-    <step>if ! grep -q "^sending=" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^sending=.*/notifications=true/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
+    <step>if grep -q "^sending=" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^sending=.*/notifications=true/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
     <step>if ! grep -q "^automaticsending=false" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^automaticsending=.*/automaticsending=false/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
     <step>cat /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf</step>
     <step>su - user -c "dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.GetConnectionUnixProcessID string:'com.nokia.CrashReporter.Daemon'"</step>
@@ -23,7 +23,7 @@
   <case type="Functional" name="test-crash-reporter-ui-notify-dialog" description="Verify that crash-reporter-ui is started, when crash occurs.">
     <step>ls /home/user/MyDocs/core-dumps -A -l</step>
     <step>if ! grep -q "^notifications=true" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^notifications=.*/notifications=true/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
-    <step>if ! grep -q "^sending=" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^sending=.*/notifications=true/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
+    <step>if grep -q "^sending=" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^sending=.*/notifications=true/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
     <step>if ! grep -q "^automaticsending=false" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^automaticsending=.*/automaticsending=false/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
     <step>cat /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf</step>
     <step expected_result="139">/usr/lib/crash-reporter-tests/testdata/crasher</step>
@@ -41,7 +41,7 @@
   <case type="Functional" name="test-crash-reporter-ui-send-selected-dialog" description="Verify that crash-reporter-ui is started, when unsent crash reports are found.">
     <step>ls /home/user/MyDocs/core-dumps -A -l</step>
     <step>if ! grep -q "^notifications=true" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^notifications=.*/notifications=true/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
-    <step>if ! grep -q "^sending=" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^sending=.*/notifications=true/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
+    <step>if grep -q "^sending=" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^sending=.*/notifications=true/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
     <step>if ! grep -q "^automaticsending=false" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^automaticsending=.*/automaticsending=false/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
     <step>cat /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf</step>
     <step>initctl stop xsession/crash-reporter-daemon</step>
@@ -93,7 +93,7 @@
   <case type="Functional" name="test-crash-reporter-sending-disabled" description="Verify that neither crash-reporter-ui nor crash-reporter-autouploader is started when sending and automaticsending are disabled.">
     <step>ls /home/user/MyDocs/core-dumps -A -l</step>
     <step>if ! grep -q "^notifications=false" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^notifications=.*/notifications=false/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
-    <step>if ! grep -q "^sending=" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^sending=.*/notifications=false/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
+    <step>if grep -q "^sending=" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^sending=.*/notifications=false/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
     <step>if ! grep -q "^automaticsending=false" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^automaticsending=.*/automaticsending=false/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
     <step>cat /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf</step>
     <step expected_result="1">(/usr/lib/crash-reporter-tests/testdata/crasher&amp;); xval=0; for i in $(seq 0 30); do su - user -c "dbus-send --session --print-reply --dest=org.freedesktop.DBus / org.freedesktop.DBus.GetConnectionUnixProcessID string:'com.nokia.CrashReporter.AutoUploader'"; if [ $xval -eq $? ]; then exit 0; fi; sleep .1; done; exit 1;</step>
