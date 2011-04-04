@@ -104,8 +104,15 @@ void CReporterNotificationDialog::createcontent()
 
     setObjectName("CrashReporterNotificationDialog");
 
-    //% "The application %1 crashed."
-    QString title = qtTrId("qtn_the_application_%1_crashed_text").arg(d->details.at(0));
+    QString title;
+    if (d->details.at(0) == CReporter::LifelogPackagePrefix)
+    {   //% "New lifelog report"
+        title = qtTrId("qtn_new_lifelog_report_text");
+    }
+    else
+    {   //% "%1 has crashed"
+        title = qtTrId("qtn_the_application_%1_crashed_text").arg(d->details.at(0));
+    }
 
     // Set title.
     setTitle(title);
@@ -113,31 +120,54 @@ void CReporterNotificationDialog::createcontent()
     // Create widgets to be placed on central widget.
     QGraphicsWidget *panel = centralWidget();
 
-    QString message;
-    //% "Please help to improve the software by filling this report and describe what you we're doing. "
-    //% "Useful information include how to reproduce the error etc."
-    message = qtTrId("qtn_notify_dialog_header_text");
+    // Create layout and policy.
+    MLayout *layout = new MLayout(panel);
+    panel->setLayout(layout);
+    MLinearLayoutPolicy  *policy = new MLinearLayoutPolicy(layout, Qt::Vertical);
+    policy->setObjectName("DialogMainLayout");
+    layout->setContentsMargins(0,0,0,0);
 
-    // Central widget content.
+    QString message;
+    if (d->details.at(0) == CReporter::LifelogPackagePrefix)
+    {   //% "New Crash Reporter Lifelog report is ready to be sent. Lifelogs provide information on crashes, "
+        //% "battery status, memory usage etc. and are vital for device statistics. Sending them regularly "
+        //% "is highly suggested but their generation can be disabled in Crash Reporter settings."
+        message = qtTrId("qtn_notify_lifelog_body_text");
+    }
+    else
+    {   //% "Please help to improve the software by filling this report and describe what you we're doing. "
+        //% "Useful information include how to reproduce the error etc."
+        message = qtTrId("qtn_notify_dialog_header_text");
+    }
+
     MLabel *upperLabel = new MLabel(message, panel);
     upperLabel->setWordWrap(true);
     upperLabel->setObjectName("DialogUpperLabel");
     upperLabel->setStyleName("CommonBodyTextInverted");
+    policy->addItem(upperLabel, Qt::AlignLeft | Qt::AlignTop);
 
-    d->commentField = new MTextEdit(MTextEditModel::MultiLine, "", panel);
-    d->commentField->setObjectName("DialogCommentField");
+    // Don't add comments or details for lifelogs
+    if (d->details.at(0) != CReporter::LifelogPackagePrefix)
+    {
+        d->commentField = new MTextEdit(MTextEditModel::MultiLine, "", panel);
+        d->commentField->setObjectName("DialogCommentField");
 
-    //% "File size: %1, Receiving server: %2. "
-    QString details = qtTrId("qtn_receiving_server_and_filesize_text").arg(d->filesize).arg(d->server);
+        //% "File size: %1, Receiving server: %2. "
+        QString details = qtTrId("qtn_receiving_server_and_filesize_text").arg(d->filesize).arg(d->server);
 
-    //% "The following technical information will be included in the report: PID: %1, Signal: %2"
-    details += qtTrId("qtn_technical_infomation_included_text")
-                        .arg(d->details.at(3)).arg(d->details.at(2));
+        //% "The following technical information will be included in the report: PID: %1, Signal: %2"
+        details += qtTrId("qtn_technical_infomation_included_text")
+                            .arg(d->details.at(3)).arg(d->details.at(2));
 
-    MLabel *crashDetailsLabel = new MLabel(details, panel);
-    crashDetailsLabel->setObjectName("CrashDetailsLabel");
-    crashDetailsLabel->setStyleName("CommonBodyTextInverted");
-    crashDetailsLabel->setWordWrap(true);
+        MLabel *crashDetailsLabel = new MLabel(details, panel);
+        crashDetailsLabel->setObjectName("CrashDetailsLabel");
+        crashDetailsLabel->setStyleName("CommonBodyTextInverted");
+        crashDetailsLabel->setWordWrap(true);
+
+
+        policy->addItem(d->commentField, Qt::AlignLeft  | Qt::AlignTop);
+        policy->addItem(crashDetailsLabel, Qt::AlignLeft);
+    }
 
     QSignalMapper *mapper = new QSignalMapper(this);
 
@@ -147,22 +177,10 @@ void CReporterNotificationDialog::createcontent()
     optionsButton->setPreferredWidth(140);
     optionsButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
     optionsButton->setStyleName("CommonSingleButtonInverted");
+    policy->addItem(optionsButton, Qt::AlignCenter);
 
     connect(optionsButton, SIGNAL(clicked()), mapper, SLOT(map()));
     mapper->setMapping(optionsButton, static_cast<int>(CReporter::OptionsButton));
-
-    // Create layout and policy.
-    MLayout *layout = new MLayout(panel);
-    panel->setLayout(layout);
-    MLinearLayoutPolicy  *policy = new MLinearLayoutPolicy(layout, Qt::Vertical);
-    policy->setObjectName("DialogMainLayout");
-    layout->setContentsMargins(0,0,0,0);
-
-    // Add items to the layout.
-    policy->addItem(upperLabel, Qt::AlignLeft | Qt::AlignTop);
-    policy->addItem(d->commentField, Qt::AlignLeft  | Qt::AlignTop);
-    policy->addItem(crashDetailsLabel, Qt::AlignLeft);
-    policy->addItem(optionsButton, Qt::AlignCenter);
 
     // Add buttons to button area.
     //% "Send"

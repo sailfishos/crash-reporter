@@ -83,17 +83,13 @@ mountpoint_env_names[NUM_ENV_MOUNTPOINTS][MAX_MOUNTPOINT_NAMELEN] =
 static const char
 mountpoint_static[NUM_STATIC_MOUNTPOINTS][MAX_MOUNTPOINT_NAMELEN] =
     {
-    "/media/mmc1",
-    "/home/user/MyDocs",
-    "/media/mmc2"
+    "/home/user/MyDocs"
     };
 #else
 static const char
 mountpoint_static[NUM_STATIC_MOUNTPOINTS][MAX_MOUNTPOINT_NAMELEN] =
     {
-    "/crash-reporter-tests/media/mmc1",
-    "/crash-reporter-tests/home/user/MyDocs",
-    "/crash-reporter-tests/media/mmc2"
+    "/crash-reporter-tests/home/user/MyDocs"
     };
 #endif // CREPORTER_UNIT_TEST
 

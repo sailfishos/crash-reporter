@@ -222,6 +222,14 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
         void setAutoDeleteDuplicates(bool value);
 
         /*!
+          * @brief Enables or disables lifelog.
+          *
+          * @note This setting used by the crash-reporter.
+          * @param True to enable feature; false to disable.
+          */
+        bool setLifelogEnabled(bool value);
+
+        /*!
           * @brief Set the amount of cores kept when auto delete is enabled
           *
           * @note This setting used by the crash-reporter.

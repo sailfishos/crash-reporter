@@ -135,6 +135,13 @@ QStringList CReporterUtils::parseCrashInfoFromFilename(const QString &filePath)
     // application-xxxx-11-2029
     QString baseName = fi.baseName();
 
+    // Checking if the file is a lifelog report
+    if (baseName.startsWith(CReporter::LifelogPackagePrefix))
+    {
+        qDebug() << __PRETTY_FUNCTION__ << "Lifelog report detected. Will not try to parse crash info.";
+        return QStringList() << CReporter::LifelogPackagePrefix << QString() << QString() << QString();
+    }
+
     /*
      * The basename format is: application_name-xxxx-11-2029.rcore.lzo.
      *

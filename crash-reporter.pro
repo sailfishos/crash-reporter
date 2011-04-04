@@ -36,8 +36,6 @@ SUBDIRS += src tests translations
 # If running in SDK, create fake mount points in user home
 contains(DEFINES, CREPORTER_SDK_HOST) {
     system(mkdir -p $HOME/home/user/MyDocs)
-    system(mkdir -p $HOME/media/mmc1)
-    system(mkdir -p $HOME/media/mmc2)
 }
 
 include(doc/doc.pri)

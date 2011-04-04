@@ -152,6 +152,15 @@ namespace CReporter {
             //! Log to a file.
             LogFile,
         } LogType;
+
+       //! Lifelog update interval (MSECS!)
+       const int LifelogUpdateInterval = 60 * 60 * 1000;
+
+       //! Lifelog minimum update interval when starting/stopping lifelogging etc (SECS!)
+       const int LifelogMinimumUpdateInterval = 15 * 60;
+
+       //! Prefix for lifelog lzop packages
+       const QString LifelogPackagePrefix = "LifelogReport";
 }
 
 #endif // CREPORTERNAMESPACE_H

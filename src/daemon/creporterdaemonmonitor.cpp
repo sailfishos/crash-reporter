@@ -172,7 +172,10 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
 
             QStringList details = CReporterUtils::parseCrashInfoFromFilename(filePath);
 
-            if (autoDelete && checkForDuplicates(filePath)) {
+            emit q_ptr->richCoreNotify(filePath);
+
+            if (autoDelete && checkForDuplicates(filePath)
+                && !filePath.contains(CReporter::LifelogPackagePrefix)) {
                 // Check for dublicates, if auto-deleting is enabled. If Maximum number of duplicates
                 // exeeded, delete file.
                 if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
@@ -187,8 +190,6 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
                 return;
             }
 
-            emit q_ptr->richCoreNotify(filePath);
-
             if (!autoUpload)
             {
                 QVariantList arguments;
@@ -199,8 +200,17 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
                     // Daemon is not a Meego Touch application, thus translation with MLocale
                     // won't work here.
 
-                    QString notificationSummary("The application %1 crashed.");
-                    notificationSummary = notificationSummary.arg(details.at(0));
+                    QString notificationSummary;
+                    if (filePath.contains(CReporter::LifelogPackagePrefix))
+                    {
+                        notificationSummary = "New lifelog report is ready.";
+                    }
+                    else
+                    {
+                        notificationSummary = "The application %1 crashed.";
+                        notificationSummary = notificationSummary.arg(details.at(0));
+                    }
+
 
                     QString notificationBody("Unable to start Crash Reporter UI");
 
@@ -217,8 +227,19 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
             {
                 if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
                 {
+                    QString notificationSummary;
+                    if (filePath.contains(CReporter::LifelogPackagePrefix))
+                    {
+                        notificationSummary = "New lifelog report is ready.";
+                    }
+                    else
+                    {
+                        notificationSummary = "%1 has crashed.";
+                        notificationSummary = notificationSummary.arg(details.at(0));
+                    }
+
                     CReporterNotification *notification = new CReporterNotification("crash-reporter",
-                            QString("%1 has crashed").arg(details.at(0)),
+                            QString(notificationSummary).arg(details.at(0)),
                             QString("Automatic uploading is triggered"));
                     notification->setTimeout(30);
                     notification->setParent(this);

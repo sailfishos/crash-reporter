@@ -54,6 +54,8 @@ CReporterDaemon::CReporterDaemon() :
 
     d->monitor = 0;
     d->timerId = 0;
+    d->lifelogTimer = 0;
+    d->lifelogUpdateCount = 0;
 
     // Create registry instance preserving core locations.
     d->registry = new CReporterDaemonCoreRegistry();
@@ -135,6 +137,7 @@ bool CReporterDaemon::initiateDaemon()
     d->settingsObserver->addWatcher(Settings::ValueNotifications);
     d->settingsObserver->addWatcher(Settings::ValueAutomaticSending);
     d->settingsObserver->addWatcher(Settings::ValueAutoDeleteDuplicates);
+    d->settingsObserver->addWatcher(Settings::ValueLifelog);
 
     connect(d->settingsObserver, SIGNAL(valueChanged(QString,QVariant)),
                 this, SLOT(settingValueChanged(QString,QVariant)));
@@ -194,6 +197,9 @@ bool CReporterDaemon::initiateDaemon()
         }
     }
 
+    // Start lifelogging if it's enabled in settings
+    setLifelogEnabled(CReporterPrivacySettingsModel::instance()->lifelogEnabled());
+
     return true;
 }
 
@@ -211,6 +217,8 @@ void CReporterDaemon::startCoreMonitoring(const bool fromDBus)
 		// Create monitor instance and start monitoring cores.
         d->monitor = new CReporterDaemonMonitor(d->registry);
         Q_CHECK_PTR(d->monitor);
+
+        connect(d->monitor, SIGNAL(richCoreNotify(QString)), SLOT(newCoreDump(QString)));
 
         qDebug() << __PRETTY_FUNCTION__ << "Core monitoring started.";
 
@@ -290,6 +298,10 @@ void CReporterDaemon::settingValueChanged(const QString &key, const QVariant &va
             d_ptr->monitor->setAutoDelete(value.toBool());
         }
     }
+    else if (key == Settings::ValueLifelog)
+    {
+        setLifelogEnabled(value.toBool());
+    }
 
     if (key == Settings::ValueAutomaticSending)
     {
@@ -331,6 +343,135 @@ void CReporterDaemon::handleNotificationEvent()
 
     if (notification != 0) {
         delete notification;
+    }
+}
+
+// ----------------------------------------------------------------------------
+//  CReporterDaemon::setLifelogEnabled
+// ----------------------------------------------------------------------------
+void CReporterDaemon::setLifelogEnabled(bool enabled)
+{
+    Q_D(CReporterDaemon);
+    if (enabled && !d->lifelogTimer)
+    {
+        updateLifelog();
+        // Start the timer to update lifelog
+        d->lifelogTimer = new QTimer(this);
+        connect(d->lifelogTimer, SIGNAL(timeout()), SLOT(updateLifelog()));
+        d->lifelogTimer->start(CReporter::LifelogUpdateInterval);
+    }
+    else if (!enabled && d->lifelogTimer)
+    {
+        delete d->lifelogTimer;
+        d->lifelogTimer = 0;
+    }
+}
+
+// ----------------------------------------------------------------------------
+// constant lifelogging commands used by the update function below
+// ----------------------------------------------------------------------------
+
+const QString LL_ID_GEN_CMD = "echo LL_ID_GEN "
+    "sn=`sysinfoclient -g /device/production-sn | awk 'BEGIN {FS=\" \"} {print $3}'`,"
+    "hw=`sysinfoclient -g /device/hw-version | awk 'BEGIN {FS=\" \"} {print $3}'`,"
+    "sw=`sysinfoclient -g /device/sw-release-ver | awk 'BEGIN {FS=\" \"} {print $3}'`,"
+    "wlanmac=`ifconfig wlan0 | awk 'BEGIN {FS=\" \"} {print $5; exit;}'`,";
+
+const QString LL_ID_CELL_CMD = "echo LL_ID_CELL "
+    "imei=`dbus-send --system --print-reply --dest=com.nokia.csd.Info /com/nokia/csd/info com.nokia.csd.Info.GetIMEINumber | tail -n +2 | awk '{print $2}'`,"
+    "imsi=`dbus-send --system --print-reply --dest=com.nokia.phone.SSC /com/nokia/phone/SSC com.nokia.phone.SSC.get_imsi | tail -n +2 | awk '{print $2}'`,"
+    "cellmosw=`dbus-send --system --print-reply --dest=com.nokia.csd.Info /com/nokia/csd/info com.nokia.csd.Info.GetMCUSWVersion | tail -n +2`,";
+
+const QString LL_TICK_CMD = "echo LL_TICK "
+    "date=`date +%s`,"
+    "`lshal | awk '/battery.charge_level.percentage/{print \"batt_perc=\" $3}/battery.rechargeable.is_charging/{print \", charging=\" $3; exit;}'`,"
+    "uptime=`cat /proc/uptime`,loadavg=`awk '{print $3,$4,$5}' /proc/loadavg`,"
+    "memfree=`awk '/MemFree:/{print $2}' /proc/meminfo`,";
+
+const QString LL_CELL_CMD = "echo LL_CELL "
+    "date=`date +%s`,"
+    "ssc=`dbus-send --system --print-reply --dest=com.nokia.phone.SSC /com/nokia/phone/SSC com.nokia.phone.SSC.get_modem_state | tail -n +2 | awk '{print $2}'`,"
+    "gprs-status=`dbus-send --system --print-reply --dest=com.nokia.csd.GPRS /com/nokia/csd/gprs com.nokia.csd.GPRS.GetStatus | tail -n +2 | awk '$1~/string|boolean|uint64/ {print $2}'`,"
+    "gprs-serv-status=`dbus-send --print-reply --system --dest=com.nokia.csd.GPRS /com/nokia/csd/gprs org.freedesktop.DBus.Properties.GetAll string: | tail -n +2 | awk '$2~/boolean|uint64/{print $3}'`,";
+
+// ----------------------------------------------------------------------------
+//  CReporterDaemon::updateLifelog
+// ----------------------------------------------------------------------------
+void CReporterDaemon::updateLifelog()
+{
+    Q_D(CReporterDaemon);
+    QStringList* corePathsPtr = d->registry->getCoreLocationPaths();
+    QStringList corePaths(*corePathsPtr);
+    delete corePathsPtr; corePathsPtr = 0;
+    if (corePaths.isEmpty())
+    {
+        qDebug() << __PRETTY_FUNCTION__ << "No core paths available. Cannot update lifelog";
+        return;
+    }
+
+    // Abort update if lifelog was updated recently.
+    // This happens when e.g. lifelogging is disabled and re-enabled
+    if (d->lifelogLastUpdate.isValid() &&
+        d->lifelogLastUpdate.addSecs(CReporter::LifelogMinimumUpdateInterval) > QDateTime::currentDateTimeUtc())
+        return;
+
+    QFile lifelogFile(corePaths.first() + "/" + "lifelog");
+
+    if (d->lifelogUpdateCount > 23 ||
+        d->lifelogUpdateCount < 1 ||
+        (d->lifelogLastUpdate.isValid() && d->lifelogLastUpdate.addSecs(12*60*60) < QDateTime::currentDateTimeUtc()))
+    {
+        d->lifelogUpdateCount = 0;
+        d->lifelogLastUpdate = QDateTime();
+
+        //Package old lifelog
+        if (lifelogFile.exists())
+        {
+            QString destFilePath = corePaths.first() + "/"
+                + QString("%1-%2.rcore.lzo").arg(CReporter::LifelogPackagePrefix, QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss"));
+            int ret = system(QString("lzop -U -o\"%1\" \"%2\"").arg(destFilePath, lifelogFile.fileName()).toLocal8Bit());
+            qDebug() << __PRETTY_FUNCTION__ << "lifelog lzop exit code:" << ret;
+        }
+    }
+
+    if (!lifelogFile.exists())
+    {
+        int ret = system(QString(">\"%1\"").arg(lifelogFile.fileName()).prepend(LL_ID_GEN_CMD).toLocal8Bit());
+        qDebug() << __PRETTY_FUNCTION__ << "lifelog ID_GEN command exit code:" << ret;
+        ret = system(QString(">>\"%1\"").arg(lifelogFile.fileName()).prepend(LL_ID_CELL_CMD).toLocal8Bit());
+        qDebug() << __PRETTY_FUNCTION__ << "lifelog ID_CELL command exit code:" << ret;
+    }
+    int ret = system(QString(">>\"%1\"").arg(lifelogFile.fileName()).prepend(LL_TICK_CMD).toLocal8Bit());
+    qDebug() << __PRETTY_FUNCTION__ << "lifelog TICK command exit code:" << ret;
+    ret = system(QString(">>\"%1\"").arg(lifelogFile.fileName()).prepend(LL_CELL_CMD).toLocal8Bit());
+    qDebug() << __PRETTY_FUNCTION__ << "lifelog CELL command exit code:" << ret;
+    d->lifelogUpdateCount++;
+    d->lifelogLastUpdate = QDateTime::currentDateTimeUtc();
+}
+
+// ----------------------------------------------------------------------------
+// CReporterDaemon::newCoreDump
+// ----------------------------------------------------------------------------
+
+void CReporterDaemon::newCoreDump(const QString& filePath)
+{
+    Q_D(CReporterDaemon);
+    QStringList* corePathsPtr = d->registry->getCoreLocationPaths();
+    QStringList corePaths(*corePathsPtr);
+    delete corePathsPtr; corePathsPtr = 0;
+    if (corePaths.isEmpty())
+    {
+        qDebug() << __PRETTY_FUNCTION__ << "No core paths available. Cannot update lifelog";
+        return;
+    }
+
+    QFile lifelogFile(corePaths.first() + "/" + "lifelog");
+
+    if (d->lifelogTimer && lifelogFile.exists() && !filePath.contains(CReporter::LifelogPackagePrefix))
+    {
+        QString coreDumpCommand = QString("echo LL_COREDUMP date=`date +%s`, %1").arg(filePath);
+        int ret = system(QString(">>\"%1\"").arg(lifelogFile.fileName()).prepend(coreDumpCommand).toLocal8Bit());
+        qDebug() << __PRETTY_FUNCTION__ << "lifelog COREDUMP command exit code:" << ret;
     }
 }
 

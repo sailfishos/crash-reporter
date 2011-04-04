@@ -103,6 +103,12 @@ void CReporterMonitorSettingsContainer::updateButtons()
         d->m_buttons->button(AutoDeleteCrashReportsBtn)->
                 setChecked(CReporterPrivacySettingsModel::instance()->autoDeleteDuplicates());
     }
+    if (d->m_buttons->button(LifelogBtn)->isChecked()
+        != CReporterPrivacySettingsModel::instance()->lifelogEnabled())
+    {
+        d->m_buttons->button(LifelogBtn)->
+                setChecked(CReporterPrivacySettingsModel::instance()->lifelogEnabled());
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -143,7 +149,7 @@ void CReporterMonitorSettingsContainer::initWidget()
     d->m_buttons->setExclusive(false);
 
     // Label for save crash reports text.
-    //% "Save crash reports"
+    //% "Gather crash reports"
     MLabel *label = new MLabel(qtTrId("qtn_dcp_save_crash_reports_text"), this);
     label->setObjectName("SaveCrashReportsLabel");
     label->setStyleName("CommonSingleTitleInverted");
@@ -161,6 +167,25 @@ void CReporterMonitorSettingsContainer::initWidget()
     policy->addItem(label, 0, 0, Qt::AlignLeft | Qt::AlignVCenter);
     policy->addItem(button, 0, 1, Qt::AlignRight | Qt::AlignVCenter);
 
+    // Label for lifelog option.
+    //% "Gather lifelog"
+    label = new MLabel(qtTrId("qtn_dcp_lifelog_text"), this);
+    label->setObjectName("LifelogLabel");
+    label->setStyleName("CommonSingleTitleInverted");
+    label->setWordWrap(true);
+
+    // Toggle button for lifelog option.
+    button = new MButton(this);
+    button->setObjectName("LifelogSwitch");
+    button->setViewType(MButton::switchType);
+    button->setCheckable(true);
+    button->setStyleName("CommonSwitchInverted");
+
+    d->m_buttons->addButton(button, LifelogBtn);
+
+    policy->addItem(label, 1, 0, Qt::AlignLeft | Qt::AlignVCenter);
+    policy->addItem(button, 1, 1, Qt::AlignRight | Qt::AlignVCenter );
+
     // Label for monitor and send crash reports text.
     //% "Show notifications"
     label = new MLabel(qtTrId("qtn_dcp_show_notifications_text"), this);
@@ -177,11 +202,11 @@ void CReporterMonitorSettingsContainer::initWidget()
 
     d->m_buttons->addButton(button, NotifyCrashReportsBtn);
 
-    policy->addItem(label, 1, 0, Qt::AlignLeft | Qt::AlignVCenter);
-    policy->addItem(button, 1, 1, Qt::AlignRight | Qt::AlignVCenter );
+    policy->addItem(label, 2, 0, Qt::AlignLeft | Qt::AlignVCenter);
+    policy->addItem(button, 2, 1, Qt::AlignRight | Qt::AlignVCenter );
 
     // Label for automatic sending text.
-    //% "Send crash reports automatically"
+    //% "Send reports automatically"
     label = new MLabel(qtTrId("qtn_dcp_send_automatically_text"), this);
     label->setObjectName("SendAutomaticallyLabel");
     label->setStyleName("CommonSingleTitleInverted");
@@ -196,8 +221,8 @@ void CReporterMonitorSettingsContainer::initWidget()
 
     d->m_buttons->addButton(button, AutomaticSendingBtn);
 
-    policy->addItem(label, 2, 0, Qt::AlignLeft | Qt::AlignVCenter);
-    policy->addItem(button, 2, 1, Qt::AlignRight | Qt::AlignVCenter );
+    policy->addItem(label, 3, 0, Qt::AlignLeft | Qt::AlignVCenter);
+    policy->addItem(button, 3, 1, Qt::AlignRight | Qt::AlignVCenter );
 
     // Label for auto-delete option.
     //% "Auto-delete repeating duplicates"
@@ -219,8 +244,8 @@ void CReporterMonitorSettingsContainer::initWidget()
     }
     d->m_buttons->addButton(button, AutoDeleteCrashReportsBtn);
 
-    policy->addItem(label, 3, 0, Qt::AlignLeft | Qt::AlignVCenter);
-    policy->addItem(button, 3, 1, Qt::AlignRight | Qt::AlignVCenter );
+    policy->addItem(label, 4, 0, Qt::AlignLeft | Qt::AlignVCenter);
+    policy->addItem(button, 4, 1, Qt::AlignRight | Qt::AlignVCenter );
 
     mainPolicy->addItem(layout);
 
@@ -257,11 +282,6 @@ void CReporterMonitorSettingsContainer::groupButtonToggled(bool checked)
     // Enable/ disable rich-core dumping. If enabled, possibility toggle sending and auto-delete
     // features on/ off.
     case SaveCrashReportsBtn:
-        if (!checked) {
-            // If core dumping was disabled, disable notifications and automatic sending.
-            CReporterPrivacySettingsModel::instance()->setNotificationsEnabled(false);
-            CReporterPrivacySettingsModel::instance()->setAutomaticSendingEnabled(false);
-        }
         // Set new core dumping settings.
         CReporterPrivacySettingsModel::instance()->setCoreDumpingEnabled(checked);
         break;
@@ -277,6 +297,10 @@ void CReporterMonitorSettingsContainer::groupButtonToggled(bool checked)
     // Toggle auto-deletion on/off.
     case AutoDeleteCrashReportsBtn:
         CReporterPrivacySettingsModel::instance()->setAutoDeleteDuplicates(checked);
+        break;
+    // Toggle lifelogging
+    case LifelogBtn:
+        CReporterPrivacySettingsModel::instance()->setLifelogEnabled(checked);
         break;
     case NoBtn:
         break;

@@ -191,6 +191,14 @@ void CReporterPrivacySettingsModel::setAutoDeleteDuplicates(bool value)
 }
 
 // ----------------------------------------------------------------------------
+// CReporterPrivacySettingsModel::setLifelogEnabled
+// ----------------------------------------------------------------------------
+bool CReporterPrivacySettingsModel::setLifelogEnabled(bool value)
+{
+    setValue(Settings::ValueLifelog, QVariant(value));
+}
+
+// ----------------------------------------------------------------------------
 // CReporterPrivacySettingsModel::setAutoDeleteMaxSimilarCores
 // ----------------------------------------------------------------------------
 void CReporterPrivacySettingsModel::setAutoDeleteMaxSimilarCores(int value)

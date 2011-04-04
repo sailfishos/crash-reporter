@@ -120,7 +120,8 @@ bool CReporterNotifyDialogPlugin::requestDialog(const QVariantList &arguments)
 
     // Resolve arguments.
     // arguments[0] = Path to rich-core (argument received from daemon).
-    if (arguments.count() != 1 || arguments.at(0).type() != QVariant::String) {
+    if (arguments.count() != 1 || arguments.at(0).type() != QVariant::String)
+    {
         qDebug() << __PRETTY_FUNCTION__ << "Invalid number of arguments or type:"
                 << "Count:" << arguments.count() << "Type:" << arguments.at(0).type();
         return false;
@@ -130,7 +131,8 @@ bool CReporterNotifyDialogPlugin::requestDialog(const QVariantList &arguments)
     d_ptr->filePath.clear();
     d_ptr->filePath = arguments.at(0).toString();
 
-    if (d_ptr->filePath.isEmpty()) {
+    if (d_ptr->filePath.isEmpty())
+    {
         qDebug() << __PRETTY_FUNCTION__ << "Invalid file path.";
         return false;
     }
@@ -143,8 +145,15 @@ bool CReporterNotifyDialogPlugin::requestDialog(const QVariantList &arguments)
 
     // Construct message for the notification.
 
-    //% "Application %1 crashed."
-    QString notificationSummary = qtTrId("qtn_application_%1_crashed_text").arg(d_ptr->details[0]);
+    QString notificationSummary;
+    if (d_ptr->filePath.contains(CReporter::LifelogPackagePrefix))
+    {   //% "New lifelog report is ready."
+        notificationSummary = qtTrId("qtn_new_lifelog_ready_text");
+    }
+    else
+    {   //% "Application %1 crashed."
+        notificationSummary = qtTrId("qtn_application_%1_crashed_text").arg(d_ptr->details[0]);
+    }
 
     if (d_ptr->notification != 0)
     {
@@ -155,7 +164,7 @@ bool CReporterNotifyDialogPlugin::requestDialog(const QVariantList &arguments)
 
     qDebug() << __PRETTY_FUNCTION__ << "Creating new notification.";
     // Create new notification.
-    //% "Tap to send crash report."
+    //% "Tap to send report."
     d_ptr->notification = new CReporterNotification("crash-reporter", notificationSummary,
                                                     qtTrId("qtn_tab_to_send_crash_report_text"));
     d_ptr->notification->setTimeout(60);

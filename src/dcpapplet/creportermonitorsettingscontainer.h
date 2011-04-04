@@ -58,6 +58,8 @@ class CReporterMonitorSettingsContainer : public MStylableWidget
             AutoDeleteCrashReportsBtn,
             //! @arg Toggle button for automatic sending.
             AutomaticSendingBtn,
+            //! @arg Toggle lifelog
+            LifelogBtn,
             //! @arg None. Simply update the buttons.
             NoBtn
         } typedef SettingsGroupButton;

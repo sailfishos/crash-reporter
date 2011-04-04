@@ -180,27 +180,34 @@ void CReporterDaemonCoreDir::createCoreDirectory()
 {
     Q_D(CReporterDaemonCoreDir);
 
-    if (CReporterUtils::isMounted(d->mountpoint)) {
-		// Construct new QDir pointing to mount point.
+    if (CReporterUtils::isMounted(d->mountpoint))
+    {
+        // Construct new QDir pointing to mount point.
         QDir coreRoot(d->mountpoint);
-		
-        if (!coreRoot.exists(d->directory)) {
-			// If core-dumps -directory doesn't exist.
-			// Create new sub-directory.
-            if (coreRoot.mkdir(d->directory)) {
-				qDebug() << __PRETTY_FUNCTION__ << "Created directory:" << d->directory;
+
+        if (!coreRoot.exists(d->directory))
+        {
+            // If core-dumps -directory doesn't exist.
+            // Create new sub-directory.
+            if (coreRoot.exists(d->directory.left(d->directory.lastIndexOf('/')))
+                && coreRoot.mkdir(d->directory))
+            {
+                qDebug() << __PRETTY_FUNCTION__ << "Created directory:" << d->directory;
                 chmod(CReporterUtils::qstringToChar(d->directory), FILE_PERMISSION);
-			} else {
-				qWarning() << __PRETTY_FUNCTION__ << "Error while creating directory:" << d->directory;
-			}
-			// Remove old entries from the list.
-			d->coresAtDirectory.clear();
-		}
-		else {
-			// There was a "core-dumps" directory already. Fetch possible core files.
-			updateCoreList();
-		}
-	}
+            }
+            else
+            {
+                qWarning() << __PRETTY_FUNCTION__ << "Error while creating directory:" << d->directory;
+            }
+            // Remove old entries from the list.
+            d->coresAtDirectory.clear();
+        }
+        else
+        {
+            // There was a "core-dumps" directory already. Fetch possible core files.
+            updateCoreList();
+        }
+    }
 }
 
 // ----------------------------------------------------------------------------
