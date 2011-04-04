@@ -149,7 +149,7 @@ void CReporterMonitorSettingsContainer::initWidget()
     d->m_buttons->setExclusive(false);
 
     // Label for save crash reports text.
-    //% "Gather crash reports"
+    //% "Collect crash reports"
     MLabel *label = new MLabel(qtTrId("qtn_dcp_save_crash_reports_text"), this);
     label->setObjectName("SaveCrashReportsLabel");
     label->setStyleName("CommonSingleTitleInverted");
@@ -168,7 +168,7 @@ void CReporterMonitorSettingsContainer::initWidget()
     policy->addItem(button, 0, 1, Qt::AlignRight | Qt::AlignVCenter);
 
     // Label for lifelog option.
-    //% "Gather lifelog"
+    //% "Collect lifelog"
     label = new MLabel(qtTrId("qtn_dcp_lifelog_text"), this);
     label->setObjectName("LifelogLabel");
     label->setStyleName("CommonSingleTitleInverted");

@@ -425,10 +425,17 @@ void CReporterDaemon::updateLifelog()
         d->lifelogLastUpdate = QDateTime();
 
         //Package old lifelog
-        if (lifelogFile.exists())
+        if (lifelogFile.exists() && lifelogFile.open(QFile::ReadOnly))
         {
+            QString firstLine = lifelogFile.readLine();
+            lifelogFile.close();
+            int serialStart = firstLine.indexOf('=')+1;
+            QString serialNumber = firstLine.mid(serialStart, firstLine.indexOf(',')-serialStart);
             QString destFilePath = corePaths.first() + "/"
-                + QString("%1-%2.rcore.lzo").arg(CReporter::LifelogPackagePrefix, QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss"));
+                + QString("%1-%2-%3-%4.rcore.lzo").arg(CReporter::LifelogPackagePrefix,
+                                                    QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss"),
+                                                    serialNumber,
+                                                    QString::number(qrand(),16));
             int ret = system(QString("lzop -U -o\"%1\" \"%2\"").arg(destFilePath, lifelogFile.fileName()).toLocal8Bit());
             qDebug() << __PRETTY_FUNCTION__ << "lifelog lzop exit code:" << ret;
         }
