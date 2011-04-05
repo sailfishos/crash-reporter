@@ -194,24 +194,6 @@ void Ut_CReporterDaemonMonitor::testNewCoreFileFoundInvalidFile()
     QVERIFY(testDialogServer->callReceivedCalled == false);
 }
 
-/*void Ut_CReporterDaemonMonitor::testNewCoreFileFoundInvalidFile2()
-{
-    monitor = new CReporterDaemonMonitor(registry);
-
-    QString filePath(paths->at(0));
-    filePath.append("/crash-reporter-daemon.rcore.lzo");
-
-    QDir::setCurrent(paths->at(0));
-	
-	QFile file;
-    file.setFileName("crash-reporter-daemon.rcore.lzo");
-    file.open(QIODevice::ReadWrite);
-    file.close();
-
-    QTest::qWait(50);
-    QVERIFY(testDialogServer->callReceivedCalled == false);
-}*/
-
 void Ut_CReporterDaemonMonitor::testNewCoreFileFoundByTheSameName()
 {
     monitor = new CReporterDaemonMonitor(registry);

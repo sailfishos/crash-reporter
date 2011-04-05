@@ -180,7 +180,7 @@ bool CReporterDaemon::initiateDaemon()
 
                 try
                 {
-                    notification = new CReporterNotification("crash-reporter",
+                    notification = new CReporterNotification(CReporter::ApplicationNotificationEventType,
                                                              notificationSummary, notificationBody);
                 }
                 catch (...)

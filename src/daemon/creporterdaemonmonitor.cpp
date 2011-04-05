@@ -180,9 +180,10 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
                 // exeeded, delete file.
                 if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
                 {
-                    CReporterNotification *notification = new CReporterNotification("crash-reporter",
-                                                                                    QString("%1 has crashed once again").arg(details.at(0)),
-                                                                                    QString("The crash report looked like a possible duplicate and was deleted"));
+                    CReporterNotification *notification = new CReporterNotification(
+                            CReporter::ApplicationNotificationEventType,
+                            QString("%1 has crashed once again").arg(details.at(0)),
+                            QString("The crash report looked like a possible duplicate and was deleted"));
                     notification->setTimeout(30);
                     notification->setParent(this);
                 }
@@ -214,8 +215,9 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
 
                     QString notificationBody("Unable to start Crash Reporter UI");
 
-                    CReporterNotification *notification = new CReporterNotification("crash-reporter",
-                                                                                    notificationSummary, notificationBody);
+                    CReporterNotification *notification = new CReporterNotification(
+                            CReporter::ApplicationNotificationEventType,
+                            notificationSummary, notificationBody);
                     notification->setTimeout(10);
                     notification->setParent(this);
 
@@ -238,7 +240,8 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
                         notificationSummary = notificationSummary.arg(details.at(0));
                     }
 
-                    CReporterNotification *notification = new CReporterNotification("crash-reporter",
+                    CReporterNotification *notification = new CReporterNotification(
+                            CReporter::AutoUploaderNotificationEventType,
                             QString(notificationSummary).arg(details.at(0)),
                             QString("Automatic uploading is triggered"));
                     notification->setTimeout(30);
@@ -251,9 +254,10 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
                     qWarning() << __PRETTY_FUNCTION__ << "Failed to start Auto Uploader.";
                     if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
                     {
-                        CReporterNotification *newnotification = new CReporterNotification("crash-reporter",
-                            QString("Auto Uploader failed to start").arg(details.at(0)),
-                            QString("Please send the crash reports manually"));
+                        CReporterNotification *newnotification = new CReporterNotification(
+                                CReporter::AutoUploaderNotificationEventType,
+                                QString("Auto Uploader failed to start").arg(details.at(0)),
+                                QString("Please send the crash reports manually"));
                         newnotification->setTimeout(30);
                         newnotification->setParent(this);
                     }

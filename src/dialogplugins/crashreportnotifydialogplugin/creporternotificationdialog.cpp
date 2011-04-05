@@ -190,6 +190,13 @@ void CReporterNotificationDialog::createcontent()
     connect(dialogButton, SIGNAL(clicked()), mapper, SLOT(map()));
     mapper->setMapping(dialogButton, static_cast<int>(CReporter::SendButton));
 
+    //% "Save"
+    dialogButton = addButton(qtTrId("qtn_cr_button_save"));
+    dialogButton->setObjectName("DialogButton");
+
+    connect(dialogButton, SIGNAL(clicked()), mapper, SLOT(map()));
+    mapper->setMapping(dialogButton, static_cast<int>(CReporter::SaveButton));
+
     //% "Delete"
     dialogButton = addButton(qtTrId("qtn_cr_button_delete"));
     dialogButton->setObjectName("DialogButton");

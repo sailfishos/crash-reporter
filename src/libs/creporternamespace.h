@@ -44,6 +44,8 @@ namespace CReporter {
         DeleteButton = 0,
         //! "Send" button.
         SendButton,
+        //! "Save" button.
+        SaveButton,
         //! "Options" button.
         OptionsButton,
         //! "Delete All" button.
@@ -161,6 +163,12 @@ namespace CReporter {
 
        //! Prefix for lifelog lzop packages
        const QString LifelogPackagePrefix = "LifelogReport";
+
+       //! Event type for crash reporter notifications
+       const QString ApplicationNotificationEventType = "x-nokia.crash-reporter.notification";
+
+       //! Event type for autouploader notifications
+       const QString AutoUploaderNotificationEventType = "x-nokia.crash-reporter.autouploader";
 }
 
 #endif // CREPORTERNAMESPACE_H

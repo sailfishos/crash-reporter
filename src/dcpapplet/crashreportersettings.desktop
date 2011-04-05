@@ -1,20 +1,26 @@
 [Desktop Entry]
-Type=DUIApplet
+Type=ControlPanelApplet
 Name=Crash Reporter
-Icon=
+Icon=icon-m-crash-reporter
 Exec=
-X-logical-id=qtn_dcp_applet_name
+X-logical-id=qtn_sett_crash-reporter
 X-translation-catalog=crash-reporter
+
+# This has to be specified in order that the .desktop file can also be
+# used as an action (for example for search to know how to
+# open the applet)
+X-Maemo-Service=com.nokia.DuiControlPanel
+X-Maemo-Method=com.nokia.DuiControlPanelIf.appletPage
+X-Maemo-Object-Path=/
+# this has to be the same as Name
+X-Maemo-Fixed-Args=Crash Reporter
 
 [DUI]
 X-DUIApplet-Applet=libcrashreportersettingsapplet.so
-X-DUIApplet-Identifier=
-X-DUIApplet-ImageLandscape=
-X-DUIApplet-ImagePortrait=
 
 [DCP]
 Category=Applications
 Order=1
 WidgetType=Label
 Text1=Crash Reporter
-Text2=
+Text2=...

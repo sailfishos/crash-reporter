@@ -165,8 +165,8 @@ bool CReporterNotifyDialogPlugin::requestDialog(const QVariantList &arguments)
     qDebug() << __PRETTY_FUNCTION__ << "Creating new notification.";
     // Create new notification.
     //% "Tap to send report."
-    d_ptr->notification = new CReporterNotification("crash-reporter", notificationSummary,
-                                                    qtTrId("qtn_tab_to_send_crash_report_text"));
+    d_ptr->notification = new CReporterNotification(CReporter::ApplicationNotificationEventType,
+                                                    notificationSummary, qtTrId("qtn_tab_to_send_crash_report_text"));
     d_ptr->notification->setTimeout(60);
     d_ptr->notification->setParent(this);
     connect(d_ptr->notification, SIGNAL(timeouted()), SLOT(notificationTimeout()));
@@ -217,6 +217,17 @@ void CReporterNotifyDialogPlugin::actionPerformed(int buttonId)
             arguments << QVariant(d_ptr->filePath);
             // Create event to upload file.
             d_ptr->server->createRequest(CReporter::UploadDialogType, arguments);
+            break;
+        case CReporter::SaveButton:
+            // "Save" -button was pressed. Get the user comments, if any.
+            comments =  d_ptr->dialog->userComments();
+            if (!comments.isEmpty()) {
+                // Append comments to *.lzo.
+                if (!CReporterUtils::appendToLzo(comments, d_ptr->filePath)) {
+                    qDebug() << __PRETTY_FUNCTION__ << "Unable to add user comments to:"
+                           << d_ptr->filePath;
+                }
+            }
             break;
         case CReporter::DeleteButton:
             // "Delete" -button was pressed. Remove rich core from the system.

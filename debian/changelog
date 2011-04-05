@@ -2,6 +2,8 @@ crash-reporter (1.9.3-0) unstable; urgency=low
 
   * Fixes: NB#238898 - Lifelog generation
   * Fixes: NB#233925 - mmcblk0p1 mounted on /home/user/MyDocs and /media/mmc2 at a time
+  * Fixes: NB#242404 - Crash reporter does not update or remove its notifications
+  * Fixes: NB#216483 - Save crash report comments without uploading immediately
 
  -- Raimo Gratseff <ext-raimo.gratseff@nokia.com>  Mon, 04 Apr 2011 13:02:24 +0300
 

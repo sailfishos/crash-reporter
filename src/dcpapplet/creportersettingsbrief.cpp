@@ -62,21 +62,29 @@ QString CReporterSettingsBrief::titleText() const
 // ----------------------------------------------------------------------------
 QString CReporterSettingsBrief::valueText() const
 {
-    if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
+    if (CReporterPrivacySettingsModel::instance()->coreDumpingEnabled())
     {
-        //% "Notify of new crash reports"
-        return QString(qtTrId("qt_dcp_show_notitications_text"));
+        if (CReporterPrivacySettingsModel::instance()->notificationsEnabled()
+            && !CReporterPrivacySettingsModel::instance()->automaticSendingEnabled())
+        {
+            //% "Notify of new crash reports"
+            return QString(qtTrId("qt_dcp_show_notitications_text"));
+        }
+        else if (CReporterPrivacySettingsModel::instance()->automaticSendingEnabled()
+            && CReporterPrivacySettingsModel::instance()->notificationsEnabled())
+        {
+            //% "Notify and send reports automatically"
+            return QString(qtTrId("qt_dcp_sending_automatically_text"));
+        }
+        else if (CReporterPrivacySettingsModel::instance()->automaticSendingEnabled()
+            && !CReporterPrivacySettingsModel::instance()->notificationsEnabled())
+        {
+            //% "Silently send reports automatically"
+            return QString(qtTrId("qt_dcp_sending_automatically_text"));
+        }
     }
-    else if (CReporterPrivacySettingsModel::instance()->automaticSendingEnabled())
-    {
-        //% "Send crash reports automatically"
-        return QString(qtTrId("qt_dcp_sending_automatically_text"));
-    }
-    else
-    {
-        //% "Notifications and sending disabled"
-        return QString(qtTrId("qt_dcp_notifications_and_automatic_uploading_disabled_text"));
-    }
+    //% "Crash reporting disabled"
+    return QString(qtTrId("qt_dcp_notifications_and_automatic_uploading_disabled_text"));
 }
 
 // ======== LOCAL FUNCTIONS ========
@@ -88,7 +96,9 @@ void CReporterSettingsBrief::settingsChanged(const QString& key, const QVariant&
 {
     Q_UNUSED(value);
 
-    if (key == Settings::ValueCoreDumping || key == Settings::ValueAutomaticSending) {
+    if (key == Settings::ValueCoreDumping
+        || key == Settings::ValueNotifications
+        || key == Settings::ValueAutomaticSending) {
         emit valuesChanged();
     }
 }

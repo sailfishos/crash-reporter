@@ -118,9 +118,10 @@ bool CReporterAutoUploader::uploadFiles(const QStringList &fileList)
 
     if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
     {
-        CReporterNotification *notification = new CReporterNotification("crash-reporter",
-            QString("Crash Reporter Auto Uploader started"),
-            QString("Uploading %1 crash report(s)").arg(fileList.count()));
+        CReporterNotification *notification = new CReporterNotification(
+                CReporter::AutoUploaderNotificationEventType,
+                QString("Crash Reporter Auto Uploader started"),
+                QString("Uploading %1 crash report(s)").arg(fileList.count()));
         notification->setTimeout(30);
         notification->setParent(this);
     }
@@ -205,7 +206,8 @@ void CReporterAutoUploader::engineFinished(int error, int sent, int total)
 
     if (total > sent && CReporterPrivacySettingsModel::instance()->notificationsEnabled())
     {
-        CReporterNotification *notification = new CReporterNotification("crash-reporter",
+        CReporterNotification *notification = new CReporterNotification(
+                CReporter::AutoUploaderNotificationEventType,
                 QString("Crash Reporter failed to send all reports"),
                 QString("%1 out of %2 sent").arg(sent).arg(total));
         notification->setTimeout(30);
@@ -213,7 +215,8 @@ void CReporterAutoUploader::engineFinished(int error, int sent, int total)
     }
     else if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
     {
-        CReporterNotification *notification = new CReporterNotification("crash-reporter",
+        CReporterNotification *notification = new CReporterNotification(
+                CReporter::AutoUploaderNotificationEventType,
                 QString("Crash Reporter"),
                 QString("%1 crash report(s) sent successfully").arg(sent));
         notification->setTimeout(30);

@@ -133,8 +133,8 @@ bool CReporterSendSelectedDialogPlugin::requestDialog(const QVariantList &argume
         QString notificationBody = qtTrId("qtn_tap_to_send_or_delete_text");
 
         // Create new notification.
-        d_ptr->notification = new CReporterNotification("crash-reporter", notificationSummary,
-                                                                  notificationBody);
+        d_ptr->notification = new CReporterNotification(CReporter::ApplicationNotificationEventType,
+                                                        notificationSummary, notificationBody);
         d_ptr->notification->setTimeout(60);
         d_ptr->notification->setParent(this);
 
