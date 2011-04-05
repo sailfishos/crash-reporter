@@ -180,6 +180,7 @@ void Ut_CReporterDaemon::init()
     settings->setValue(Settings::ValueCoreDumping, true);
     settings->setValue(Settings::ValueAutoDeleteDuplicates, true);
     settings->setValue(Settings::ValueAutomaticSending, false);
+    settings->setValue(Settings::ValueLifelog, false);
 
     settings->setValue(Privacy::ValueIncludeCore, true);
     settings->setValue(Privacy::ValueIncludeSysLog, true);
