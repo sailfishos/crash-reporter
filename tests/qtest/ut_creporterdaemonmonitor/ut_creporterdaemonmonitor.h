@@ -66,9 +66,7 @@ private slots:
 	void init();
 
     void testNewCoreFileFoundNotified();
-    void testNewCoreFileFoundNotified2();
     void testNewCoreFileFoundInvalidFile();
-    /*void testNewCoreFileFoundInvalidFile2();*/
     void testNewCoreFileFoundByTheSameName();
     void testDirectoryDeletedNotNotified();
     void testAutoDeleteDublicateCores();

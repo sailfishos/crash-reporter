@@ -175,29 +175,6 @@ void Ut_CReporterDaemonMonitor::testNewCoreFileFoundNotified()
     QVERIFY(richCoreNotifySpy.count() == 1);
 }
 
-void Ut_CReporterDaemonMonitor::testNewCoreFileFoundNotified2()
-{
-    monitor = new CReporterDaemonMonitor(registry);
-	
-    QString filePath(paths->at(1));
-    filePath.append("/application-4321-10-1111.rcore");
-
-    QDir::setCurrent(paths->at(1));
-	
-	QFile file;
-    file.setFileName("application-4321-10-1111.rcore");
-    file.open(QIODevice::ReadWrite);
-    file.close();
-
-    QTest::qWait(50);
-
-    QVERIFY(testDialogServer->callReceivedCalled == true);
-    QVERIFY(testDialogServer->callArguments.at(0).type() == QVariant::String);
-    QVERIFY(testDialogServer->requestedDialog == CReporter::NotifyNewDialogType);
-    QString argument = testDialogServer->callArguments.at(0).toString();
-    QCOMPARE(argument, filePath);
-}
-
 void Ut_CReporterDaemonMonitor::testNewCoreFileFoundInvalidFile()
 {
     monitor = new CReporterDaemonMonitor(registry);
