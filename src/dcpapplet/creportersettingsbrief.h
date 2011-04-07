@@ -56,19 +56,6 @@ public:
     */
    virtual QString titleText() const;
 
-    /*!
-     * @reimp
-     */
-    virtual QString valueText() const;
-
-private Q_SLOTS:
-    /*!
-      * @brief Called, when setting value changes.
-      *
-      * @param key Reference to changed setting.
-      * @param value Reference to new value.
-      */
-    void settingsChanged(const QString& key, const QVariant& value);
 };
 
 #endif // CREPORTERSETTINGSBRIEF_H

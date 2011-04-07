@@ -1,3 +1,9 @@
+crash-reporter (1.9.3-1) unstable; urgency=low
+
+  * Fixes: NB#243932 - 2nd row label should be removed from Crash reporter settings plugin
+
+ -- Jarkko Leminen <ext-jarkko.leminen@nokia.com>  Thu, 07 Apr 2011 08:40:31 +0300
+
 crash-reporter (1.9.3-0) unstable; urgency=low
 
   * Fixes: NB#238898 - Lifelog generation
