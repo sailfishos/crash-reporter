@@ -73,6 +73,7 @@ CReporterNotificationDialog::CReporterNotificationDialog(const QStringList &deta
     d->details = details;
     d->server = server;
     d->filesize = filesize;
+    d->commentField = 0;
 
     // Create widgets.
     createcontent();
@@ -88,11 +89,15 @@ CReporterNotificationDialog::~CReporterNotificationDialog()
 }
 
 // ----------------------------------------------------------------------------
-// CReporterNotifyDialogPlugin::userComments
+// CReporterNotificationDialog::userComments
 // ----------------------------------------------------------------------------
 QString CReporterNotificationDialog::userComments() const
 {
-    return d_ptr->commentField->text();
+    Q_D(const CReporterNotificationDialog);
+    if (d->commentField)
+        return d->commentField->text();
+    else
+        return QString();
 }
 
 // ----------------------------------------------------------------------------
