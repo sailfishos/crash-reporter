@@ -60,9 +60,9 @@ public:
 // ----------------------------------------------------------------------------
 CReporterNwSessionMgr::CReporterNwSessionMgr(QObject *parent) :
         QObject(parent),
-		d_ptr(new CReporterNwSessionMgrPrivate())
+        d_ptr(new CReporterNwSessionMgrPrivate())
 {
-	Q_D(CReporterNwSessionMgr);
+    Q_D(CReporterNwSessionMgr);
     d->networkSession = 0;
 }
 
@@ -74,7 +74,7 @@ CReporterNwSessionMgr::~CReporterNwSessionMgr()
     Q_D(CReporterNwSessionMgr);
     if (d->networkSession) delete d->networkSession; d->networkSession = 0;
     delete d_ptr;
-	d_ptr = 0;
+    d_ptr = 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -104,17 +104,17 @@ bool CReporterNwSessionMgr::open()
 
     if (d->networkSession == 0) {
         qDebug() << __PRETTY_FUNCTION__ << "No existing network session.";
-		// If there was no network session, create one.
+        // If there was no network session, create one.
         d->networkManager.updateConfigurations();
         d->networkConfiguration = d->networkManager.defaultConfiguration();
         d->networkSession = new QNetworkSession(d->networkConfiguration);
 
         connect(d->networkSession, SIGNAL(stateChanged(QNetworkSession::State)),
-				this, SLOT(networkStateChanged(QNetworkSession::State)));
+                this, SLOT(networkStateChanged(QNetworkSession::State)));
         connect(d->networkSession, SIGNAL(error(QNetworkSession::SessionError)),
-				this, SLOT(networkError(QNetworkSession::SessionError)));
+                this, SLOT(networkError(QNetworkSession::SessionError)));
         connect(d->networkSession, SIGNAL(opened()), this, SIGNAL(sessionOpened()));
-	}
+    }
     else if (d->networkSession->isOpen()) {
         qDebug() << __PRETTY_FUNCTION__ << "Using existing network session.";
         return true;
@@ -139,9 +139,9 @@ void CReporterNwSessionMgr::close()
     Q_D(CReporterNwSessionMgr);
 
     if (d->networkSession != 0) {
-		qDebug() << __PRETTY_FUNCTION__ << "Close network session.";
+        qDebug() << __PRETTY_FUNCTION__ << "Close network session.";
         d->networkSession->close();
-	}
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -180,39 +180,39 @@ void CReporterNwSessionMgr::networkError(QNetworkSession::SessionError error)
 // ----------------------------------------------------------------------------
 void CReporterNwSessionMgr::networkStateChanged(QNetworkSession::State state)
 {
-	Q_D(CReporterNwSessionMgr);
+    Q_D(CReporterNwSessionMgr);
 
     QString text = "Connection status:";
 
-	switch (state) {
-		case QNetworkSession::Invalid:
-			qDebug() << __PRETTY_FUNCTION__ << text << "Invalid";
-			break;
-		case QNetworkSession::NotAvailable:
-			qDebug() << __PRETTY_FUNCTION__ << text << "Not available";
-			break;
-		case QNetworkSession::Connecting:
-			qDebug() << __PRETTY_FUNCTION__ << text << "Connecting";
-			break;
-		case QNetworkSession::Connected:
-			qDebug() << __PRETTY_FUNCTION__ << text << "Connected";
-			break;
-		case QNetworkSession::Closing:
-			qDebug() << __PRETTY_FUNCTION__ << text << "Closing";
-			break;
-		case QNetworkSession::Disconnected:
-			// Existing session disconnected, delete the session
-			qDebug() << __PRETTY_FUNCTION__ << text << "Disconnected";
-            emit sessionDisconnected();
-            d->networkSession->deleteLater();
-            d->networkSession = 0;
-			break;
-		case QNetworkSession::Roaming:
-			qDebug() << __PRETTY_FUNCTION__ << text << "Roaming";
-			break;
-		default:
-			break;
-	};
+    switch (state) {
+    case QNetworkSession::Invalid:
+        qDebug() << __PRETTY_FUNCTION__ << text << "Invalid";
+        break;
+    case QNetworkSession::NotAvailable:
+        qDebug() << __PRETTY_FUNCTION__ << text << "Not available";
+        break;
+    case QNetworkSession::Connecting:
+        qDebug() << __PRETTY_FUNCTION__ << text << "Connecting";
+        break;
+    case QNetworkSession::Connected:
+        qDebug() << __PRETTY_FUNCTION__ << text << "Connected";
+        break;
+    case QNetworkSession::Closing:
+        qDebug() << __PRETTY_FUNCTION__ << text << "Closing";
+        break;
+    case QNetworkSession::Disconnected:
+        // Existing session disconnected, delete the session
+        qDebug() << __PRETTY_FUNCTION__ << text << "Disconnected";
+        emit sessionDisconnected();
+        d->networkSession->deleteLater();
+        d->networkSession = 0;
+        break;
+    case QNetworkSession::Roaming:
+        qDebug() << __PRETTY_FUNCTION__ << text << "Roaming";
+        break;
+    default:
+        break;
+    };
 }
 
 // End of file.

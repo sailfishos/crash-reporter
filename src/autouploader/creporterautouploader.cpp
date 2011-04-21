@@ -56,6 +56,8 @@ class CReporterAutoUploaderPrivate
         CReporterUploadQueue queue;
         //! @arg Is the service active.
         bool activated;
+        //! @arg files that have been added to upload queue during this auto uploader session
+        QStringList addedFiles;
 
 };
 
@@ -111,9 +113,17 @@ bool CReporterAutoUploader::uploadFiles(const QStringList &fileList)
 
     foreach (QString filename, fileList)
     {
-        qDebug() << __PRETTY_FUNCTION__ << "Adding to upload queue: " << filename;
-        // CReporterUploadQueue class will own the CReporterUploadItem instance.
-        d_ptr->queue.enqueue(new CReporterUploadItem(filename));
+        if (!d_ptr->addedFiles.contains(filename))
+        {
+            qDebug() << __PRETTY_FUNCTION__ << "Adding to upload queue: " << filename;
+            // CReporterUploadQueue class will own the CReporterUploadItem instance.
+            d_ptr->queue.enqueue(new CReporterUploadItem(filename));
+            d_ptr->addedFiles << filename;
+        }
+        else
+        {
+            qDebug() << __PRETTY_FUNCTION__ << filename << "was not added to queue because it had already been added before";
+        }
     }
 
     if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())

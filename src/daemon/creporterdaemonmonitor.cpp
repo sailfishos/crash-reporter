@@ -242,8 +242,8 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
 
                     CReporterNotification *notification = new CReporterNotification(
                             CReporter::AutoUploaderNotificationEventType,
-                            QString(notificationSummary).arg(details.at(0)),
-                            QString("Automatic uploading is triggered"));
+                            QString("Automatic uploading is triggered"),
+                            QString(notificationSummary).arg(details.at(0)));
                     notification->setTimeout(30);
                     notification->setParent(this);
                 }

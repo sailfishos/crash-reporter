@@ -225,6 +225,7 @@ void CReporterUploadEnginePrivate::connectionError(const QString &errorString)
 {
     qDebug() << __PRETTY_FUNCTION__ << "Error in network connection. Setting error.";
     setErrorString(errorString);
+    sessionDisconnected();
 }
 #endif // CREPORTER_LIBBEARER_ENABLED
 
