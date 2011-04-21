@@ -7,6 +7,7 @@
     <step>rm -f /tmp/crash-reporter.log</step>
     <step>cp -p /usr/share/crash-reporter-settings/crash-reporter.conf /usr/share/crash-reporter-settings/crash-reporter.conf.bak</step>
     <step>sed -ie "s/^logger_type=.*/logger_type=file/" /usr/share/crash-reporter-settings/crash-reporter.conf</step>
+    <step>if ! grep -q "^lifelog=false" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf; then sed -ie "s/^lifelog=.*/lifelog=false/" /home/user/.config/crash-reporter-settings/crash-reporter-privacy.conf &amp;&amp; sleep 2; fi</step>
   </pre_steps>
 
   <case type="Functional" name="test-crash-reporter-daemon" description="Verify, crash-reporter-daemon is running and restarted.">
