@@ -65,11 +65,25 @@ class CReporterNotificationDialog : public MDialog
         virtual ~CReporterNotificationDialog();
 
         /*!
-          * @brief Returns the text written by the user in the text field.
+          * @brief Returns the text written by the user in the text field. Contact info is included if the user has checked the contact info check box.
           *
           * @return Text from the MTextField. Empty, fi no comments.
           */
         QString userComments() const;
+
+        /*!
+          * @brief Set the contact information field value
+          *
+          * @param contactInfo new contact info field value
+          */
+        void setContactInfo(QString contactInfo);
+
+        /*!
+          * @brief Set the contact information field value
+          *
+          * @return contact info field value. null if contact info check box is unchecked
+          */
+        QString getContactInfo() const;
 
      Q_SIGNALS:
         /*!
@@ -84,6 +98,10 @@ class CReporterNotificationDialog : public MDialog
            * @reimp
            */
         virtual void createcontent();
+
+    protected slots:
+
+        void setContactChecked();
 
     private: // data
         Q_DECLARE_PRIVATE(CReporterNotificationDialog)

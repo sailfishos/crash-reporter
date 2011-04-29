@@ -88,7 +88,7 @@ void CReporterPrivacySettingsWidget::initWidget()
 
     //% "Version %1"
     MLabel *versionLabel = new MLabel(qtTrId("qtn_dcp_version_%1").arg(QString(CREPORTERVERSION)));
-    versionLabel->setStyleName("CommonSingleTitleInverted");
+    versionLabel->setStyleName("CommonSubTitleInverted");
 
     // Create containers.
     CReporterMonitorSettingsContainer *monitorSettings =

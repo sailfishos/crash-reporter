@@ -203,7 +203,7 @@ void CReporterSendSelectedDialog::createcontent()
     messagelabel->setWordWrap(true);
     messagelabel->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
     messagelabel->setObjectName("DialogMessageLabel");
-    messagelabel->setStyleName("CommonBodyTextInverted");
+    messagelabel->setStyleName("CommonFieldLabelInverted");
 
     d->list = new MList(panel);
     d->cellCreator = new MContentItemCreator;

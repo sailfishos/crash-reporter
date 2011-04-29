@@ -60,6 +60,8 @@ class CReporterMonitorSettingsContainer : public MStylableWidget
             AutomaticSendingBtn,
             //! @arg Toggle lifelog
             LifelogBtn,
+            //! @arg Toggle instant dialogs
+            InstantDialogsBtn,
             //! @arg None. Simply update the buttons.
             NoBtn
         } typedef SettingsGroupButton;

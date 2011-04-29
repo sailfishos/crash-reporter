@@ -45,7 +45,8 @@ class CReporterPrivacySettingsModelPrivate;
   * @brief Settings affecting to application behiour.
   *
   */
-namespace Settings {
+namespace Settings
+{
     //! This setting affects to sp-rich-core. If set to true, rich-core dumps are produced.
     const QString ValueCoreDumping("Settings/coredumping");
     //! This setting affects to crash-reporter. If set to true, user notifications are displayed.
@@ -57,7 +58,12 @@ namespace Settings {
     //! This setting affects to crash-reporter. If set to true, lifelogging is enabled.
     const QString ValueLifelog("Settings/lifelog");
     //! This setting affects to crash-reporter. If set to true, crash-reporter tries to upload rich-core dumps automatically.
-    const QString ValueAutomaticSending("Settings/automaticsending");}
+    const QString ValueAutomaticSending("Settings/automaticsending");
+    //! This setting affects crash-reporter. If true, crash notification dialogs open up instantly (without requiring the user to tap a system notification)
+    const QString ValueInstantDialogs("Settings/instantdialogs");
+    //! This setting is used for saving the last contact info entered in the crash notification dialog
+    const QString ValueContactInfo("Settings/contactinfo");
+}
 
 /*!
   * @namespace Privacy
@@ -162,6 +168,23 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
         bool automaticSendingEnabled() const;
 
         /*!
+          * @brief Reads setting value for instant dialogs and returns it.
+          *
+          * @note This setting used by the crash-reporter.
+          * @return Returns true, if instant dialogs are enabled; otherwise false. If value doesn't
+          *     exist, default value is returned.
+          */
+        bool instantDialogsEnabled() const;
+
+        /*!
+          * @brief Reads value for saved contact info and returns it.
+          *
+          * @note This setting used by the crash-reporter.
+          * @return Saved contact info. Empty string if none.
+          */
+        QString contactInfo() const;
+
+        /*!
           * @brief Reads setting value for including core and returns it.
           *
           * @note This setting used by the rich-core.
@@ -244,6 +267,22 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
            * @param True to enable feature; false to disable.
            */
          void setAutomaticSendingEnabled(bool value);
+
+         /*!
+            * @brief Enables or disables instant dialogs
+            *
+            * @note This setting used by the crash-reporter.
+            * @param True to enable feature; false to disable.
+            */
+         void setInstantDialogsEnabled(bool value);
+
+         /*!
+            * @brief Save contact info string
+            *
+            * @note This setting used by the crash-reporter.
+            * @param new contact info value
+            */
+         void setContactInfo(QString value);
 
         /*!
           * @brief Enables or disables for including core in the crash report.

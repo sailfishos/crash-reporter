@@ -27,6 +27,7 @@
 #include <QtPlugin> // For Q_EXPORT_PLUGIN2
 #include <QDebug>
 #include <QFileInfo>
+#include <QTimer>
 
 #include <MWindow>
 #include <DuiControlPanelIf>
@@ -37,6 +38,7 @@
 #include "creporternotificationdialog.h"
 #include "creporterutils.h"
 #include "creporterapplicationsettings.h"
+#include "creporterprivacysettingsmodel.h"
 #include "creporternotification.h"
 #include "creporternamespace.h"
 #include "creporterinfobanner.h"
@@ -143,35 +145,41 @@ bool CReporterNotifyDialogPlugin::requestDialog(const QVariantList &arguments)
     d_ptr->details.clear();	
     d_ptr->details = CReporterUtils::parseCrashInfoFromFilename(d_ptr->filePath);
 
-    // Construct message for the notification.
-
-    QString notificationSummary;
-    if (d_ptr->filePath.contains(CReporter::LifelogPackagePrefix))
-    {   //% "New lifelog report is ready."
-        notificationSummary = qtTrId("qtn_new_lifelog_ready_text");
+    if (CReporterPrivacySettingsModel::instance()->instantDialogsEnabled())
+    {
+        // If instant dialogs are enabled, do not open a notification
+        QTimer::singleShot(0, this, SLOT(notificationActivated()));
     }
     else
-    {   //% "Application %1 crashed."
-        notificationSummary = qtTrId("qtn_application_%1_crashed_text").arg(d_ptr->details[0]);
-    }
-
-    if (d_ptr->notification != 0)
     {
-        qDebug() << __PRETTY_FUNCTION__ << "Removing old notification.";
-        d_ptr->notification->remove();
-        d_ptr->notification->deleteLater();
+        // Construct message for the notification.
+        QString notificationSummary;
+        if (d_ptr->filePath.contains(CReporter::LifelogPackagePrefix))
+        {   //% "New lifelog report is ready."
+            notificationSummary = qtTrId("qtn_new_lifelog_ready_text");
+        }
+        else
+        {   //% "Application %1 crashed."
+            notificationSummary = qtTrId("qtn_application_%1_crashed_text").arg(d_ptr->details[0]);
+        }
+
+        if (d_ptr->notification != 0)
+        {
+            qDebug() << __PRETTY_FUNCTION__ << "Removing old notification.";
+            d_ptr->notification->remove();
+            d_ptr->notification->deleteLater();
+        }
+
+        qDebug() << __PRETTY_FUNCTION__ << "Creating new notification.";
+        // Create new notification.
+        //% "Tap to send report."
+        d_ptr->notification = new CReporterNotification(CReporter::ApplicationNotificationEventType,
+                                                        notificationSummary, qtTrId("qtn_tab_to_send_crash_report_text"));
+        d_ptr->notification->setTimeout(60);
+        d_ptr->notification->setParent(this);
+        connect(d_ptr->notification, SIGNAL(timeouted()), SLOT(notificationTimeout()));
+        connect(d_ptr->notification, SIGNAL(activated()), SLOT(notificationActivated()));
     }
-
-    qDebug() << __PRETTY_FUNCTION__ << "Creating new notification.";
-    // Create new notification.
-    //% "Tap to send report."
-    d_ptr->notification = new CReporterNotification(CReporter::ApplicationNotificationEventType,
-                                                    notificationSummary, qtTrId("qtn_tab_to_send_crash_report_text"));
-    d_ptr->notification->setTimeout(60);
-    d_ptr->notification->setParent(this);
-    connect(d_ptr->notification, SIGNAL(timeouted()), SLOT(notificationTimeout()));
-    connect(d_ptr->notification, SIGNAL(activated()), SLOT(notificationActivated()));
-
 
     return true;
 }
@@ -214,6 +222,8 @@ void CReporterNotifyDialogPlugin::actionPerformed(int buttonId)
                            << d_ptr->filePath;
                 }
             }
+            if (!d_ptr->dialog->getContactInfo().isNull())
+                CReporterPrivacySettingsModel::instance()->setContactInfo(d_ptr->dialog->getContactInfo());
             arguments << QVariant(d_ptr->filePath);
             // Create event to upload file.
             d_ptr->server->createRequest(CReporter::UploadDialogType, arguments);
@@ -228,6 +238,8 @@ void CReporterNotifyDialogPlugin::actionPerformed(int buttonId)
                            << d_ptr->filePath;
                 }
             }
+            if (!d_ptr->dialog->getContactInfo().isNull())
+                CReporterPrivacySettingsModel::instance()->setContactInfo(d_ptr->dialog->getContactInfo());
             break;
         case CReporter::DeleteButton:
             // "Delete" -button was pressed. Remove rich core from the system.
@@ -306,6 +318,8 @@ void CReporterNotifyDialogPlugin::notificationActivated()
                                                    CReporterUtils::fileSizeToString(fi.size()));
    connect(d_ptr->dialog, SIGNAL(actionPerformed(int)), this, SLOT(actionPerformed(int)));
    connect(d_ptr->dialog, SIGNAL(disappeared()), this, SLOT(dialogFinished()));
+
+   d_ptr->dialog->setContactInfo(CReporterPrivacySettingsModel::instance()->contactInfo());
 
     // Become visible.
     d_ptr->server->showDialog(d_ptr->dialog);

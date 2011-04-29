@@ -372,27 +372,27 @@ void CReporterDaemon::setLifelogEnabled(bool enabled)
 // ----------------------------------------------------------------------------
 
 const QString LL_ID_GEN_CMD = "echo LL_ID_GEN "
-    "sn=`sysinfoclient -g /device/production-sn | awk 'BEGIN {FS=\" \"} {print $3}'`,"
-    "hw=`sysinfoclient -g /device/hw-version | awk 'BEGIN {FS=\" \"} {print $3}'`,"
-    "sw=`sysinfoclient -g /device/sw-release-ver | awk 'BEGIN {FS=\" \"} {print $3}'`,"
-    "wlanmac=`ifconfig wlan0 | awk 'BEGIN {FS=\" \"} {print $5; exit;}'`,";
+    "sn=`/usr/bin/sysinfoclient -g /device/production-sn | /usr/bin/awk 'BEGIN {FS=\" \"} {print $3}'`,"
+    "hw=`/usr/bin/sysinfoclient -g /device/hw-version | /usr/bin/awk 'BEGIN {FS=\" \"} {print $3}'`,"
+    "sw=`/usr/bin/sysinfoclient -g /device/sw-release-ver | /usr/bin/awk 'BEGIN {FS=\" \"} {print $3}'`,"
+    "wlanmac=`/sbin/ifconfig wlan0 | /usr/bin/awk 'BEGIN {FS=\" \"} {print $5; exit;}'`,";
 
 const QString LL_ID_CELL_CMD = "echo LL_ID_CELL "
-    "imei=`dbus-send --system --print-reply --dest=com.nokia.csd.Info /com/nokia/csd/info com.nokia.csd.Info.GetIMEINumber | tail -n +2 | awk '{print $2}'`,"
-    "imsi=`dbus-send --system --print-reply --dest=com.nokia.phone.SSC /com/nokia/phone/SSC com.nokia.phone.SSC.get_imsi | tail -n +2 | awk '{print $2}'`,"
-    "cellmosw=`dbus-send --system --print-reply --dest=com.nokia.csd.Info /com/nokia/csd/info com.nokia.csd.Info.GetMCUSWVersion | tail -n +2`,";
+    "imei=`/usr/bin/dbus-send --system --print-reply --dest=com.nokia.csd.Info /com/nokia/csd/info com.nokia.csd.Info.GetIMEINumber | /usr/bin/tail -n +2 | /usr/bin/awk '{print $2}'`,"
+    "imsi=`/usr/bin/dbus-send --system --print-reply --dest=com.nokia.phone.SSC /com/nokia/phone/SSC com.nokia.phone.SSC.get_imsi | /usr/bin/tail -n +2 | /usr/bin/awk '{print $2}'`,"
+    "cellmosw=`/usr/bin/dbus-send --system --print-reply --dest=com.nokia.csd.Info /com/nokia/csd/info com.nokia.csd.Info.GetMCUSWVersion | /usr/bin/tail -n +2`,";
 
 const QString LL_TICK_CMD = "echo LL_TICK "
-    "date=`date +%s`,"
-    "`lshal | awk '/battery.charge_level.percentage/{print \"batt_perc=\" $3}/battery.rechargeable.is_charging/{print \", charging=\" $3; exit;}'`,"
-    "uptime=`cat /proc/uptime`,loadavg=`awk '{print $3,$4,$5}' /proc/loadavg`,"
-    "memfree=`awk '/MemFree:/{print $2}' /proc/meminfo`,";
+    "date=`/bin/date +%s`,"
+    "`lshal | /usr/bin/awk '/battery.charge_level.percentage/{print \"batt_perc=\" $3}/battery.rechargeable.is_charging/{print \", charging=\" $3; exit;}'`,"
+    "uptime=`/bin/cat /proc/uptime`,loadavg=`/usr/bin/awk '{print $3,$4,$5}' /proc/loadavg`,"
+    "memfree=`/usr/bin/awk '/MemFree:/{print $2}' /proc/meminfo`,";
 
 const QString LL_CELL_CMD = "echo LL_CELL "
-    "date=`date +%s`,"
-    "ssc=`dbus-send --system --print-reply --dest=com.nokia.phone.SSC /com/nokia/phone/SSC com.nokia.phone.SSC.get_modem_state | tail -n +2 | awk '{print $2}'`,"
-    "gprs-status=`dbus-send --system --print-reply --dest=com.nokia.csd.GPRS /com/nokia/csd/gprs com.nokia.csd.GPRS.GetStatus | tail -n +2 | awk '$1~/string|boolean|uint64/ {print $2}'`,"
-    "gprs-serv-status=`dbus-send --print-reply --system --dest=com.nokia.csd.GPRS /com/nokia/csd/gprs org.freedesktop.DBus.Properties.GetAll string: | tail -n +2 | awk '$2~/boolean|uint64/{print $3}'`,";
+    "date=`/bin/date +%s`,"
+    "ssc=`/usr/bin/dbus-send --system --print-reply --dest=com.nokia.phone.SSC /com/nokia/phone/SSC com.nokia.phone.SSC.get_modem_state | /usr/bin/tail -n +2 | /usr/bin/awk '{print $2}'`,"
+    "gprs-status=`/usr/bin/dbus-send --system --print-reply --dest=com.nokia.csd.GPRS /com/nokia/csd/gprs com.nokia.csd.GPRS.GetStatus | /usr/bin/tail -n +2 | /usr/bin/awk '$1~/string|boolean|uint64/ {print $2}'`,"
+    "gprs-serv-status=`/usr/bin/dbus-send --print-reply --system --dest=com.nokia.csd.GPRS /com/nokia/csd/gprs org.freedesktop.DBus.Properties.GetAll string: | /usr/bin/tail -n +2 | /usr/bin/awk '$2~/boolean|uint64/{print $3}'`,";
 
 // ----------------------------------------------------------------------------
 //  CReporterDaemon::updateLifelog

@@ -87,15 +87,11 @@ void CReporterIncludeSettingsContainer::initWidget()
     mainLayout->setPolicy(mainPolicy);
     mainLayout->setContentsMargins(0,20,0,20);
 
-    //% "Include into future crash reports"
+    //% "Crash report generation"
     MLabel* header = new MLabel(qtTrId("qtn_dcp_include_container_title_text"));
     header->setStyleName("CommonHeaderInverted");
     header->setWordWrap(true);
     mainPolicy->addItem(header);
-
-    MStylableWidget* separator = new MStylableWidget(this);
-    separator->setStyleName("CommonHeaderDividerInverted");
-    mainPolicy->addItem(separator);
 
     // Create main layout and policy.
     MLayout *layout = new MLayout(mainLayout);
@@ -109,8 +105,9 @@ void CReporterIncludeSettingsContainer::initWidget()
     d->m_buttons = new MButtonGroup(this);
     d->m_buttons->setExclusive(false);
 
+    // -------------------------------------------------------------------------------- //
     // Label for including Core dump text.
-    //% "Core dump"
+    //% "Include core dump"
     MLabel *label = new MLabel(qtTrId("qtn_dcp_include_core_dump_text"), this);
     label->setObjectName("IncludeCoreDumpLabel");
     label->setStyleName("CommonSingleTitleInverted");
@@ -129,8 +126,9 @@ void CReporterIncludeSettingsContainer::initWidget()
     policy->addItem(label, 0, 0, Qt::AlignLeft | Qt::AlignVCenter);
     policy->addItem(button, 0, 1, Qt::AlignRight | Qt::AlignVCenter );
 
+    // -------------------------------------------------------------------------------- //
     // Label for including syslog text.
-    //% "System log (if exists)"
+    //% "Include syslog"
     label = new MLabel(qtTrId("qtn_dcp_include_syslog_text"), this);
     label->setObjectName("IncludeSyslogLabel");
     label->setStyleName("CommonSingleTitleInverted");
@@ -148,8 +146,9 @@ void CReporterIncludeSettingsContainer::initWidget()
     policy->addItem(label, 1, 0, Qt::AlignLeft | Qt::AlignVCenter);
     policy->addItem(button, 1, 1, Qt::AlignRight | Qt::AlignVCenter );
 
+    // -------------------------------------------------------------------------------- //
     // Label for including installed packages text.
-    //% "List of installed packages"
+    //% "Include list of installed packages"
     label = new MLabel(qtTrId("qtn_dcp_include_installed_packages_text"), this);
     label->setObjectName("IncludePackagesLabel");
     label->setStyleName("CommonSingleTitleInverted");
@@ -167,6 +166,7 @@ void CReporterIncludeSettingsContainer::initWidget()
     policy->addItem(label, 2, 0, Qt::AlignLeft | Qt::AlignVCenter);
     policy->addItem(button, 2, 1, Qt::AlignRight | Qt::AlignVCenter );
 
+    // -------------------------------------------------------------------------------- //
     // Label for reducing core size text.
     //% "Reduce core dump size"
     label = new MLabel(qtTrId("qtn_dcp_reduce_core_dump_size"), this);
@@ -186,6 +186,8 @@ void CReporterIncludeSettingsContainer::initWidget()
 
     policy->addItem(label, 3, 0, Qt::AlignLeft | Qt::AlignVCenter);
     policy->addItem(button, 3, 1, Qt::AlignRight | Qt::AlignVCenter );
+
+    // -------------------------------------------------------------------------------- //
 
     mainPolicy->addItem(layout);
 

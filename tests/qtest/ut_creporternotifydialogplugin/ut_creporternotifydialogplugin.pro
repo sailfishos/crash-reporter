@@ -31,7 +31,10 @@ HEADERS += $${PLUGIN_SRC_DIR}/creporternotifydialogplugin.h \
            $${CREPORTER_SRC_DIR}/libs/dialoginterface/creporterdialogserverinterface.h \
            $${CREPORTER_STUBS_DIR}/creporterdialogserver_stub.h \
            $${CREPORTER_SRC_DIR}/libs/settings/creporterapplicationsettings.h \
+           $${CREPORTER_SRC_DIR}/libs/settings/creporterprivacysettingsmodel.h \
            $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsinit_p.h \
+           $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsbase.h \
+           $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsbase_p.h \
            $${CREPORTER_SRC_DIR}/libs/infobanner/creporterinfobanner.h \
            $${CREPORTER_SRC_DIR}/libs/notification/creporternotification.h \
            ut_creporternotifydialogplugin.h \
@@ -41,6 +44,8 @@ SOURCES += $$TEST_SOURCES \
            $$TEST_STUBS \
            $${CREPORTER_SRC_DIR}/libs/settings/creporterapplicationsettings.cpp \
            $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsinit.cpp \
+           $${CREPORTER_SRC_DIR}/libs/settings/creporterprivacysettingsmodel.cpp \
+           $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsbase.cpp \
            ut_creporternotifydialogplugin.cpp \
 
 include(../ut_coverage.pri)

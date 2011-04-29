@@ -109,6 +109,12 @@ void CReporterMonitorSettingsContainer::updateButtons()
         d->m_buttons->button(LifelogBtn)->
                 setChecked(CReporterPrivacySettingsModel::instance()->lifelogEnabled());
     }
+    if (d->m_buttons->button(InstantDialogsBtn)->isChecked()
+        != CReporterPrivacySettingsModel::instance()->instantDialogsEnabled())
+    {
+        d->m_buttons->button(InstantDialogsBtn)->
+                setChecked(CReporterPrivacySettingsModel::instance()->instantDialogsEnabled());
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -126,34 +132,38 @@ void CReporterMonitorSettingsContainer::initWidget()
     mainLayout->setPolicy(mainPolicy);
     mainLayout->setContentsMargins(0,20,0,20);
 
-    //% "Monitoring settings"
+    //% "Monitoring"
     MLabel* header = new MLabel(qtTrId("qtn_dcp_monitoring_container_title"));
     header->setStyleName("CommonHeaderInverted");
     header->setWordWrap(true);
     mainPolicy->addItem(header);
 
-    MStylableWidget* separator = new MStylableWidget(this);
-    separator->setStyleName("CommonHeaderDividerInverted");
-    mainPolicy->addItem(separator);
-
     // Create layout and policy.
     MLayout *layout = new MLayout(mainLayout);
     MGridLayoutPolicy *policy = new MGridLayoutPolicy(layout);
-    policy->setVerticalSpacing(20.0);
+    policy->setVerticalSpacing(4.0);
     policy->setObjectName("Containerpolicy");
     layout->setPolicy(policy);
     layout->setContentsMargins(0,0,0,0);
+    int layoutLineNumber = 0;
 
     // Group for buttons.
     d->m_buttons = new MButtonGroup(this);
     d->m_buttons->setExclusive(false);
 
+    // -------------------------------------------------------------------------------- //
     // Label for save crash reports text.
     //% "Collect crash reports"
     MLabel *label = new MLabel(qtTrId("qtn_dcp_save_crash_reports_text"), this);
     label->setObjectName("SaveCrashReportsLabel");
-    label->setStyleName("CommonSingleTitleInverted");
+    label->setStyleName("CommonTitleInverted");
     label->setWordWrap(true);
+
+    //% "Generate reports of all crashed applications and services"
+    MLabel *desc = new MLabel(qtTrId("qtn_dcp_collect_crash_reports_desc"), this);
+    desc->setObjectName("SaveCrashReportsDesc");
+    desc->setStyleName("CommonSubTitleInverted");
+    desc->setWordWrap(true);
 
     // Toggle button for save crash reports option.
     MButton *button = new MButton(this);
@@ -164,15 +174,23 @@ void CReporterMonitorSettingsContainer::initWidget()
     button->setStyleName("CommonSwitchInverted");
     d->m_buttons->addButton(button, SaveCrashReportsBtn);
 
-    policy->addItem(label, 0, 0, Qt::AlignLeft | Qt::AlignVCenter);
-    policy->addItem(button, 0, 1, Qt::AlignRight | Qt::AlignVCenter);
+    policy->addItem(label, layoutLineNumber, 0, Qt::AlignLeft | Qt::AlignTop);
+    policy->addItem(button, layoutLineNumber++, 1, 2, 1, Qt::AlignRight | Qt::AlignVCenter);
+    policy->addItem(desc, layoutLineNumber++, 0, Qt::AlignLeft | Qt::AlignTop);
 
+    // -------------------------------------------------------------------------------- //
     // Label for lifelog option.
     //% "Collect lifelog"
     label = new MLabel(qtTrId("qtn_dcp_lifelog_text"), this);
     label->setObjectName("LifelogLabel");
-    label->setStyleName("CommonSingleTitleInverted");
+    label->setStyleName("CommonTitleInverted");
     label->setWordWrap(true);
+
+    //% "Save hourly statistics on crashes, memory and battery usage etc."
+    desc = new MLabel(qtTrId("qtn_dcp_lifelog_desc"), this);
+    desc->setObjectName("LifelogDesc");
+    desc->setStyleName("CommonSubTitleInverted");
+    desc->setWordWrap(true);
 
     // Toggle button for lifelog option.
     button = new MButton(this);
@@ -183,15 +201,23 @@ void CReporterMonitorSettingsContainer::initWidget()
 
     d->m_buttons->addButton(button, LifelogBtn);
 
-    policy->addItem(label, 1, 0, Qt::AlignLeft | Qt::AlignVCenter);
-    policy->addItem(button, 1, 1, Qt::AlignRight | Qt::AlignVCenter );
+    policy->addItem(label, layoutLineNumber, 0, Qt::AlignLeft | Qt::AlignTop);
+    policy->addItem(button, layoutLineNumber++, 1, 2, 1, Qt::AlignRight | Qt::AlignVCenter);
+    policy->addItem(desc, layoutLineNumber++, 0, Qt::AlignLeft | Qt::AlignTop);
 
+    // -------------------------------------------------------------------------------- //
     // Label for monitor and send crash reports text.
     //% "Show notifications"
     label = new MLabel(qtTrId("qtn_dcp_show_notifications_text"), this);
     label->setObjectName("ShowNotificationsLabel");
-    label->setStyleName("CommonSingleTitleInverted");
+    label->setStyleName("CommonTitleInverted");
     label->setWordWrap(true);
+
+    //% "Notify of crashes and Crash Reporter actions"
+    desc = new MLabel(qtTrId("qtn_dcp_notifications_desc"), this);
+    desc->setObjectName("NotificationsDesc");
+    desc->setStyleName("CommonSubTitleInverted");
+    desc->setWordWrap(true);
 
     // Toggle button for monitor and send crash reports option.
     button = new MButton(this);
@@ -202,15 +228,23 @@ void CReporterMonitorSettingsContainer::initWidget()
 
     d->m_buttons->addButton(button, NotifyCrashReportsBtn);
 
-    policy->addItem(label, 2, 0, Qt::AlignLeft | Qt::AlignVCenter);
-    policy->addItem(button, 2, 1, Qt::AlignRight | Qt::AlignVCenter );
+    policy->addItem(label, layoutLineNumber, 0, Qt::AlignLeft | Qt::AlignTop);
+    policy->addItem(button, layoutLineNumber++, 1, 2, 1, Qt::AlignRight | Qt::AlignVCenter);
+    policy->addItem(desc, layoutLineNumber++, 0, Qt::AlignLeft | Qt::AlignTop);
 
+    // -------------------------------------------------------------------------------- //
     // Label for automatic sending text.
     //% "Send reports automatically"
     label = new MLabel(qtTrId("qtn_dcp_send_automatically_text"), this);
     label->setObjectName("SendAutomaticallyLabel");
-    label->setStyleName("CommonSingleTitleInverted");
+    label->setStyleName("CommonTitleInverted");
     label->setWordWrap(true);
+
+    //% "Upload all reports in the background using a default internet access point"
+    desc = new MLabel(qtTrId("qtn_dcp_sent_automatically_desc"), this);
+    desc->setObjectName("SendAutomaticallyDesc");
+    desc->setStyleName("CommonSubTitleInverted");
+    desc->setWordWrap(true);
 
     // Toggle button for monitor and send crash reports option.
     button = new MButton(this);
@@ -221,15 +255,23 @@ void CReporterMonitorSettingsContainer::initWidget()
 
     d->m_buttons->addButton(button, AutomaticSendingBtn);
 
-    policy->addItem(label, 3, 0, Qt::AlignLeft | Qt::AlignVCenter);
-    policy->addItem(button, 3, 1, Qt::AlignRight | Qt::AlignVCenter );
+    policy->addItem(label, layoutLineNumber, 0, Qt::AlignLeft | Qt::AlignTop);
+    policy->addItem(button, layoutLineNumber++, 1, 2, 1, Qt::AlignRight | Qt::AlignVCenter);
+    policy->addItem(desc, layoutLineNumber++, 0, Qt::AlignLeft | Qt::AlignTop);
 
+    // -------------------------------------------------------------------------------- //
     // Label for auto-delete option.
     //% "Auto-delete repeating duplicates"
     label = new MLabel(qtTrId("qtn_dcp_auto_delete_dups_text"), this);
     label->setObjectName("AutoDeleteDupsLabel");
-    label->setStyleName("CommonSingleTitleInverted");
+    label->setStyleName("CommonTitleInverted");
     label->setWordWrap(true);
+
+    //% "Delete repeating crash reports that are similar to earlier reports"
+    desc = new MLabel(qtTrId("qtn_dcp_auto_delete_dups_desc"), this);
+    desc->setObjectName("AutoDeleteDupsDesc");
+    desc->setStyleName("CommonSubTitleInverted");
+    desc->setWordWrap(true);
 
     // Toggle button for auto-delete option.
     button = new MButton(this);
@@ -238,14 +280,40 @@ void CReporterMonitorSettingsContainer::initWidget()
     button->setCheckable(true);
     button->setStyleName("CommonSwitchInverted");
 
-    if (!dumpingEnabled) {
-        // If dumping is not enabled, we cannot toggle auto-delete option.
-        button->setEnabled(false);
-    }
     d->m_buttons->addButton(button, AutoDeleteCrashReportsBtn);
 
-    policy->addItem(label, 4, 0, Qt::AlignLeft | Qt::AlignVCenter);
-    policy->addItem(button, 4, 1, Qt::AlignRight | Qt::AlignVCenter );
+    policy->addItem(label, layoutLineNumber, 0, Qt::AlignLeft | Qt::AlignTop);
+    policy->addItem(button, layoutLineNumber++, 1, 2, 1, Qt::AlignRight | Qt::AlignVCenter);
+    policy->addItem(desc, layoutLineNumber++, 0, Qt::AlignLeft | Qt::AlignTop);
+
+    // -------------------------------------------------------------------------------- //
+    // Label for instant dialogs option.
+    //% "Open crash dialogs instantly"
+    label = new MLabel(qtTrId("qtn_dcp_instant_dialogs_text"), this);
+    label->setObjectName("InstantDialogsLabel");
+    label->setStyleName("CommonTitleInverted");
+    label->setWordWrap(true);
+
+    //% "Always open crash dialogs in foreground instead of using notifications"
+    desc = new MLabel(qtTrId("qtn_dcp_instant_dialogs_desc"), this);
+    desc->setObjectName("InstantDialogsDesc");
+    desc->setStyleName("CommonSubTitleInverted");
+    desc->setWordWrap(true);
+
+    // Toggle button for instant dialogs option.
+    button = new MButton(this);
+    button->setObjectName("InstantDialogsSwitch");
+    button->setViewType(MButton::switchType);
+    button->setCheckable(true);
+    button->setStyleName("CommonSwitchInverted");
+
+    d->m_buttons->addButton(button, InstantDialogsBtn);
+
+    policy->addItem(label, layoutLineNumber, 0, Qt::AlignLeft | Qt::AlignTop);
+    policy->addItem(button, layoutLineNumber++, 1, 2, 1, Qt::AlignRight | Qt::AlignVCenter);
+    policy->addItem(desc, layoutLineNumber++, 0, Qt::AlignLeft | Qt::AlignTop);
+
+    // -------------------------------------------------------------------------------- //
 
     mainPolicy->addItem(layout);
 
@@ -301,6 +369,10 @@ void CReporterMonitorSettingsContainer::groupButtonToggled(bool checked)
     // Toggle lifelogging
     case LifelogBtn:
         CReporterPrivacySettingsModel::instance()->setLifelogEnabled(checked);
+        break;
+    // Toggle instant dialogs
+    case InstantDialogsBtn:
+        CReporterPrivacySettingsModel::instance()->setInstantDialogsEnabled(checked);
         break;
     case NoBtn:
         break;

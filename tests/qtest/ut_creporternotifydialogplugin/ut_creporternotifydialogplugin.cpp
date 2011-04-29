@@ -185,7 +185,22 @@ QString CReporterNotificationDialog::userComments() const
     return userCommentsText;
 }
 
+void CReporterNotificationDialog::setContactInfo(QString contactInfo)
+{
+    Q_UNUSED(contactInfo);
+}
+
+QString CReporterNotificationDialog::getContactInfo() const
+{
+    return QString();
+}
+
 void CReporterNotificationDialog::createcontent()
+{
+
+}
+
+void CReporterNotificationDialog::setContactChecked()
 {
 
 }
