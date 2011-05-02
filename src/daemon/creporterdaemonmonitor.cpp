@@ -265,8 +265,48 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
             }
         }
     }
-    // else: Drive was unmouted or directory was deleted by the user. Directory monitoring was
-    // removed. Take no action.
+    else // Monitored directory was deleted
+    {
+        // Re-add core dirs when the parent dir changes so that monitoring is resumed
+        // after usb mass storage mode has been disconnected
+        QDir changedDir(path);
+        if (changedDir.cd("../.."))
+        {
+            connect(&parentDirWatcher, SIGNAL(directoryChanged(QString)), SLOT(handleParentDirectoryChanged()));
+            parentDirWatcher.addPath(changedDir.absolutePath());
+            qDebug() << __PRETTY_FUNCTION__ << "Directory was deleted. Started parent dir monitoring.";
+        }
+        else
+        {
+            qDebug() << __PRETTY_FUNCTION__ << "Directory was deleted. Parent dir does not exist.";
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+// CReporterDaemonMonitorPrivate::handleParentDirectoryChanged
+// ----------------------------------------------------------------------------
+void CReporterDaemonMonitorPrivate::handleParentDirectoryChanged()
+{
+    qDebug() << __PRETTY_FUNCTION__ << "Parent dir has changed. Trying to re-add directory watchers.";
+    QStringList* corePaths = registry->getCoreLocationPaths();
+    int numWatchPaths = watcher.directories().count();
+
+    if (!corePaths->isEmpty()) {
+        registry->refreshRegistry();
+        // Add monitored directories to QFileSystemWatcher. Paths are not added
+        // if they do not exist, or if they are already being monitored by the file system watcher.
+        watcher.addPaths(*corePaths);
+    }
+
+    delete corePaths;
+
+    if (watcher.directories().count() > numWatchPaths)
+    {
+        qDebug() << __PRETTY_FUNCTION__ << "Successfully started watching core-dump dir";
+        disconnect(this, SLOT(handleParentDirectoryChanged()));
+        parentDirWatcher.removePaths(parentDirWatcher.directories());
+    }
 }
 
 // ----------------------------------------------------------------------------

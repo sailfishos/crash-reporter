@@ -1,3 +1,11 @@
+crash-reporter (1.9.5-0) unstable; urgency=low
+
+  * Fixes: NB#247120 - sh: ifconfig: not found after Init/done
+  * Fixes: NB#239926 - ask user to describe the use case causing the crash
+  * Fixes: NB#251419 - Crash monitoring stops permanently when USB mass storage mode is used
+
+ -- Raimo Gratseff <ext-raimo.gratseff@nokia.com>  Mon, 02 May 2011 14:01:03 +0300
+
 crash-reporter (1.9.4-0) unstable; urgency=low
 
   * Fixes: NB#247879 - Crash-reporter does not release /home/user/MyDocs/core-dumps directory

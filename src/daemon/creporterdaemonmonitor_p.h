@@ -126,6 +126,12 @@ class CReporterDaemonMonitorPrivate : public QObject
         void handleDirectoryChanged(const QString &path);
 
         /*!
+         * @brief Re-enables monitoring of core-dump dir when USB mass storage has been disabled and MyDocs is back in use
+         *
+         */
+        void handleParentDirectoryChanged();
+
+        /*!
           * @brief Called, when signal is received from CReporterNotification class.
           *
           * @sa CReporterNotification::activated()
@@ -149,6 +155,8 @@ class CReporterDaemonMonitorPrivate : public QObject
         CReporterDaemonCoreRegistry *registry;
         //! @arg For monitoring directories.
         QFileSystemWatcher watcher;
+        //! @arg Watcher for monitoring the return of an unmounted directory for when core-dumps dir has disappeared because of USB mass storage mode
+        QFileSystemWatcher parentDirWatcher;
         //! @arg List of handled rich-cores.
         QList <CReporterHandledRichCore *> handledRichCores;
         //! @arg State of auto-delete feature (enabled/ disabled).
