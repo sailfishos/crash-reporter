@@ -257,7 +257,7 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
                         CReporterNotification *newnotification = new CReporterNotification(
                                 CReporter::AutoUploaderNotificationEventType,
                                 QString("Auto Uploader failed to start").arg(details.at(0)),
-                                QString("Please send the crash reports manually"));
+                                QString("Please send the reports manually"));
                         newnotification->setTimeout(30);
                         newnotification->setParent(this);
                     }

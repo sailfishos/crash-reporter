@@ -131,7 +131,7 @@ bool CReporterAutoUploader::uploadFiles(const QStringList &fileList)
         CReporterNotification *notification = new CReporterNotification(
                 CReporter::AutoUploaderNotificationEventType,
                 QString("Crash Reporter Auto Uploader started"),
-                QString("Uploading %1 crash report(s)").arg(fileList.count()));
+                QString("Uploading %1 report(s)").arg(fileList.count()));
         notification->setTimeout(30);
         notification->setParent(this);
     }
@@ -172,13 +172,13 @@ void CReporterAutoUploader::engineFinished(int error, int sent, int total)
     switch (error)
     {
         case CReporterUploadEngine::NoError:
-            //% "%1 crash report(s) uploaded successfully."
+            //% "%1 report(s) uploaded successfully."
             message = qtTrId("qtn_%1_crash_reports_uploaded_successfully_text").arg(total);
             break;
         case CReporterUploadEngine::ProtocolError:
         case CReporterUploadEngine::ConnectionNotAvailable:
         case CReporterUploadEngine::ConnectionClosed:
-            //% "Failed to upload crash report(s)."
+            //% "Failed to upload report(s)."
             message = qtTrId("qtn_failed_to_send_crash_reports_text");
             //% "<br>Upload results: %1 files attempted %2 files succeeded."
             message += qtTrId("qtn_%1_files_attempted_%2_files_succeeded_text").arg(total).arg(sent);
@@ -228,7 +228,7 @@ void CReporterAutoUploader::engineFinished(int error, int sent, int total)
         CReporterNotification *notification = new CReporterNotification(
                 CReporter::AutoUploaderNotificationEventType,
                 QString("Crash Reporter"),
-                QString("%1 crash report(s) sent successfully").arg(sent));
+                QString("%1 report(s) sent successfully").arg(sent));
         notification->setTimeout(30);
         notification->setParent(this);
     }

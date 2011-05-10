@@ -115,11 +115,9 @@ bool CReporterUtils::isMounted(const QString &path)
 // ----------------------------------------------------------------------------
 bool CReporterUtils::removeFile(const QString &path)
 {
-    qDebug() << __PRETTY_FUNCTION__ << "Removing file:" << path;
     QFileInfo fi(path);
-    QDir::setCurrent(fi.absolutePath());
-
-    return QFile::remove(fi.fileName());
+    qDebug() << __PRETTY_FUNCTION__ << "Removing file:" << fi.absoluteFilePath();
+    return QFile::remove(fi.absoluteFilePath());
 }
 
 // ----------------------------------------------------------------------------

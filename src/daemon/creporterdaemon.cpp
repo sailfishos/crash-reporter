@@ -174,7 +174,7 @@ bool CReporterDaemon::initiateDaemon()
                 // UI failed to launch did not succeed. Try to show notification instead.
                 // Daemon is not a Meego Touch application, thus translation with MLocale
                 // won't work here.
-                QString notificationSummary("This system has stored crash reports.");
+                QString notificationSummary("This system has stored reports.");
                 QString notificationBody("Unable to start Crash Reporter UI.");
                 CReporterNotification *notification = 0;
 
