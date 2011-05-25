@@ -1,0 +1,18 @@
+<aegis>
+  <request>
+    <credential name="UID::user" />
+    <credential name="GID::users" />
+    <for path="/usr/bin/crash-reporter-daemon" />
+  </request>
+  <request>
+    <credential name="UID::user" />
+    <credential name="GID::users" />
+    <for path="/usr/bin/crash-reporter-ui" />
+  </request>
+  <request>
+    <credential name="UID::user" />
+    <credential name="GID::users" />
+    <for path="/usr/bin/crash-reporter-autouploader" />
+  </request>
+</aegis>
+

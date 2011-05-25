@@ -1,3 +1,9 @@
+crash-reporter (1.9.7-0) unstable; urgency=low
+
+  * Work in progress
+
+ -- Raimo Gratseff <ext-raimo.gratseff@nokia.com>  Wed, 25 May 2011 17:57:47 +0300
+
 crash-reporter (1.9.6-0) unstable; urgency=low
 
   * Fixes: NB#252147 - Crash-reporter-daemon keeps FS busy prohibiting usb mass storage mode
