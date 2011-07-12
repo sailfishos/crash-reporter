@@ -95,7 +95,19 @@ void CReporterNotificationPrivate::timerEvent(QTimerEvent *event)
     killTimer(timerId);
     timerId = 0;
     timeout = 0;
-    notification->remove();
+
+    // Removing a notification tends to fail when dbus is not
+    // up and running (in special cases) and apparently this will not be fixed in MeeGo Touch.
+    // When dbus is not available the system is most likely being shut down and we'll just ignore
+    // this here to avoid a core dump.
+    try
+    {
+        notification->remove();
+    }
+    catch (...)
+    {
+        // Do nothing
+    }
 
     emit q_ptr->timeouted();
 }

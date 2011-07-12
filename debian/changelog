@@ -1,8 +1,9 @@
 crash-reporter (1.9.7-0) unstable; urgency=low
 
   * Fixes: NB#254618 - updated capabilities
+  * Fixes: NB#227742 - notification removal crashes
 
- -- Raimo Gratseff <ext-raimo.gratseff@nokia.com>  Mon, 11 Jul 2011 16:27:32 +0300
+ -- Raimo Gratseff <ext-raimo.gratseff@nokia.com>  Tue, 12 Jul 2011 13:11:54 +0300
 
 crash-reporter (1.9.6-0) unstable; urgency=low
 
