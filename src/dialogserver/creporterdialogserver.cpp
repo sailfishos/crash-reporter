@@ -45,6 +45,7 @@
 #include "creporterdialogserver_p.h"
 #include "creporternamespace.h"
 #include "creporterinfobanner.h"
+#include "creporterprivacysettingsmodel.h"
 
 /*!
   * @class CReporterDialogRequest
@@ -111,10 +112,15 @@ void CReporterDialogServerPrivate::processRequests()
         else if (m_appService && win != 0 && isDialogVisible())
         {
             qDebug() << __PRETTY_FUNCTION__ << "UI was already open. Previously opened dialog is shown.";
-            CReporterInfoBanner::show(qtTrId("This Crash Reporter dialog was already open."));
+            CReporterInfoBanner::show(qtTrId("Crash dialog queued"));
             m_appService->launch();
-            // Remove the request from the queue
-            delete m_requestQueue.takeFirst();
+            m_requestQueueMutex.unlock();
+            return;
+        }
+        else
+        {
+            if (!CReporterPrivacySettingsModel::instance()->instantDialogsEnabled())
+                delete m_requestQueue.takeFirst(); // Remove the request from the queue
             m_requestQueueMutex.unlock();
             return;
         }
@@ -176,7 +182,7 @@ void CReporterDialogServerPrivate::requestCompleted()
             << "completed request.";
 
     // Process request queue.
-    processRequests();
+    QTimer::singleShot(0, this, SLOT(processRequests()));
 }
 
 // ----------------------------------------------------------------------------
@@ -375,7 +381,19 @@ bool CReporterDialogServer::createRequest(const QString &dialogName,
 
     qDebug() << __PRETTY_FUNCTION__ << "Queue new request...";
     d_ptr->m_requestQueueMutex.lock();
-    d_ptr->m_requestQueue.append(request);
+
+    // Setting request priority based on it's type.
+    if (dialogName == CReporter::SendSelectedDialogType)
+        d_ptr->m_requestQueue.append(request); // Low priority
+    else if (dialogName == CReporter::NotifyNewDialogType)
+        d_ptr->m_requestQueue.append(request); // Low priority
+    else if (dialogName == CReporter::UploadDialogType)
+        d_ptr->m_requestQueue.prepend(request); // High priority
+    else if (dialogName == CReporter::MessageBoxDialogType)
+        d_ptr->m_requestQueue.prepend(request); // High priority
+    else
+        d_ptr->m_requestQueue.append(request); // Low priority
+
     d_ptr->m_requestQueueMutex.unlock();
 
     return true;
@@ -466,7 +484,18 @@ QDBusError::ErrorType CReporterDialogServer::callReceived(const QString &dialogN
 
     // Queue and schedule request.
     d_ptr->m_requestQueueMutex.lock();
-    d_ptr->m_requestQueue.append(request);
+
+    // Setting request priority based on it's type.
+    if (dialogName == CReporter::SendSelectedDialogType)
+        d_ptr->m_requestQueue.append(request); // Low priority
+    else if (dialogName == CReporter::NotifyNewDialogType)
+        d_ptr->m_requestQueue.append(request); // Low priority
+    else if (dialogName == CReporter::UploadDialogType)
+        d_ptr->m_requestQueue.prepend(request); // High priority
+    else if (dialogName == CReporter::MessageBoxDialogType)
+        d_ptr->m_requestQueue.prepend(request); // High priority
+    else
+        d_ptr->m_requestQueue.append(request); // Low priority
 
     if (d_ptr->m_scheduleTimer == 0) {
         d_ptr->m_scheduleTimer = new QTimer(this);

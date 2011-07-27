@@ -235,24 +235,36 @@ void CReporterNotificationDialog::createcontent()
 
     // Add buttons to button area.
     //% "Send"
-    MButtonModel *dialogButton = addButton(qtTrId("qtn_cr_button_send"));
+    MButton* dialogButton = new MButton(qtTrId("qtn_cr_button_send"));
+    dialogButton->setStyleName("CommonSingleButtonInverted");
+    policy->addItem(dialogButton, Qt::AlignCenter);
+//    MButtonModel *dialogButton = addButton(qtTrId("qtn_cr_button_send"));
     dialogButton->setObjectName("DialogButton");
 
     connect(dialogButton, SIGNAL(clicked()), mapper, SLOT(map()));
+    connect(dialogButton, SIGNAL(clicked()), this, SLOT(accept()));
     mapper->setMapping(dialogButton, static_cast<int>(CReporter::SendButton));
 
     //% "Save"
-    dialogButton = addButton(qtTrId("qtn_cr_button_save"));
+    dialogButton = new MButton(qtTrId("qtn_cr_button_save"));
+    dialogButton->setStyleName("CommonSingleButtonInverted");
+    policy->addItem(dialogButton, Qt::AlignCenter);
+//    dialogButton = addButton(qtTrId("qtn_cr_button_save"));
     dialogButton->setObjectName("DialogButton");
 
     connect(dialogButton, SIGNAL(clicked()), mapper, SLOT(map()));
+    connect(dialogButton, SIGNAL(clicked()), this, SLOT(accept()));
     mapper->setMapping(dialogButton, static_cast<int>(CReporter::SaveButton));
 
     //% "Delete"
-    dialogButton = addButton(qtTrId("qtn_cr_button_delete"));
+    dialogButton = new MButton(qtTrId("qtn_cr_button_delete"));
+    dialogButton->setStyleName("CommonSingleButtonInverted");
+    policy->addItem(dialogButton, Qt::AlignCenter);
+//    dialogButton = addButton(qtTrId("qtn_cr_button_delete"));
     dialogButton->setObjectName("DialogButton");
 
     connect(dialogButton, SIGNAL(clicked()), mapper, SLOT(map()));
+    connect(dialogButton, SIGNAL(clicked()), this, SLOT(accept()));
     mapper->setMapping(dialogButton, static_cast<int>(CReporter::DeleteButton));
 
     connect(mapper, SIGNAL(mapped(int)), SIGNAL(actionPerformed(int)));

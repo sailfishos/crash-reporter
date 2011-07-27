@@ -220,27 +220,31 @@ void CReporterSendSelectedDialog::createcontent()
     // Add buttons to button area.
     QSignalMapper *mapper = new QSignalMapper(this);
     //% "Send Selected"
-    MButtonModel *dialogButton = addButton(qtTrId("qtn_send_selected_button"));
-    dialogButton->setObjectName("SendSelectedButton");
-
+    MButton* dialogButton = new MButton(qtTrId("qtn_send_selected_button"));
+    dialogButton->setStyleName("CommonSingleButtonInverted");
+    policy->addItem(dialogButton, Qt::AlignCenter);
+//    MButtonModel *dialogButton = addButton(qtTrId("qtn_send_selected_button"), M::ActionRole);
     connect(dialogButton, SIGNAL(clicked()), mapper, SLOT(map()));
     mapper->setMapping(dialogButton, static_cast<int>(CReporter::SendSelectedButton));
 
     //% "Send All"
-    dialogButton = addButton(qtTrId("qtn_send_all_button"));
-    dialogButton->setObjectName("SendAllButton");
-
+    dialogButton = new MButton(qtTrId("qtn_send_all_button"));
+    dialogButton->setStyleName("CommonSingleButtonInverted");
+    policy->addItem(dialogButton, Qt::AlignCenter);
+//    dialogButton = addButton(qtTrId("qtn_send_all_button"), M::ActionRole);
     connect(dialogButton, SIGNAL(clicked()), mapper, SLOT(map()));
     mapper->setMapping(dialogButton, static_cast<int>(CReporter::SendAllButton));
 
     //% "Delete Selected"
-    dialogButton = addButton(qtTrId("qtn_delete_selected_button"));
-    dialogButton->setObjectName("DeleteSelectedButton");
-
+    dialogButton = new MButton(qtTrId("qtn_delete_selected_button"));
+    dialogButton->setStyleName("CommonSingleButtonInverted");
+    policy->addItem(dialogButton, Qt::AlignCenter);
+//    dialogButton = addButton(qtTrId("qtn_delete_selected_button"), M::DestructiveRole);
     connect(dialogButton, SIGNAL(clicked()), mapper, SLOT(map()));
     mapper->setMapping(dialogButton, static_cast<int>(CReporter::DeleteSelectedButton));
 
     connect(mapper, SIGNAL(mapped(int)), SIGNAL(actionPerformed(int)));
+    connect(mapper, SIGNAL(mapped(int)), SLOT(accept()));
 }
 
 // End of file.
