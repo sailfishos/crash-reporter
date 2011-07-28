@@ -294,8 +294,6 @@ void Ut_CReporterDialogServer::testRequestInvalidPlugin()
 
 void Ut_CReporterDialogServer::testRequestActivePlugin()
 {
-    // Test requesting active plugin. Request is handled by showing previously opened dialog
-    // Previously this request would have failed.
     TestPlugin *plugin = new TestPlugin();
     plugin->pluginName = CReporter::NotifyNewDialogType;
     plugin->active = true;
@@ -317,7 +315,7 @@ void Ut_CReporterDialogServer::testRequestActivePlugin()
     QCOMPARE(reply.count(), 1);
 
     QTest::qWait(100);
-    QVERIFY(plugin->requestHandled == true);
+    QVERIFY(plugin->requestHandled == false); // request goes to queue if there's an active dialog
     QVERIFY(reply.value() == true);
 }
 
@@ -358,6 +356,7 @@ void Ut_CReporterDialogServer::testDialogRequestedByAnotherPlugin()
     QVERIFY(ret == true);
     plugin1->emitRequestCompleted();
 
+    QTest::qWait(100);
     QVERIFY(plugin2->requestHandled == true);
     plugin2->emitRequestCompleted();
 }
