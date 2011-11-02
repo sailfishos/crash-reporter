@@ -405,7 +405,7 @@ void CReporterMonitorSettingsContainer::showAutoUploaderMessage()
     msgText += "regarding this feature you may contact <b>twux-dev@projects.maemo.org.</b></p>";
 
     MMessageBox *msgBox = new MMessageBox(msgText);
-    msgBox->appear(0, MSceneWindow::DestroyWhenDone);
+    msgBox->appear(MSceneWindow::DestroyWhenDone);
 }
 
 // End of file.
