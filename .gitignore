@@ -19,6 +19,7 @@ debian/files
 *.gcov
 *.log
 doc/html/*
+doc/man/*
 *.pc
 *.out
 *.substvars
