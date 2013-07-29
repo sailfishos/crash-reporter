@@ -116,8 +116,8 @@ headers.path = $$[QT_INSTALL_PREFIX]/include/crash-reporter
 # Pkg-config
 createpkgconfig.target = $$OUT_PWD/crash-reporter.pc
 createpkgconfig.commands = \
-    sed -e 's,@VERSION\@,$$VERSION,g' $$PWD/crash-reporter.pc.in > $$OUT_PWD/crash-reporter.pc.tmp; \
-    sed -e 's,@PREFIX\@,$$[QT_INSTALL_PREFIX],g' $$OUT_PWD/crash-reporter.pc.tmp > $$createpkgconfig.target; \
+    sed -e 's,@VERSION\\@,$$VERSION,g' $$PWD/crash-reporter.pc.in > $$OUT_PWD/crash-reporter.pc.tmp; \
+    sed -e 's,@PREFIX\\@,$$[QT_INSTALL_PREFIX],g' $$OUT_PWD/crash-reporter.pc.tmp > $$createpkgconfig.target; \
     rm $$OUT_PWD/crash-reporter.pc.tmp
 
 QMAKE_EXTRA_TARGETS += createpkgconfig
