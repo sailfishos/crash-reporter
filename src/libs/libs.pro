@@ -27,7 +27,7 @@
 include(../../crash-reporter-conf.pri)
 
 TEMPLATE = lib
-CONFIG += dll meegotouch
+CONFIG += dll meegotouch mlocale
 QT += network dbus
 
 DEFINES += CREPORTER_EXPORTS

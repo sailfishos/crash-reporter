@@ -1,6 +1,6 @@
 include(../ut_common_top.pri)
 DAEMON_SRC_DIR = $${CREPORTER_SRC_DIR}/daemon
-CONFIG += meegotouch
+CONFIG += meegotouch mlocale
 TARGET = ut_creporterdaemon
 INCLUDEPATH += . \
     $${CREPORTER_SRC_DIR}/libs/serviceif \

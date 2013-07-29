@@ -2,7 +2,7 @@ include(../ut_common_top.pri)
 
 CLIENT_SRC_DIR = $${CREPORTER_SRC_DIR}/libs/httpclient
 
-CONFIG += meegotouch
+CONFIG += meegotouch mlocale
 QT -= network
 
 TARGET = ut_creporterhttpclient
