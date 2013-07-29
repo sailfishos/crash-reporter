@@ -5,7 +5,10 @@
 #
 #  Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
 #  Author: Carol Rus <carol.rus@digia.com>
-# 
+#
+#  Copyright (C) 2013 Jolla Ltd.
+#  Contact: Jakub Adam <jakub.adam@jollamobile.com>
+#
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU Lesser General Public License
 #  version 2.1 as published by the Free Software Foundation.
@@ -32,7 +35,7 @@ QT += network dbus
 
 DEFINES += CREPORTER_EXPORTS
 
-CREPORTER_BUILD_ARCH = $$system(dpkg-architecture -qDEB_BUILD_ARCH)
+CREPORTER_BUILD_ARCH = $$system(uname -m)
 message(Building architecture: $$CREPORTER_BUILD_ARCH)
 
 # Enable Qt Bearer Management API.
