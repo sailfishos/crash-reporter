@@ -3,6 +3,8 @@
 %define release         0
 %define buildroot       %{_topdir}/%{name}-%{version}-%{release}-root
 
+%define _unpackaged_files_terminate_build 0
+
 BuildRoot:              %{buildroot}
 Summary:                Crash Reporting Tool for MeeGo
 License:                LGPL
@@ -11,7 +13,7 @@ Version:                1.10.0
 Release:                %{release}
 Prefix:                 /usr
 Group:                  Development/Tools
-BuildRequires:          qt-devel, libmeegotouch-devel, libmlocale-devel, libmeegocontrolpanel-devel, gcc-c++
+BuildRequires:          qt-devel, libmeegotouch-devel, libmlocale-devel, gcc-c++
 Source0:                %{name}-%{version}.tar.gz
 
 %description
@@ -36,11 +38,11 @@ Requires:               crash-reporter
 %description            tests
 Test binaries for testing Crash Reporter.
 
-%package                ui-tests
-Summary:                crash-reporter UI tests
-Requires:               crash-reporter
-%description            ui-tests
-MATTI test cases for Crash Reporter UI.
+#%package                ui-tests
+#Summary:                crash-reporter UI tests
+#Requires:               crash-reporter
+#%description            ui-tests
+#MATTI test cases for Crash Reporter UI.
 
 %package                l10n-engineering-english
 Summary:                Engineering English translations for crash-reporter
@@ -61,9 +63,9 @@ make install INSTALL_ROOT=%{buildroot}
 %files
 %doc README COPYING
 /usr/bin/crash*
-/usr/lib/duicontrolpanel/*.desktop
-/usr/lib/duicontrolpanel/applets/*crash*.so*
-/usr/lib/crash-reporter/dialogplugins/*
+#/usr/lib/duicontrolpanel/*.desktop
+#/usr/lib/duicontrolpanel/applets/*crash*.so*
+#/usr/lib/crash-reporter/dialogplugins/*
 /usr/share/crash-reporter/*
 /usr/share/dbus-1/services/*.service
 /usr/share/man/man1/*
@@ -84,9 +86,9 @@ make install INSTALL_ROOT=%{buildroot}
 /usr/lib/crash-reporter-tests/*
 /usr/share/crash-reporter-tests/*
 
-%files ui-tests
-/usr/lib/crash-reporter-ui-tests/testdata/*
-/usr/share/crash-reporter-ui-tests/*
+#%files ui-tests
+#/usr/lib/crash-reporter-ui-tests/testdata/*
+#/usr/share/crash-reporter-ui-tests/*
 
 %files l10n-engineering-english
 /usr/share/l10n/meegotouch/crash-reporter.qm

@@ -4,4 +4,4 @@
 
 TEMPLATE = subdirs
 
-SUBDIRS += libs daemon dcpapplet dialogserver dialogplugins autouploader
+SUBDIRS += libs daemon autouploader
