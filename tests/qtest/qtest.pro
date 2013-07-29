@@ -7,7 +7,6 @@ SUBDIRS =  ut_creporterdaemonmonitor \
           ut_creportersettingsobserver \
           ut_creporternotification \
           ut_creporterdaemoncoredir \
-          ut_creporterhttpclient \
           ut_creporterdialogserver \
           ut_creporternotifydialogplugin \
           ut_creportersendalldialogplugin \
