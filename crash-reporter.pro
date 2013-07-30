@@ -51,4 +51,8 @@ icons.path = $${CREPORTER_SYSTEM_SHARE}/themes/base/meegotouch/icons
 icons.files = data/icon-s-crash-reporter.svg \
               data/icon-m-crash-reporter.svg
 
-INSTALLS += scripts notifications icons
+settings.path = $$CREPORTER_SETTINGS_PATH
+settings.files += data/crash-reporter-privacy.conf \
+	data/crash-reporter.conf
+
+INSTALLS += scripts notifications icons settings

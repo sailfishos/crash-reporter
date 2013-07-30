@@ -67,6 +67,7 @@ make install INSTALL_ROOT=%{buildroot}
 #/usr/lib/duicontrolpanel/applets/*crash*.so*
 #/usr/lib/crash-reporter/dialogplugins/*
 /usr/share/crash-reporter/*
+/usr/share/crash-reporter-settings/*
 /usr/share/dbus-1/services/*.service
 /usr/share/man/man1/*
 /usr/share/meegotouch/notifications/eventtypes/*

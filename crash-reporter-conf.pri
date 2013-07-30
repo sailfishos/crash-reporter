@@ -34,6 +34,7 @@ CREPORTER_SYSTEM_INCLUDE = /usr/include
 CREPORTER_SYSTEM_SHARE = /usr/share
 CREPORTER_SYSTEM_BIN = /usr/bin
 CREPORTER_SYSTEM_DBUS_SERVICES = /usr/share/dbus-1/services
+CREPORTER_SETTINGS_PATH = $${CREPORTER_SYSTEM_SHARE}/crash-reporter-settings
 CREPORTER_DLG_PLUGINS_PATH = /usr/lib/crash-reporter/dialogplugins
 CREPORTER_TESTS_TESTDATA_INSTALL_LIBS = $$[QT_INSTALL_LIBS]/crash-reporter-tests/testdata
 CREPORTER_TESTS_TESTDATA_INSTALL_DOCS = $${CREPORTER_SYSTEM_SHARE}/crash-reporter-tests/testdata
