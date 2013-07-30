@@ -6,6 +6,9 @@
  * Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
  * Author: Raimo Gratseff <ext-raimo.gratseff@nokia.com>
  *
+ * Copyright (C) 2013 Jolla Ltd.
+ * Contact: Jakub Adam <jakub.adam@jollamobile.com>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
  * version 2.1 as published by the Free Software Foundation.
@@ -26,12 +29,8 @@
 
 #include <signal.h>
 
+#include <QApplication>
 #include <QDebug>
-
-#include <MApplication>
-///#include <MWindow>
-#include <MApplicationService>
-///#include <MLocale>
 
 // User includes.
 
@@ -45,32 +44,6 @@
 #endif // QT_NO_DEBUG_OUTPUT
 
 extern char *g_progname;
-
-/*! 
- * @class CReporterMApplicationService
- * @brief Overriden M application service class to disable application service.
- *
- */
-class CReporterMApplicationService : public MApplicationService
-{
-    public:
-        CReporterMApplicationService(QObject *parent = 0) :
-            MApplicationService("com.nokia.crash-reporter-autouploader", parent) {
-        }
-
-        //! @reimp
-        QString registeredName() {
-            return QString();
-        }
-        //! @reimp
-        bool isRegistered() {
-            return false;
-        }
-        //! @reimp
-        bool registerService() {
-            return true;
-        }
-};
 
 /*!
   * @brief Crash Reporter Auto Uploader main function.
@@ -88,9 +61,7 @@ int main(int argc, char **argv)
         Logger logger(type);
 #endif // QT_NO_DEBUG_OUTPUT
 
-    // Create new MApplication and service.
-    MApplication app(argc, argv, CReporter::AutoUploaderBinaryName,
-        new CReporterMApplicationService());
+    QApplication app(argc, argv);
 
     qDebug() << __PRETTY_FUNCTION__  << CReporter::AutoUploaderBinaryName << "[" << app.applicationPid()
         << "]" << "started.";

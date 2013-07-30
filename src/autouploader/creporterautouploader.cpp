@@ -6,6 +6,9 @@
  * Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
  * Author: Raimo Gratseff <ext-raimo.gratseff@nokia.com>
  *
+ * Copyright (C) 2013 Jolla Ltd.
+ * Contact: Jakub Adam <jakub.adam@jollamobile.com>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
  * version 2.1 as published by the Free Software Foundation.
@@ -26,7 +29,6 @@
 
 #include <QDebug>
 #include <QDBusConnection>
-#include <MApplication>
 
 // User includes.
 
@@ -158,7 +160,7 @@ void CReporterAutoUploader::quit()
         d_ptr->engine->deleteLater();
         d_ptr->engine = 0;
     }
-    MApplication::instance()->quit();
+    qApp->quit();
 }
 
 // ----------------------------------------------------------------------------
