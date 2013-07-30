@@ -1,0 +1,9 @@
+[Unit]
+Description=Crash file reporter daemon
+Requires=dbus.service
+
+[Service]
+ExecStart=/usr/bin/crash-reporter-daemon
+Type=dbus
+BusName=com.nokia.CrashReporter.Daemon
+Restart=always

@@ -59,6 +59,8 @@ make
 
 %install
 make install INSTALL_ROOT=%{buildroot}
+mkdir %{buildroot}/usr/lib/systemd/user/nemo-mobile-session.target.wants
+ln -s -t %{buildroot}/usr/lib/systemd/user/nemo-mobile-session.target.wants ../crash-reporter.service
 
 %files
 %doc README COPYING
@@ -66,6 +68,7 @@ make install INSTALL_ROOT=%{buildroot}
 #/usr/lib/duicontrolpanel/*.desktop
 #/usr/lib/duicontrolpanel/applets/*crash*.so*
 #/usr/lib/crash-reporter/dialogplugins/*
+/usr/lib/systemd/user/*
 /usr/share/crash-reporter/*
 /usr/share/crash-reporter-settings/*
 /usr/share/dbus-1/services/*.service
