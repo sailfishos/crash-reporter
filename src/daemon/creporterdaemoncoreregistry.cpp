@@ -6,6 +6,9 @@
  * Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
  * Author: Riku Halonen <riku.halonen@nokia.com>
  *
+ * Copyright (C) 2013 Jolla Ltd.
+ * Contact: Jakub Adam <jakub.adam@jollamobile.com>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
  * version 2.1 as published by the Free Software Foundation.
@@ -83,7 +86,7 @@ mountpoint_env_names[NUM_ENV_MOUNTPOINTS][MAX_MOUNTPOINT_NAMELEN] =
 static const char
 mountpoint_static[NUM_STATIC_MOUNTPOINTS][MAX_MOUNTPOINT_NAMELEN] =
     {
-    "/home/user/MyDocs"
+    "/var/cache"
     };
 #else
 static const char
