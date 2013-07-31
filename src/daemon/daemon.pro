@@ -26,8 +26,6 @@ include(../../crash-reporter-conf.pri)
 TEMPLATE = app
 TARGET = crash-reporter-daemon
 
-CONFIG += meegotouch
-
 INCLUDEPATH += . \
                ../libs/utils \
                ../libs/logger \

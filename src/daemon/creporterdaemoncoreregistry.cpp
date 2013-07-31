@@ -34,8 +34,6 @@
 #include <QDir>
 #include <QSignalMapper>
 
-#include <MGConfItem> // g_conf wrapper
-
 // User includes
 
 #include "creporterdaemoncoreregistry.h"
@@ -51,27 +49,6 @@
 #define MAX_MOUNTPOINT_NAMELEN (128)
 
 #define MMC_EVENT_TIMEOUT   5000 // Time to wait (ms) after mmc state has changed.
-
-#define MAX_GCONF_KEYLEN    128
-#define NUM_GCONF_KEYS      6
-
-static const char
-gconf_keys[NUM_GCONF_KEYS][MAX_GCONF_KEYLEN] =
-    {
-     "/system/osso/af/mmc-device-present",
-     "/system/osso/af/internal-mmc-device-present",
-     "/system/osso/af/mmc-cover-open",
-     "/system/osso/af/mmc/mmc-corrupted",
-     "/system/osso/af/mmc-used-over-usb",
-     "/system/osso/af/internal-mmc-used-over-usb"
-    };
-
-#define EXTERNAL_MMC_PRESENT    "/system/osso/af/mmc-device-present"
-#define INTERNAL_MMC_PRESENT 	"/system/osso/af/internal-mmc-device-present"
-#define EXTERNAL_COVER_OPEN 	"/system/osso/af/mmc-cover-open"
-#define MMC_CORRUPTED 		    "/system/osso/af/mmc/mmc-corrupted"
-#define EXTERNAL_MMC_USED_USB	"/system/osso/af/mmc-used-over-usb"
-#define INTERNAL_MMC_USED_USB	"/system/osso/af/internal-mmc-used-over-usb"
 
 // Local constants.
 
@@ -126,18 +103,12 @@ CReporterDaemonCoreRegistryPrivate::~CReporterDaemonCoreRegistryPrivate()
 CReporterDaemonCoreRegistry::CReporterDaemonCoreRegistry() :
     d_ptr(new CReporterDaemonCoreRegistryPrivate())
 {
-    Q_D(CReporterDaemonCoreRegistry);
-
 	createCoreLocationRegistry();
 
+	/* TODO: status of MMC card used to be monitored here, and mmcStateChanged()
+	 * triggered when card was inserted/removed/mounted via USB. We might need
+	 * to re-implement this functionality also for Sailfish. */
     // Cache keys under /system/osso/af and map state change signals to single slot.
-    for (int i=0; i< NUM_GCONF_KEYS; i++) {
-        MGConfItem *gConf = new MGConfItem(gconf_keys[i], this);
-        connect(gConf, SIGNAL(valueChanged()), d->mapper, SLOT(map()));
-        d->mapper->setMapping(gConf, gconf_keys[i]);
-    }
-
-    connect(d->mapper, SIGNAL(mapped(QString)), this, SLOT(mmcStateChanged(QString)));
 }
 
 // ----------------------------------------------------------------------------
