@@ -6,6 +6,9 @@
  * Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
  * Author: Riku Halonen <riku.halonen@nokia.com>
  *
+ * Copyright (C) 2013 Jolla Ltd.
+ * Contact: Jakub Adam <jakub.adam@jollamobile.com>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
  * version 2.1 as published by the Free Software Foundation.
@@ -209,7 +212,7 @@ void CReporterPrivacySettingsModel::setAutoDeleteDuplicates(bool value)
 // ----------------------------------------------------------------------------
 // CReporterPrivacySettingsModel::setLifelogEnabled
 // ----------------------------------------------------------------------------
-bool CReporterPrivacySettingsModel::setLifelogEnabled(bool value)
+void CReporterPrivacySettingsModel::setLifelogEnabled(bool value)
 {
     setValue(Settings::ValueLifelog, QVariant(value));
 }

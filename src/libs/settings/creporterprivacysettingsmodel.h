@@ -6,6 +6,9 @@
  * Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
  * Author: Riku Halonen <riku.halonen@nokia.com>
  *
+ * Copyright (C) 2013 Jolla Ltd.
+ * Contact: Jakub Adam <jakub.adam@jollamobile.com>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
  * version 2.1 as published by the Free Software Foundation.
@@ -250,7 +253,7 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
           * @note This setting used by the crash-reporter.
           * @param True to enable feature; false to disable.
           */
-        bool setLifelogEnabled(bool value);
+        void setLifelogEnabled(bool value);
 
         /*!
           * @brief Set the amount of cores kept when auto delete is enabled
