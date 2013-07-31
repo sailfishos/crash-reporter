@@ -34,9 +34,6 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QFile>
-#include <MLocale>
-
-using ML10N::MLocale;
 
 // User includes.
 
@@ -132,7 +129,6 @@ QStringList CReporterUtils::parseCrashInfoFromFilename(const QString &filePath)
 {
     qDebug() << __PRETTY_FUNCTION__ << "Parse:" << filePath;
 
-    MLocale locale;
     QFileInfo fi(filePath);
     // Remove path and file suffix. i.e. /media/mmc1/application-xxxx-11-2029.rcore.lzo =>
     // application-xxxx-11-2029
@@ -220,7 +216,6 @@ bool CReporterUtils::appendToLzo(const QString &text, const QString &filePath)
 // ----------------------------------------------------------------------------
 QString CReporterUtils::fileSizeToString(const quint64 size)
 {
-    MLocale locale;
     QString text;
 
     if (size == 0) {
@@ -239,7 +234,7 @@ QString CReporterUtils::fileSizeToString(const quint64 size)
             ++temp;
         }
         // Show one decimal.
-        QString formattedNumber = locale.formatNumber(fSize, 1);
+        QString formattedNumber(QString("Value: %L1").arg(fSize, 0, 'f', 1));
         if (temp == 1) {
             text = QString("%1 kB").arg(formattedNumber);
         }

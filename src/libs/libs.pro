@@ -27,7 +27,7 @@
 include(../../crash-reporter-conf.pri)
 
 TEMPLATE = lib
-CONFIG += dll meegotouch mlocale
+CONFIG += dll
 QT += network dbus
 
 DEFINES += CREPORTER_EXPORTS
@@ -62,7 +62,6 @@ SOURCES += httpclient/creporterhttpclient.cpp \
             httpclient/creporteruploadengine.cpp \
             utils/creporterutils.cpp \
             logger/creporterlogger.cpp \
-            infobanner/creporterinfobanner.cpp \
             serviceif/creporterdialogserverproxy.cpp \
             serviceif/creporterdaemonproxy.cpp \
             serviceif/creporterautouploaderproxy.cpp \
@@ -84,7 +83,6 @@ PUBLIC_HEADERS += creporternamespace.h \
                   dialoginterface/creporterdialogplugininterface.h \
                   dialoginterface/creporterdialogserverinterface.h \
                   logger/creporterlogger.h \
-                  infobanner/creporterinfobanner.h \
                   serviceif/creporterdaemonproxy.h \
                   serviceif/creporterdialogserverproxy.h \
                   serviceif/creporterautouploaderproxy.h \

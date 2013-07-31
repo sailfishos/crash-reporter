@@ -6,6 +6,9 @@
  * Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
  * Author: Riku Halonen <riku.halonen@nokia.com>
  *
+ * Copyright (C) 2013 Jolla Ltd.
+ * Contact: Jakub Adam <jakub.adam@jollamobile.com>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
  * version 2.1 as published by the Free Software Foundation.
@@ -45,8 +48,6 @@
 
 // Forward declarations.
 
-class MNotification;
-class MRemoteAction;
 class CReporterNotification;
 
 /*!
@@ -98,10 +99,6 @@ class CReporterNotificationPrivate : public QObject
         virtual void timerEvent(QTimerEvent *event);
 
     public:
-        //! @arg Pointer to the notification.
-        MNotification *notification;
-        //! @arg Pointer remote action.
-        MRemoteAction *action;
         //! @arg Timeout value.
         int timeout;
         //! @arg Value for identifying elapsed timer.
