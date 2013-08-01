@@ -1,7 +1,6 @@
 include(../ut_common_top.pri)
 
 QT -= gui
-CONFIG += meegotouch
 
 PLUGIN_SRC_DIR = $${CREPORTER_SRC_DIR}/dialogplugins/sendselecteddialogplugin
 

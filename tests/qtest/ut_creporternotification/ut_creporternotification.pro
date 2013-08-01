@@ -5,8 +5,6 @@ QT += dbus
 
 NOTIFICATION_SRC_DIR = $${CREPORTER_SRC_DIR}/libs/notification
 
-CONFIG += meegotouch
-
 INCLUDEPATH += . \
                $${NOTIFICATION_SRC_DIR} \
                $${CREPORTER_SRC_DIR}/libs \

@@ -1,7 +1,6 @@
 include(../ut_common_top.pri)
 
 TARGET = ut_creportersendalldialogplugin
-CONFIG += meegotouch
 
 PLUGIN_SRC_DIR = $${CREPORTER_SRC_DIR}/dialogplugins/sendallreportsdialogplugin
 

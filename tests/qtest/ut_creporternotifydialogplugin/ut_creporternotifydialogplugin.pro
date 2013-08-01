@@ -1,7 +1,6 @@
 include(../ut_common_top.pri)
 
 TARGET = ut_creporternotifydialogplugin
-CONFIG += meegotouch
 
 LIBS += -lduicontrolpanel \
 

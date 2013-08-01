@@ -1,7 +1,5 @@
 include(../ut_common_top.pri)
 
-CONFIG += meegotouch mlocale
-
 TARGET = ut_creporterutils
 
 INCLUDEPATH += . \

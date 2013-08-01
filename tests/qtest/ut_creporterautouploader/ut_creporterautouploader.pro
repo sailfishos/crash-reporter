@@ -1,7 +1,6 @@
 include(../ut_common_top.pri)
 
 TARGET = ut_creporterautouploader
-CONFIG += meegotouch
 QT += dbus
 
 AUTOUPLOADER_SRC_DIR = $${CREPORTER_SRC_DIR}/autouploader

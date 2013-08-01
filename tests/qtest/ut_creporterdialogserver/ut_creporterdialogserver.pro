@@ -1,7 +1,6 @@
 include(../ut_common_top.pri)
 
 DLG_SERVER_SRC_DIR = $${CREPORTER_SRC_DIR}/dialogserver
-CONFIG += meegotouch
 QT += dbus
 
 TARGET = ut_creporterdialogserver

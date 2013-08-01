@@ -5,21 +5,14 @@ SUBDIRS =  ut_creporterdaemonmonitor \
           ut_creporterdaemonproxy \
           ut_creporterdaemoncoreregistry \
           ut_creportersettingsobserver \
-          ut_creporternotification \
           ut_creporterdaemoncoredir \
-          ut_creportersendalldialogplugin \
-          ut_creportersendfilelistmodel \
-          ut_creportersendselecteddialogplugin \
           ut_creporterutils \
-          ut_creporteruploaddialogplugin \
-          ut_creportermessageboxdialogplugin \
           ut_creporternwsessionmgr \
           ut_creporteruploaditem \
           ut_creporteruploadqueue \
           ut_creporteruploadengine \
           ut_creporterapplicationsettings \
           ut_creporterprivacysettingsmodel \
-          ut_creporterautouploader \
 
 testsxml.target = $$OUT_PWD/tests.xml
 testsxml.commands = $$PWD/generate_tests_xml.sh $$PWD > $$testsxml.target
