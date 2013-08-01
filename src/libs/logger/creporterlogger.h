@@ -6,6 +6,9 @@
  * Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
  * Author: Riku Halonen <riku.halonen@nokia.com>
  *
+ * Copyright (C) 2013 Jolla Ltd.
+ * Contact: Jakub Adam <jakub.adam@jollamobile.com>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
  * version 2.1 as published by the Free Software Foundation.
@@ -69,9 +72,12 @@ class CREPORTER_EXPORT CReporterLogger {
          * @brief Overrides default message handler.
          * 
          * @param type Message type.
+         * @param context Additional information about a log message.
          * @param msg Log message.
          */
-        static void messageHandler(QtMsgType type, const char *msg);
+        static void messageHandler(QtMsgType type,
+                                   const QMessageLogContext &context,
+                                   const QString &msg);
 
     private:
         //! @arg Instance pointer to the this class.
@@ -81,7 +87,7 @@ class CREPORTER_EXPORT CReporterLogger {
          //! @arg File to write.
         QFile m_file;
         //! @arg Old msg handler.
-        QtMsgHandler m_old_msg_handler;
+        QtMessageHandler m_old_msg_handler;
         //! @arg Use syslog for logging.
         static bool sm_Syslog;
         static CReporter::LogType sm_LogType;

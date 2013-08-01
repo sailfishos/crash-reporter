@@ -29,7 +29,7 @@
 
 #include <signal.h>
 
-#include <QApplication>
+#include <QCoreApplication>
 #include <QDebug>
 
 // User includes.
@@ -61,7 +61,7 @@ int main(int argc, char **argv)
         Logger logger(type);
 #endif // QT_NO_DEBUG_OUTPUT
 
-    QApplication app(argc, argv);
+    QCoreApplication app(argc, argv);
 
     qDebug() << __PRETTY_FUNCTION__  << CReporter::AutoUploaderBinaryName << "[" << app.applicationPid()
         << "]" << "started.";

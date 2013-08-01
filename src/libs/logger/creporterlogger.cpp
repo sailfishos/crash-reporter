@@ -6,6 +6,9 @@
  * Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
  * Author: Riku Halonen <riku.halonen@nokia.com>
  *
+ * Copyright (C) 2013 Jolla Ltd.
+ * Contact: Jakub Adam <jakub.adam@jollamobile.com>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
  * version 2.1 as published by the Free Software Foundation.
@@ -91,7 +94,7 @@ CReporterLogger::CReporterLogger(const QString type)
             break;
     };
     // Register ourselves as a debug message handler
-    m_old_msg_handler = qInstallMsgHandler(CReporterLogger::messageHandler);
+    m_old_msg_handler = qInstallMessageHandler(CReporterLogger::messageHandler);
 }
 
 // ----------------------------------------------------------------------------
@@ -100,7 +103,7 @@ CReporterLogger::CReporterLogger(const QString type)
 CReporterLogger::~CReporterLogger ()
 {
     if (m_old_msg_handler) {
-        qInstallMsgHandler(m_old_msg_handler);
+        qInstallMessageHandler(m_old_msg_handler);
     }
     if (m_file.isOpen()) {
         m_file.close();
@@ -114,8 +117,12 @@ CReporterLogger::~CReporterLogger ()
 // ----------------------------------------------------------------------------
 // CReporterLogger::messageHandler
 // ----------------------------------------------------------------------------
-void CReporterLogger::messageHandler(QtMsgType type, const char *msg)
+void CReporterLogger::messageHandler(QtMsgType type,
+                                     const QMessageLogContext &context,
+                                     const QString &msg)
 {
+    Q_UNUSED(context);
+
     if (CReporterLogger::sm_LogType == CReporter::LogNone) {
         return;
     }
@@ -137,7 +144,7 @@ void CReporterLogger::messageHandler(QtMsgType type, const char *msg)
                 break;
             };
 
-            syslog(msgLevel, "%s", msg);
+            syslog(msgLevel, "%s", msg.toStdString().c_str());
     }
     else if (CReporterLogger::sm_LogType == CReporter::LogFile) {
         QString timeStamp = QTime::currentTime().toString(Qt::ISODate);

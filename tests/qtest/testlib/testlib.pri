@@ -1,4 +1,4 @@
 
-HEADERS += creportertestutils.h
+HEADERS += $${PWD}/creportertestutils.h
 
-SOURCES += creportertestutils.cpp
+SOURCES += $${PWD}/creportertestutils.cpp

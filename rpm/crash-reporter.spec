@@ -13,7 +13,7 @@ Version:                1.10.0
 Release:                %{release}
 Prefix:                 /usr
 Group:                  Development/Tools
-BuildRequires:          qt-devel, gcc-c++
+BuildRequires:          gcc-c++, qt5-qtgui-devel, qt5-qtdbus-devel, qt5-qtnetwork-devel, qt5-qttest-devel
 Source0:                %{name}-%{version}.tar.gz
 
 %description
@@ -54,7 +54,7 @@ Test binaries for testing Crash Reporter.
 %setup -q -n %{name}-%{version}
 
 %build
-%qmake
+%qmake5
 make
 
 %install
