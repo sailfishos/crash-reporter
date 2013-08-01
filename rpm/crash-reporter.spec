@@ -13,7 +13,7 @@ Version:                1.10.0
 Release:                %{release}
 Prefix:                 /usr
 Group:                  Development/Tools
-BuildRequires:          qt-devel, libmeegotouch-devel, libmlocale-devel, gcc-c++
+BuildRequires:          qt-devel, gcc-c++
 Source0:                %{name}-%{version}.tar.gz
 
 %description
