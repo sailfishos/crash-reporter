@@ -44,11 +44,11 @@ Test binaries for testing Crash Reporter.
 #%description            ui-tests
 #MATTI test cases for Crash Reporter UI.
 
-%package                l10n-engineering-english
-Summary:                Engineering English translations for crash-reporter
-Requires:               crash-reporter
-%description            l10n-engineering-english
-Engineering English translations for Crash Reporter.
+#%package                l10n-engineering-english
+#Summary:                Engineering English translations for crash-reporter
+#Requires:               crash-reporter
+#%description            l10n-engineering-english
+#Engineering English translations for Crash Reporter.
 
 %prep
 %setup -q -n %{name}-%{version}
@@ -94,8 +94,8 @@ ln -s -t %{buildroot}/usr/lib/systemd/user/nemo-mobile-session.target.wants ../c
 #/usr/lib/crash-reporter-ui-tests/testdata/*
 #/usr/share/crash-reporter-ui-tests/*
 
-%files l10n-engineering-english
-/usr/share/l10n/meegotouch/crash-reporter.qm
+#%files l10n-engineering-english
+#/usr/share/l10n/meegotouch/crash-reporter.qm
 
 %postun
 ldconfig

@@ -34,7 +34,7 @@ CONFIG += ordered recurse
 
 include(crash-reporter-conf.pri)
 
-SUBDIRS += src tests translations
+SUBDIRS += src tests
 
 # If running in SDK, create fake mount points in user home
 contains(DEFINES, CREPORTER_SDK_HOST) {
