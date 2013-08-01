@@ -26,9 +26,6 @@
 #
 include(../../crash-reporter-conf.pri)
 
-# include version number for the library
-include(../../version.pri)
-
 TEMPLATE = lib
 CONFIG += dll meegotouch
 QT += network dbus
