@@ -4,4 +4,4 @@
 
 TEMPLATE = subdirs
 
-SUBDIRS += libs daemon autouploader
+SUBDIRS += libs daemon autouploader sailfishui

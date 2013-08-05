@@ -1,0 +1,15 @@
+{
+    "translation_catalog": "crash-reporter",
+    "entries": [
+    {
+        "path": "system_settings/development/crash_reporter",
+        "title": "Crash reporter",
+        "translation_id": "settings_crash-reporter",
+        "type": "page",
+        "icon": "image://theme/icon-m-crash-reporter",
+        "params": {
+            "source": "/usr/share/jolla-settings/pages/crash-reporter/crash-reporter.qml"
+        }
+    }
+    ]
+}

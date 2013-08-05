@@ -25,6 +25,13 @@ Group:                  System/Libraries
 %description -n         libcrash-reporter0
 This package contains various widgets and helper classes for Crash Reporter.
 
+%package -n             jolla-settings-crash-reporter
+Summary:                Crash Reporter Settings UI for Jolla Sailfish OS
+Group:                  System/GUI/Other
+Requires:               qt5-qtsvg-plugin-imageformat-svg
+%description -n         jolla-settings-crash-reporter
+Crash Reporter settings plugin for the Sailfish OS Settings application.
+
 %package                devel
 Summary:                crash-reporter development files
 Group:                  Development/Libraries
@@ -78,6 +85,11 @@ make
 /usr/lib/*crash*.so.*
 /usr/share/crash-reporter-settings/*
 /usr/share/translations/*
+
+%files -n jolla-settings-crash-reporter
+/usr/lib/qt5/qml/*
+/usr/share/jolla-settings/pages/crash-reporter/*
+/usr/share/jolla-settings/entries/*
 
 %files devel
 %doc COPYING
