@@ -13,7 +13,7 @@ Version:                1.10.0
 Release:                %{release}
 Prefix:                 /usr
 Group:                  Development/Tools
-BuildRequires:          gcc-c++, qt5-qtgui-devel, qt5-qtdbus-devel, qt5-qtnetwork-devel, qt5-qttest-devel
+BuildRequires:          gcc-c++, qt5-qtgui-devel, qt5-qtdbus-devel, qt5-qtnetwork-devel, qt5-qttest-devel, qt5-qttools-linguist
 Source0:                %{name}-%{version}.tar.gz
 
 %description
@@ -79,6 +79,7 @@ ln -s -t %{buildroot}/usr/lib/systemd/user/nemo-mobile-session.target.wants ../c
 %files -n libcrash-reporter0
 %doc COPYING
 /usr/lib/*crash*.so.*
+/usr/share/translations/*
 
 %files devel
 %doc COPYING
@@ -93,9 +94,6 @@ ln -s -t %{buildroot}/usr/lib/systemd/user/nemo-mobile-session.target.wants ../c
 #%files ui-tests
 #/usr/lib/crash-reporter-ui-tests/testdata/*
 #/usr/share/crash-reporter-ui-tests/*
-
-#%files l10n-engineering-english
-#/usr/share/l10n/meegotouch/crash-reporter.qm
 
 %post -n libcrash-reporter0
 ldconfig
