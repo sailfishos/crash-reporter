@@ -99,9 +99,9 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
 
     public:
        /*!
-          * @brief Creates new a new instance of this class, if not exist and returns it.
+          * @brief Creates a new instance of this class if it doesn't exist and returns it.
           *
-          * @return Class refence.
+          * @return Class reference.
           */
         static CReporterPrivacySettingsModel *instance();
 

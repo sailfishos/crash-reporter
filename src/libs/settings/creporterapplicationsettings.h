@@ -111,7 +111,7 @@ class CReporterApplicationSettings : public QObject
         /*!
          * @brief Creates new a new instance of this class, if not exist and returns it.
          *
-         * @return Class refence.
+         * @return Class reference.
          */
         static CReporterApplicationSettings *instance();
 
