@@ -38,6 +38,46 @@ Page {
                 //% "Crash reporter"
                 title: qsTrId("settings_crash-reporter")
             }
+
+            TextSwitch {
+                automaticCheck: false
+                checked: PrivacySettings.coreDumping
+                //% "Dump cores"
+                text: qsTrId("settings_crash-reporter_dump_cores")
+                //% "Collects and uploads a core dump when application crashes"
+                description: qsTrId("settings_crash-reporter_dump_cores_description")
+                onClicked: PrivacySettings.coreDumping = !PrivacySettings.coreDumping
+            }
+
+            TextSwitch {
+                automaticCheck: false
+                checked: PrivacySettings.notifications
+                //% "Notifications"
+                text: qsTrId("settings_crash-reporter_notifications")
+                //% "Displays user notifications when core dump is being uploaded"
+                description: qsTrId("settings_crash-reporter_notifications_description")
+                onClicked: PrivacySettings.notifications = !PrivacySettings.notifications
+            }
+
+            TextSwitch {
+                automaticCheck: false
+                checked: PrivacySettings.autoDeleteDuplicates
+                //% "Auto-delete duplicates"
+                text: qsTrId("settings_crash-reporter_autodelete_duplicates")
+                //% "Automatically deletes duplicate rich cores"
+                description: qsTrId("settings_crash-reporter_autodelete_duplicates_description")
+                onClicked: PrivacySettings.autoDeleteDuplicates = !PrivacySettings.autoDeleteDuplicates
+            }
+
+            TextSwitch {
+                automaticCheck: false
+                checked: PrivacySettings.lifelog
+                //% "Life logging"
+                text: qsTrId("settings_crash-reporter_lifelog")
+                //% "Periodically collects system statistics"
+                description: qsTrId("settings_crash-reporter_lifelog_description")
+                onClicked: PrivacySettings.lifelog = !PrivacySettings.lifelog
+            }
         }
     }
 }

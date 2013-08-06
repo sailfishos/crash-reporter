@@ -12,6 +12,11 @@ import.path = $$TARGETPATH
 
 target.path = $$TARGETPATH
 
+INCLUDEPATH += ../../libs \
+	../../libs/settings
+
+LIBS += ../../../lib/libcrashreporter.so
+
 SOURCES += plugin.cpp
 
 INSTALLS += target import

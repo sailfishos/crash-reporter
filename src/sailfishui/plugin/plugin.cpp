@@ -21,6 +21,8 @@
 
 #include <QtQml>
 
+#include "creporterprivacysettingsmodel.h"
+
 // using custom translator so it gets properly removed from qApp when engine is deleted
 class AppTranslator: public QTranslator
 {
@@ -36,6 +38,13 @@ public:
     }
 };
 
+static QObject *privacysettingsSingletontypeProvider(QQmlEngine *engine, QJSEngine *scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    return CReporterPrivacySettingsModel::instance();
+}
 
 class CrashReporterQmlPlugin : public QQmlExtensionPlugin
 {
@@ -58,9 +67,9 @@ public:
     {
         Q_UNUSED(uri)
 
-        // QtQuick requires to register something. Otherwise import fails.
-        qmlRegisterUncreatableType<AppTranslator>("com.jolla.settings.crashreporter.translations", 1, 0,
-                                                  "CrashReporterTranslations", "Crash Reporter translations loaded by import");
+        qmlRegisterSingletonType<CReporterPrivacySettingsModel>(
+                "com.jolla.settings.crashreporter", 1, 0,
+                "PrivacySettings", privacysettingsSingletontypeProvider);
     }
 };
 
