@@ -70,7 +70,6 @@ ln -s -t %{buildroot}/usr/lib/systemd/user/nemo-mobile-session.target.wants ../c
 #/usr/lib/crash-reporter/dialogplugins/*
 /usr/lib/systemd/user/*
 /usr/share/crash-reporter/*
-/usr/share/crash-reporter-settings/*
 /usr/share/dbus-1/services/*.service
 /usr/share/man/man1/*
 /usr/share/meegotouch/notifications/eventtypes/*
@@ -79,6 +78,7 @@ ln -s -t %{buildroot}/usr/lib/systemd/user/nemo-mobile-session.target.wants ../c
 %files -n libcrash-reporter0
 %doc COPYING
 /usr/lib/*crash*.so.*
+/usr/share/crash-reporter-settings/*
 /usr/share/translations/*
 
 %files devel
