@@ -100,7 +100,3 @@ ldconfig
 
 %postun -n libcrash-reporter0
 ldconfig
-
-%changelog
-* Tue Jul 29 2013 Jakub Adam <jakub.adam@jollamobile.com> - 1.10.0
-- Initial release for Mer
