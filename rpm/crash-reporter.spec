@@ -58,7 +58,7 @@ Test binaries for testing Crash Reporter.
 make
 
 %install
-make install INSTALL_ROOT=%{buildroot}
+%qmake5_install
 mkdir %{buildroot}/usr/lib/systemd/user/nemo-mobile-session.target.wants
 ln -s -t %{buildroot}/usr/lib/systemd/user/nemo-mobile-session.target.wants ../crash-reporter.service
 
