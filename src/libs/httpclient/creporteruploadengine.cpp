@@ -279,9 +279,7 @@ void CReporterUploadEnginePrivate::emitFinished(CReporterUploadEngine::ErrorType
 
     d->queue = queue;
 
-    d->usbNetworking =
-            CReporterApplicationSettings::instance()->value(Connectivity::ValueUsbNetworking,
-                                                            QVariant(DefaultApplicationSettings::ValueUsbNetworkingDefault)).toBool();
+    d->usbNetworking = CReporterApplicationSettings::instance()->usbNetworking();
     d_ptr->q_ptr = this;
 
     // Upload queue signals.

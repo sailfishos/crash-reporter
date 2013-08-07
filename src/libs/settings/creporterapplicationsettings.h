@@ -6,6 +6,9 @@
  * Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
  * Author: Riku Halonen <riku.halonen@nokia.com>
  *
+ * Copyright (C) 2013 Jolla Ltd.
+ * Contact: Jakub Adam <jakub.adam@jollamobile.com>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
  * version 2.1 as published by the Free Software Foundation.
@@ -25,9 +28,7 @@
 #ifndef CREPORTERAPPLICATIONSETTINGS_H
 #define CREPORTERAPPLICATIONSETTINGS_H
 
-// System includes.
-
-#include <QVariant>
+#include "creportersettingsbase.h"
 
 // Forward declarations.
 
@@ -103,7 +104,7 @@ namespace DefaultApplicationSettings {
   * @brief This a singleton class for reading and writing crash-reporter application settings.
   *
   */
-class CReporterApplicationSettings : public QObject
+class CReporterApplicationSettings : public CReporterSettingsBase
 {
     Q_OBJECT
 
@@ -127,14 +128,38 @@ class CReporterApplicationSettings : public QObject
          */
         ~CReporterApplicationSettings();
 
-        /*!
-         * @brief Returns setting value of key.
-         *
-         * @param key Setting key of which value to find.
-         * @param defaultValue Returned, if setting doesn't exist.
-         * @return Setting value.
-         */
-        QVariant value(const QString &key, const QVariant &defaultValue = QVariant()) const;
+        QString serverUrl() const;
+        void setServerUrl(const QString &url);
+
+        int serverPort() const;
+        void setServerPort(int port);
+
+        QString serverPath() const;
+        void setServerPath(const QString &path);
+
+        bool useSsl() const;
+        void setUseSsl(bool state);
+
+        QString username() const;
+        void setUsername(const QString &username);
+
+        QString password() const;
+        void setPassword(const QString &password);
+
+        bool useProxy() const;
+        void setUseProxy(bool state);
+
+        QString proxyUrl() const;
+        void setProxyUrl(const QString &url);
+
+        int proxyPort() const;
+        void setProxyPort(int port);
+
+        bool usbNetworking() const;
+        void setUsbNetworking(bool state);
+
+        QString loggerType() const;
+        void setLoggerType(const QString &type);
 
     protected:
         /*!

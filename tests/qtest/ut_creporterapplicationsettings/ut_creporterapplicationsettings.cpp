@@ -62,35 +62,24 @@ void Ut_CReporterApplicationSettings::init()
 void Ut_CReporterApplicationSettings::testReadSettings()
 {
     // Test reading settings.
-    QVariant setting;
+    const CReporterApplicationSettings *const settings = CReporterApplicationSettings::instance();
 
     // Read from system scope location.
-    setting = CReporterApplicationSettings::instance()->value(Server::ValueServerAddress);
-    QVERIFY(setting.toString() == "127.0.0.1");
-
-    setting = CReporterApplicationSettings::instance()->value(Server::ValueServerPort);
-    QVERIFY(setting.toInt() == 8080);
+    QVERIFY(settings->serverUrl() == "127.0.0.1");
+    QVERIFY(settings->serverPort() == 8080);
 
     // Read from user scope location.
-    setting = CReporterApplicationSettings::instance()->value(Proxy::ValueProxyAddress);
-    QVERIFY(setting.toString() == "127.0.0.2");
-
-    setting = CReporterApplicationSettings::instance()->value(Proxy::ValueProxyPort);
-    QVERIFY(setting.toInt() == 1234);
+    QVERIFY(settings->proxyUrl() == "127.0.0.2");
+    QVERIFY(settings->proxyPort() == 1234);
 }
 
 void Ut_CReporterApplicationSettings::testReadNotFoundSettings()
 {
     // Test reading not found settings.
-    QVariant setting;
+    const CReporterApplicationSettings *const settings = CReporterApplicationSettings::instance();
 
     // Value is not found from settings; default value is returned.
-    setting = CReporterApplicationSettings::instance()->value(Server::ValueServerPath, "/path");
-    QVERIFY(setting.toString() == "/path");
-
-    // Setting not found; empty returned
-    setting = CReporterApplicationSettings::instance()->value("Key/value");
-    QVERIFY(setting.isNull() == true);
+    QVERIFY(settings->serverPath() == DefaultApplicationSettings::ValueServerPathDefault);
 }
 
 void Ut_CReporterApplicationSettings::cleanupTestCase()

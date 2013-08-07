@@ -15,11 +15,14 @@ TEST_SOURCES += $${SETTINGS_SRC_DIR}/creporterapplicationsettings.cpp \
                 $${SETTINGS_SRC_DIR}/creportersettingsinit.cpp \
 
 HEADERS += $${SETTINGS_SRC_DIR}/creporterapplicationsettings.h \
+           $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsbase.h \
+           $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsbase_p.h \
             $${SETTINGS_SRC_DIR}/creportersettingsinit_p.h \
             ut_creporterapplicationsettings.h \
 
 # unit test and sources
 SOURCES += $$TEST_SOURCES \
+           $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsbase.cpp \
            ut_creporterapplicationsettings.cpp \
 
 include(../ut_coverage.pri)

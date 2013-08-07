@@ -94,9 +94,7 @@ int main(int argc, char **argv)
 {
 #ifndef QT_NO_DEBUG_OUTPUT
     g_progname = (char *) "crash-reporter-daemon";
-    QString type = CReporterApplicationSettings::instance()->value(Logging::ValueLoggerType,
-                                                    DefaultApplicationSettings::ValueLoggerTypeDefault).toString();
-    Logger logger(type);
+    Logger logger(CReporterApplicationSettings::instance()->loggerType());
 #endif // QT_NO_DEBUG_OUTPUT
 
     QCoreApplication app(argc, argv);

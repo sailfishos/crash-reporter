@@ -92,16 +92,13 @@ void CReporterHttpClientPrivate::init(bool deleteAfterSending)
 	m_userAborted = false;
     m_httpError = false;
 
-    if (CReporterApplicationSettings::instance()->value(Server::ValueUseProxy,
-                                                        QVariant(DefaultApplicationSettings::ValueUseProxyDefault)).toBool()) {
+    if (CReporterApplicationSettings::instance()->useProxy()) {
         qDebug() << __PRETTY_FUNCTION__ << "Network proxy defined.";
 
         QNetworkProxy proxy;
         proxy.setType(QNetworkProxy::HttpProxy);
-        proxy.setHostName(CReporterApplicationSettings::instance()->
-                          value(Proxy::ValueProxyAddress, QVariant(DefaultApplicationSettings::ValueProxyAddressDefault)).toString());
-        proxy.setPort(CReporterApplicationSettings::instance()->
-                      value(Proxy::ValueProxyPort, QVariant(DefaultApplicationSettings::ValueProxyPortDefault)).toInt());
+        proxy.setHostName(CReporterApplicationSettings::instance()->proxyUrl());
+        proxy.setPort(CReporterApplicationSettings::instance()->proxyPort());
         QNetworkProxy::setApplicationProxy(proxy);
     }
 
@@ -131,11 +128,9 @@ bool CReporterHttpClientPrivate::createRequest(const QString &file)
     QByteArray dataToSend;
 
     // Set server URL and port.
-    QUrl url(CReporterApplicationSettings::instance()->
-             value(Server::ValueServerAddress, QVariant(DefaultApplicationSettings::ValueServerAddressDefault)).toString());
+    QUrl url(CReporterApplicationSettings::instance()->serverUrl());
 
-    if (CReporterApplicationSettings::instance()->value(Server::ValueUseSsl,
-                                                        QVariant(DefaultApplicationSettings::ValueUseSslDefault)).toBool()) {
+    if (CReporterApplicationSettings::instance()->useSsl()) {
         qDebug() << __PRETTY_FUNCTION__ << "SSL is enabled.";
         QSslConfiguration ssl(QSslConfiguration::defaultConfiguration());
         ssl.setPeerVerifyMode(QSslSocket::VerifyNone);
@@ -148,9 +143,7 @@ bool CReporterHttpClientPrivate::createRequest(const QString &file)
     qDebug() << __PRETTY_FUNCTION__ << "File size:" << m_currentFile.size() / 1024 << "kB's";
 
     // For PUT, we need to append file name to the path.
-    QString serverPath = CReporterApplicationSettings::instance()->
-                         value(Server::ValueServerPath,
-                               QVariant(DefaultApplicationSettings::ValueServerPathDefault)).toString() +
+    QString serverPath = CReporterApplicationSettings::instance()->serverPath() +
                          "/" + m_currentFile.fileName();
 
     url.setPath(serverPath);
@@ -216,12 +209,8 @@ void CReporterHttpClientPrivate::handleAuthenticationRequired(QNetworkReply *rep
             this, SLOT(handleUploadProgress(qint64,qint64)));
 
 	// Fill in the credentials.
-    authenticator->setUser(CReporterApplicationSettings::instance()->
-                           value(Server::ValueUsername,
-                                 QVariant(DefaultApplicationSettings::ValueUsernameDefault)).toString());
-    authenticator->setPassword(CReporterApplicationSettings::instance()->
-                               value(Server::ValuePassword,
-                                     QVariant(DefaultApplicationSettings::ValuePasswordDefault)).toString());
+    authenticator->setUser(CReporterApplicationSettings::instance()->username());
+    authenticator->setPassword(CReporterApplicationSettings::instance()->password());
 }
 
 // ----------------------------------------------------------------------------
