@@ -13,7 +13,7 @@ Version:                1.10.3
 Release:                %{release}
 Prefix:                 /usr
 Group:                  Development/Tools
-BuildRequires:          gcc-c++, qt5-qtgui-devel, qt5-qtdbus-devel, qt5-qtnetwork-devel, qt5-qttest-devel, qt5-qttools-linguist
+BuildRequires:          gcc-c++, qt5-qtgui-devel, qt5-qtdbus-devel, qt5-qtnetwork-devel, qt5-qttest-devel, qt5-qttools-linguist, ssu-devel
 Source0:                %{name}-%{version}.tar.gz
 
 %description

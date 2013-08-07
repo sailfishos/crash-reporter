@@ -104,6 +104,8 @@ HEADERS += $$PUBLIC_HEADERS \
             notification/creporternotification_p.h \
             notification/creporternotificationadaptor.h \
 
+LIBS += -lssu
+
 TARGET = $$qtLibraryTarget(crashreporter)
 
 target.path += $$[QT_INSTALL_LIBS]

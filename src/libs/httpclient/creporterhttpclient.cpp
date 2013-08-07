@@ -6,6 +6,9 @@
  * Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
  * Author: Riku Halonen <riku.halonen@nokia.com>
  *
+ * Copyright (C) 2013 Jolla Ltd.
+ * Contact: Jakub Adam <jakub.adam@jollamobile.com>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
  * version 2.1 as published by the Free Software Foundation.
@@ -35,6 +38,8 @@
 #include <QSslConfiguration>
 #include <QNetworkProxy>
 #include <QTime>
+
+#include <ssudeviceinfo.h>
 
 // User includes.
 
@@ -149,6 +154,9 @@ bool CReporterHttpClientPrivate::createRequest(const QString &file)
                          "/" + m_currentFile.fileName();
 
     url.setPath(serverPath);
+
+    SsuDeviceInfo deviceInfo;
+    url.setQuery("uuid=" + deviceInfo.deviceUid() + "&model=" + deviceInfo.deviceModel());
 
     request.setUrl(url);
     qDebug() << __PRETTY_FUNCTION__ << "Upload URL:" << url.toString();
