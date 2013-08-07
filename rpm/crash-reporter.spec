@@ -97,7 +97,10 @@ ln -s -t %{buildroot}/usr/lib/systemd/user/nemo-mobile-session.target.wants ../c
 #%files l10n-engineering-english
 #/usr/share/l10n/meegotouch/crash-reporter.qm
 
-%postun
+%post -n libcrash-reporter0
+ldconfig
+
+%postun -n libcrash-reporter0
 ldconfig
 
 %changelog
