@@ -59,8 +59,6 @@ make
 
 %install
 %qmake5_install
-mkdir %{buildroot}/usr/lib/systemd/user/nemo-mobile-session.target.wants
-ln -s -t %{buildroot}/usr/lib/systemd/user/nemo-mobile-session.target.wants ../crash-reporter.service
 
 %files
 %doc README COPYING
