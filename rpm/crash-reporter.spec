@@ -1,6 +1,6 @@
 # spec file for crash-reporter
 
-%define release         0
+%define release         1
 %define buildroot       %{_topdir}/%{name}-%{version}-%{release}-root
 
 %define _unpackaged_files_terminate_build 0
@@ -13,7 +13,14 @@ Version:                1.10.3
 Release:                %{release}
 Prefix:                 /usr
 Group:                  Development/Tools
-BuildRequires:          gcc-c++, qt5-qtgui-devel, qt5-qtdbus-devel, qt5-qtnetwork-devel, qt5-qttest-devel, qt5-qttools-linguist, ssu-devel
+BuildRequires:          gcc-c++
+BuildRequires:          qt5-qtdbus-devel
+BuildRequires:          qt5-qtdeclarative-devel
+BuildRequires:          qt5-qtgui-devel
+BuildRequires:          qt5-qtnetwork-devel
+BuildRequires:          qt5-qttest-devel
+BuildRequires:          qt5-qttools-linguist
+BuildRequires:          ssu-devel
 Source0:                %{name}-%{version}.tar.gz
 
 %description
