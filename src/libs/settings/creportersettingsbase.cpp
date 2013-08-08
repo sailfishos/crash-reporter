@@ -125,7 +125,7 @@ bool CReporterSettingsBase::isValid() const
 // ----------------------------------------------------------------------------
 // CReporterSettingsBase::setValue
 // ----------------------------------------------------------------------------
-void CReporterSettingsBase::setValue(const QString &key, const QVariant &value)
+bool CReporterSettingsBase::setValue(const QString &key, const QVariant &value)
 {
     Q_D(CReporterSettingsBase);
 
@@ -136,7 +136,10 @@ void CReporterSettingsBase::setValue(const QString &key, const QVariant &value)
     if (oldValue != value) {
         // Notify change, if setting value was changed.
         emit valueChanged(key, value);
+        return true;
     }
+
+    return false;
 }
 
 // ----------------------------------------------------------------------------

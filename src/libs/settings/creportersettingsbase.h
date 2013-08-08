@@ -100,8 +100,11 @@ class CREPORTER_EXPORT CReporterSettingsBase : public QObject
          *
          * @param key Setting of which value to set.
          * @param value New key value.
+         *
+         * @return true if value was changed, false if new value equals the
+         * value already stored.
          */
-        void setValue(const QString &key, const QVariant &value);
+        bool setValue(const QString &key, const QVariant &value);
 
         /*!
          * @brief Returns setting value of key.
