@@ -21,6 +21,7 @@
 
 #include <QtQml>
 
+#include "creporterapplicationsettings.h"
 #include "creporterprivacysettingsmodel.h"
 
 // using custom translator so it gets properly removed from qApp when engine is deleted
@@ -46,6 +47,14 @@ static QObject *privacysettingsSingletontypeProvider(QQmlEngine *engine, QJSEngi
     return CReporterPrivacySettingsModel::instance();
 }
 
+static QObject *applicationsettingsSingletontypeProvider(QQmlEngine *engine, QJSEngine *scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    return CReporterApplicationSettings::instance();
+}
+
 class CrashReporterQmlPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
@@ -66,6 +75,10 @@ public:
     void registerTypes(const char *uri)
     {
         Q_UNUSED(uri)
+
+        qmlRegisterSingletonType<CReporterApplicationSettings>(
+                "com.jolla.settings.crashreporter", 1, 0,
+                "ApplicationSettings", applicationsettingsSingletontypeProvider);
 
         qmlRegisterSingletonType<CReporterPrivacySettingsModel>(
                 "com.jolla.settings.crashreporter", 1, 0,

@@ -39,6 +39,16 @@ Page {
                 title: qsTrId("settings_crash-reporter")
             }
 
+            ValueButton {
+                //% "Server URL"
+                label: qsTrId("settings_crash-reporter_server_url")
+                value: ApplicationSettings.serverUrl + ":" + ApplicationSettings.serverPort + ApplicationSettings.serverPath
+
+                onClicked: {
+                    pageStack.push("ServerSettingsDialog.qml")
+                }
+            }
+
             TextSwitch {
                 automaticCheck: false
                 checked: PrivacySettings.coreDumping
