@@ -108,6 +108,18 @@ class CReporterApplicationSettings : public CReporterSettingsBase
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString serverUrl READ serverUrl WRITE setServerUrl NOTIFY serverUrlChanged)
+    Q_PROPERTY(int serverPort READ serverPort WRITE setServerPort NOTIFY serverPortChanged)
+    Q_PROPERTY(QString serverPath READ serverPath WRITE setServerPath NOTIFY serverPathChanged)
+    Q_PROPERTY(bool useSsl READ useSsl WRITE setUseSsl NOTIFY useSslChanged)
+    Q_PROPERTY(QString username READ username WRITE setUsername NOTIFY usernameChanged)
+    Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
+    Q_PROPERTY(bool useProxy READ useProxy WRITE setUseProxy NOTIFY useProxyChanged)
+    Q_PROPERTY(QString proxyUrl READ proxyUrl WRITE setProxyUrl NOTIFY proxyUrlChanged)
+    Q_PROPERTY(int proxyPort READ proxyPort WRITE setProxyPort NOTIFY proxyPortChanged)
+    Q_PROPERTY(bool usbNetworking READ usbNetworking WRITE setUsbNetworking NOTIFY usbNetworkingChanged)
+    Q_PROPERTY(QString loggerType READ loggerType WRITE setLoggerType NOTIFY loggerTypeChanged)
+
     public:
         /*!
          * @brief Creates new a new instance of this class, if not exist and returns it.
@@ -160,6 +172,19 @@ class CReporterApplicationSettings : public CReporterSettingsBase
 
         QString loggerType() const;
         void setLoggerType(const QString &type);
+
+    signals:
+        void serverUrlChanged();
+        void serverPortChanged();
+        void serverPathChanged();
+        void useSslChanged();
+        void usernameChanged();
+        void passwordChanged();
+        void useProxyChanged();
+        void proxyUrlChanged();
+        void proxyPortChanged();
+        void usbNetworkingChanged();
+        void loggerTypeChanged();
 
     protected:
         /*!

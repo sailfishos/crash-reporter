@@ -112,7 +112,8 @@ QString CReporterApplicationSettings::serverUrl() const
 
 void CReporterApplicationSettings::setServerUrl(const QString &url)
 {
-    setValue(Server::ValueServerAddress, url);
+    if (setValue(Server::ValueServerAddress, url))
+        emit serverUrlChanged();
 }
 
 int CReporterApplicationSettings::serverPort() const
@@ -125,7 +126,8 @@ int CReporterApplicationSettings::serverPort() const
 
 void CReporterApplicationSettings::setServerPort(int port)
 {
-    setValue(Server::ValueServerPort, port);
+    if (setValue(Server::ValueServerPort, port))
+        emit serverPortChanged();
 }
 
 QString CReporterApplicationSettings::serverPath() const
@@ -136,7 +138,8 @@ QString CReporterApplicationSettings::serverPath() const
 
 void CReporterApplicationSettings::setServerPath(const QString &path)
 {
-    setValue(Server::ValueServerPath, path);
+    if (setValue(Server::ValueServerPath, path))
+        emit serverPathChanged();
 }
 
 bool CReporterApplicationSettings::useSsl() const
@@ -147,7 +150,8 @@ bool CReporterApplicationSettings::useSsl() const
 
 void CReporterApplicationSettings::setUseSsl(bool state)
 {
-    setValue(Server::ValueUseSsl, state);
+    if (setValue(Server::ValueUseSsl, state))
+        emit useSslChanged();
 }
 
 QString CReporterApplicationSettings::username() const
@@ -158,7 +162,8 @@ QString CReporterApplicationSettings::username() const
 
 void CReporterApplicationSettings::setUsername(const QString &username)
 {
-    setValue(Server::ValueUsername, username);
+    if (setValue(Server::ValueUsername, username))
+        emit usernameChanged();
 }
 
 QString CReporterApplicationSettings::password() const
@@ -169,7 +174,8 @@ QString CReporterApplicationSettings::password() const
 
 void CReporterApplicationSettings::setPassword(const QString &password)
 {
-    setValue(Server::ValuePassword, password);
+    if (setValue(Server::ValuePassword, password))
+        emit passwordChanged();
 }
 
 bool CReporterApplicationSettings::useProxy() const
@@ -180,7 +186,8 @@ bool CReporterApplicationSettings::useProxy() const
 
 void CReporterApplicationSettings::setUseProxy(bool state)
 {
-    setValue(Server::ValueUseProxy, state);
+    if (setValue(Server::ValueUseProxy, state))
+        emit useProxyChanged();
 }
 
 QString CReporterApplicationSettings::proxyUrl() const
@@ -191,7 +198,8 @@ QString CReporterApplicationSettings::proxyUrl() const
 
 void CReporterApplicationSettings::setProxyUrl(const QString &url)
 {
-    setValue(Proxy::ValueProxyAddress, url);
+    if (setValue(Proxy::ValueProxyAddress, url))
+        emit proxyUrlChanged();
 }
 
 int CReporterApplicationSettings::proxyPort() const
@@ -204,7 +212,8 @@ int CReporterApplicationSettings::proxyPort() const
 
 void CReporterApplicationSettings::setProxyPort(int port)
 {
-    setValue(Proxy::ValueProxyPort, port);
+    if (setValue(Proxy::ValueProxyPort, port))
+        emit proxyPortChanged();
 }
 
 bool CReporterApplicationSettings::usbNetworking() const
@@ -215,7 +224,8 @@ bool CReporterApplicationSettings::usbNetworking() const
 
 void CReporterApplicationSettings::setUsbNetworking(bool state)
 {
-    setValue(Connectivity::ValueUsbNetworking, state);
+    if (setValue(Connectivity::ValueUsbNetworking, state))
+        emit usbNetworkingChanged();
 }
 
 QString CReporterApplicationSettings::loggerType() const
@@ -226,7 +236,8 @@ QString CReporterApplicationSettings::loggerType() const
 
 void CReporterApplicationSettings::setLoggerType(const QString &type)
 {
-    setValue(Logging::ValueLoggerType, type);
+    if (setValue(Logging::ValueLoggerType, type))
+        emit loggerTypeChanged();
 }
 
 // ----------------------------------------------------------------------------
