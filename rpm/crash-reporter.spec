@@ -78,7 +78,6 @@ make
 /usr/share/dbus-1/services/*.service
 /usr/share/man/man1/*
 /usr/share/meegotouch/notifications/eventtypes/*
-/usr/share/themes/base/meegotouch/icons/*
 
 %files -n libcrash-reporter0
 %doc COPYING
@@ -90,6 +89,7 @@ make
 /usr/lib/qt5/qml/*
 /usr/share/jolla-settings/pages/crash-reporter/*
 /usr/share/jolla-settings/entries/*
+/usr/share/themes/*
 
 %files devel
 %doc COPYING
