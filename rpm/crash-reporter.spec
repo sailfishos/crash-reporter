@@ -51,12 +51,6 @@ Test binaries for testing Crash Reporter.
 #%description            ui-tests
 #MATTI test cases for Crash Reporter UI.
 
-#%package                l10n-engineering-english
-#Summary:                Engineering English translations for crash-reporter
-#Requires:               crash-reporter
-#%description            l10n-engineering-english
-#Engineering English translations for Crash Reporter.
-
 %prep
 %setup -q -n %{name}-%{version}
 
