@@ -190,7 +190,8 @@ bool CReporterPrivacySettingsModel::reduceCore() const
 // ----------------------------------------------------------------------------
 void CReporterPrivacySettingsModel::setCoreDumpingEnabled(bool value)
 {
-    setValue(Settings::ValueCoreDumping, QVariant(value));
+    if (setValue(Settings::ValueCoreDumping, QVariant(value)))
+        emit coreDumpingEnabledChanged();
 }
 
 // ----------------------------------------------------------------------------
@@ -198,7 +199,8 @@ void CReporterPrivacySettingsModel::setCoreDumpingEnabled(bool value)
 // ----------------------------------------------------------------------------
 void CReporterPrivacySettingsModel::setNotificationsEnabled(bool value)
 {
-    setValue(Settings::ValueNotifications, QVariant(value));
+    if (setValue(Settings::ValueNotifications, QVariant(value)))
+        emit notificationsEnabledChanged();
 }
 
 // ----------------------------------------------------------------------------
@@ -206,7 +208,8 @@ void CReporterPrivacySettingsModel::setNotificationsEnabled(bool value)
 // ----------------------------------------------------------------------------
 void CReporterPrivacySettingsModel::setAutoDeleteDuplicates(bool value)
 {
-    setValue(Settings::ValueAutoDeleteDuplicates, QVariant(value));
+    if (setValue(Settings::ValueAutoDeleteDuplicates, QVariant(value)))
+        emit autoDeleteDuplicatesChanged();
 }
 
 // ----------------------------------------------------------------------------
@@ -214,7 +217,8 @@ void CReporterPrivacySettingsModel::setAutoDeleteDuplicates(bool value)
 // ----------------------------------------------------------------------------
 void CReporterPrivacySettingsModel::setLifelogEnabled(bool value)
 {
-    setValue(Settings::ValueLifelog, QVariant(value));
+    if (setValue(Settings::ValueLifelog, QVariant(value)))
+        emit lifelogEnabledChanged();
 }
 
 // ----------------------------------------------------------------------------

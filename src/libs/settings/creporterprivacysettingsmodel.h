@@ -97,6 +97,11 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool coreDumping READ coreDumpingEnabled WRITE setCoreDumpingEnabled NOTIFY coreDumpingEnabledChanged)
+    Q_PROPERTY(bool notifications READ notificationsEnabled WRITE setNotificationsEnabled NOTIFY notificationsEnabledChanged)
+    Q_PROPERTY(bool autoDeleteDuplicates READ autoDeleteDuplicates WRITE setAutoDeleteDuplicates NOTIFY autoDeleteDuplicatesChanged)
+    Q_PROPERTY(bool lifelog READ lifelogEnabled WRITE setLifelogEnabled NOTIFY lifelogEnabledChanged)
+
     public:
        /*!
           * @brief Creates a new instance of this class if it doesn't exist and returns it.
@@ -318,6 +323,12 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
           * @param True to enable feature; false to disable.
           */
         void setReduceCore(bool value);
+
+    signals:
+        void coreDumpingEnabledChanged();
+        void notificationsEnabledChanged();
+        void autoDeleteDuplicatesChanged();
+        void lifelogEnabledChanged();
 
     protected:
         CReporterPrivacySettingsModel();
