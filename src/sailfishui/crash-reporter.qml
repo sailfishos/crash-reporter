@@ -88,6 +88,63 @@ Page {
                 description: qsTrId("settings_crash-reporter_lifelog_description")
                 onClicked: PrivacySettings.lifelog = !PrivacySettings.lifelog
             }
+
+            SectionHeader {
+                //% "Logging"
+                text: qsTrId("settings_crash-reporter_logging")
+            }
+
+            ComboBox {
+                //% "Logger type"
+                label: qsTrId("settings_crash-reporter_logger_type")
+                currentItem: {
+                    switch (ApplicationSettings.loggerType) {
+                        case "none":
+                            return noneItem
+                        case "file":
+                            return fileItem
+                        case "syslog":
+                            return syslogItem
+                    }
+                    return noneItem
+                } 
+
+                onCurrentItemChanged: {
+                    var type
+
+                    switch (currentItem) {
+                        case noneItem:
+                            type = "none"
+                            break
+                        case fileItem:
+                            type = "file"
+                            break
+                        case syslogItem:
+                            type = "syslog"
+                            break
+                    }
+
+                    ApplicationSettings.loggerType = type
+                }
+
+                menu: ContextMenu {
+                    MenuItem {
+                        id: noneItem
+                        //% "none"
+                        text: qsTrId("settings_crash-reporter_logging_type_none")
+                    }
+                    MenuItem {
+                        id: fileItem
+                        //% "file"
+                        text: qsTrId("settings_crash-reporter_logging_type_file")
+                    }
+                    MenuItem {
+                        id: syslogItem
+                        //% "system log"
+                        text: qsTrId("settings_crash-reporter_logging_type_syslog")
+                    }
+                }
+            }
         }
     }
 }
