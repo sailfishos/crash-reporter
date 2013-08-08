@@ -27,3 +27,5 @@ QMAKE_EXTRA_TARGETS += ts engineering_english
 PRE_TARGETDEPS += ts engineering_english
 
 INSTALLS += ts_install engineering_english_install
+
+QMAKE_DIST_CLEAN += $$TS_FILE $$EE_QM
