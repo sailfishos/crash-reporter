@@ -42,19 +42,19 @@ Crash Reporter settings plugin for the Sailfish OS Settings application.
 %package                devel
 Summary:                Development files for crash-reporter
 Group:                  Development/Libraries
-Requires:               crash-reporter
+Requires:               %{name} = %{version}-%{release}
 %description            devel
 Development headers and libraries for crash-reporter.
 
 %package                tests
 Summary:                Tests for crash-reporter
-Requires:               crash-reporter
+Requires:               %{name} = %{version}-%{release}
 %description            tests
 Test binaries for testing Crash Reporter.
 
 #%package                ui-tests
 #Summary:                UI tests for crash-reporter
-#Requires:               crash-reporter
+#Requires:               %{name} = %{version}-%{release}
 #%description            ui-tests
 #MATTI test cases for Crash Reporter UI.
 
