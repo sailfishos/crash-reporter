@@ -40,20 +40,20 @@ Requires:               qt5-qtsvg-plugin-imageformat-svg
 Crash Reporter settings plugin for the Sailfish OS Settings application.
 
 %package                devel
-Summary:                crash-reporter development files
+Summary:                Development files for crash-reporter
 Group:                  Development/Libraries
 Requires:               crash-reporter
 %description            devel
 Development headers and libraries for crash-reporter.
 
 %package                tests
-Summary:                crash-reporter tests
+Summary:                Tests for crash-reporter
 Requires:               crash-reporter
 %description            tests
 Test binaries for testing Crash Reporter.
 
 #%package                ui-tests
-#Summary:                crash-reporter UI tests
+#Summary:                UI tests for crash-reporter
 #Requires:               crash-reporter
 #%description            ui-tests
 #MATTI test cases for Crash Reporter UI.
