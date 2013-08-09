@@ -130,6 +130,8 @@ bool CReporterHttpClientPrivate::createRequest(const QString &file)
     // Set server URL and port.
     QUrl url(CReporterApplicationSettings::instance()->serverUrl());
 
+    url.setPort(CReporterApplicationSettings::instance()->serverPort());
+
     if (CReporterApplicationSettings::instance()->useSsl()) {
         qDebug() << __PRETTY_FUNCTION__ << "SSL is enabled.";
         QSslConfiguration ssl(QSslConfiguration::defaultConfiguration());
