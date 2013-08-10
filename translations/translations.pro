@@ -28,4 +28,4 @@ PRE_TARGETDEPS += ts engineering_english
 
 INSTALLS += ts_install engineering_english_install
 
-QMAKE_DIST_CLEAN += $$TS_FILE $$EE_QM
+QMAKE_DISTCLEAN += $$TS_FILE $$EE_QM
