@@ -63,7 +63,7 @@ Test binaries for testing Crash Reporter.
 
 %build
 %qmake5
-make
+make %{?jobs:-j%jobs}
 
 %install
 %qmake5_install
