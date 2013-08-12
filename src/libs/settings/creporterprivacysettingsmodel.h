@@ -80,6 +80,8 @@ namespace Privacy {
     const QString ValueIncludeSysLog("Privacy/INCLUDE_SYSLOG");
      //! If set to true, package list is included in the crash reporter.
     const QString ValueIncludePkgList("Privacy/INCLUDE_PKGLIST");
+    //! If set to true, stack trace is included in the crash report.
+    const QString ValueIncludeStackTrace("Privacy/INCLUDE_STACK_TRACE");
      //! If set to true, core dump size is reduced before included in the crash reporter.
     const QString ValueReduceCore("Privacy/REDUCE_CORE");
 }
@@ -101,6 +103,7 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
     Q_PROPERTY(bool notifications READ notificationsEnabled WRITE setNotificationsEnabled NOTIFY notificationsEnabledChanged)
     Q_PROPERTY(bool autoDeleteDuplicates READ autoDeleteDuplicates WRITE setAutoDeleteDuplicates NOTIFY autoDeleteDuplicatesChanged)
     Q_PROPERTY(bool lifelog READ lifelogEnabled WRITE setLifelogEnabled NOTIFY lifelogEnabledChanged)
+    Q_PROPERTY(bool includeStackTrace READ includeStackTrace WRITE setIncludeStackTrace NOTIFY includeStackTraceChanged)
 
     public:
        /*!
@@ -228,6 +231,14 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
           */
         bool includePackageList() const;
 
+        /*!
+         * @brief Reads setting for including stack trace into crash report.
+         *
+         * @note This setting is used by rich-core-dumper.
+         * @return true if stack trace should be included; otherwise false.
+         */
+        bool includeStackTrace() const;
+
           /*!
           * @brief Enables or disables core dumping.
           *
@@ -317,6 +328,14 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
         void setIncludePackageList(bool value);
 
         /*!
+         * @brief Enables or disables stack trace inclusion into crash reports.
+         *
+         * @note This setting is used by rich-core-dumper.
+         * @param value true to enable feature; false to disable.
+         */
+        void setIncludeStackTrace(bool value);
+
+        /*!
           * @brief Enables or disables core-dump size shrinking.
           *
           * @note This setting used by the rich-core.
@@ -329,6 +348,7 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
         void notificationsEnabledChanged();
         void autoDeleteDuplicatesChanged();
         void lifelogEnabledChanged();
+        void includeStackTraceChanged();
 
     protected:
         CReporterPrivacySettingsModel();

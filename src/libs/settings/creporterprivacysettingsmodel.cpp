@@ -177,6 +177,11 @@ bool CReporterPrivacySettingsModel::includePackageList() const
     return value(Privacy::ValueIncludePkgList, QVariant(true)).toBool();
 }
 
+bool CReporterPrivacySettingsModel::includeStackTrace() const
+{
+    return value(Privacy::ValueIncludeStackTrace, QVariant(false)).toBool();
+}
+
 // ----------------------------------------------------------------------------
 // CReporterPrivacySettingsModel::reduceCore
 // ----------------------------------------------------------------------------
@@ -275,6 +280,12 @@ void CReporterPrivacySettingsModel::setIncludeSystemLog(bool value)
 void CReporterPrivacySettingsModel::setIncludePackageList(bool value)
 {
    setValue(Privacy::ValueIncludePkgList, QVariant(value));
+}
+
+void CReporterPrivacySettingsModel::setIncludeStackTrace(bool value)
+{
+    if (setValue(Privacy::ValueIncludeStackTrace, QVariant(value)))
+        emit includeStackTraceChanged();
 }
 
 // ----------------------------------------------------------------------------

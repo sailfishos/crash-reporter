@@ -71,6 +71,16 @@ Page {
 
             TextSwitch {
                 automaticCheck: false
+                checked: PrivacySettings.includeStackTrace
+                //% "Include stack trace"
+                text: qsTrId("settings_crash-reporter_include_stack_trace")
+                //% "Includes stack trace into crash report. Can trigger installation of a debugger and debug symbols when enabled."
+                description: qsTrId("settings_crash-reporter_include_stack_trace_description")
+                onClicked: PrivacySettings.includeStackTrace = !PrivacySettings.includeStackTrace
+            }
+
+            TextSwitch {
+                automaticCheck: false
                 checked: PrivacySettings.autoDeleteDuplicates
                 //% "Auto-delete duplicates"
                 text: qsTrId("settings_crash-reporter_autodelete_duplicates")
