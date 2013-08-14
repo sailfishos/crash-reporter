@@ -13,6 +13,7 @@ Version:                1.10.5
 Release:                %{release}
 Prefix:                 /usr
 Group:                  Development/Tools
+URL:                    https://github.com/mer-qa/crash-reporter
 BuildRequires:          gcc-c++
 BuildRequires:          qt5-qtdbus-devel
 BuildRequires:          qt5-qtdeclarative-devel
@@ -29,8 +30,17 @@ Crash Reporting Tool allows users to easily upload crash reports provided by sp-
 %package -n             libcrash-reporter0
 Summary:                Crash Reporter library
 Group:                  System/Libraries
+Requires:               crash-reporter-config
 %description -n         libcrash-reporter0
 This package contains various widgets and helper classes for Crash Reporter.
+
+%package -n             crash-reporter-config-nemo
+Summary:                Crash Reporter default configuration
+Group:                  Development/Tools
+BuildArch:              noarch
+Provides:               crash-reporter-config
+%description -n         crash-reporter-config-nemo
+Crash Reporter default setting files.
 
 %package -n             jolla-settings-crash-reporter
 Summary:                Crash Reporter Settings UI for Jolla Sailfish OS
@@ -69,6 +79,7 @@ make %{?jobs:-j%jobs}
 %qmake5_install
 
 %files
+%defattr(-,root,root,-)
 %doc README COPYING
 /usr/bin/crash*
 #/usr/lib/duicontrolpanel/*.desktop
@@ -81,24 +92,31 @@ make %{?jobs:-j%jobs}
 /usr/share/meegotouch/notifications/eventtypes/*
 
 %files -n libcrash-reporter0
+%defattr(-,root,root,-)
 %doc COPYING
 /usr/lib/*crash*.so.*
-/usr/share/crash-reporter-settings/*
 /usr/share/translations/*
 
+%files -n crash-reporter-config-nemo
+%defattr(-,root,root,-)
+/usr/share/crash-reporter-settings/*
+
 %files -n jolla-settings-crash-reporter
+%defattr(-,root,root,-)
 /usr/lib/qt5/qml/*
 /usr/share/jolla-settings/pages/crash-reporter/*
 /usr/share/jolla-settings/entries/*
 /usr/share/themes/*
 
 %files devel
+%defattr(-,root,root,-)
 %doc COPYING
 /usr/include/crash-reporter/*.h
 /usr/lib/*.so
 /usr/lib/pkgconfig/*.pc
 
 %files tests
+%defattr(-,root,root,-)
 /usr/lib/crash-reporter-tests/*
 /usr/share/crash-reporter-tests/*
 
