@@ -29,8 +29,17 @@ Crash Reporting Tool allows users to easily upload crash reports provided by sp-
 %package -n             libcrash-reporter0
 Summary:                Crash Reporter library
 Group:                  System/Libraries
+Requires:               crash-reporter-config
 %description -n         libcrash-reporter0
 This package contains various widgets and helper classes for Crash Reporter.
+
+%package -n             crash-reporter-config-nemo
+Summary:                Crash Reporter default configuration
+Group:                  Development/Tools
+BuildArch:              noarch
+Provides:               crash-reporter-config
+%description -n         crash-reporter-config-nemo
+Crash Reporter default setting files.
 
 %package -n             jolla-settings-crash-reporter
 Summary:                Crash Reporter Settings UI for Jolla Sailfish OS
@@ -83,8 +92,11 @@ make %{?jobs:-j%jobs}
 %files -n libcrash-reporter0
 %doc COPYING
 /usr/lib/*crash*.so.*
-/usr/share/crash-reporter-settings/*
 /usr/share/translations/*
+
+%files -n crash-reporter-config-nemo
+%defattr(-,root,root,-)
+/usr/share/crash-reporter-settings/*
 
 %files -n jolla-settings-crash-reporter
 /usr/lib/qt5/qml/*
