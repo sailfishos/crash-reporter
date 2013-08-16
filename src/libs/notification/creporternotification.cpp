@@ -43,8 +43,7 @@
 // CReporterNotificationPrivate::CReporterNotificationPrivate
 // ----------------------------------------------------------------------------
 CReporterNotificationPrivate::CReporterNotificationPrivate(const QString &eventType,
-                                     const QString &summary, const QString &body,
-                                     const QString &imageName) :
+                                     const QString &summary, const QString &body) :
    timeout(0), timerId(0)
 {
 
@@ -60,7 +59,6 @@ CReporterNotificationPrivate::CReporterNotificationPrivate(const QString &eventT
     Q_UNUSED(eventType);
     Q_UNUSED(summary);
     Q_UNUSED(body);
-    Q_UNUSED(imageName);
 }
 
 // ----------------------------------------------------------------------------
@@ -113,9 +111,9 @@ void CReporterNotificationPrivate::timerEvent(QTimerEvent *event)
 // ----------------------------------------------------------------------------
 CReporterNotification::CReporterNotification(const QString &eventType,
                                              const QString &summary, const QString &body,
-                                             const QString &imageName, QObject *parent) :
+                                             QObject *parent) :
     QObject(parent),
-    d_ptr(new CReporterNotificationPrivate(eventType, summary, body, imageName))
+    d_ptr(new CReporterNotificationPrivate(eventType, summary, body))
 {
     d_ptr->q_ptr = this;
 }

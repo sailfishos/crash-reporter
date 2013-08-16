@@ -42,7 +42,6 @@
 static QString ntfEventType;
 static QString ntfSummary;
 static QString ntfBody;
-static QString ntfImageName;
 static bool notificationCreated;
 static bool notificationUpdated;
 static bool notificationTimeoutSet;
@@ -61,12 +60,11 @@ QDBusReply<bool> QDBusConnectionInterface::isServiceRegistered(const QString &se
 // CReporterNotification mock object.
 CReporterNotification::CReporterNotification(const QString &eventType,
                                              const QString &summary, const QString &body,
-                                             const QString &imageName, QObject *parent)
+                                             QObject *parent)
 {
     ntfEventType = eventType;
     ntfSummary = summary;
     ntfBody = body;
-    ntfImageName = imageName;
     notificationCreated = true;
     Q_UNUSED(parent);
 }
@@ -135,7 +133,6 @@ void Ut_CReporterDaemonMonitor::init()
     ntfEventType.clear();
     ntfSummary.clear();
     ntfBody.clear();
-    ntfImageName.clear();
     notificationCreated = false;
     notificationUpdated = false;
     notificationTimeoutSet = false;

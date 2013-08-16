@@ -56,13 +56,11 @@ class CREPORTER_EXPORT CReporterNotification : public QObject
           * @param eventType Type of the notification.
           * @param summary Summary text to be used in the notification. Defaults to no summary text.
           * @param body Body text to be used in the notification. Defaults to no body text.
-          * @param imageName ID of the icon to be used in the notification. Defaults to no image URI.
           * @param parent Parent object.
           */
         CReporterNotification(const QString &eventType,
                               const QString &summary = QString(),
                               const QString &body = QString(),
-                              const QString &imageName = QString(),
                               QObject *parent = 0);
 
         /*!

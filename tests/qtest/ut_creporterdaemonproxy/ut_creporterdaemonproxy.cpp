@@ -50,12 +50,11 @@ static const char* test_files1[] = {
 // CReporterNotification mock object.
 CReporterNotification::CReporterNotification(const QString &eventType,
                                              const QString &summary, const QString &body,
-                                             const QString &imageName, QObject *parent)
+                                             QObject *parent)
 {
     Q_UNUSED(eventType);
     Q_UNUSED(summary);
     Q_UNUSED(body);
-    Q_UNUSED(imageName);
     Q_UNUSED(parent);
 }
 
