@@ -25,10 +25,6 @@
  *
  */
 
-// System includes.
-
-#include <QDebug>
-
 // User includes.
 
 #include "creporternotification.h"
@@ -44,27 +40,65 @@
 // ----------------------------------------------------------------------------
 CReporterNotificationPrivate::CReporterNotificationPrivate(const QString &eventType,
                                      const QString &summary, const QString &body) :
-   timeout(0), timerId(0)
+  id(0), category(eventType), timeout(0), timerId(0)
 {
-
-    new CReporterNotificationAdaptor(this);
-
-    // Register to unique path.
-    QString uniqueId = QUuid::createUuid().toString();
-    uniqueId = uniqueId.remove('{').remove('}').remove('-');
-    QString objPath = QString(CREPORTER_DBUS_NTF_OBJECT_PATH) + uniqueId;
-    QDBusConnection::sessionBus().registerObject(objPath, this);
-
-    // TODO: Re-implement notifications for Sailfish
-    Q_UNUSED(eventType);
-    Q_UNUSED(summary);
-    Q_UNUSED(body);
+    QDBusPendingReply<quint32> reply = sendDBusNotify(summary, body);
+    callWatcher = new QDBusPendingCallWatcher(reply, this);
 }
 
 // ----------------------------------------------------------------------------
 // CReporterNotificationPrivate::~CReporterNotificationPrivate
 // ----------------------------------------------------------------------------
 CReporterNotificationPrivate::~CReporterNotificationPrivate() {}
+
+QDBusPendingReply<quint32>
+CReporterNotificationPrivate::sendDBusNotify(const QString &summary,
+                                             const QString &body)
+{
+    QDBusMessage message =
+            QDBusMessage::createMethodCall("org.freedesktop.Notifications",
+                    "/org/freedesktop/Notifications",
+                    "org.freedesktop.Notifications", "Notify");
+
+    QVariantHash hints;
+    hints.insert("category", category);
+    hints.insert("x-nemo-preview-summary", summary);
+    hints.insert("x-nemo-preview-body", body);
+
+    message.setArguments(QVariantList()
+            << QString() << id << QString() << summary << body << QStringList()
+            << hints << -1);
+
+    qDebug() << __PRETTY_FUNCTION__
+             << "Sending Notify for notification" << id
+             << "of category" << category
+             << "with summary" << summary << "and body" << body;
+
+    return QDBusConnection::sessionBus().asyncCall(message);
+}
+
+void CReporterNotificationPrivate::retrieveNotificationId()
+{
+    if (callWatcher == 0)
+        return;
+
+    callWatcher->waitForFinished();
+
+    QDBusPendingReply<quint32> reply = *callWatcher;
+    callWatcher->deleteLater();
+    callWatcher = 0;
+
+    if (reply.isValid()) {
+        id = reply.argumentAt<0>();
+        qDebug() << __PRETTY_FUNCTION__
+                 << "Create notification with id: " << id;
+    } else if (reply.isError()) {
+        QDBusError error = reply.error();
+        qDebug() << __PRETTY_FUNCTION__ << "Failed to create notification: "
+                 << error.name() << " - " << error.message();
+    }
+}
+
 
 // ----------------------------------------------------------------------------
 // CReporterNotificationPrivate::activate
@@ -140,7 +174,15 @@ bool CReporterNotification::operator==(const CReporterNotification &other) const
 // ----------------------------------------------------------------------------
 void CReporterNotification::update(const QString &summary, const QString &body)
 {
-	// TODO: Re-implement for Sailfish
+    Q_D(CReporterNotification);
+
+    d->retrieveNotificationId();
+
+    if (d->id != 0) {
+        d->sendDBusNotify(summary, body);
+    } else {
+        qDebug() << __PRETTY_FUNCTION__ << "Couldn't update notification.";
+    }
 }
 
 // ----------------------------------------------------------------------------

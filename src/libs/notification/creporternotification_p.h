@@ -30,9 +30,7 @@
 
 // System includes.
 
-#include <QObject>
-#include <QString>
-#include <QVariant>
+#include <QDBusPendingReply>
 
 /*!
   * @def CREPORTER_DBUS_NTF_OBJECT_PATH
@@ -80,6 +78,10 @@ class CReporterNotificationPrivate : public QObject
           */
         virtual ~CReporterNotificationPrivate();
 
+        QDBusPendingReply<quint32> sendDBusNotify(const QString &summary,
+                                                  const QString &body);
+        void retrieveNotificationId();
+
     public Q_SLOTS:
 
         /*!
@@ -97,6 +99,12 @@ class CReporterNotificationPrivate : public QObject
         virtual void timerEvent(QTimerEvent *event);
 
     public:
+        //! Id of the notification assigned by the notification manager.
+        quint32 id;
+        //! Pending reply on the notification creation from the notification manager.
+        QDBusPendingCallWatcher *callWatcher;
+        //! Category of the notification, e.g. "x-nokia.crash-reporter.autouploader".
+        QString category;
         //! @arg Timeout value.
         int timeout;
         //! @arg Value for identifying elapsed timer.
