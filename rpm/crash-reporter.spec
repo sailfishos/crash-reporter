@@ -89,7 +89,7 @@ make %{?jobs:-j%jobs}
 /usr/share/crash-reporter/*
 /usr/share/dbus-1/services/*.service
 /usr/share/man/man1/*
-/usr/share/meegotouch/notifications/eventtypes/*
+/usr/share/lipstick/notificationcategories/*
 
 %files -n libcrash-reporter0
 %defattr(-,root,root,-)

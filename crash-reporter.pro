@@ -46,7 +46,7 @@ include(doc/doc.pri)
 scripts.path = $${CREPORTER_SYSTEM_SHARE}/crash-reporter
 scripts.files = scripts/crash-report-monitoring
 
-notifications.path = $${CREPORTER_SYSTEM_SHARE}/meegotouch/notifications/eventtypes
+notifications.path = $${CREPORTER_SYSTEM_SHARE}/lipstick/notificationcategories/
 notifications.files = data/x-nokia.crash-reporter.autouploader.conf \
                       data/x-nokia.crash-reporter.notification.conf
 
