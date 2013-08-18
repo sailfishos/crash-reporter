@@ -6,6 +6,9 @@
  * Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
  * Author: Riku Halonen <riku.halonen@nokia.com>
  *
+ * Copyright (C) 2013 Jolla Ltd.
+ * Contact: Jakub Adam <jakub.adam@jollamobile.com>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
  * version 2.1 as published by the Free Software Foundation.
@@ -180,11 +183,10 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
                 // exeeded, delete file.
                 if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
                 {
-                    CReporterNotification *notification = new CReporterNotification(
+                    CReporterNotification notification(
                             CReporter::ApplicationNotificationEventType,
-                            QString("%1 has crashed once again").arg(details.at(0)),
-                            QString("The crash report looked like a possible duplicate and was deleted"));
-                    notification->setParent(this);
+                            QString("%1 has crashed once again.").arg(details.at(0)),
+                            QString("Duplicate crash report was deleted."));
                 }
                 CReporterUtils::removeFile(filePath);
                 return;
@@ -194,6 +196,13 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
             {
                 QVariantList arguments;
                 arguments << filePath;
+
+                /* TODO: Here multiple-choice notification should be displayed
+                 * with options to send or delete the crash report. So far
+                 * disabling auto upload is not possible in the UI and we never
+                 * get here. This code now at least leaks CReporterNotification
+                 * and has to be re-implemented. Standard Sailfish notifications
+                 * don't support multiple actions so far.*/
 
                 if (!q_ptr->notifyCrashReporterUI(CReporter::NotifyNewDialogType, arguments)) {
                     // UI failed to launch. Try to show notification instead.
@@ -225,37 +234,27 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
             }
             else
             {
-                if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
-                {
-                    QString notificationSummary;
-                    if (filePath.contains(CReporter::LifelogPackagePrefix))
-                    {
-                        notificationSummary = "New lifelog report is ready.";
-                    }
-                    else
-                    {
-                        notificationSummary = "%1 has crashed.";
-                        notificationSummary = notificationSummary.arg(details.at(0));
-                    }
+                QScopedPointer<CReporterNotification> notification;
+                QString summary;
 
-                    CReporterNotification *notification = new CReporterNotification(
+                if (CReporterPrivacySettingsModel::instance()->notificationsEnabled() &&
+                    !filePath.contains(CReporter::LifelogPackagePrefix)) {
+
+                    summary = QString("%1 has crashed.").arg(details.at(0));
+
+                    notification.reset(new CReporterNotification(
                             CReporter::AutoUploaderNotificationEventType,
-                            QString("Automatic uploading is triggered"),
-                            QString(notificationSummary).arg(details.at(0)));
-                    notification->setParent(this);
+                            summary, "Uploading automatically...",
+                            this));
                 }
                 // In AutoUpload-mode try to upload all core files each time a new one has appeared
                 QStringList fileList = registry->collectAllCoreFiles();
                 if (!q_ptr->notifyAutoUploader(fileList))
                 {
                     qWarning() << __PRETTY_FUNCTION__ << "Failed to start Auto Uploader.";
-                    if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
-                    {
-                        CReporterNotification *newnotification = new CReporterNotification(
-                                CReporter::AutoUploaderNotificationEventType,
-                                QString("Auto Uploader failed to start").arg(details.at(0)),
-                                QString("Please send the reports manually"));
-                        newnotification->setParent(this);
+                    if (notification) {
+                        notification->update(summary,
+                                "Auto uploader failed to start, send the report manually");
                     }
                 }
             }
