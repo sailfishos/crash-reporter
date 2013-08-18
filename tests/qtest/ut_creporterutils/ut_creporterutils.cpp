@@ -6,6 +6,9 @@
  * Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
  * Author: Riku Halonen <riku.halonen@nokia.com>
  *
+ * Copyright (C) 2013 Jolla Ltd.
+ * Contact: Jakub Adam <jakub.adam@jollamobile.com>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
  * version 2.1 as published by the Free Software Foundation.
@@ -97,13 +100,14 @@ void Ut_CReporterUtils::testRemoveFile()
 
 void Ut_CReporterUtils::testParseCrashInfoFromFilename()
 {
-    QString path = "/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo";
+    QString path = "/media/mmc1/core-dumps/application-1234-somehwid-11-4321.rcore.lzo";
     QStringList info = CReporterUtils::parseCrashInfoFromFilename(path);
 
     QVERIFY(info.at(0) == "application");
     QVERIFY(info.at(1) == "1234");
-    QVERIFY(info.at(2) == "11");
-    QVERIFY(info.at(3) == "4321");
+    QVERIFY(info.at(2) == "somehwid");
+    QVERIFY(info.at(3) == "11");
+    QVERIFY(info.at(4) == "4321");
 }
 
 void Ut_CReporterUtils::testFileSizeToString()

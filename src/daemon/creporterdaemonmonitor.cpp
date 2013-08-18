@@ -59,9 +59,7 @@ CReporterHandledRichCore::CReporterHandledRichCore(const QString &filePath)
     QStringList rCoreInfo = CReporterUtils::parseCrashInfoFromFilename(filePath);
 
     binaryName = rCoreInfo[0];
-
-    QString str = rCoreInfo[2];
-    signalNumber = str.toInt();
+    signalNumber = rCoreInfo[3].toInt();
 
     QFileInfo fi(filePath);
     size = fi.size();

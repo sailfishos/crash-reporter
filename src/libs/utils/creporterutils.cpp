@@ -130,8 +130,8 @@ QStringList CReporterUtils::parseCrashInfoFromFilename(const QString &filePath)
     qDebug() << __PRETTY_FUNCTION__ << "Parse:" << filePath;
 
     QFileInfo fi(filePath);
-    // Remove path and file suffix. i.e. /media/mmc1/application-xxxx-11-2029.rcore.lzo =>
-    // application-xxxx-11-2029
+    // Remove path and file suffix. i.e. /media/mmc1/application-xxxx-hwid-11-2029.rcore.lzo =>
+    // application-xxxx-hwid-11-2029
     QString baseName = fi.baseName();
 
     // Checking if the file is a lifelog report
@@ -142,7 +142,7 @@ QStringList CReporterUtils::parseCrashInfoFromFilename(const QString &filePath)
     }
 
     /*
-     * The basename format is: application_name-xxxx-11-2029.rcore.lzo.
+     * The basename format is: application_name-xxxx-hwid-11-2029
      *
      * where xxxx are last four digits of device IMEI.
      * Parsing from start until dash '-', because it may appear as part of executable name.
@@ -158,7 +158,7 @@ QStringList CReporterUtils::parseCrashInfoFromFilename(const QString &filePath)
     // Remove dash and PID from the original basename.
     baseName = baseName.remove(searchIndex, pid.size() + 1);
 
-    // Repeat above for SIGNUM and IMEI. Finally, string what is left in the basename,
+    // Repeat above for SIGNUM, HWID and IMEI. Finally, string what is left in the basename,
     // is the application name.
 
     // Extract SIGNUM.
@@ -167,6 +167,13 @@ QStringList CReporterUtils::parseCrashInfoFromFilename(const QString &filePath)
     qDebug() << __PRETTY_FUNCTION__ << "SIGNUM:" << signum;
 
     baseName = baseName.remove(searchIndex, signum.size() + 1);
+
+    // Extract HWID.
+    searchIndex = baseName.lastIndexOf("-");
+    QString hwid = baseName.right(baseName.size() - (searchIndex + 1));
+    qDebug() << __PRETTY_FUNCTION__ << "HWID:" << hwid;
+
+    baseName = baseName.remove(searchIndex, hwid.size() + 1);
 
     // Extract IMEI.
     searchIndex = baseName.lastIndexOf("-");
@@ -178,7 +185,7 @@ QStringList CReporterUtils::parseCrashInfoFromFilename(const QString &filePath)
 
     // Append results to list. Index 0 = Application name ....
     QStringList result;
-    result << baseName << imei << signum << pid;
+    result << baseName << imei << hwid << signum << pid;
 
     return result;
 }
