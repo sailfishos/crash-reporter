@@ -71,7 +71,6 @@ static QString ntfSummary;
 static QString ntfBody;
 static bool notificationCreated;
 static bool notificationUpdated;
-static bool notificationTimeoutSet;
 
 // CReporterNotification mock object.
 CReporterNotification::CReporterNotification(const QString &eventType,
@@ -95,19 +94,8 @@ void CReporterNotification::update(const QString &summary, const QString &body)
     Q_UNUSED(body);
 }
 
-void CReporterNotification::setTimeout(int timeout)
-{
-    notificationTimeoutSet = true;
-    Q_UNUSED(timeout);
-}
-
 void CReporterNotification::remove()
 {}
-
-int CReporterNotification::timeout() const
-{
-    return 0;
-}
 
 const QString testSettingsFile("/tmp/crash-reporter-tests/user_settings/crash-reporter-settings/crash-reporter-privacy.conf");
 
@@ -159,7 +147,6 @@ void Ut_CReporterDaemon::init()
     ntfBody.clear();
     notificationCreated = false;
     notificationUpdated = false;
-    notificationTimeoutSet = false;
     serviceRegisteredReply = true;
 
     static QCoreApplication *app = 0;

@@ -142,7 +142,6 @@ bool CReporterAutoUploader::uploadFiles(const QStringList &fileList)
                 QString("Crash report upload started"),
                 QString("Uploading %1 report(s)").arg(fileList.count()),
                 this);
-        d_ptr->notification->setTimeout(30);
     }
 
     return true;

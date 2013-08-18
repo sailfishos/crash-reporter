@@ -47,7 +47,6 @@ class CReporterNotificationPrivate;
 class CREPORTER_EXPORT CReporterNotification : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(bool timeout READ timeout WRITE setTimeout)
 
     public:
         /*!
@@ -90,20 +89,6 @@ class CREPORTER_EXPORT CReporterNotification : public QObject
           */
         void update(const QString &summary = QString(),
                               const QString &body = QString());
-
-        /*!
-          * @brief Timeout in seconds to set after which the notification disappears.
-          *
-          * @param timeout Timeout value after notification disappears.
-          */
-        void setTimeout(int timeout);
-
-        /*!
-          * @brief Returns timeout value.
-          *
-          * @return timeout.
-          */
-         int timeout() const;
 
         /*!
           * @brief Returns whether notification is published or not.

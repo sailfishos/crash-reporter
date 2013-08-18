@@ -40,7 +40,7 @@
 // ----------------------------------------------------------------------------
 CReporterNotificationPrivate::CReporterNotificationPrivate(const QString &eventType,
                                      const QString &summary, const QString &body) :
-  id(0), category(eventType), timeout(0), timerId(0)
+  id(0), category(eventType)
 {
     QDBusPendingReply<quint32> reply = sendDBusNotify(summary, body);
     callWatcher = new QDBusPendingCallWatcher(reply, this);
@@ -108,34 +108,6 @@ void CReporterNotificationPrivate::activate()
     emit q_ptr->activated();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterNotificationPrivate::timerEvent
-// ----------------------------------------------------------------------------
-void CReporterNotificationPrivate::timerEvent(QTimerEvent *event)
-{
-    if (event->timerId() != timerId) return;
-
-    // kill timer and remove the notification.
-    killTimer(timerId);
-    timerId = 0;
-    timeout = 0;
-
-    // Removing a notification tends to fail when dbus is not
-    // up and running (in special cases) and apparently this will not be fixed in MeeGo Touch.
-    // When dbus is not available the system is most likely being shut down and we'll just ignore
-    // this here to avoid a core dump.
-    try
-    {
-        // TODO: Re-implement reaction on timeout for Sailfish
-    }
-    catch (...)
-    {
-        // Do nothing
-    }
-
-    emit q_ptr->timeouted();
-}
-
 // ======== Class CReporterNotification ========
 
 // ======== MEMBER FUNCTIONS ========
@@ -191,38 +163,6 @@ void CReporterNotification::update(const QString &summary, const QString &body)
 void CReporterNotification::remove()
 {
     // TODO: Re-implement notification removal for Sailfish
-
-    if (d_ptr->timerId != 0) {
-        // Remove existing timeout, if notification was removed.
-        d_ptr->killTimer(d_ptr->timerId);
-        d_ptr->timerId = 0;
-    }
-}
-
-// ----------------------------------------------------------------------------
-// CReporterNotification::setTimeout
-// ----------------------------------------------------------------------------
-void CReporterNotification::setTimeout(int timeout)
-{
-    d_ptr->timeout = timeout;
-
-    if (d_ptr->timerId != 0) {
-        // Remove previous timeout.
-        d_ptr->killTimer(d_ptr->timerId);
-        d_ptr->timerId = 0;
-    }
-
-    if (d_ptr->timeout > 0) {
-        d_ptr->timerId = d_ptr->startTimer(d_ptr->timeout * 1000);
-    }
-}
-
-// ----------------------------------------------------------------------------
-// CReporterNotification::timeout
-// ----------------------------------------------------------------------------
-int CReporterNotification::timeout() const
-{
-    return d_ptr->timeout;
 }
 
 // ----------------------------------------------------------------------------

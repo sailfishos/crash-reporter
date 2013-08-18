@@ -188,7 +188,6 @@ bool CReporterDaemon::initiateDaemon()
                     // Don't care if MNotifications bug
                     return true;
                 }
-                notification->setTimeout(10);
                 notification->setParent(this);
 
                 connect(notification, SIGNAL(activated()), this, SLOT(handleNotificationEvent()));

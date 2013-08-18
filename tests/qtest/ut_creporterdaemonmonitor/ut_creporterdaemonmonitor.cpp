@@ -44,7 +44,6 @@ static QString ntfSummary;
 static QString ntfBody;
 static bool notificationCreated;
 static bool notificationUpdated;
-static bool notificationTimeoutSet;
 
 static bool serviceRegisteredReply;
 // Overridden here to able to fake UI launch failing. Otherwise the Qt implementation seems
@@ -79,19 +78,8 @@ void CReporterNotification::update(const QString &summary, const QString &body)
     Q_UNUSED(body);
 }
 
-void CReporterNotification::setTimeout(int timeout)
-{
-    notificationTimeoutSet = true;
-    Q_UNUSED(timeout);
-}
-
 void CReporterNotification::remove()
 {}
-
-int CReporterNotification::timeout() const
-{
-    return 0;
-}
 
 TestDialogServer::TestDialogServer()
 {
@@ -135,7 +123,6 @@ void Ut_CReporterDaemonMonitor::init()
     ntfBody.clear();
     notificationCreated = false;
     notificationUpdated = false;
-    notificationTimeoutSet = false;
     serviceRegisteredReply = true;
 
     registry = new CReporterDaemonCoreRegistry();

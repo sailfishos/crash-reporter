@@ -67,18 +67,8 @@ void CReporterNotification::update(const QString &summary, const QString &body)
     Q_UNUSED(body);
 }
 
-void CReporterNotification::setTimeout(int timeout)
-{
-    Q_UNUSED(timeout);
-}
-
 void CReporterNotification::remove()
 {}
-
-int CReporterNotification::timeout() const
-{
-    return 0;
-}
 
 void Ut_CReporterDaemonProxy::initTestCase()
 {

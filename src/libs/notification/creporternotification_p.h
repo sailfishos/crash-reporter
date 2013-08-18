@@ -90,14 +90,6 @@ class CReporterNotificationPrivate : public QObject
           */
         void activate();
 
-    protected:
-        /*!
-          * @brief Called, when timer elapses.
-          *
-          * @param event Pointer to timer event.
-          */
-        virtual void timerEvent(QTimerEvent *event);
-
     public:
         //! Id of the notification assigned by the notification manager.
         quint32 id;
@@ -105,10 +97,6 @@ class CReporterNotificationPrivate : public QObject
         QDBusPendingCallWatcher *callWatcher;
         //! Category of the notification, e.g. "x-nokia.crash-reporter.autouploader".
         QString category;
-        //! @arg Timeout value.
-        int timeout;
-        //! @arg Value for identifying elapsed timer.
-        int timerId;
         //! @arg Pointer to public class.
         CReporterNotification *q_ptr;
 };

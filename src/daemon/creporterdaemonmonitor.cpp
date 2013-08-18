@@ -184,7 +184,6 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
                             CReporter::ApplicationNotificationEventType,
                             QString("%1 has crashed once again").arg(details.at(0)),
                             QString("The crash report looked like a possible duplicate and was deleted"));
-                    notification->setTimeout(30);
                     notification->setParent(this);
                 }
                 CReporterUtils::removeFile(filePath);
@@ -218,7 +217,6 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
                     CReporterNotification *notification = new CReporterNotification(
                             CReporter::ApplicationNotificationEventType,
                             notificationSummary, notificationBody);
-                    notification->setTimeout(10);
                     notification->setParent(this);
 
                     connect(notification, SIGNAL(activated()), this, SLOT(handleNotificationEvent()));
@@ -244,7 +242,6 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
                             CReporter::AutoUploaderNotificationEventType,
                             QString("Automatic uploading is triggered"),
                             QString(notificationSummary).arg(details.at(0)));
-                    notification->setTimeout(30);
                     notification->setParent(this);
                 }
                 // In AutoUpload-mode try to upload all core files each time a new one has appeared
@@ -258,7 +255,6 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
                                 CReporter::AutoUploaderNotificationEventType,
                                 QString("Auto Uploader failed to start").arg(details.at(0)),
                                 QString("Please send the reports manually"));
-                        newnotification->setTimeout(30);
                         newnotification->setParent(this);
                     }
                 }
