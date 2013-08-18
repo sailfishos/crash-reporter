@@ -25,11 +25,13 @@
  *
  */
 
+#include <QDBusConnection>
+#include <QDebug>
+
 // User includes.
 
 #include "creporternotification.h"
 #include "creporternotification_p.h"
-#include "creporternotificationadaptor.h"
 
 // ======== Class CReporterNotificationPrivate ========
 

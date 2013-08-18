@@ -71,7 +71,6 @@ SOURCES += httpclient/creporterhttpclient.cpp \
             settings/creporterapplicationsettings.cpp \
             settings/creportersettingsinit.cpp \
             notification/creporternotification.cpp \
-            notification/creporternotificationadaptor.cpp \
 
 # Public headers
 PUBLIC_HEADERS += creporternamespace.h \
@@ -102,7 +101,6 @@ HEADERS += $$PUBLIC_HEADERS \
             settings/creportersettingsobserver_p.h \
             settings/creportersettingsinit_p.h \
             notification/creporternotification_p.h \
-            notification/creporternotificationadaptor.h \
 
 LIBS += -lssu
 
