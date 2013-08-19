@@ -23,6 +23,7 @@
 
 #include "creporterapplicationsettings.h"
 #include "creporterprivacysettingsmodel.h"
+#include "systemdservice.h"
 
 // using custom translator so it gets properly removed from qApp when engine is deleted
 class AppTranslator: public QTranslator
@@ -55,6 +56,19 @@ static QObject *applicationsettingsSingletontypeProvider(QQmlEngine *engine, QJS
     return CReporterApplicationSettings::instance();
 }
 
+static QObject *reporterserviceSingletontypeProvider(QQmlEngine *engine, QJSEngine *scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    static SystemdService *instance = 0;
+    if (!instance) {
+        instance = new SystemdService("crash-reporter.service");
+    }
+
+    return instance;
+}
+
 class CrashReporterQmlPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
@@ -83,6 +97,10 @@ public:
         qmlRegisterSingletonType<CReporterPrivacySettingsModel>(
                 "com.jolla.settings.crashreporter", 1, 0,
                 "PrivacySettings", privacysettingsSingletontypeProvider);
+
+        qmlRegisterSingletonType<SystemdService>(
+                "com.jolla.settings.crashreporter", 1, 0,
+                "CrashReporterService", reporterserviceSingletontypeProvider);
     }
 };
 
