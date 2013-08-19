@@ -1,6 +1,6 @@
 # spec file for crash-reporter
 
-%define release         1
+%define release         0
 %define buildroot       %{_topdir}/%{name}-%{version}-%{release}-root
 
 %define _unpackaged_files_terminate_build 0
@@ -9,7 +9,7 @@ BuildRoot:              %{buildroot}
 Summary:                Crash Reporting Tool for MeeGo
 License:                LGPL
 Name:                   crash-reporter
-Version:                1.10.5
+Version:                1.10.6
 Release:                %{release}
 Prefix:                 /usr
 Group:                  Development/Tools
