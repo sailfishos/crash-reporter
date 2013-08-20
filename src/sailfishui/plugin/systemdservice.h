@@ -24,9 +24,7 @@
 
 #include <QObject>
 
-class QDBusPendingCallWatcher;
-class SystemdManagerProxy;
-class SystemdUnitProxy;
+class SystemdServicePrivate;
 
 class SystemdService: public QObject {
     Q_OBJECT
@@ -45,16 +43,14 @@ signals:
 
 private:
     Q_DISABLE_COPY(SystemdService)
+    Q_DECLARE_PRIVATE(SystemdService)
+    QScopedPointer<SystemdServicePrivate> d_ptr;
 
-    SystemdManagerProxy *manager;
-    SystemdUnitProxy *unit;
-
-private slots:
-    void gotUnitPath(QDBusPendingCallWatcher *call);
-    void stateChanged(QDBusPendingCallWatcher *call);
-    void propertiesChanged(const QString &interface,
-                           const QVariantMap &changedProperties,
-                           const QStringList &invalidatedProperties);
+    Q_PRIVATE_SLOT(d_func(), void gotUnitPath(QDBusPendingCallWatcher *));
+    Q_PRIVATE_SLOT(d_func(), void stateChanged(QDBusPendingCallWatcher *));
+    Q_PRIVATE_SLOT(d_func(), void propertiesChanged(const QString &,
+                                                    const QVariantMap &,
+                                                    const QStringList &));
 };
 
 #endif // SYSTEMDSERVICE_H

@@ -21,31 +21,29 @@
 
 #include "systemdservice.h"
 
-#include <QDBusPendingCallWatcher>
-
 #include "propertiesproxy.h"
 #include "systemdmanagerproxy.h"
 #include "systemdunitproxy.h"
 
-SystemdService::SystemdService(const QString& serviceName):
-  manager(new SystemdManagerProxy("org.freedesktop.systemd1",
-          "/org/freedesktop/systemd1", QDBusConnection::sessionBus(), this)),
-  unit(0) {
-    // Calling subscribe allows us to receive DBus signals from systemd
-    QDBusPendingCall reply = manager->Subscribe();
-    reply.waitForFinished();
-    if (reply.isError()) {
-        qDebug() << "Couldn't subscribe to systemd manager";
-    }
+class SystemdServicePrivate {
+public:
+    SystemdManagerProxy *manager;
+    SystemdUnitProxy *unit;
 
-    reply = manager->GetUnit(serviceName);
-    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(reply, this);
+    void gotUnitPath(QDBusPendingCallWatcher *call);
+    void propertiesChanged(const QString &interface,
+                           const QVariantMap &changedProperties,
+                           const QStringList &invalidatedProperties);
+    void stateChanged(QDBusPendingCallWatcher *call);
 
-    connect(watcher, &QDBusPendingCallWatcher::finished,
-            this, &SystemdService::gotUnitPath);
-}
+private:
+    Q_DECLARE_PUBLIC(SystemdService)
+    SystemdService *q_ptr;
+};
 
-void SystemdService::gotUnitPath(QDBusPendingCallWatcher *call) {
+void SystemdServicePrivate::gotUnitPath(QDBusPendingCallWatcher *call) {
+    Q_Q(SystemdService);
+
     QDBusPendingReply<QDBusObjectPath> reply = *call;
     if (reply.isError()) {
         qDebug() << "Failed to get crash-reporter.service DBus path"
@@ -53,30 +51,32 @@ void SystemdService::gotUnitPath(QDBusPendingCallWatcher *call) {
     } else {
         QString path = reply.argumentAt<0>().path();
 
-        unit = new SystemdUnitProxy("org.freedesktop.systemd1",
-                path, QDBusConnection::sessionBus(), this);
+        unit = new SystemdUnitProxy("org.freedesktop.systemd1", path,
+                QDBusConnection::sessionBus(), q);
 
         PropertiesProxy *crashReporterProperties = new PropertiesProxy(
                 "org.freedesktop.systemd1", path, QDBusConnection::sessionBus(),
-                this);
+                q);
 
-        connect(crashReporterProperties, &PropertiesProxy::PropertiesChanged,
-                this, &SystemdService::propertiesChanged);
+        QObject::connect(crashReporterProperties,SIGNAL(PropertiesChanged(const QString &, const QVariantMap &, const QStringList &)),
+                         q, SLOT(propertiesChanged(const QString &, const QVariantMap &, const QStringList &)));
 
         /* Before we create a unit proxy, we 'guess' service is not running. Now
          * when we can actually query its status, notify about the change if our
          * assumption was wrong. */
-        if (running() != false) {
-            emit runningChanged();
+        if (q->running() != false) {
+            emit q->runningChanged();
         }
     }
 
     call->deleteLater();
 }
 
-void SystemdService::propertiesChanged(const QString &interface,
-                                       const QVariantMap &changedProperties,
-                                       const QStringList &invalidatedProperties) {
+void SystemdServicePrivate::propertiesChanged(const QString &interface,
+                                              const QVariantMap &changedProperties,
+                                              const QStringList &invalidatedProperties) {
+    Q_Q(SystemdService);
+
     if (interface != SystemdUnitProxy::staticInterfaceName())
         return;
 
@@ -90,34 +90,10 @@ void SystemdService::propertiesChanged(const QString &interface,
     Q_ASSERT(unit);
     qDebug() << "State changed to:" << unit->activeState();
 
-    emit runningChanged();
+    emit q->runningChanged();
 }
 
-bool SystemdService::running() const {
-    return (unit && unit->activeState() == "active");
-}
-
-void SystemdService::setRunning(bool state) {
-    QDBusPendingCallWatcher *watcher;
-
-    if (!unit) {
-        qDebug() << "Systemd unit proxy not initialized!";
-        return;
-    }
-
-    if (state) {
-        watcher = new QDBusPendingCallWatcher(
-                unit->Start("replace"), this);
-    } else {
-        watcher = new QDBusPendingCallWatcher(
-                unit->Stop("replace"), this);
-    }
-
-    connect(watcher, &QDBusPendingCallWatcher::finished,
-            this, &SystemdService::stateChanged);
-}
-
-void SystemdService::stateChanged(QDBusPendingCallWatcher *call) {
+void SystemdServicePrivate::stateChanged(QDBusPendingCallWatcher *call) {
     QDBusPendingReply<QDBusObjectPath> reply = *call;
     if (reply.isError()) {
         qDebug() << "Couldn't change systemd service state"
@@ -127,8 +103,63 @@ void SystemdService::stateChanged(QDBusPendingCallWatcher *call) {
     call->deleteLater();
 }
 
+SystemdService::SystemdService(const QString& serviceName):
+  d_ptr(new SystemdServicePrivate) {
+    Q_D(SystemdService);
+    d->q_ptr = this;
+
+    d->manager = new SystemdManagerProxy("org.freedesktop.systemd1",
+            "/org/freedesktop/systemd1", QDBusConnection::sessionBus(), this);
+    d->unit = 0;
+
+    // Calling subscribe allows us to receive DBus signals from systemd
+    QDBusPendingCall reply = d->manager->Subscribe();
+    reply.waitForFinished();
+    if (reply.isError()) {
+        qDebug() << "Couldn't subscribe to systemd manager";
+    }
+
+    reply = d->manager->GetUnit(serviceName);
+    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(reply, this);
+
+    connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher *)),
+            this, SLOT(gotUnitPath(QDBusPendingCallWatcher *)));
+}
+
+bool SystemdService::running() const {
+    Q_D(const SystemdService);
+
+    return (d->unit && d->unit->activeState() == "active");
+}
+
+void SystemdService::setRunning(bool state) {
+    Q_D(SystemdService);
+
+    QDBusPendingCallWatcher *watcher;
+
+    if (!d->unit) {
+        qDebug() << "Systemd unit proxy not initialized!";
+        return;
+    }
+
+    if (state) {
+        watcher = new QDBusPendingCallWatcher(
+                d->unit->Start("replace"), this);
+    } else {
+        watcher = new QDBusPendingCallWatcher(
+                d->unit->Stop("replace"), this);
+    }
+
+    connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher *)),
+            this, SLOT(stateChanged(QDBusPendingCallWatcher *)));
+}
+
 SystemdService::~SystemdService() {
+    Q_D(SystemdService);
+
     /* Properly unsubscribe from receiving DBus signals in order to stop systemd
      * pointlessly sending them if we were the sole listener. */
-    manager->Unsubscribe();
+    d->manager->Unsubscribe();
 }
+
+#include "moc_systemdservice.cpp"
