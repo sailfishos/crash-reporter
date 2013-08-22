@@ -30,6 +30,7 @@ class SystemdService: public QObject {
     Q_OBJECT
 
     Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged)
+    Q_PROPERTY(bool masked READ masked WRITE setMasked NOTIFY maskedChanged)
 
 public:
     SystemdService(const QString& serviceName);
@@ -37,9 +38,13 @@ public:
     bool running() const;
     void setRunning(bool state);
 
+    bool masked() const;
+    void setMasked(bool state);
+
     ~SystemdService();
 signals:
     void runningChanged();
+    void maskedChanged();
 
 private:
     Q_DISABLE_COPY(SystemdService)
@@ -47,6 +52,8 @@ private:
     QScopedPointer<SystemdServicePrivate> d_ptr;
 
     Q_PRIVATE_SLOT(d_func(), void gotUnitPath(QDBusPendingCallWatcher *));
+    Q_PRIVATE_SLOT(d_func(), void maskingChanged(QDBusPendingCallWatcher *));
+    Q_PRIVATE_SLOT(d_func(), void reloaded(QDBusPendingCallWatcher *));
     Q_PRIVATE_SLOT(d_func(), void stateChanged(QDBusPendingCallWatcher *));
     Q_PRIVATE_SLOT(d_func(), void propertiesChanged(const QString &,
                                                     const QVariantMap &,

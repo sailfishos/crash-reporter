@@ -40,13 +40,37 @@ Page {
             }
 
             TextSwitch {
+                id: reporterSwitch
                 automaticCheck: false
                 checked: CrashReporterService.running
                 //% "Report application crashes"
                 text: qsTrId("settings_crash-reporter_report_crashes")
                 //% "Collects and uploads a report when application crashes"
                 description: qsTrId("settings_crash-reporter_report_crashes_description")
-                onClicked: CrashReporterService.running = !checked
+
+                property bool startingUp: false
+
+                onClicked: {
+                    if (!checked && CrashReporterService.masked) {
+                        /* Unmask the crash reporter service first and wait
+                         * for finished. */
+                        startingUp = true;
+                        CrashReporterService.masked = false
+                    } else {
+                        CrashReporterService.masked = checked
+                        CrashReporterService.running = !checked
+                    }
+                }
+                
+                Connections {
+                    target: CrashReporterService
+                    onMaskedChanged: {
+                        if (reporterSwitch.startingUp && !CrashReporterService.masked) {
+                            reporterSwitch.startingUp = false
+                            CrashReporterService.running = true
+                        }
+                    }
+                }
             }
 
             ValueButton {

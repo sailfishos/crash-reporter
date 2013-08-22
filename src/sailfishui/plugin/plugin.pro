@@ -1,4 +1,4 @@
-system(qdbusxml2cpp org.freedesktop.systemd1.Manager.xml -c SystemdManagerProxy -p systemdmanagerproxy.h:systemdmanagerproxy.cpp)
+system(qdbusxml2cpp org.freedesktop.systemd1.Manager.xml -c SystemdManagerProxy -p systemdmanagerproxy.h:systemdmanagerproxy.cpp -i unitfilechange.h)
 system(qdbusxml2cpp org.freedesktop.systemd1.Unit.xml -c SystemdUnitProxy -p systemdunitproxy.h:systemdunitproxy.cpp)
 system(qdbusxml2cpp org.freedesktop.DBus.Properties.xml -c PropertiesProxy -p propertiesproxy.h:propertiesproxy.cpp)
 
@@ -38,7 +38,8 @@ QDBUS_GENERATED_SOURCES = \
 SOURCES += \
 	$$QDBUS_GENERATED_SOURCES \
 	plugin.cpp \
-	systemdservice.cpp
+	systemdservice.cpp \
+	unitfilechange.cpp
 
 INSTALLS += target import
 

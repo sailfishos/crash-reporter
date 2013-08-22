@@ -8,5 +8,19 @@
   </method>
   <method name="Subscribe"/>
   <method name="Unsubscribe"/>
+  <method name="Reload"/>
+  <method name="MaskUnitFiles">
+   <arg name="files" type="as" direction="in"/>
+   <arg name="runtime" type="b" direction="in"/>
+   <arg name="force" type="b" direction="in"/>
+   <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList&lt;UnitFileChange&gt;"/>
+   <arg name="changes" type="a(sss)" direction="out"/>
+  </method>
+  <method name="UnmaskUnitFiles">
+   <arg name="files" type="as" direction="in"/>
+   <arg name="runtime" type="b" direction="in"/>
+   <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList&lt;UnitFileChange&gt;"/>
+   <arg name="changes" type="a(sss)" direction="out"/>
+  </method>
  </interface>
 </node>

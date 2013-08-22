@@ -27,6 +27,7 @@
 
 class SystemdServicePrivate {
 public:
+    QString serviceName;
     SystemdManagerProxy *manager;
     SystemdUnitProxy *unit;
 
@@ -34,6 +35,8 @@ public:
     void propertiesChanged(const QString &interface,
                            const QVariantMap &changedProperties,
                            const QStringList &invalidatedProperties);
+    void maskingChanged(QDBusPendingCallWatcher *call);
+    void reloaded(QDBusPendingCallWatcher *call);
     void stateChanged(QDBusPendingCallWatcher *call);
 
 private:
@@ -63,9 +66,12 @@ void SystemdServicePrivate::gotUnitPath(QDBusPendingCallWatcher *call) {
 
         /* Before we create a unit proxy, we 'guess' service is not running. Now
          * when we can actually query its status, notify about the change if our
-         * assumption was wrong. */
+         * assumption was wrong. Same applies to the state of masking. */
         if (q->running() != false) {
             emit q->runningChanged();
+        }
+        if (q->masked() != false) {
+            emit q->maskedChanged();
         }
     }
 
@@ -80,17 +86,18 @@ void SystemdServicePrivate::propertiesChanged(const QString &interface,
     if (interface != SystemdUnitProxy::staticInterfaceName())
         return;
 
-    changedProperties.contains("ActiveState");
-    QVariant state(changedProperties.value("ActiveState"));
-    if (!state.isValid()) {
-        if (!invalidatedProperties.contains("ActiveState"))
-            return;
-    }
-
     Q_ASSERT(unit);
-    qDebug() << "State changed to:" << unit->activeState();
 
-    emit q->runningChanged();
+    if (changedProperties.contains("ActiveState") ||
+        invalidatedProperties.contains("ActiveState")) {
+        qDebug() << "State changed to:" << unit->activeState();
+        emit q->runningChanged();
+    }
+    if (changedProperties.contains("LoadState") ||
+        invalidatedProperties.contains("LoadState")) {
+        qDebug() << "Unit file state changed to:" << unit->loadState();
+        emit q->maskedChanged();
+    }
 }
 
 void SystemdServicePrivate::stateChanged(QDBusPendingCallWatcher *call) {
@@ -103,14 +110,52 @@ void SystemdServicePrivate::stateChanged(QDBusPendingCallWatcher *call) {
     call->deleteLater();
 }
 
+void SystemdServicePrivate::maskingChanged(QDBusPendingCallWatcher *call) {
+    Q_Q(SystemdService);
+
+    QDBusPendingCall reply = *call;
+    if (reply.isError()) {
+        qDebug() << "Couldn't mask or unmask a unit file"
+                 << reply.error().name() << reply.error().message();
+    } else {
+        QDBusPendingCallWatcher *watcher =
+                new QDBusPendingCallWatcher(manager->Reload(), q);
+
+        QObject::connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher *)),
+                         q, SLOT(reloaded(QDBusPendingCallWatcher *)));
+    }
+
+    call->deleteLater();
+}
+
+void SystemdServicePrivate::reloaded(QDBusPendingCallWatcher *call) {
+    Q_Q(SystemdService);
+
+    QDBusPendingCall reply = *call;
+    if (reply.isError()) {
+        qDebug() << "Couldn't reload a unit file"
+                 << reply.error().name() << reply.error().message();
+    } else {
+        /* Seems systemd won't notify us when load state changes to 'masked'.
+         * We have to emit our change notification ourselves. */
+        emit q->maskedChanged();
+    }
+
+    call->deleteLater();
+}
+
 SystemdService::SystemdService(const QString& serviceName):
   d_ptr(new SystemdServicePrivate) {
     Q_D(SystemdService);
     d->q_ptr = this;
+    d->serviceName = serviceName;
 
     d->manager = new SystemdManagerProxy("org.freedesktop.systemd1",
             "/org/freedesktop/systemd1", QDBusConnection::sessionBus(), this);
     d->unit = 0;
+
+    qDBusRegisterMetaType<UnitFileChange>();
+    qDBusRegisterMetaType<QList<UnitFileChange> >();
 
     // Calling subscribe allows us to receive DBus signals from systemd
     QDBusPendingCall reply = d->manager->Subscribe();
@@ -119,7 +164,7 @@ SystemdService::SystemdService(const QString& serviceName):
         qDebug() << "Couldn't subscribe to systemd manager";
     }
 
-    reply = d->manager->GetUnit(serviceName);
+    reply = d->manager->GetUnit(d->serviceName);
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(reply, this);
 
     connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher *)),
@@ -155,6 +200,40 @@ void SystemdService::setRunning(bool state) {
 
     connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher *)),
             this, SLOT(stateChanged(QDBusPendingCallWatcher *)));
+}
+
+void SystemdService::setMasked(bool state) {
+    Q_D(SystemdService);
+
+    if (masked() == state)
+        return;
+
+    QDBusPendingCallWatcher *watcher;
+
+    if (!d->unit) {
+        qDebug() << "Systemd unit proxy not initialized!";
+        return;
+    }
+
+    QStringList services;
+    services.append(d->serviceName);
+
+    if (state) {
+        watcher = new QDBusPendingCallWatcher(
+                d->manager->MaskUnitFiles(services, false, true), this);
+    } else {
+        watcher = new QDBusPendingCallWatcher(
+                d->manager->UnmaskUnitFiles(services, false), this);
+    }
+
+    connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher *)),
+            this, SLOT(maskingChanged(QDBusPendingCallWatcher *)));
+}
+
+bool SystemdService::masked() const {
+    Q_D(const SystemdService);
+
+    return (d->unit && d->unit->loadState() == "masked");
 }
 
 SystemdService::~SystemdService() {
