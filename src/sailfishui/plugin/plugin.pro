@@ -42,15 +42,6 @@ SOURCES += \
 
 INSTALLS += target import
 
-generate_dbus_proxies.commands = \
-	qdbusxml2cpp org.freedesktop.systemd1.Manager.xml -c SystemdManagerProxy -p systemdmanagerproxy.h:systemdmanagerproxy.cpp; \
-	qdbusxml2cpp org.freedesktop.systemd1.Unit.xml -c SystemdUnitProxy -p systemdunitproxy.h:systemdunitproxy.cpp; \
-	qdbusxml2cpp org.freedesktop.DBus.Properties.xml -c PropertiesProxy -p propertiesproxy.h:propertiesproxy.cpp;
-
-QMAKE_EXTRA_TARGETS += generate_dbus_proxies
-
-PRE_TARGETDEPS += generate_dbus_proxies
-
 QMAKE_DISTCLEAN += \
 	systemdmanagerproxy.h systemdmanagerproxy.cpp \
 	propertiesproxy.h propertiesproxy.cpp \
