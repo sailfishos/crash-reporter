@@ -135,6 +135,9 @@ bool SystemdService::running() const {
 void SystemdService::setRunning(bool state) {
     Q_D(SystemdService);
 
+    if (running() == state)
+        return;
+
     QDBusPendingCallWatcher *watcher;
 
     if (!d->unit) {
