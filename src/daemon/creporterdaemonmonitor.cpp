@@ -38,7 +38,7 @@
 
 #include "creporterdaemonmonitor.h"
 #include "creporterdaemonmonitor_p.h"
-#include "creporterdaemoncoreregistry.h"
+#include "creportercoreregistry.h"
 #include "creporterutils.h"
 #include "creporterdialogserverproxy.h"
 #include "creporterautouploaderproxy.h"
@@ -363,7 +363,7 @@ void CReporterDaemonMonitorPrivate::handleNotificationEvent()
 // ----------------------------------------------------------------------------
 // CReporterDaemonMonitor::CReporterDaemonMonitor
 // ----------------------------------------------------------------------------
-CReporterDaemonMonitor::CReporterDaemonMonitor(CReporterDaemonCoreRegistry *reg) :
+CReporterDaemonMonitor::CReporterDaemonMonitor(CReporterCoreRegistry *reg) :
     d_ptr(new CReporterDaemonMonitorPrivate())
 {
     d_ptr->q_ptr = this;

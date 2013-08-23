@@ -33,7 +33,7 @@
 // Forward declarations.
 
 class CReporterDaemonMonitor;
-class CReporterDaemonCoreRegistry;
+class CReporterCoreRegistry;
 class CReporterSettingsObserver;
 class QTimer;
 
@@ -49,7 +49,7 @@ public:
     //! @arg Pointer to monitor object.
     CReporterDaemonMonitor *monitor;
     //! @arg Pointer to registry object.
-    CReporterDaemonCoreRegistry *registry;
+    CReporterCoreRegistry *registry;
     //! @arg Pointer to settings observer object.
     CReporterSettingsObserver *settingsObserver;
     //! @arg Startup delay timer Id.

@@ -22,14 +22,14 @@
  *
  */
 
-#ifndef UT_CREPORTERDAEMONCOREDIR_H
-#define UT_CREPORTERDAEMONCOREDIR_H
+#ifndef UT_CREPORTERCOREDIR_H
+#define UT_CREPORTERCOREDIR_H
 
 #include <QTest>
 
-class CReporterDaemonCoreDir;
+class CReporterCoreDir;
 
-class Ut_CReporterDaemonCoreDir : public QObject
+class Ut_CReporterCoreDir : public QObject
 {
     Q_OBJECT
 
@@ -45,7 +45,7 @@ private slots:
 
 private:
 
-    CReporterDaemonCoreDir *dir;
+    CReporterCoreDir *dir;
 };
 
-#endif // UT_CREPORTERDAEMONCOREDIR_H
+#endif // UT_CREPORTERCOREDIR_H

@@ -27,6 +27,7 @@ TEMPLATE = app
 TARGET = crash-reporter-daemon
 
 INCLUDEPATH += . \
+               ../libs/coredir \
                ../libs/utils \
                ../libs/logger \
                ../libs/serviceif \
@@ -44,18 +45,12 @@ SOURCES += main.cpp \
            creporterdaemon.cpp \
            creporterdaemonadaptor.cpp \
            creporterdaemonmonitor.cpp \
-           creporterdaemoncoredir.cpp \
-           creporterdaemoncoreregistry.cpp \
 
 HEADERS += creporterdaemon.h \
            creporterdaemon_p.h \
            creporterdaemonadaptor.h \
            creporterdaemonmonitor.h \
            creporterdaemonmonitor_p.h \
-           creporterdaemoncoredir.h \
-           creporterdaemoncoredir_p.h \
-           creporterdaemoncoreregistry.h \
-           creporterdaemoncoreregistry_p.h \
 
 service.files = com.nokia.CrashReporter.Daemon.service
 service.path = $$CREPORTER_SYSTEM_DBUS_SERVICES

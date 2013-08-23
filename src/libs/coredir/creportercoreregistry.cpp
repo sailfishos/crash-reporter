@@ -36,9 +36,9 @@
 
 // User includes
 
-#include "creporterdaemoncoreregistry.h"
-#include "creporterdaemoncoreregistry_p.h"
-#include "creporterdaemoncoredir.h"
+#include "creportercoreregistry.h"
+#include "creportercoreregistry_p.h"
+#include "creportercoredir.h"
 #include "creporterutils.h"
 
 // Local macros and definitions.
@@ -75,33 +75,22 @@ mountpoint_static[NUM_STATIC_MOUNTPOINTS][MAX_MOUNTPOINT_NAMELEN] =
 
 const char core_dumps_suffix[] = "/core-dumps";
 
-// ********* Class CReporterDaemonCoreDirPrivate ********
 // ======== MEMBER FUNCTIONS ========
 
-// ----------------------------------------------------------------------------
-// CReporterDaemonCoreRegistryPrivate::CReporterDaemonCoreRegistryPrivate
-// ----------------------------------------------------------------------------
-CReporterDaemonCoreRegistryPrivate::CReporterDaemonCoreRegistryPrivate()
+CReporterCoreRegistryPrivate::CReporterCoreRegistryPrivate()
 {
     mapper = new QSignalMapper();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemonCoreRegistryPrivate::~CReporterDaemonCoreRegistryPrivate
-// ----------------------------------------------------------------------------
-CReporterDaemonCoreRegistryPrivate::~CReporterDaemonCoreRegistryPrivate()
+CReporterCoreRegistryPrivate::~CReporterCoreRegistryPrivate()
 {
     delete mapper;
 }
 
-// ********* Class CReporterDaemonCoreDir ********
 // ======== MEMBER FUNCTIONS ========
 
-// ----------------------------------------------------------------------------
-// CReporterDaemonCoreRegistry::CReporterDaemonCoreRegistry
-// ----------------------------------------------------------------------------
-CReporterDaemonCoreRegistry::CReporterDaemonCoreRegistry() :
-    d_ptr(new CReporterDaemonCoreRegistryPrivate())
+CReporterCoreRegistry::CReporterCoreRegistry() :
+    d_ptr(new CReporterCoreRegistryPrivate())
 {
 	createCoreLocationRegistry();
 
@@ -114,11 +103,11 @@ CReporterDaemonCoreRegistry::CReporterDaemonCoreRegistry() :
 // ----------------------------------------------------------------------------
 // CReporterDaemonCoreRegistry::~CReporterDaemonCoreRegistry
 // ----------------------------------------------------------------------------
-CReporterDaemonCoreRegistry::~CReporterDaemonCoreRegistry()
+CReporterCoreRegistry::~CReporterCoreRegistry()
 {
-    Q_D(CReporterDaemonCoreRegistry);
+    Q_D(CReporterCoreRegistry);
 
-	QList<CReporterDaemonCoreDir*> dirs = d->coreDirs;
+	QList<CReporterCoreDir*> dirs = d->coreDirs;
 	// Clear list.
 	d->coreDirs.clear();
 	// Delete entries.
@@ -129,15 +118,15 @@ CReporterDaemonCoreRegistry::~CReporterDaemonCoreRegistry()
 // ----------------------------------------------------------------------------
 // CReporterDaemonCoreRegistry::collectAllCoreFiles
 // ----------------------------------------------------------------------------
-QStringList CReporterDaemonCoreRegistry::collectAllCoreFiles()
+QStringList CReporterCoreRegistry::collectAllCoreFiles()
 {
-    Q_D(CReporterDaemonCoreRegistry);
+    Q_D(CReporterCoreRegistry);
 
     QStringList out;
-	QListIterator<CReporterDaemonCoreDir*> iter(d->coreDirs); 
+	QListIterator<CReporterCoreDir*> iter(d->coreDirs); 
 
     while (iter.hasNext()) {
-		CReporterDaemonCoreDir* dir = (CReporterDaemonCoreDir*) iter.next();
+		CReporterCoreDir* dir = (CReporterCoreDir*) iter.next();
         dir->collectAllCoreFilesAtLocation(out);
 	}
     return out;
@@ -146,16 +135,16 @@ QStringList CReporterDaemonCoreRegistry::collectAllCoreFiles()
 // ----------------------------------------------------------------------------
 // CReporterDaemonCoreRegistry::getCoreLocationPaths
 // ----------------------------------------------------------------------------
-QStringList* CReporterDaemonCoreRegistry::getCoreLocationPaths()
+QStringList* CReporterCoreRegistry::getCoreLocationPaths()
 {
-	Q_D( CReporterDaemonCoreRegistry );
+	Q_D( CReporterCoreRegistry );
 	QStringList* paths = new QStringList();
 	
-	QListIterator<CReporterDaemonCoreDir*> iter(d->coreDirs); 
+	QListIterator<CReporterCoreDir*> iter(d->coreDirs); 
 
 	while ( iter.hasNext() ) {
 		// Get paths for core locations.
-		CReporterDaemonCoreDir* pCoreDir =  (CReporterDaemonCoreDir*) iter.next();
+		CReporterCoreDir* pCoreDir =  (CReporterCoreDir*) iter.next();
 		QDir dir( pCoreDir->getDirectory() );
 
 		qDebug() << __PRETTY_FUNCTION__ << "Got directory:" << pCoreDir->getDirectory();
@@ -173,15 +162,15 @@ QStringList* CReporterDaemonCoreRegistry::getCoreLocationPaths()
 // ----------------------------------------------------------------------------
 // CReporterDaemonCoreRegistry::checkDirectoryForCores
 // ----------------------------------------------------------------------------
-QString CReporterDaemonCoreRegistry::checkDirectoryForCores(const QString& path)
+QString CReporterCoreRegistry::checkDirectoryForCores(const QString& path)
 {
-	Q_D( CReporterDaemonCoreRegistry );
+	Q_D( CReporterCoreRegistry );
 
 	QString coreFilePath;
-	QListIterator<CReporterDaemonCoreDir*> iter(d->coreDirs); 
+	QListIterator<CReporterCoreDir*> iter(d->coreDirs); 
 	
 	while ( iter.hasNext() ) {
-		CReporterDaemonCoreDir* pCoreDir =  (CReporterDaemonCoreDir*) iter.next();
+		CReporterCoreDir* pCoreDir =  (CReporterCoreDir*) iter.next();
 		// Find the correct location.
 		if ( pCoreDir->getDirectory() == path ) {
 			coreFilePath = pCoreDir->checkDirectoryForCores();
@@ -193,7 +182,7 @@ QString CReporterDaemonCoreRegistry::checkDirectoryForCores(const QString& path)
 // ----------------------------------------------------------------------------
 // CReporterDaemonCoreRegistry::refreshRegistry
 // ----------------------------------------------------------------------------
-void CReporterDaemonCoreRegistry::refreshRegistry()
+void CReporterCoreRegistry::refreshRegistry()
 {
 	qDebug() << __PRETTY_FUNCTION__ << "Emit registryRefreshNeeded().";
 	emit registryRefreshNeeded();
@@ -204,7 +193,7 @@ void CReporterDaemonCoreRegistry::refreshRegistry()
 // ----------------------------------------------------------------------------
 // CReporterDaemonCoreRegistry::mmcStateChanged
 // ----------------------------------------------------------------------------
-void CReporterDaemonCoreRegistry::mmcStateChanged(const QString &key)
+void CReporterCoreRegistry::mmcStateChanged(const QString &key)
 {
     qDebug() << __PRETTY_FUNCTION__ << "Key:" << key << "has changed.";
 	QTimer::singleShot( MMC_EVENT_TIMEOUT, this, SIGNAL(coreLocationsUpdated()) );
@@ -213,9 +202,9 @@ void CReporterDaemonCoreRegistry::mmcStateChanged(const QString &key)
 // ----------------------------------------------------------------------------
 // CReporterDaemonCoreRegistry::createCoreLocationRegistry
 // ----------------------------------------------------------------------------
-void CReporterDaemonCoreRegistry::createCoreLocationRegistry()
+void CReporterCoreRegistry::createCoreLocationRegistry()
 {
-    Q_D(CReporterDaemonCoreRegistry);
+    Q_D(CReporterCoreRegistry);
     const char *name;
 
 #if defined(__arm__) && (!defined(CREPORTER_SDK_HOST) || !defined(CREPORTER_UNIT_TEST))
@@ -227,7 +216,7 @@ void CReporterDaemonCoreRegistry::createCoreLocationRegistry()
         QString mpoint(getenv(name));
 	
         if (!mpoint.isEmpty()) {
-			CReporterDaemonCoreDir* dir = new CReporterDaemonCoreDir( mpoint, this );
+			CReporterCoreDir* dir = new CReporterCoreDir( mpoint, this );
 			d->coreDirs << dir;
 		}
     }
@@ -245,7 +234,7 @@ void CReporterDaemonCoreRegistry::createCoreLocationRegistry()
             mpoint.prepend(QDir::homePath());
 #endif // defined(CREPORTER_SDK_HOST) || defined(CREPORTER_UNIT_TEST)
 
-            CReporterDaemonCoreDir* dir = new CReporterDaemonCoreDir(mpoint, this);
+            CReporterCoreDir* dir = new CReporterCoreDir(mpoint, this);
 			d->coreDirs << dir;
 		}
     }
@@ -254,7 +243,7 @@ void CReporterDaemonCoreRegistry::createCoreLocationRegistry()
 
     for (int i = 0; i < d->coreDirs.count(); i++) {
 		// Set directory for core locations.
-        CReporterDaemonCoreDir* dir = (CReporterDaemonCoreDir*) d->coreDirs.at(i);
+        CReporterCoreDir* dir = (CReporterCoreDir*) d->coreDirs.at(i);
         connect(this, SIGNAL(coreLocationsUpdated()), dir, SLOT(createCoreDirectory()));
         connect(this, SIGNAL(registryRefreshNeeded()), dir, SLOT(updateCoreList()));
 

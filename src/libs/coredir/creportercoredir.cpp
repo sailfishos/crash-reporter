@@ -33,9 +33,8 @@
 
 // User includes.
 
-#include "creporterdaemoncoredir.h"
-#include "creporterdaemoncoredir_p.h"
-#include "creporterdaemonmonitor.h"
+#include "creportercoredir.h"
+#include "creportercoredir_p.h"
 #include "creporterutils.h"
 
 // Local macros and definitions.
@@ -52,8 +51,8 @@ const char rcore_lzo_file_name_filter[] = "*.rcore.lzo";
 // ----------------------------------------------------------------------------
 // CReporterDaemonCoreDir::CReporterDaemonCoreDir
 // ----------------------------------------------------------------------------
-CReporterDaemonCoreDir::CReporterDaemonCoreDir(QString& mpoint, QObject* parent)
-    : QObject(parent), d_ptr(new CReporterDaemonCoreDirPrivate())
+CReporterCoreDir::CReporterCoreDir(QString& mpoint, QObject* parent)
+    : QObject(parent), d_ptr(new CReporterCoreDirPrivate())
 {
 	d_ptr->mountpoint = mpoint;
 	qDebug() << __PRETTY_FUNCTION__ << "Mountpoint set to:" << d_ptr->mountpoint;
@@ -62,7 +61,7 @@ CReporterDaemonCoreDir::CReporterDaemonCoreDir(QString& mpoint, QObject* parent)
 // ----------------------------------------------------------------------------
 // CReporterDaemonCoreDir::~CReporterDaemonCoreDir
 // ----------------------------------------------------------------------------
-CReporterDaemonCoreDir::~CReporterDaemonCoreDir()
+CReporterCoreDir::~CReporterCoreDir()
 {
 	delete d_ptr;
 }
@@ -70,7 +69,7 @@ CReporterDaemonCoreDir::~CReporterDaemonCoreDir()
 // ----------------------------------------------------------------------------
 // CReporterDaemonCoreDir::getDirectory
 // ----------------------------------------------------------------------------
-QString CReporterDaemonCoreDir::getDirectory() const
+QString CReporterCoreDir::getDirectory() const
 {
     return d_ptr->directory;
 }
@@ -78,7 +77,7 @@ QString CReporterDaemonCoreDir::getDirectory() const
 // ----------------------------------------------------------------------------
 // CReporterDaemonCoreDir::getMountpoint
 // ----------------------------------------------------------------------------
-QString CReporterDaemonCoreDir::getMountpoint() const
+QString CReporterCoreDir::getMountpoint() const
 {
     return d_ptr->mountpoint;
 }
@@ -86,9 +85,9 @@ QString CReporterDaemonCoreDir::getMountpoint() const
 // ----------------------------------------------------------------------------
 // CReporterDaemonCoreDir::setDirectory
 // ----------------------------------------------------------------------------
-void CReporterDaemonCoreDir::setDirectory(const QString& dir)
+void CReporterCoreDir::setDirectory(const QString& dir)
 {
-    Q_D(CReporterDaemonCoreDir);
+    Q_D(CReporterCoreDir);
 
 	d->directory = dir;
 	qDebug() << __PRETTY_FUNCTION__ << "Directory set to:" << d->directory;
@@ -97,9 +96,9 @@ void CReporterDaemonCoreDir::setDirectory(const QString& dir)
 // ----------------------------------------------------------------------------
 // CReporterDaemonCoreDir::setMountpoint
 // ----------------------------------------------------------------------------
-void CReporterDaemonCoreDir::setMountpoint(const QString& mpoint)
+void CReporterCoreDir::setMountpoint(const QString& mpoint)
 {
-    Q_D(CReporterDaemonCoreDir);
+    Q_D(CReporterCoreDir);
 
 	d->mountpoint = mpoint;
 	qDebug() << __PRETTY_FUNCTION__ << "Mountpoint set to:" << d->mountpoint;
@@ -108,9 +107,9 @@ void CReporterDaemonCoreDir::setMountpoint(const QString& mpoint)
 // ----------------------------------------------------------------------------
 // CReporterDaemonCoreDir::collectAllCoreFilesAtLocation
 // ----------------------------------------------------------------------------
-void CReporterDaemonCoreDir::collectAllCoreFilesAtLocation(QStringList& coreList)
+void CReporterCoreDir::collectAllCoreFilesAtLocation(QStringList& coreList)
 {
-    Q_D(CReporterDaemonCoreDir);
+    Q_D(CReporterCoreDir);
 
 	qDebug() << __PRETTY_FUNCTION__ << "Collecting cores from:" << d->directory;
 	
@@ -135,9 +134,9 @@ void CReporterDaemonCoreDir::collectAllCoreFilesAtLocation(QStringList& coreList
 // ----------------------------------------------------------------------------
 // CReporterDaemonCoreDir::checkDirectoryForCores
 // ----------------------------------------------------------------------------
-QString CReporterDaemonCoreDir::checkDirectoryForCores()
+QString CReporterCoreDir::checkDirectoryForCores()
 {
-    Q_D(CReporterDaemonCoreDir);
+    Q_D(CReporterCoreDir);
 
 	QFileInfo fi;
 	QString coreFilePath;
@@ -176,9 +175,9 @@ QString CReporterDaemonCoreDir::checkDirectoryForCores()
 // ----------------------------------------------------------------------------
 // CReporterDaemonCoreDir::createCoreDirectory
 // ----------------------------------------------------------------------------
-void CReporterDaemonCoreDir::createCoreDirectory()
+void CReporterCoreDir::createCoreDirectory()
 {
-    Q_D(CReporterDaemonCoreDir);
+    Q_D(CReporterCoreDir);
 
     if (CReporterUtils::isMounted(d->mountpoint))
     {
@@ -213,9 +212,9 @@ void CReporterDaemonCoreDir::createCoreDirectory()
 // ----------------------------------------------------------------------------
 // CReporterDaemonCoreDir::updateCoreList
 // ----------------------------------------------------------------------------
-void CReporterDaemonCoreDir::updateCoreList()
+void CReporterCoreDir::updateCoreList()
 {
-    Q_D(CReporterDaemonCoreDir);
+    Q_D(CReporterCoreDir);
 
 	qDebug() << __PRETTY_FUNCTION__ << "Refreshing core directory list.";
 

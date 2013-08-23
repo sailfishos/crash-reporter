@@ -8,6 +8,7 @@ TARGET = ut_creportersettingsobserver
 
 INCLUDEPATH += $$SETTINGS_SRC_DIR \
                $${CREPORTER_SRC_DIR}/libs \
+               $${CREPORTER_SRC_DIR}/coredir/libs \
 
 DEPENDPATH += $$INCLUDEPATH \
 

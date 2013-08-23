@@ -33,7 +33,7 @@
 #include <QDBusConnectionInterface>
 
 #include "ut_creporterdaemon.h"
-#include "creporterdaemoncoreregistry.h"
+#include "creportercoreregistry.h"
 #include "creportertestutils.h"
 #include "creporterdaemon.h"
 #include "creporterdaemon_p.h"

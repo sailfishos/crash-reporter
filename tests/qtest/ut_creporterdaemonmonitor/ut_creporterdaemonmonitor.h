@@ -32,7 +32,7 @@
 #include <QDBusMessage>
 
 class CReporterDaemonMonitor;
-class CReporterDaemonCoreRegistry;
+class CReporterCoreRegistry;
 
 class TestDialogServer : public QObject
 {
@@ -79,7 +79,7 @@ private:
 
     QStringList *paths;
     CReporterDaemonMonitor *monitor;
-    CReporterDaemonCoreRegistry *registry;
+    CReporterCoreRegistry *registry;
     TestDialogServer *testDialogServer;
 };
 

@@ -3,9 +3,9 @@ TEMPLATE = subdirs
 SUBDIRS =  ut_creporterdaemonmonitor \
           ut_creporterdaemon \
           ut_creporterdaemonproxy \
-          ut_creporterdaemoncoreregistry \
+          ut_creportercoreregistry \
           ut_creportersettingsobserver \
-          ut_creporterdaemoncoredir \
+          ut_creportercoredir \
           ut_creporterutils \
           ut_creporternwsessionmgr \
           ut_creporteruploaditem \

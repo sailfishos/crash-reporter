@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef CREPORTERDAEMONCOREREGISTRY_H
-#define CREPORTERDAEMONCOREREGISTRY_H
+#ifndef CREPORTERCOREREGISTRY_H
+#define CREPORTERCOREREGISTRY_H
 
 // System includes
 
@@ -32,15 +32,15 @@
 
 // Forward declarations
 
-class CReporterDaemonCoreRegistryPrivate;
+class CReporterCoreRegistryPrivate;
 
 /*!
- * @class CReporterDaemonCoreRegistry
- * @brief This class is a parent proxy class CReporterDaemonCoreDir instances.
+ * @class CReporterCoreRegistry
+ * @brief This class is a parent proxy class CReporterCoreDir instances.
  *
- * @sa CReporterDaemonCoreDir
+ * @sa CReporterCoreDir
  */
-class CReporterDaemonCoreRegistry : public QObject 
+class CReporterCoreRegistry : public QObject 
 {
 	Q_OBJECT
 		
@@ -50,13 +50,13 @@ public:
      * @brief Class constructor.
 	 *
 	 */
-	CReporterDaemonCoreRegistry();
+	CReporterCoreRegistry();
 	
 	/*!
      * @brief Class destructor.
 	 *
 	 */
-	~CReporterDaemonCoreRegistry();
+	~CReporterCoreRegistry();
 
 	 /*!
      * @brief This function searches for core dump files from directories and appends
@@ -87,7 +87,7 @@ public:
 public Q_SLOTS:
 	/*!
       * @brief Parent can call this to refresh internal core file lists of
-	  * CReporterDaemonCoreDir instances. Typically called, when monitoring
+	  * CReporterCoreDir instances. Typically called, when monitoring
 	  * is activated and file lists needs to updated.
 	  */
 	void refreshRegistry();
@@ -119,21 +119,21 @@ private Q_SLOTS:
 
 private:
     /*!
-      * @brief Iniates registry and instantiates CReporterDaemonCoreDir objects.
+      * @brief Iniates registry and instantiates CReporterCoreDir objects.
       *
       */
 	void createCoreLocationRegistry();
 	
 private: // data
 		
-    Q_DECLARE_PRIVATE(CReporterDaemonCoreRegistry)
+    Q_DECLARE_PRIVATE(CReporterCoreRegistry)
     //! @arg Pointer to private data class.
-    CReporterDaemonCoreRegistryPrivate *d_ptr;
+    CReporterCoreRegistryPrivate *d_ptr;
 
 #ifdef CREPORTER_UNIT_TEST
-	friend class Ut_CReporterDaemonCoreRegistry;
+	friend class Ut_CReporterCoreRegistry;
 #endif
 
 };
 
-#endif /* CREPORTERDAEMONCOREREGISTRY_H */
+#endif /* CREPORTERCOREREGISTRY_H */

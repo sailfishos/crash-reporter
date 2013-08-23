@@ -30,10 +30,9 @@
 #include <QDBusConnectionInterface>
 
 #include "ut_creporterdaemonmonitor.h"
-#include "creporterdaemoncoreregistry.h"
+#include "creportercoreregistry.h"
 #include "creportertestutils.h"
 #include "creporterdaemonmonitor.h"
-#include "creporterdaemoncoreregistry.h"
 #include "creporternamespace.h"
 #include "creporterdialogserverdbusadaptor.h"
 #include "creporterdaemonmonitor_p.h"
@@ -125,7 +124,7 @@ void Ut_CReporterDaemonMonitor::init()
     notificationUpdated = false;
     serviceRegisteredReply = true;
 
-    registry = new CReporterDaemonCoreRegistry();
+    registry = new CReporterCoreRegistry();
     paths = registry->getCoreLocationPaths();
 
     testDialogServer = new TestDialogServer();

@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef CREPORTERDAEMONCOREDIR_H
-#define CREPORTERDAEMONCOREDIR_H
+#ifndef CREPORTERCOREDIR_H
+#define CREPORTERCOREDIR_H
 
 // System includes
 
@@ -32,18 +32,18 @@
 
 // Forward declarations.
 
-class CReporterDaemonCoreDirPrivate;
+class CReporterCoreDirPrivate;
 
 /*!
- * @class CReporterDaemonCoreDir
+ * @class CReporterCoreDir
  * @brief This class implements properties and methods for handling
  * core-dumps directory.
  * 
- * This class is instantiated by the CReporterDaemonCoreRegistry,
+ * This class is instantiated by the CReporterCoreRegistry,
  * when daemon process starts. Class provides methods for iterating directory for cores
  * and preserves a list of core files in the directory.
  */
-class CReporterDaemonCoreDir : public QObject
+class CReporterCoreDir : public QObject
 {
 	Q_OBJECT
 
@@ -55,13 +55,13 @@ public:
      * @param mpoint Core location mount point.
      * @param parent Owner of this object (default= 0).
 	 */
-	CReporterDaemonCoreDir( QString& mpoint, QObject *parent = 0 );
+	CReporterCoreDir( QString& mpoint, QObject *parent = 0 );
 
 	/*! 
      * @brief Class destructor.
 	 *
 	 */
-	~CReporterDaemonCoreDir();
+	~CReporterCoreDir();
 
 	/*!
      * @brief Return core dumps directory path.
@@ -121,14 +121,14 @@ public Q_SLOTS:
 	
 private: // data
 
-	Q_DECLARE_PRIVATE( CReporterDaemonCoreDir )
+	Q_DECLARE_PRIVATE(CReporterCoreDir)
     //! Pointer to the private class data.
-    CReporterDaemonCoreDirPrivate *d_ptr;
+    CReporterCoreDirPrivate *d_ptr;
 #ifdef CREPORTER_UNIT_TEST
-    friend class Ut_CReporterDaemonCoreDir;
+    friend class Ut_CReporterCoreDir;
 #endif // CREPORTER_UNIT_TEST
 };
 
-#endif // CREPORTERDAEMONCOREDIR_H
+#endif // CREPORTERCOREDIR_H
 
 // End of file

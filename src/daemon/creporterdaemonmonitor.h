@@ -32,7 +32,7 @@
 
 // Forward declarations.
 
-class CReporterDaemonCoreRegistry;
+class CReporterCoreRegistry;
 class CReporterDaemonMonitorPrivate;
 
 /*!
@@ -52,11 +52,11 @@ class CReporterDaemonMonitor : public QObject
         /*!
          * @brief Class constructor.
          *
-         * @param reg Pointer to CReporterDaemonCoreRegistry instance.
+         * @param reg Pointer to CReporterCoreRegistry instance.
          *
-         * @sa CReporterDaemonCoreRegistry
+         * @sa CReporterCoreRegistry
          */
-        CReporterDaemonMonitor(CReporterDaemonCoreRegistry *reg);
+        CReporterDaemonMonitor(CReporterCoreRegistry *reg);
 
         /*!
          * @brief Class destructor.

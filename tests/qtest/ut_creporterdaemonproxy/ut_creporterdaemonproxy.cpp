@@ -29,7 +29,7 @@
 #include <QDBusPendingReply>
 
 #include "ut_creporterdaemonproxy.h"
-#include "creporterdaemoncoreregistry.h"
+#include "creportercoreregistry.h"
 #include "creportertestutils.h"
 #include "creporterdaemon.h"
 #include "creporterdaemon_p.h"

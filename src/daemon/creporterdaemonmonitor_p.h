@@ -33,7 +33,7 @@
 
 // Forward declarations.
 
-class CReporterDaemonCoreRegistry;
+class CReporterCoreRegistry;
 class CReporterDaemonMonitor;
 
 /*!
@@ -152,7 +152,7 @@ class CReporterDaemonMonitorPrivate : public QObject
 
     public:
         //! @arg Pointer to the registry instance.
-        CReporterDaemonCoreRegistry *registry;
+        CReporterCoreRegistry *registry;
         //! @arg For monitoring directories.
         QFileSystemWatcher watcher;
         //! @arg Watcher for monitoring the return of an unmounted directory for when core-dumps dir has disappeared because of USB mass storage mode

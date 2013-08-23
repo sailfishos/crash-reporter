@@ -22,15 +22,15 @@
  *
  */
 
-#ifndef UT_CREPORTERDAEMONCOREREGISTRY_H
-#define UT_CREPORTERDAEMONCOREREGISTRY_H
+#ifndef UT_CREPORTERCOREREGISTRY_H
+#define UT_CREPORTERCOREREGISTRY_H
 
 #include <QTest>
 #include <QStringList>
 
-class CReporterDaemonCoreRegistry;
+class CReporterCoreRegistry;
 
-class Ut_CReporterDaemonCoreRegistry : public QObject
+class Ut_CReporterCoreRegistry : public QObject
 {
 	Q_OBJECT
 
@@ -48,7 +48,7 @@ private slots:
 private:
 
 	QStringList* paths;	
-	CReporterDaemonCoreRegistry* registry;
+	CReporterCoreRegistry* registry;
 };
 
-#endif /* UT_CREPORTERDAEMONCOREREGISTRY_H */
+#endif /* UT_CREPORTERCOREREGISTRY_H */

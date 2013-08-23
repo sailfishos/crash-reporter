@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef CREPORTERDAEMONCOREREGISTRY_P_H
-#define CREPORTERDAEMONCOREREGISTRY_P_H
+#ifndef CREPORTERCOREREGISTRY_P_H
+#define CREPORTERCOREREGISTRY_P_H
 
 // System includes.
 
@@ -31,37 +31,37 @@
 
 // Forward declarations
 
-class CReporterDaemonCoreDir;
+class CReporterCoreDir;
 class QSignalMapper;
 
 /*!
- * \class CReporterDaemonCoreRegistry
- * \brief Private CReporterDaemonCoreRegistry class.
+ * \class CReporterCoreRegistry
+ * \brief Private CReporterCoreRegistry class.
  *
- * \sa CReporterDaemonCoreRegistry
+ * \sa CReporterCoreRegistry
  */
-class CReporterDaemonCoreRegistryPrivate
+class CReporterCoreRegistryPrivate
 {
     public:
         /*!
           * @brief Class constructor.
           *
           */
-        CReporterDaemonCoreRegistryPrivate();
+        CReporterCoreRegistryPrivate();
 
         /*!
           * @brief Class destructor.
           *
           */
-        virtual ~CReporterDaemonCoreRegistryPrivate();
+        virtual ~CReporterCoreRegistryPrivate();
 
     public:
         //! @arg Signal mapper to map gconf value changes.
         QSignalMapper *mapper;
-        //! @arg List of CReporterDaemonCoreDir instances.
-        QList<CReporterDaemonCoreDir*> coreDirs;
+        //! @arg List of CReporterCoreDir instances.
+        QList<CReporterCoreDir*> coreDirs;
 };
 
-#endif // CREPORTERDAEMONCOREREGISTRY_P_H
+#endif // CREPORTERCOREREGISTRY_P_H
 
 // End of file.

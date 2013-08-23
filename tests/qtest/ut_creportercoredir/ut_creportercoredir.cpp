@@ -27,29 +27,29 @@
 #include <QFile>
 #include <QDir>
 
-#include "ut_creporterdaemoncoredir.h"
-#include "creporterdaemoncoredir.h"
-#include "creporterdaemoncoredir_p.h"
+#include "ut_creportercoredir.h"
+#include "creportercoredir.h"
+#include "creportercoredir_p.h"
 #include "creportertestutils.h"
 
 QString testMountPoint1("/tmp/crash-reporter-tests/media/mmc1");
 QString testMountPoint2("/tmp/crash-reporter-tests/media/mmc2");
 
-void Ut_CReporterDaemonCoreDir::initTestCase()
+void Ut_CReporterCoreDir::initTestCase()
 {
 
 }
 
-void Ut_CReporterDaemonCoreDir::init()
+void Ut_CReporterCoreDir::init()
 {
     QString mkDir = QString("mkdir -p -m 777 %1 %2").arg(testMountPoint1).arg(testMountPoint2);
     system(mkDir.toLatin1());
 }
 
-void Ut_CReporterDaemonCoreDir::testCreationOfDirectoryForCores()
+void Ut_CReporterCoreDir::testCreationOfDirectoryForCores()
 {
     // Set and verify mountpoint.
-    dir = new CReporterDaemonCoreDir(testMountPoint1);
+    dir = new CReporterCoreDir(testMountPoint1);
     QVERIFY(dir->getMountpoint() == testMountPoint1);
 
     // Set and verify directory.
@@ -61,9 +61,9 @@ void Ut_CReporterDaemonCoreDir::testCreationOfDirectoryForCores()
     QVERIFY(dir->getDirectory() == compareDirectory);
 }
 
-void Ut_CReporterDaemonCoreDir::testCollectingCrashReportsFromDirectory()
+void Ut_CReporterCoreDir::testCollectingCrashReportsFromDirectory()
 {
-    dir = new CReporterDaemonCoreDir(testMountPoint2);
+    dir = new CReporterCoreDir(testMountPoint2);
 
     QString coreDirectory = QString(testMountPoint2);
     coreDirectory.append("/core-dumps");
@@ -93,9 +93,9 @@ void Ut_CReporterDaemonCoreDir::testCollectingCrashReportsFromDirectory()
     QCOMPARE(files.count(), 2);
 }
 
-void Ut_CReporterDaemonCoreDir::testCheckDirectoryForNewCrashReport()
+void Ut_CReporterCoreDir::testCheckDirectoryForNewCrashReport()
 {
-     dir = new CReporterDaemonCoreDir(testMountPoint2);
+     dir = new CReporterCoreDir(testMountPoint2);
 
     QString coreDirectory = QString(testMountPoint2);
     coreDirectory.append("/core-dumps");
@@ -113,14 +113,14 @@ void Ut_CReporterDaemonCoreDir::testCheckDirectoryForNewCrashReport()
     QVERIFY(newFile == coreDirectory.append("/rich-core-application.rcore.lzo"));
 }
 
-void Ut_CReporterDaemonCoreDir::cleanupTestCase()
+void Ut_CReporterCoreDir::cleanupTestCase()
 {
     QDir::setCurrent(QDir::homePath());
     QString rm = QString("rm -r -f /tmp/crash-reporter-tests");
     system(rm.toLatin1());
 }
 
-void Ut_CReporterDaemonCoreDir::cleanup()
+void Ut_CReporterCoreDir::cleanup()
 {
     QDir::setCurrent(QDir::homePath());
     QString rm = QString("rm -r -f %1 %2").arg(testMountPoint1).arg(testMountPoint2);
@@ -132,4 +132,4 @@ void Ut_CReporterDaemonCoreDir::cleanup()
     }
 }
 
-QTEST_MAIN(Ut_CReporterDaemonCoreDir)
+QTEST_MAIN(Ut_CReporterCoreDir)

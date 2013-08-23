@@ -30,25 +30,25 @@
 #include <MGConfItem>
 #include <QMap>
 
-#include "creporterdaemoncoreregistry.h"
-#include "creporterdaemoncoreregistry_p.h"
+#include "creportercoreregistry.h"
+#include "creportercoreregistry_p.h"
 #include "creportertestutils.h"
-#include "ut_creporterdaemoncoreregistry.h"
+#include "ut_creportercoreregistry.h"
 
 extern QMap<QString, MGConfItem*> gMGConfItems;
 
-void Ut_CReporterDaemonCoreRegistry::initTestCase()
+void Ut_CReporterCoreRegistry::initTestCase()
 {
 	CReporterTestUtils::createTestMountpoints();
 }
 
-void Ut_CReporterDaemonCoreRegistry::init()
+void Ut_CReporterCoreRegistry::init()
 {
-	registry = new CReporterDaemonCoreRegistry();
+	registry = new CReporterCoreRegistry();
 	paths = registry->getCoreLocationPaths();
 }
 
-void Ut_CReporterDaemonCoreRegistry::testRegistryRefreshNeededEmission()
+void Ut_CReporterCoreRegistry::testRegistryRefreshNeededEmission()
 {	
 	QSignalSpy registryRefreshNeededSpy( registry,
 			SIGNAL(registryRefreshNeeded()) );
@@ -58,7 +58,7 @@ void Ut_CReporterDaemonCoreRegistry::testRegistryRefreshNeededEmission()
 	QCOMPARE( registryRefreshNeededSpy.count(), 1 );
 }
 
-void Ut_CReporterDaemonCoreRegistry::testCoreLocationsUpdatedEmission()
+void Ut_CReporterCoreRegistry::testCoreLocationsUpdatedEmission()
 {
     QSignalSpy coreLocationsUpdatedSpy(registry,
             SIGNAL(coreLocationsUpdated()));
@@ -70,12 +70,12 @@ void Ut_CReporterDaemonCoreRegistry::testCoreLocationsUpdatedEmission()
 	QCOMPARE( coreLocationsUpdatedSpy.count(), 1 );
 }
 
-void Ut_CReporterDaemonCoreRegistry::cleanupTestCase()
+void Ut_CReporterCoreRegistry::cleanupTestCase()
 {
     CReporterTestUtils::removeTestMountpoints();
 }
 
-void Ut_CReporterDaemonCoreRegistry::cleanup()
+void Ut_CReporterCoreRegistry::cleanup()
 {	
 	CReporterTestUtils::removeDirectories( *paths );
 
@@ -86,5 +86,5 @@ void Ut_CReporterDaemonCoreRegistry::cleanup()
 	paths = NULL;
 }
 
-QTEST_MAIN(Ut_CReporterDaemonCoreRegistry)
+QTEST_MAIN(Ut_CReporterCoreRegistry)
 

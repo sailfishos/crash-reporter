@@ -33,7 +33,7 @@
 #include "creporterdaemon_p.h"
 #include "creporterdaemonadaptor.h"
 #include "creporterdaemonmonitor.h"
-#include "creporterdaemoncoreregistry.h"
+#include "creportercoreregistry.h"
 #include "creporterutils.h"
 #include "creportersettingsobserver.h"
 #include "creporternamespace.h"
@@ -58,7 +58,7 @@ CReporterDaemon::CReporterDaemon() :
     d->lifelogUpdateCount = 0;
 
     // Create registry instance preserving core locations.
-    d->registry = new CReporterDaemonCoreRegistry();
+    d->registry = new CReporterCoreRegistry();
     Q_CHECK_PTR(d->registry);
 
     // Adaptor class is deleted automatically, when the class, it is

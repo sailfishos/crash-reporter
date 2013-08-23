@@ -22,20 +22,20 @@
  *
  */
 
-#ifndef CREPORTERDAEMONCOREDIR_P_H
-#define CREPORTERDAEMONCOREDIR_P_H
+#ifndef CREPORTERCOREDIR_P_H
+#define CREPORTERCOREDIR_P_H
 
 // System includes
 
 #include <QStringList>
 
 /*!
- * \class CReporterDaemonCoreDirPrivate
- * \brief Private CReporterDaemonCoreDir class.
+ * \class CReporterCoreDirPrivate
+ * \brief Private CReporterCoreDir class.
  *
- * \sa CReporterDaemonCoreDir
+ * \sa CReporterCoreDir
  */
-class CReporterDaemonCoreDirPrivate
+class CReporterCoreDirPrivate
 {
 public:
     //! @arg Absolute path to the core-dumps directory.
@@ -46,4 +46,4 @@ public:
     QStringList coresAtDirectory;
 };
 
-#endif // CREPORTERDAEMONCOREDIR_P_H
+#endif // CREPORTERCOREDIR_P_H

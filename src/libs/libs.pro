@@ -56,7 +56,9 @@ INCLUDEPATH += . \
 
 DEPENDPATH = $$INCLUDEPATH
 
-SOURCES += httpclient/creporterhttpclient.cpp \
+SOURCES += coredir/creportercoredir.cpp \
+           coredir/creportercoreregistry.cpp \
+           httpclient/creporterhttpclient.cpp \
             httpclient/creporteruploaditem.cpp \
             httpclient/creporteruploadqueue.cpp \
             httpclient/creporteruploadengine.cpp \
@@ -74,6 +76,8 @@ SOURCES += httpclient/creporterhttpclient.cpp \
 
 # Public headers
 PUBLIC_HEADERS += creporternamespace.h \
+                  coredir/creportercoredir.h \
+                  coredir/creportercoreregistry.h \
                   httpclient/creporterhttpclient.h \
                   httpclient/creporteruploaditem.h \
                   httpclient/creporteruploadqueue.h \
@@ -95,6 +99,8 @@ PUBLIC_HEADERS += creporternamespace.h \
 
 # Local headers
 HEADERS += $$PUBLIC_HEADERS \
+           coredir/creportercoredir_p.h \
+           coredir/creportercoreregistry_p.h \
             httpclient/creporterhttpclient_p.h \
             httpclient/creporteruploadengine_p.h \
             settings/creportersettingsbase_p.h \
