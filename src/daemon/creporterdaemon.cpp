@@ -371,27 +371,27 @@ void CReporterDaemon::setLifelogEnabled(bool enabled)
 // ----------------------------------------------------------------------------
 
 const QString LL_ID_GEN_CMD = "echo LL_ID_GEN "
-    "sn=`/usr/bin/sysinfoclient -g /device/production-sn | /usr/bin/awk 'BEGIN {FS=\" \"} {print $3}'`,"
-    "hw=`/usr/bin/sysinfoclient -g /device/hw-version | /usr/bin/awk 'BEGIN {FS=\" \"} {print $3}'`,"
-    "sw=`/usr/bin/sysinfoclient -g /device/sw-release-ver | /usr/bin/awk 'BEGIN {FS=\" \"} {print $3}'`,"
-    "wlanmac=`/sbin/ifconfig wlan0 | /usr/bin/awk 'BEGIN {FS=\" \"} {print $5; exit;}'`,";
+    "sn=`/usr/bin/sysinfoclient -g /device/production-sn | /usr/bin/awk 'BEGIN {FS=\" \"} {print $3}'`\\;"
+    "hw=`ssu mo | sed 's/^Device model is: //'`\\;"
+    "sw=`sed -n 's/PRETTY_NAME=\"\\(.*\\)\"/\\1/p' /etc/os-release`\\;"
+    "wlanmac=`ip link show wlan0 | tail -n 1 | awk '{print $2}'`";
 
 const QString LL_ID_CELL_CMD = "echo LL_ID_CELL "
-    "imei=`/usr/bin/dbus-send --system --print-reply --dest=com.nokia.csd.Info /com/nokia/csd/info com.nokia.csd.Info.GetIMEINumber | /usr/bin/tail -n +2 | /usr/bin/awk '{print $2}'`,"
-    "imsi=`/usr/bin/dbus-send --system --print-reply --dest=com.nokia.phone.SSC /com/nokia/phone/SSC com.nokia.phone.SSC.get_imsi | /usr/bin/tail -n +2 | /usr/bin/awk '{print $2}'`,"
-    "cellmosw=`/usr/bin/dbus-send --system --print-reply --dest=com.nokia.csd.Info /com/nokia/csd/info com.nokia.csd.Info.GetMCUSWVersion | /usr/bin/tail -n +2`,";
+    "imei=`ssu s | grep 'Device UID' | awk '{print $3}'`\\;"
+    "imsi=`/usr/bin/dbus-send --system --print-reply --dest=com.nokia.phone.SSC /com/nokia/phone/SSC com.nokia.phone.SSC.get_imsi | /usr/bin/tail -n +2 | /usr/bin/awk '{print $2}'`\\;"
+    "cellmosw=`/usr/bin/dbus-send --system --print-reply --dest=com.nokia.csd.Info /com/nokia/csd/info com.nokia.csd.Info.GetMCUSWVersion | /usr/bin/tail -n +2`";
 
 const QString LL_TICK_CMD = "echo LL_TICK "
-    "date=`/bin/date +%s`,"
-    "`lshal | /usr/bin/awk '/battery.charge_level.percentage/{print \"batt_perc=\" $3}/battery.rechargeable.is_charging/{print \", charging=\" $3; exit;}'`,"
-    "uptime=`/bin/cat /proc/uptime`,loadavg=`/usr/bin/awk '{print $3,$4,$5}' /proc/loadavg`,"
-    "memfree=`/usr/bin/awk '/MemFree:/{print $2}' /proc/meminfo`,";
+    "date=`/bin/date +%s`\\;"
+    "`upower -i /org/freedesktop/UPower/devices/battery_battery | awk '/percentage:/{printf \"batt_perc=%s;\",$2}/state:/{printf \"state=%s;\",$2}'`"
+    "uptime=`/bin/cat /proc/uptime`\\;loadavg=`/usr/bin/awk '{print $3,$4,$5}' /proc/loadavg`\\;"
+    "memfree=`/usr/bin/awk '/MemFree:/{print $2}' /proc/meminfo`";
 
 const QString LL_CELL_CMD = "echo LL_CELL "
-    "date=`/bin/date +%s`,"
-    "ssc=`/usr/bin/dbus-send --system --print-reply --dest=com.nokia.phone.SSC /com/nokia/phone/SSC com.nokia.phone.SSC.get_modem_state | /usr/bin/tail -n +2 | /usr/bin/awk '{print $2}'`,"
-    "gprs-status=`/usr/bin/dbus-send --system --print-reply --dest=com.nokia.csd.GPRS /com/nokia/csd/gprs com.nokia.csd.GPRS.GetStatus | /usr/bin/tail -n +2 | /usr/bin/awk '$1~/string|boolean|uint64/ {print $2}'`,"
-    "gprs-serv-status=`/usr/bin/dbus-send --print-reply --system --dest=com.nokia.csd.GPRS /com/nokia/csd/gprs org.freedesktop.DBus.Properties.GetAll string: | /usr/bin/tail -n +2 | /usr/bin/awk '$2~/boolean|uint64/{print $3}'`,";
+    "date=`/bin/date +%s`\\;"
+    "ssc=`/usr/bin/dbus-send --system --print-reply --dest=com.nokia.phone.SSC /com/nokia/phone/SSC com.nokia.phone.SSC.get_modem_state | /usr/bin/tail -n +2 | /usr/bin/awk '{print $2}'`\\;"
+    "gprs-status=`/usr/bin/dbus-send --system --print-reply --dest=com.nokia.csd.GPRS /com/nokia/csd/gprs com.nokia.csd.GPRS.GetStatus | /usr/bin/tail -n +2 | /usr/bin/awk '$1~/string|boolean|uint64/ {print $2}'`\\;"
+    "gprs-serv-status=`/usr/bin/dbus-send --print-reply --system --dest=com.nokia.csd.GPRS /com/nokia/csd/gprs org.freedesktop.DBus.Properties.GetAll string: | /usr/bin/tail -n +2 | /usr/bin/awk '$2~/boolean|uint64/{print $3}'`";
 
 // ----------------------------------------------------------------------------
 //  CReporterDaemon::updateLifelog
@@ -429,7 +429,7 @@ void CReporterDaemon::updateLifelog()
             QString firstLine = lifelogFile.readLine();
             lifelogFile.close();
             int serialStart = firstLine.indexOf('=')+1;
-            QString serialNumber = firstLine.mid(serialStart, firstLine.indexOf(',')-serialStart);
+            QString serialNumber = firstLine.mid(serialStart, firstLine.indexOf(';')-serialStart);
             QString destFilePath = corePaths.first() + "/"
                 + QString("%1-%2-%3-%4.rcore.lzo").arg(CReporter::LifelogPackagePrefix,
                                                     QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss"),
