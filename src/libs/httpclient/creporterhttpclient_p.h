@@ -38,6 +38,7 @@
 
 // Forward declarations.
 
+class CReporterCoreRegistry;
 class QNetworkAccessManager;
 class QAuthenticator;
 class QAuthenticator;
@@ -168,6 +169,17 @@ class CReporterHttpClientPrivate : public QObject
          * @param dataToSend Data array to send.
          */
         bool createPutRequest(QNetworkRequest &request, QByteArray &dataToSend);
+
+        /*!
+         * @brief Reads server reply and save submission URL into a log file.
+         */
+        void parseReply();
+
+        /*!
+         * @return Registry of filesystem directories where core files
+         *         are stored.
+         */
+        static CReporterCoreRegistry& coreRegistry();
 
 	public:
         //! @arg QNetworkAccessManager object.

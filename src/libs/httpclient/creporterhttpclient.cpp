@@ -27,9 +27,9 @@
 
 // System includes.
 
-#include <QNetworkAccessManager>
 #include <QAuthenticator>
-#include <QList>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QNetworkReply>
 #include <QDebug>
 #include <QFile>
@@ -43,6 +43,7 @@
 
 // User includes.
 
+#include "creportercoreregistry.h"
 #include "creporterhttpclient.h"
 #include "creporterhttpclient_p.h"
 #include "creporterapplicationsettings.h"
@@ -249,6 +250,49 @@ void CReporterHttpClientPrivate::handleError(QNetworkReply::NetworkError error)
 	}
 }
 
+void CReporterHttpClientPrivate::parseReply()
+{
+    if (!m_reply) {
+        qDebug() << "Server reply is NULL";
+        return;
+    }
+
+    if (!m_reply->open(QIODevice::ReadOnly)) {
+        qDebug() << "Couldn't open server reply for reading.";
+        return;
+    }
+
+    QJsonDocument reply = QJsonDocument::fromJson(m_reply->readAll());
+    if (reply.isNull() || !reply.isObject()) {
+        qDebug() << "Error parsing JSON server reply.";
+        return;
+    }
+
+    QJsonObject json = reply.object();
+    int submissionId = static_cast<int>(json.value("submission_id").toDouble(0));
+    if (submissionId == 0) {
+        qDebug() << "Failed to parse submission id from JSON.";
+        return;
+    }
+
+    QUrl submissionUrl(CReporterApplicationSettings::instance()->serverUrl());
+    submissionUrl.setPort(CReporterApplicationSettings::instance()->serverPort());
+    submissionUrl.setPath("/");
+    submissionUrl.setFragment(QString("submissions/%1").arg(submissionId));
+
+    QString corePath(coreRegistry().getCoreLocationPaths()->first());
+    QFile uploadlog(corePath + "/uploadlog");
+    if (!uploadlog.open(QIODevice::WriteOnly | QIODevice::Append)) {
+        qDebug() << "Couldn't open uploadlog for writing.";
+        return;
+    }
+
+    QTextStream stream(&uploadlog);
+    stream << m_currentFile.fileName() << ' ' << submissionUrl.toString() << '\n';
+
+    uploadlog.close();
+}
+
 // ----------------------------------------------------------------------------
 // CReporterHttpClientPrivate::handleFinished
 // ----------------------------------------------------------------------------
@@ -256,9 +300,14 @@ void CReporterHttpClientPrivate::handleFinished()
 {
     qDebug() << __PRETTY_FUNCTION__ << "Uploading file:" << m_currentFile.fileName() << "finished.";
 
-    if (!m_httpError && m_deleteFileFlag && !m_userAborted) {
-		// Remove file, if upload was successfull and delete was requested.
-        CReporterUtils::removeFile(m_currentFile.absoluteFilePath());
+    if (!m_httpError && !m_userAborted) {
+        // Upload was successful.
+        parseReply();
+
+        if (m_deleteFileFlag) {
+            // Remove file if delete was requested.
+            CReporterUtils::removeFile(m_currentFile.absoluteFilePath());
+        }
 	}
 
     // QNetworkreply objects are owned by QNetworkAccessManager and deleted along with it.
@@ -322,6 +371,15 @@ bool CReporterHttpClientPrivate::createPutRequest(QNetworkRequest &request,
     request.setHeader(QNetworkRequest::ContentLengthHeader, dataToSend.size());
 
     return true;
+}
+
+CReporterCoreRegistry& CReporterHttpClientPrivate::coreRegistry()
+{
+    static CReporterCoreRegistry *registry = 0;
+    if (!registry) {
+        registry = new CReporterCoreRegistry();
+    }
+    return *registry;
 }
 
 // ******** Class CReporterHttpClient ********

@@ -50,6 +50,7 @@ DESTDIR = ../../lib
 !exists(../../lib):system(mkdir -p $$DESTDIR)
 
 INCLUDEPATH += . \
+               coredir \
                serviceif \
                utils \
                settings \
