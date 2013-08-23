@@ -100,9 +100,6 @@ CReporterCoreRegistry::CReporterCoreRegistry() :
     // Cache keys under /system/osso/af and map state change signals to single slot.
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemonCoreRegistry::~CReporterDaemonCoreRegistry
-// ----------------------------------------------------------------------------
 CReporterCoreRegistry::~CReporterCoreRegistry()
 {
     Q_D(CReporterCoreRegistry);
@@ -115,9 +112,6 @@ CReporterCoreRegistry::~CReporterCoreRegistry()
 	delete d_ptr;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemonCoreRegistry::collectAllCoreFiles
-// ----------------------------------------------------------------------------
 QStringList CReporterCoreRegistry::collectAllCoreFiles()
 {
     Q_D(CReporterCoreRegistry);
@@ -132,9 +126,6 @@ QStringList CReporterCoreRegistry::collectAllCoreFiles()
     return out;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemonCoreRegistry::getCoreLocationPaths
-// ----------------------------------------------------------------------------
 QStringList* CReporterCoreRegistry::getCoreLocationPaths()
 {
 	Q_D( CReporterCoreRegistry );
@@ -159,9 +150,6 @@ QStringList* CReporterCoreRegistry::getCoreLocationPaths()
 	return paths;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemonCoreRegistry::checkDirectoryForCores
-// ----------------------------------------------------------------------------
 QString CReporterCoreRegistry::checkDirectoryForCores(const QString& path)
 {
 	Q_D( CReporterCoreRegistry );
@@ -179,9 +167,6 @@ QString CReporterCoreRegistry::checkDirectoryForCores(const QString& path)
 	return coreFilePath;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemonCoreRegistry::refreshRegistry
-// ----------------------------------------------------------------------------
 void CReporterCoreRegistry::refreshRegistry()
 {
 	qDebug() << __PRETTY_FUNCTION__ << "Emit registryRefreshNeeded().";
@@ -190,18 +175,12 @@ void CReporterCoreRegistry::refreshRegistry()
 
 // ======== LOCAL FUNCTIONS ========
 
-// ----------------------------------------------------------------------------
-// CReporterDaemonCoreRegistry::mmcStateChanged
-// ----------------------------------------------------------------------------
 void CReporterCoreRegistry::mmcStateChanged(const QString &key)
 {
     qDebug() << __PRETTY_FUNCTION__ << "Key:" << key << "has changed.";
 	QTimer::singleShot( MMC_EVENT_TIMEOUT, this, SIGNAL(coreLocationsUpdated()) );
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemonCoreRegistry::createCoreLocationRegistry
-// ----------------------------------------------------------------------------
 void CReporterCoreRegistry::createCoreLocationRegistry()
 {
     Q_D(CReporterCoreRegistry);
