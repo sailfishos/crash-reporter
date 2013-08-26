@@ -396,9 +396,24 @@ const char *LL_CELL_CMD = "echo LL_CELL "
     "gprs-status=`/usr/bin/dbus-send --system --print-reply --dest=com.nokia.csd.GPRS /com/nokia/csd/gprs com.nokia.csd.GPRS.GetStatus | /usr/bin/tail -n +2 | /usr/bin/awk '$1~/string|boolean|uint64/ {print $2}'`\\;"
     "gprs-serv-status=`/usr/bin/dbus-send --print-reply --system --dest=com.nokia.csd.GPRS /com/nokia/csd/gprs org.freedesktop.DBus.Properties.GetAll string: | /usr/bin/tail -n +2 | /usr/bin/awk '$2~/boolean|uint64/{print $3}'`";
 
+const char *LL_DF_CMD = "echo -e \"LL_DF\\n\""
+    "\"`df`\\n\""
+    "LL_DF_END";
+
+const char *LL_MEMINFO_CMD = "echo -e \"LL_MEMINFO\\n\""
+    "\"`cat /proc/meminfo`\\n\""
+    "LL_MEMINFO_END";
+
+const char *LL_INT_CMD = "echo -e \"LL_INT\\n\""
+    "\"`cat /proc/interrupts`\\n\""
+    "LL_INT_END";
+
 const char *LL_PERIODIC_COMMANDS[] = {
     "TICK", LL_TICK_CMD,
     "CELL", LL_CELL_CMD,
+    "DF", LL_DF_CMD,
+    "MEMINFO", LL_MEMINFO_CMD,
+    "INT", LL_INT_CMD,
     NULL
 };
 
