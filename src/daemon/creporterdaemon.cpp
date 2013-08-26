@@ -381,7 +381,7 @@ const char *LL_ID_GEN_CMD = "echo LL_ID_GEN "
 
 const char *LL_ID_CELL_CMD = "echo LL_ID_CELL "
     "imei=`ssu s | grep 'Device UID' | awk '{print $3}'`\\;"
-    "imsi=`/usr/bin/dbus-send --system --print-reply --dest=com.nokia.phone.SSC /com/nokia/phone/SSC com.nokia.phone.SSC.get_imsi | /usr/bin/tail -n +2 | /usr/bin/awk '{print $2}'`\\;"
+    "imsi=`dbus-send --system --print-reply --dest=org.ofono /ril_0 org.ofono.SimManager.GetProperties | sed -n '/SubscriberIdentity/{n;s/.*\"\\(.*\\)\".*/\\1/p}'`\\;"
     "cellmosw=`/usr/bin/dbus-send --system --print-reply --dest=com.nokia.csd.Info /com/nokia/csd/info com.nokia.csd.Info.GetMCUSWVersion | /usr/bin/tail -n +2`";
 
 const char *LL_TICK_CMD = "echo LL_TICK "
