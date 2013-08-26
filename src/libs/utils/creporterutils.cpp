@@ -130,8 +130,8 @@ QStringList CReporterUtils::parseCrashInfoFromFilename(const QString &filePath)
     qDebug() << __PRETTY_FUNCTION__ << "Parse:" << filePath;
 
     QFileInfo fi(filePath);
-    // Remove path and file suffix. i.e. /media/mmc1/application-xxxx-hwid-11-2029.rcore.lzo =>
-    // application-xxxx-hwid-11-2029
+    // Remove path and file suffix. i.e. /media/mmc1/application-hwid-11-2029.rcore.lzo =>
+    // application-hwid-11-2029
     QString baseName = fi.baseName();
 
     // Checking if the file is a lifelog report
@@ -142,9 +142,8 @@ QStringList CReporterUtils::parseCrashInfoFromFilename(const QString &filePath)
     }
 
     /*
-     * The basename format is: application_name-xxxx-hwid-11-2029
+     * The basename format is: application_name-hwid-11-2029
      *
-     * where xxxx are last four digits of device IMEI.
      * Parsing from start until dash '-', because it may appear as part of executable name.
      * Instead, walk from end to beginning.
      */
@@ -175,17 +174,11 @@ QStringList CReporterUtils::parseCrashInfoFromFilename(const QString &filePath)
 
     baseName = baseName.remove(searchIndex, hwid.size() + 1);
 
-    // Extract IMEI.
-    searchIndex = baseName.lastIndexOf("-");
-    QString imei = baseName.right(baseName.size() - (searchIndex + 1));
-    qDebug() << __PRETTY_FUNCTION__ << "IMEI:" << imei;
-
-    baseName = baseName.remove(searchIndex, imei.size() + 1);
     qDebug() << __PRETTY_FUNCTION__ << "Application name:" << baseName;
 
     // Append results to list. Index 0 = Application name ....
     QStringList result;
-    result << baseName << imei << hwid << signum << pid;
+    result << baseName << hwid << signum << pid;
 
     return result;
 }
