@@ -6,6 +6,9 @@
  * Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
  * Author: Riku Halonen <riku.halonen@nokia.com>
  *
+ * Copyright (C) 2013 Jolla Ltd.
+ * Contact: Jakub Adam <jakub.adam@jollamobile.com>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
  * version 2.1 as published by the Free Software Foundation.
@@ -370,28 +373,34 @@ void CReporterDaemon::setLifelogEnabled(bool enabled)
 // constant lifelogging commands used by the update function below
 // ----------------------------------------------------------------------------
 
-const QString LL_ID_GEN_CMD = "echo LL_ID_GEN "
+const char *LL_ID_GEN_CMD = "echo LL_ID_GEN "
     "sn=`/usr/bin/sysinfoclient -g /device/production-sn | /usr/bin/awk 'BEGIN {FS=\" \"} {print $3}'`\\;"
     "hw=`ssu mo | sed 's/^Device model is: //'`\\;"
     "sw=`sed -n 's/PRETTY_NAME=\"\\(.*\\)\"/\\1/p' /etc/os-release`\\;"
     "wlanmac=`ip link show wlan0 | tail -n 1 | awk '{print $2}'`";
 
-const QString LL_ID_CELL_CMD = "echo LL_ID_CELL "
+const char *LL_ID_CELL_CMD = "echo LL_ID_CELL "
     "imei=`ssu s | grep 'Device UID' | awk '{print $3}'`\\;"
     "imsi=`/usr/bin/dbus-send --system --print-reply --dest=com.nokia.phone.SSC /com/nokia/phone/SSC com.nokia.phone.SSC.get_imsi | /usr/bin/tail -n +2 | /usr/bin/awk '{print $2}'`\\;"
     "cellmosw=`/usr/bin/dbus-send --system --print-reply --dest=com.nokia.csd.Info /com/nokia/csd/info com.nokia.csd.Info.GetMCUSWVersion | /usr/bin/tail -n +2`";
 
-const QString LL_TICK_CMD = "echo LL_TICK "
+const char *LL_TICK_CMD = "echo LL_TICK "
     "date=`/bin/date +%s`\\;"
     "`upower -i /org/freedesktop/UPower/devices/battery_battery | awk '/percentage:/{printf \"batt_perc=%s;\",$2}/state:/{printf \"state=%s;\",$2}'`"
     "uptime=`/bin/cat /proc/uptime`\\;loadavg=`/usr/bin/awk '{print $3,$4,$5}' /proc/loadavg`\\;"
     "memfree=`/usr/bin/awk '/MemFree:/{print $2}' /proc/meminfo`";
 
-const QString LL_CELL_CMD = "echo LL_CELL "
+const char *LL_CELL_CMD = "echo LL_CELL "
     "date=`/bin/date +%s`\\;"
     "ssc=`/usr/bin/dbus-send --system --print-reply --dest=com.nokia.phone.SSC /com/nokia/phone/SSC com.nokia.phone.SSC.get_modem_state | /usr/bin/tail -n +2 | /usr/bin/awk '{print $2}'`\\;"
     "gprs-status=`/usr/bin/dbus-send --system --print-reply --dest=com.nokia.csd.GPRS /com/nokia/csd/gprs com.nokia.csd.GPRS.GetStatus | /usr/bin/tail -n +2 | /usr/bin/awk '$1~/string|boolean|uint64/ {print $2}'`\\;"
     "gprs-serv-status=`/usr/bin/dbus-send --print-reply --system --dest=com.nokia.csd.GPRS /com/nokia/csd/gprs org.freedesktop.DBus.Properties.GetAll string: | /usr/bin/tail -n +2 | /usr/bin/awk '$2~/boolean|uint64/{print $3}'`";
+
+const char *LL_PERIODIC_COMMANDS[] = {
+    "TICK", LL_TICK_CMD,
+    "CELL", LL_CELL_CMD,
+    NULL
+};
 
 // ----------------------------------------------------------------------------
 //  CReporterDaemon::updateLifelog
@@ -447,10 +456,15 @@ void CReporterDaemon::updateLifelog()
         ret = system(QString(">>\"%1\"").arg(lifelogFile.fileName()).prepend(LL_ID_CELL_CMD).toLocal8Bit());
         qDebug() << __PRETTY_FUNCTION__ << "lifelog ID_CELL command exit code:" << ret;
     }
-    int ret = system(QString(">>\"%1\"").arg(lifelogFile.fileName()).prepend(LL_TICK_CMD).toLocal8Bit());
-    qDebug() << __PRETTY_FUNCTION__ << "lifelog TICK command exit code:" << ret;
-    ret = system(QString(">>\"%1\"").arg(lifelogFile.fileName()).prepend(LL_CELL_CMD).toLocal8Bit());
-    qDebug() << __PRETTY_FUNCTION__ << "lifelog CELL command exit code:" << ret;
+
+    for (int i = 0; LL_PERIODIC_COMMANDS[i]; i += 2) {
+        QString command(QString(">>\"%1\"").arg(lifelogFile.fileName()));
+        command.prepend(LL_PERIODIC_COMMANDS[i + 1]);
+        int ret = system(command.toLocal8Bit());
+        qDebug() << __PRETTY_FUNCTION__ << "lifelog" << LL_PERIODIC_COMMANDS[i]
+                 << "command exit code:" << ret;
+    }
+
     d->lifelogUpdateCount++;
     d->lifelogLastUpdate = QDateTime::currentDateTimeUtc();
 }
