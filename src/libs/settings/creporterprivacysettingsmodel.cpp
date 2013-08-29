@@ -182,6 +182,11 @@ bool CReporterPrivacySettingsModel::includeStackTrace() const
     return value(Privacy::ValueIncludeStackTrace, QVariant(false)).toBool();
 }
 
+bool CReporterPrivacySettingsModel::downloadDebuginfo() const
+{
+    return value(Privacy::ValueDownloadDebuginfo, QVariant(false)).toBool();
+}
+
 // ----------------------------------------------------------------------------
 // CReporterPrivacySettingsModel::reduceCore
 // ----------------------------------------------------------------------------
@@ -286,6 +291,12 @@ void CReporterPrivacySettingsModel::setIncludeStackTrace(bool value)
 {
     if (setValue(Privacy::ValueIncludeStackTrace, QVariant(value)))
         emit includeStackTraceChanged();
+}
+
+void CReporterPrivacySettingsModel::setDownloadDebuginfo(bool value)
+{
+    if (setValue(Privacy::ValueDownloadDebuginfo, QVariant(value)))
+        emit downloadDebuginfoChanged();
 }
 
 // ----------------------------------------------------------------------------

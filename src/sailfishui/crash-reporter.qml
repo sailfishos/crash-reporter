@@ -105,16 +105,6 @@ Page {
 
             TextSwitch {
                 automaticCheck: false
-                checked: PrivacySettings.includeStackTrace
-                //% "Include stack trace"
-                text: qsTrId("settings_crash-reporter_include_stack_trace")
-                //% "Includes stack trace into crash report. Can trigger installation of a debugger and debug symbols when enabled."
-                description: qsTrId("settings_crash-reporter_include_stack_trace_description")
-                onClicked: PrivacySettings.includeStackTrace = !PrivacySettings.includeStackTrace
-            }
-
-            TextSwitch {
-                automaticCheck: false
                 checked: PrivacySettings.autoDeleteDuplicates
                 //% "Auto-delete duplicates"
                 text: qsTrId("settings_crash-reporter_autodelete_duplicates")
@@ -131,6 +121,33 @@ Page {
                 //% "Periodically collects system statistics"
                 description: qsTrId("settings_crash-reporter_lifelog_description")
                 onClicked: PrivacySettings.lifelog = !PrivacySettings.lifelog
+            }
+
+            SectionHeader {
+                //% "Stack trace"
+                text: qsTrId("settings_crash-reporter_stack_trace")
+            }
+
+            TextSwitch {
+                id: includeStackTraceSwitch
+                automaticCheck: false
+                checked: PrivacySettings.includeStackTrace
+                //% "Include stack trace"
+                text: qsTrId("settings_crash-reporter_include_stack_trace")
+                //% "Includes stack trace into crash report."
+                description: qsTrId("settings_crash-reporter_include_stack_trace_description")
+                onClicked: PrivacySettings.includeStackTrace = !PrivacySettings.includeStackTrace
+            }
+
+            TextSwitch {
+                enabled: includeStackTraceSwitch.checked
+                automaticCheck: false
+                checked: PrivacySettings.downloadDebuginfo
+                //% "Download debug symbols"
+                text: qsTrId("settings_crash-reporter_download_debug_symbols")
+                //% "Tries to automatically download missing debug symbols before making a stack trace."
+                description: qsTrId("settings_crash-reporter_download_debug_symbols_description")
+                onClicked: PrivacySettings.downloadDebuginfo = !PrivacySettings.downloadDebuginfo
             }
 
             SectionHeader {

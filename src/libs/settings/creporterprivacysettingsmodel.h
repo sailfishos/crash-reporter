@@ -84,6 +84,9 @@ namespace Privacy {
     const QString ValueIncludeStackTrace("Privacy/INCLUDE_STACK_TRACE");
      //! If set to true, core dump size is reduced before included in the crash reporter.
     const QString ValueReduceCore("Privacy/REDUCE_CORE");
+    /*! If set to true, rich-core-dumper will attempt to download missing debug
+     * symbols before generating a stack trace. */
+    const QString ValueDownloadDebuginfo("Privacy/DOWNLOAD_DEBUGINFO");
 }
 
 /*!
@@ -104,6 +107,7 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
     Q_PROPERTY(bool autoDeleteDuplicates READ autoDeleteDuplicates WRITE setAutoDeleteDuplicates NOTIFY autoDeleteDuplicatesChanged)
     Q_PROPERTY(bool lifelog READ lifelogEnabled WRITE setLifelogEnabled NOTIFY lifelogEnabledChanged)
     Q_PROPERTY(bool includeStackTrace READ includeStackTrace WRITE setIncludeStackTrace NOTIFY includeStackTraceChanged)
+    Q_PROPERTY(bool downloadDebuginfo READ downloadDebuginfo WRITE setDownloadDebuginfo NOTIFY downloadDebuginfoChanged)
 
     public:
        /*!
@@ -239,6 +243,14 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
          */
         bool includeStackTrace() const;
 
+        /*!
+         * @brief Reads setting for automatic download of debug symbols.
+         *
+         * @note This setting is used by rich-core-dumper.
+         * @return true if debug symbols should be downloaded; otherwise false.
+         */
+        bool downloadDebuginfo() const;
+
           /*!
           * @brief Enables or disables core dumping.
           *
@@ -336,6 +348,14 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
         void setIncludeStackTrace(bool value);
 
         /*!
+         * @brief Enables or disables automatic download of debug symbols.
+         *
+         * @note This setting is used by rich-core-dumper.
+         * @param value true to enable feature; false to disable.
+         */
+        void setDownloadDebuginfo(bool value);
+
+        /*!
           * @brief Enables or disables core-dump size shrinking.
           *
           * @note This setting used by the rich-core.
@@ -349,6 +369,7 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
         void autoDeleteDuplicatesChanged();
         void lifelogEnabledChanged();
         void includeStackTraceChanged();
+        void downloadDebuginfoChanged();
 
     protected:
         CReporterPrivacySettingsModel();
