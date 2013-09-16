@@ -98,6 +98,14 @@ void SystemdServicePrivate::propertiesChanged(const QString &interface,
         qDebug() << "Unit file state changed to:" << unit->loadState();
         emit q->maskedChanged();
     }
+    if (changedProperties.contains("NeedDaemonReload") ||
+        invalidatedProperties.contains("NeedDaemonReload")) {
+        QDBusPendingCallWatcher *watcher =
+                new QDBusPendingCallWatcher(manager->Reload(), q);
+
+        QObject::connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher *)),
+                         q, SLOT(reloaded(QDBusPendingCallWatcher *)));
+    }
 }
 
 void SystemdServicePrivate::stateChanged(QDBusPendingCallWatcher *call) {
@@ -111,18 +119,10 @@ void SystemdServicePrivate::stateChanged(QDBusPendingCallWatcher *call) {
 }
 
 void SystemdServicePrivate::maskingChanged(QDBusPendingCallWatcher *call) {
-    Q_Q(SystemdService);
-
     QDBusPendingCall reply = *call;
     if (reply.isError()) {
         qDebug() << "Couldn't mask or unmask a unit file"
                  << reply.error().name() << reply.error().message();
-    } else {
-        QDBusPendingCallWatcher *watcher =
-                new QDBusPendingCallWatcher(manager->Reload(), q);
-
-        QObject::connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher *)),
-                         q, SLOT(reloaded(QDBusPendingCallWatcher *)));
     }
 
     call->deleteLater();
