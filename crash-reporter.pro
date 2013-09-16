@@ -58,12 +58,7 @@ settings.path = $$CREPORTER_SETTINGS_PATH
 settings.files += data/crash-reporter-privacy.conf \
 	data/crash-reporter.conf
 
-SYSTEMD_WANTS_DIR = ${INSTALL_ROOT}$${CREPORTER_SYSTEM_SYSTEMD_SERVICES}/user-session.target.wants
-
 systemd_service.path = $${CREPORTER_SYSTEM_SYSTEMD_SERVICES}
 systemd_service.files = data/crash-reporter.service
-systemd_service.commands += \
-	mkdir $${SYSTEMD_WANTS_DIR}; \
-	ln -s -t $${SYSTEMD_WANTS_DIR} ../crash-reporter.service
 
 INSTALLS += scripts notifications icons settings systemd_service

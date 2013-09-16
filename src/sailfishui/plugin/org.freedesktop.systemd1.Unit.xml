@@ -11,6 +11,7 @@
    <arg name="job" type="o" direction="out"/>
   </method>
   <property name="LoadState" type="s" access="read"/>
+  <property name="UnitFileState" type="s" access="read"/>
   <property name="ActiveState" type="s" access="read"/>
  </interface>
 </node>

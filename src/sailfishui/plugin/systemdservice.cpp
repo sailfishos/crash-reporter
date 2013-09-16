@@ -35,6 +35,7 @@ public:
     void propertiesChanged(const QString &interface,
                            const QVariantMap &changedProperties,
                            const QStringList &invalidatedProperties);
+    void unitFileStateChanged(QDBusPendingCallWatcher *call);
     void maskingChanged(QDBusPendingCallWatcher *call);
     void reloaded(QDBusPendingCallWatcher *call);
     void stateChanged(QDBusPendingCallWatcher *call);
@@ -66,9 +67,12 @@ void SystemdServicePrivate::gotUnitPath(QDBusPendingCallWatcher *call) {
 
         /* Before we create a unit proxy, we 'guess' service is not running. Now
          * when we can actually query its status, notify about the change if our
-         * assumption was wrong. Same applies to the state of masking. */
+         * assumption was wrong. Same applies to enabled state and masking. */
         if (q->running() != false) {
             emit q->runningChanged();
+        }
+        if (q->enabled() != false) {
+            emit q->enabledChanged();
         }
         if (q->masked() != false) {
             emit q->maskedChanged();
@@ -90,12 +94,17 @@ void SystemdServicePrivate::propertiesChanged(const QString &interface,
 
     if (changedProperties.contains("ActiveState") ||
         invalidatedProperties.contains("ActiveState")) {
-        qDebug() << "State changed to:" << unit->activeState();
+        qDebug() << "ActiveState changed to:" << unit->activeState();
         emit q->runningChanged();
+    }
+    if (changedProperties.contains("UnitFileState") ||
+        invalidatedProperties.contains("UnitFileState")) {
+        qDebug() << "UnitFileState changed to:" << unit->unitFileState();
+        emit q->enabledChanged();
     }
     if (changedProperties.contains("LoadState") ||
         invalidatedProperties.contains("LoadState")) {
-        qDebug() << "Unit file state changed to:" << unit->loadState();
+        qDebug() << "LoadState changed to:" << unit->loadState();
         emit q->maskedChanged();
     }
     if (changedProperties.contains("NeedDaemonReload") ||
@@ -112,6 +121,16 @@ void SystemdServicePrivate::stateChanged(QDBusPendingCallWatcher *call) {
     QDBusPendingReply<QDBusObjectPath> reply = *call;
     if (reply.isError()) {
         qDebug() << "Couldn't change systemd service state"
+                 << reply.error().name() << reply.error().message();
+    }
+
+    call->deleteLater();
+}
+
+void SystemdServicePrivate::unitFileStateChanged(QDBusPendingCallWatcher *call) {
+    QDBusPendingCall reply = *call;
+    if (reply.isError()) {
+        qDebug() << "Couldn't enable or disable a unit file"
                  << reply.error().name() << reply.error().message();
     }
 
@@ -136,8 +155,10 @@ void SystemdServicePrivate::reloaded(QDBusPendingCallWatcher *call) {
         qDebug() << "Couldn't reload a unit file"
                  << reply.error().name() << reply.error().message();
     } else {
-        /* Seems systemd won't notify us when load state changes to 'masked'.
-         * We have to emit our change notification ourselves. */
+        /* Seems systemd won't notify when UnitFileState or LoadState
+         * properties change. We have to emit our change notifications
+         * ourselves. */
+        emit q->enabledChanged();
         emit q->maskedChanged();
     }
 
@@ -200,6 +221,40 @@ void SystemdService::setRunning(bool state) {
 
     connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher *)),
             this, SLOT(stateChanged(QDBusPendingCallWatcher *)));
+}
+
+bool SystemdService::enabled() const {
+    Q_D(const SystemdService);
+
+    return (d->unit && d->unit->unitFileState() == "enabled");
+}
+
+void SystemdService::setEnabled(bool state) {
+    Q_D(SystemdService);
+
+    if (enabled() == state)
+        return;
+
+    QDBusPendingCallWatcher *watcher;
+
+    if (!d->unit) {
+        qDebug() << "Systemd unit proxy not initialized!";
+        return;
+    }
+
+    QStringList services;
+    services.append(d->serviceName);
+
+    if (state) {
+        watcher = new QDBusPendingCallWatcher(
+                d->manager->EnableUnitFiles(services, false, true), this);
+    } else {
+        watcher = new QDBusPendingCallWatcher(
+                d->manager->DisableUnitFiles(services, false), this);
+    }
+
+    connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher *)),
+            this, SLOT(unitFileStateChanged(QDBusPendingCallWatcher *)));
 }
 
 void SystemdService::setMasked(bool state) {

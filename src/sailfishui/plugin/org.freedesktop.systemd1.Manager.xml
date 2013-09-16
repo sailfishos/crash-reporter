@@ -9,6 +9,20 @@
   <method name="Subscribe"/>
   <method name="Unsubscribe"/>
   <method name="Reload"/>
+  <method name="EnableUnitFiles">
+   <arg name="files" type="as" direction="in"/>
+   <arg name="runtime" type="b" direction="in"/>
+   <arg name="force" type="b" direction="in"/>
+   <arg name="carries_install_info" type="b" direction="out"/>
+   <annotation name="org.qtproject.QtDBus.QtTypeName.Out1" value="QList&lt;UnitFileChange&gt;"/>
+   <arg name="changes" type="a(sss)" direction="out"/>
+  </method>
+  <method name="DisableUnitFiles">
+   <arg name="files" type="as" direction="in"/>
+   <arg name="runtime" type="b" direction="in"/>
+   <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList&lt;UnitFileChange&gt;"/>
+   <arg name="changes" type="a(sss)" direction="out"/>
+  </method>
   <method name="MaskUnitFiles">
    <arg name="files" type="as" direction="in"/>
    <arg name="runtime" type="b" direction="in"/>

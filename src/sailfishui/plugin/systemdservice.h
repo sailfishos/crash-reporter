@@ -30,6 +30,7 @@ class SystemdService: public QObject {
     Q_OBJECT
 
     Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged)
+    Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
     Q_PROPERTY(bool masked READ masked WRITE setMasked NOTIFY maskedChanged)
 
 public:
@@ -38,12 +39,16 @@ public:
     bool running() const;
     void setRunning(bool state);
 
+    bool enabled() const;
+    void setEnabled(bool state);
+
     bool masked() const;
     void setMasked(bool state);
 
     ~SystemdService();
 signals:
     void runningChanged();
+    void enabledChanged();
     void maskedChanged();
 
 private:
@@ -52,6 +57,7 @@ private:
     QScopedPointer<SystemdServicePrivate> d_ptr;
 
     Q_PRIVATE_SLOT(d_func(), void gotUnitPath(QDBusPendingCallWatcher *));
+    Q_PRIVATE_SLOT(d_func(), void unitFileStateChanged(QDBusPendingCallWatcher *));
     Q_PRIVATE_SLOT(d_func(), void maskingChanged(QDBusPendingCallWatcher *));
     Q_PRIVATE_SLOT(d_func(), void reloaded(QDBusPendingCallWatcher *));
     Q_PRIVATE_SLOT(d_func(), void stateChanged(QDBusPendingCallWatcher *));
