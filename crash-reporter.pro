@@ -61,4 +61,7 @@ settings.files += data/crash-reporter-privacy.conf \
 systemd_service.path = $${CREPORTER_SYSTEM_SYSTEMD_SERVICES}
 systemd_service.files = data/crash-reporter.service
 
-INSTALLS += scripts notifications icons settings systemd_service
+oneshot.path = $${CREPORTER_SYSTEM_ONESHOT}
+oneshot.files = scripts/crash-reporter-service-default
+
+INSTALLS += scripts notifications icons settings systemd_service oneshot

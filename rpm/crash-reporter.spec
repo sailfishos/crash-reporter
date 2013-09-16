@@ -23,6 +23,8 @@ BuildRequires:          qt5-qttest-devel
 BuildRequires:          qt5-qttools-linguist
 BuildRequires:          ssu-devel
 Requires:               sp-rich-core >= 1.71.2
+Requires:               oneshot
+%{_oneshot_requires_post}
 Source0:                %{name}-%{version}.tar.gz
 
 %description
@@ -87,6 +89,7 @@ make %{?jobs:-j%jobs}
 #/usr/lib/duicontrolpanel/*.desktop
 #/usr/lib/duicontrolpanel/applets/*crash*.so*
 #/usr/lib/crash-reporter/dialogplugins/*
+/usr/lib/oneshot.d/*
 /usr/lib/systemd/user/*
 /usr/share/crash-reporter/*
 /usr/share/dbus-1/services/*.service
@@ -125,6 +128,12 @@ make %{?jobs:-j%jobs}
 #%files ui-tests
 #/usr/lib/crash-reporter-ui-tests/testdata/*
 #/usr/share/crash-reporter-ui-tests/*
+
+%post
+# on first install
+if [ "$1" -eq 1 ]; then
+	add-oneshot --user --now crash-reporter-service-default
+fi
 
 %post -n libcrash-reporter0
 ldconfig
