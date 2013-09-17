@@ -57,6 +57,8 @@ Dialog {
 
                 width: parent.width
                 inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoPredictiveText
+                //% "Enter server URL"
+                placeholderText: qsTrId("settings_crash-reporter_server_url_placeholder")
                 text: ApplicationSettings.serverUrl
                 validator: RegExpValidator { regExp: /^http[s]?:\/\/\w([\w-\.]*\w)*$/ }
                 label: qsTrId("settings_crash-reporter_server_url")
@@ -69,6 +71,8 @@ Dialog {
 
                 width: parent.width
                 inputMethodHints: Qt.ImhDigitsOnly | Qt.ImhNoPredictiveText
+                //% "Enter server port"
+                placeholderText: qsTrId("settings_crash-reporter_server_port_placeholder")
                 text: ApplicationSettings.serverPort
                 validator: IntValidator { bottom: 1; top: 65535 }
                 //% "Server port"
@@ -82,6 +86,8 @@ Dialog {
 
                 width: parent.width
                 inputMethodHints: Qt.ImhNoPredictiveText
+                //% "Enter server path"
+                placeholderText: qsTrId("settings_crash-reporter_server_path_placeholder")
                 text: ApplicationSettings.serverPath
                 validator: RegExpValidator { regExp: /^\/.*$/ }
                 //% "Server path"
@@ -100,6 +106,8 @@ Dialog {
 
                 width: parent.width
                 inputMethodHints: Qt.ImhNoPredictiveText
+                //% "Enter username"
+                placeholderText: qsTrId("settings_crash-reporter_username_placeholder")
                 text: ApplicationSettings.username
                 //% "Username"
                 label: qsTrId("settings_crash-reporter_username")
@@ -111,6 +119,8 @@ Dialog {
 
                 width: parent.width
                 inputMethodHints: Qt.ImhNoPredictiveText
+                //% "Enter password"
+                placeholderText: qsTrId("settings_crash-reporter_password_placeholder")
                 text: ApplicationSettings.password
                 //% "Password"
                 label: qsTrId("settings_crash-reporter_password")
