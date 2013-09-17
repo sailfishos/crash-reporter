@@ -232,8 +232,6 @@ bool SystemdService::enabled() const {
 void SystemdService::setEnabled(bool state) {
     Q_D(SystemdService);
 
-    if (enabled() == state)
-        return;
 
     QDBusPendingCallWatcher *watcher;
 
