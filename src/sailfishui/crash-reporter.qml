@@ -21,6 +21,7 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import Sailfish.Silica.theme 1.0
 import com.jolla.settings.crashreporter 1.0
 
 Page {
@@ -45,7 +46,7 @@ Page {
                 checked: CrashReporterService.running
                 //% "Report application crashes"
                 text: qsTrId("settings_crash-reporter_report_crashes")
-                //% "Collects and uploads a report when application crashes"
+                //% "Collects and uploads a report when application crashes."
                 description: qsTrId("settings_crash-reporter_report_crashes_description")
 
                 onClicked: {
@@ -80,7 +81,7 @@ Page {
                 checked: PrivacySettings.notifications
                 //% "Notifications"
                 text: qsTrId("settings_crash-reporter_notifications")
-                //% "Displays user notifications when core dump is being uploaded"
+                //% "Displays user notifications when crash report is being uploaded."
                 description: qsTrId("settings_crash-reporter_notifications_description")
                 onClicked: PrivacySettings.notifications = !PrivacySettings.notifications
             }
@@ -90,7 +91,7 @@ Page {
                 checked: PrivacySettings.autoDeleteDuplicates
                 //% "Auto-delete duplicates"
                 text: qsTrId("settings_crash-reporter_autodelete_duplicates")
-                //% "Automatically deletes duplicate rich cores"
+                //% "Each day, uploads only first 5 crash reports of an application. The others, likely duplicate, are deleted without being uploaded to conserve space."
                 description: qsTrId("settings_crash-reporter_autodelete_duplicates_description")
                 onClicked: PrivacySettings.autoDeleteDuplicates = !PrivacySettings.autoDeleteDuplicates
             }
@@ -100,7 +101,7 @@ Page {
                 checked: PrivacySettings.lifelog
                 //% "Life logging"
                 text: qsTrId("settings_crash-reporter_lifelog")
-                //% "Periodically collects system statistics"
+                //% "Every hour collects CPU load, memory usage, uptime, telephony status, and other system statistics."
                 description: qsTrId("settings_crash-reporter_lifelog_description")
                 onClicked: PrivacySettings.lifelog = !PrivacySettings.lifelog
             }
@@ -116,7 +117,7 @@ Page {
                 checked: PrivacySettings.includeStackTrace
                 //% "Include stack trace"
                 text: qsTrId("settings_crash-reporter_include_stack_trace")
-                //% "Includes stack trace into crash report."
+                //% "Crash report will include a stack trace generated on the device."
                 description: qsTrId("settings_crash-reporter_include_stack_trace_description")
                 onClicked: PrivacySettings.includeStackTrace = !PrivacySettings.includeStackTrace
             }
@@ -138,7 +139,7 @@ Page {
             }
 
             ComboBox {
-                //% "Logger type"
+                //% "Log reporter activity"
                 label: qsTrId("settings_crash-reporter_logger_type")
                 currentItem: {
                     switch (ApplicationSettings.loggerType) {
@@ -173,20 +174,29 @@ Page {
                 menu: ContextMenu {
                     MenuItem {
                         id: noneItem
-                        //% "none"
+                        //% "no logging"
                         text: qsTrId("settings_crash-reporter_logging_type_none")
                     }
                     MenuItem {
                         id: fileItem
-                        //% "file"
+                        //% "into a file in /tmp"
                         text: qsTrId("settings_crash-reporter_logging_type_file")
                     }
                     MenuItem {
                         id: syslogItem
-                        //% "system log"
+                        //% "into systemd journal"
                         text: qsTrId("settings_crash-reporter_logging_type_syslog")
                     }
                 }
+            }
+            Label {
+                x: Theme.paddingLarge
+                width: parent.width - (2 * Theme.paddingLarge)
+                //% "Debug logging of crash reporter activities to the device doesn't affect the data sent to a server. Change of this setting takes effect after crash reporter restart."
+                text: qsTrId("settings_crash-reporter_after_restart")
+                font.pixelSize: Theme.fontSizeExtraSmall
+                wrapMode: Text.WordWrap
+                color: Theme.secondaryColor
             }
         }
     }
