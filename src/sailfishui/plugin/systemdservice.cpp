@@ -37,12 +37,14 @@ public:
                            const QStringList &invalidatedProperties);
     void unitFileStateChanged(QDBusPendingCallWatcher *call);
     void maskingChanged(QDBusPendingCallWatcher *call);
-    void reloaded(QDBusPendingCallWatcher *call);
     void stateChanged(QDBusPendingCallWatcher *call);
 
 private:
     Q_DECLARE_PUBLIC(SystemdService)
     SystemdService *q_ptr;
+
+    void reload();
+    void reloaded(QDBusPendingCallWatcher *call);
 };
 
 void SystemdServicePrivate::gotUnitPath(QDBusPendingCallWatcher *call) {
@@ -107,14 +109,6 @@ void SystemdServicePrivate::propertiesChanged(const QString &interface,
         qDebug() << "LoadState changed to:" << unit->loadState();
         emit q->maskedChanged();
     }
-    if (changedProperties.contains("NeedDaemonReload") ||
-        invalidatedProperties.contains("NeedDaemonReload")) {
-        QDBusPendingCallWatcher *watcher =
-                new QDBusPendingCallWatcher(manager->Reload(), q);
-
-        QObject::connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher *)),
-                         q, SLOT(reloaded(QDBusPendingCallWatcher *)));
-    }
 }
 
 void SystemdServicePrivate::stateChanged(QDBusPendingCallWatcher *call) {
@@ -142,9 +136,21 @@ void SystemdServicePrivate::maskingChanged(QDBusPendingCallWatcher *call) {
     if (reply.isError()) {
         qDebug() << "Couldn't mask or unmask a unit file"
                  << reply.error().name() << reply.error().message();
+    } else {
+        reload();
     }
 
     call->deleteLater();
+}
+
+void SystemdServicePrivate::reload() {
+    Q_Q(SystemdService);
+
+    QDBusPendingCallWatcher *watcher =
+            new QDBusPendingCallWatcher(manager->Reload(), q);
+
+    QObject::connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher *)),
+                     q, SLOT(reloaded(QDBusPendingCallWatcher *)));
 }
 
 void SystemdServicePrivate::reloaded(QDBusPendingCallWatcher *call) {
@@ -155,10 +161,8 @@ void SystemdServicePrivate::reloaded(QDBusPendingCallWatcher *call) {
         qDebug() << "Couldn't reload a unit file"
                  << reply.error().name() << reply.error().message();
     } else {
-        /* Seems systemd won't notify when UnitFileState or LoadState
-         * properties change. We have to emit our change notifications
-         * ourselves. */
-        emit q->enabledChanged();
+        /* Seems systemd won't notify when LoadState property changes.
+         * We have to emit our change notifications ourselves. */
         emit q->maskedChanged();
     }
 
