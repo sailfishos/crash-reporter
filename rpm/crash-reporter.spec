@@ -9,7 +9,7 @@ BuildRoot:              %{buildroot}
 Summary:                Crash Reporting Tool for MeeGo
 License:                LGPL
 Name:                   crash-reporter
-Version:                1.10.12
+Version:                1.10.13
 Release:                %{release}
 Prefix:                 /usr
 Group:                  Development/Tools
