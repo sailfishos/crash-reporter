@@ -179,11 +179,19 @@ SystemdService::SystemdService(const QString& serviceName):
             "/org/freedesktop/systemd1", QDBusConnection::sessionBus(), this);
     d->unit = 0;
 
+    /* Ensure systemd configuration is up to date with unit files, for example
+     * after change by package update. */
+    QDBusPendingCall reply = d->manager->Reload();
+    reply.waitForFinished();
+    if (reply.isError()) {
+        qDebug() << "Couldn't reload systemd unit files";
+    }
+
     qDBusRegisterMetaType<UnitFileChange>();
     qDBusRegisterMetaType<QList<UnitFileChange> >();
 
     // Calling subscribe allows us to receive DBus signals from systemd
-    QDBusPendingCall reply = d->manager->Subscribe();
+    reply = d->manager->Subscribe();
     reply.waitForFinished();
     if (reply.isError()) {
         qDebug() << "Couldn't subscribe to systemd manager";
