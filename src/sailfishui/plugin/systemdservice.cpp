@@ -197,7 +197,7 @@ SystemdService::SystemdService(const QString& serviceName):
         qDebug() << "Couldn't subscribe to systemd manager";
     }
 
-    reply = d->manager->GetUnit(d->serviceName);
+    reply = d->manager->LoadUnit(d->serviceName);
     QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(reply, this);
 
     connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher *)),
