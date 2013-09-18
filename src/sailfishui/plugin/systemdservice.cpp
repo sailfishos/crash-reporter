@@ -70,8 +70,8 @@ void SystemdServicePrivate::gotUnitPath(QDBusPendingCallWatcher *call) {
         /* Before we create a unit proxy, we 'guess' service is not running. Now
          * when we can actually query its status, notify about the change if our
          * assumption was wrong. Same applies to enabled state and masking. */
-        if (q->running() != false) {
-            emit q->runningChanged();
+        if (q->state() != SystemdService::Inactive) {
+            emit q->stateChanged();
         }
         if (q->enabled() != false) {
             emit q->enabledChanged();
@@ -97,7 +97,7 @@ void SystemdServicePrivate::propertiesChanged(const QString &interface,
     if (changedProperties.contains("ActiveState") ||
         invalidatedProperties.contains("ActiveState")) {
         qDebug() << "ActiveState changed to:" << unit->activeState();
-        emit q->runningChanged();
+        emit q->stateChanged();
     }
     if (changedProperties.contains("UnitFileState") ||
         invalidatedProperties.contains("UnitFileState")) {
@@ -204,32 +204,55 @@ SystemdService::SystemdService(const QString& serviceName):
             this, SLOT(gotUnitPath(QDBusPendingCallWatcher *)));
 }
 
-bool SystemdService::running() const {
+SystemdService::State SystemdService::state() const {
     Q_D(const SystemdService);
 
-    return (d->unit && d->unit->activeState() == "active");
+    QString state;
+
+    if (d->unit) {
+        state = d->unit->activeState();
+    }
+
+    if (state == "active" || state == "reloading" || state == "deactivating") {
+        return Active;
+    } else if (state == "activating") {
+        return Activating;
+    } else /* "inactive", "failed", default */ {
+        return Inactive;
+    }
 }
 
-void SystemdService::setRunning(bool state) {
+void SystemdService::start() {
     Q_D(SystemdService);
-
-    if (running() == state)
-        return;
-
-    QDBusPendingCallWatcher *watcher;
 
     if (!d->unit) {
         qDebug() << "Systemd unit proxy not initialized!";
         return;
     }
 
-    if (state) {
-        watcher = new QDBusPendingCallWatcher(
-                d->unit->Start("replace"), this);
-    } else {
-        watcher = new QDBusPendingCallWatcher(
-                d->unit->Stop("replace"), this);
+    if (state() == Active || state() == Activating)
+        return;
+
+    QDBusPendingCallWatcher *watcher =
+            new QDBusPendingCallWatcher(d->unit->Start("replace"), this);
+
+    connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher *)),
+            this, SLOT(stateChanged(QDBusPendingCallWatcher *)));
+}
+
+void SystemdService::stop() {
+    Q_D(SystemdService);
+
+    if (!d->unit) {
+        qDebug() << "Systemd unit proxy not initialized!";
+        return;
     }
+
+    if (state() == Inactive)
+        return;
+
+    QDBusPendingCallWatcher *watcher =
+            new QDBusPendingCallWatcher(d->unit->Stop("replace"), this);
 
     connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher *)),
             this, SLOT(stateChanged(QDBusPendingCallWatcher *)));

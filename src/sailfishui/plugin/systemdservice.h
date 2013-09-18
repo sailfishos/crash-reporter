@@ -29,15 +29,25 @@ class SystemdServicePrivate;
 class SystemdService: public QObject {
     Q_OBJECT
 
-    Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged)
+    Q_ENUMS(State)
+
+    Q_PROPERTY(State state READ state NOTIFY stateChanged)
     Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
     Q_PROPERTY(bool masked READ masked WRITE setMasked NOTIFY maskedChanged)
 
 public:
     SystemdService(const QString& serviceName);
 
-    bool running() const;
-    void setRunning(bool state);
+    enum State {
+        Inactive,
+        Activating,
+        Active
+    };
+
+    State state() const;
+
+    Q_INVOKABLE void start();
+    Q_INVOKABLE void stop();
 
     bool enabled() const;
     void setEnabled(bool state);
@@ -47,7 +57,7 @@ public:
 
     ~SystemdService();
 signals:
-    void runningChanged();
+    void stateChanged();
     void enabledChanged();
     void maskedChanged();
 

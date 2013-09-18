@@ -43,7 +43,6 @@ Page {
             TextSwitch {
                 id: reporterSwitch
                 automaticCheck: false
-                checked: CrashReporterService.running
                 //% "Report application crashes"
                 text: qsTrId("settings_crash-reporter_report_crashes")
                 //% "Collects and uploads a report when application crashes."
@@ -52,8 +51,30 @@ Page {
                 onClicked: {
                     var newState = !checked
                     CrashReporterService.enabled = newState
-                    CrashReporterService.running = newState
+                    if (newState) {
+                        CrashReporterService.start()
+                    } else {
+                        CrashReporterService.stop()
+                    }
                 }
+
+                states: [
+                    State {
+                        name: "inactive"
+                        when: (CrashReporterService.state == CrashReporterService.Inactive)
+                        PropertyChanges { target: reporterSwitch; checked: false }
+                    },
+                    State {
+                        name: "activating"
+                        when: (CrashReporterService.state == CrashReporterService.Activating)
+                        PropertyChanges { target: reporterSwitch; checked: true; busy: true }
+                    },
+                    State {
+                        name: "active"
+                        when: (CrashReporterService.state == CrashReporterService.Active)
+                        PropertyChanges { target: reporterSwitch; checked: true }
+                    }
+                ]
             }
 
             ValueButton {
