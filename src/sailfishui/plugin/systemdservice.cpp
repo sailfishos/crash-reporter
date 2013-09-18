@@ -39,12 +39,16 @@ public:
     void maskingChanged(QDBusPendingCallWatcher *call);
     void stateChanged(QDBusPendingCallWatcher *call);
 
+    SystemdService::State state;
+
 private:
     Q_DECLARE_PUBLIC(SystemdService)
     SystemdService *q_ptr;
 
     void reload();
     void reloaded(QDBusPendingCallWatcher *call);
+
+    void changeState(const QString &state);
 };
 
 void SystemdServicePrivate::gotUnitPath(QDBusPendingCallWatcher *call) {
@@ -70,9 +74,7 @@ void SystemdServicePrivate::gotUnitPath(QDBusPendingCallWatcher *call) {
         /* Before we create a unit proxy, we 'guess' service is not running. Now
          * when we can actually query its status, notify about the change if our
          * assumption was wrong. Same applies to enabled state and masking. */
-        if (q->state() != SystemdService::Inactive) {
-            emit q->stateChanged();
-        }
+        changeState(unit->activeState());
         if (q->enabled() != false) {
             emit q->enabledChanged();
         }
@@ -96,8 +98,9 @@ void SystemdServicePrivate::propertiesChanged(const QString &interface,
 
     if (changedProperties.contains("ActiveState") ||
         invalidatedProperties.contains("ActiveState")) {
-        qDebug() << "ActiveState changed to:" << unit->activeState();
-        emit q->stateChanged();
+        QString state = unit->activeState();
+        qDebug() << "ActiveState changed to:" << state;
+        changeState(state);
     }
     if (changedProperties.contains("UnitFileState") ||
         invalidatedProperties.contains("UnitFileState")) {
@@ -169,11 +172,30 @@ void SystemdServicePrivate::reloaded(QDBusPendingCallWatcher *call) {
     call->deleteLater();
 }
 
+void SystemdServicePrivate::changeState(const QString &state) {
+    Q_Q(SystemdService);
+
+    SystemdService::State newState;
+    if (state == "active" || state == "reloading" || state == "deactivating") {
+        newState = SystemdService::Active;
+    } else if (state == "activating") {
+        newState = SystemdService::Activating;
+    } else /* "inactive", "failed", default */ {
+        newState = SystemdService::Inactive;
+    }
+
+    if (this->state != newState) {
+        this->state = newState;
+        emit q->stateChanged();
+    }
+}
+
 SystemdService::SystemdService(const QString& serviceName):
   d_ptr(new SystemdServicePrivate) {
     Q_D(SystemdService);
     d->q_ptr = this;
     d->serviceName = serviceName;
+    d->state = Inactive;
 
     d->manager = new SystemdManagerProxy("org.freedesktop.systemd1",
             "/org/freedesktop/systemd1", QDBusConnection::sessionBus(), this);
@@ -207,19 +229,7 @@ SystemdService::SystemdService(const QString& serviceName):
 SystemdService::State SystemdService::state() const {
     Q_D(const SystemdService);
 
-    QString state;
-
-    if (d->unit) {
-        state = d->unit->activeState();
-    }
-
-    if (state == "active" || state == "reloading" || state == "deactivating") {
-        return Active;
-    } else if (state == "activating") {
-        return Activating;
-    } else /* "inactive", "failed", default */ {
-        return Inactive;
-    }
+    return d->state;
 }
 
 void SystemdService::start() {
