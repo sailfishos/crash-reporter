@@ -32,17 +32,14 @@ QT += network dbus
 
 DEFINES += CREPORTER_EXPORTS
 
-CREPORTER_BUILD_ARCH = $$system(uname -m)
-message(Building architecture: $$CREPORTER_BUILD_ARCH)
+message(Building architecture: $$system(uname -m))
 
 # Enable Qt Bearer Management API.
 !contains(DEFINES, CREPORTER_SDK_HOST) {
-    contains(CREPORTER_BUILD_ARCH, armel) {
-        message("Building with Qt Bearer Management API support.")
-        DEFINES += CREPORTER_LIBBEARER_ENABLED
-        SOURCES += httpclient/creporternwsessionmgr.cpp
-        HEADERS += httpclient/creporternwsessionmgr.h
-    }
+    message("Building with Qt Bearer Management API support.")
+    DEFINES += CREPORTER_LIBBEARER_ENABLED
+    SOURCES += httpclient/creporternwsessionmgr.cpp
+    HEADERS += httpclient/creporternwsessionmgr.h
 }
 
 DESTDIR = ../../lib
