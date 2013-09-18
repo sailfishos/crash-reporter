@@ -6,7 +6,7 @@
 %define _unpackaged_files_terminate_build 0
 
 BuildRoot:              %{buildroot}
-Summary:                Crash Reporting Tool for MeeGo
+Summary:                Crash Reporting Tool for Mer
 License:                LGPL
 Name:                   crash-reporter
 Version:                1.10.13
