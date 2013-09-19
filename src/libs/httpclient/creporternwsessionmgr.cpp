@@ -6,6 +6,9 @@
  * Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
  * Author: Riku Halonen <riku.halonen@nokia.com>
  *
+ * Copyright (C) 2013 Jolla Ltd.
+ * Contact: Jakub Adam <jakub.adam@jollamobile.com>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
  * version 2.1 as published by the Free Software Foundation.
@@ -45,8 +48,6 @@ class CReporterNwSessionMgrPrivate
 public:
     //! @arg Manages the network configurations provided by the system.
     QNetworkConfigurationManager networkManager;
-    //! @arg Provides an abstraction of one or more access point configurations.
-    QNetworkConfiguration networkConfiguration;
     //! @arg Provides control over the system's access points and enables session management.
     QNetworkSession *networkSession;
 };
@@ -106,8 +107,8 @@ bool CReporterNwSessionMgr::open()
         qDebug() << __PRETTY_FUNCTION__ << "No existing network session.";
         // If there was no network session, create one.
         d->networkManager.updateConfigurations();
-        d->networkConfiguration = d->networkManager.defaultConfiguration();
-        d->networkSession = new QNetworkSession(d->networkConfiguration);
+        d->networkSession =
+                new QNetworkSession(d->networkManager.defaultConfiguration());
 
         connect(d->networkSession, SIGNAL(stateChanged(QNetworkSession::State)),
                 this, SLOT(networkStateChanged(QNetworkSession::State)));
