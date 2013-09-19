@@ -27,7 +27,7 @@
 
 include(../../crash-reporter-conf.pri)
 
-QT += dbus
+QT += dbus network
 
 TEMPLATE = app
 TARGET = crash-reporter-autouploader

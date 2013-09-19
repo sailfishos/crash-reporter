@@ -28,6 +28,7 @@ TARGET = crash-reporter-daemon
 
 INCLUDEPATH += . \
                ../libs/coredir \
+               ../libs/httpclient \
                ../libs/utils \
                ../libs/logger \
                ../libs/serviceif \
@@ -38,7 +39,7 @@ INCLUDEPATH += . \
 
 LIBS += ../../lib/libcrashreporter.so \
 
-QT += dbus
+QT += dbus network
 QT -= gui
 
 SOURCES += main.cpp \

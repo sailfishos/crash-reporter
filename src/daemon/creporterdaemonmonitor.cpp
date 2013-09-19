@@ -39,6 +39,7 @@
 #include "creporterdaemonmonitor.h"
 #include "creporterdaemonmonitor_p.h"
 #include "creportercoreregistry.h"
+#include "creporternwsessionmgr.h"
 #include "creporterutils.h"
 #include "creporterdialogserverproxy.h"
 #include "creporterautouploaderproxy.h"
@@ -435,6 +436,12 @@ bool CReporterDaemonMonitor::notifyCrashReporterUI(const QString &dialogName,
 // ----------------------------------------------------------------------------
 bool CReporterDaemonMonitor::notifyAutoUploader(const QStringList &filesToUpload)
 {
+    if (!CReporterNwSessionMgr::unpaidConnectionAvailable()) {
+        qDebug() << __PRETTY_FUNCTION__
+                 << "WiFi not available, not uploading now.";
+        return true;
+    }
+
     qDebug() << __PRETTY_FUNCTION__ << "Sending " << filesToUpload.size() << " to be uploaded.";
     CReporterAutoUploaderProxy proxy(CReporter::AutoUploaderServiceName,
                                         CReporter::AutoUploaderObjectPath, QDBusConnection::sessionBus());

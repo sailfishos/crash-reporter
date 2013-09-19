@@ -34,6 +34,7 @@
 
 #include "creporterautouploader.h"
 #include "creporternamespace.h"
+#include "creporternwsessionmgr.h"
 #include "creporterautouploaderdbusadaptor.h"
 #include "creporteruploadqueue.h"
 #include "creporteruploaditem.h"
@@ -114,6 +115,13 @@ bool CReporterAutoUploader::uploadFiles(const QStringList &fileList)
         d_ptr->engine = new CReporterUploadEngine(&d_ptr->queue);
         d_ptr->activated = true;
         connect(d_ptr->engine, SIGNAL(finished(int, int, int)), SLOT(engineFinished(int, int, int)));
+    }
+
+    if (!CReporterNwSessionMgr::unpaidConnectionAvailable()) {
+        qDebug() << __PRETTY_FUNCTION__
+                 << "No unpaid network connection available, aborting crash report upload.";
+        QTimer::singleShot(0, this, SLOT(quit()));
+        return false;
     }
 
     foreach (QString filename, fileList)

@@ -9,6 +9,7 @@ LIBS += ../../../lib/libcrashreporter.so
 INCLUDEPATH += . \
 			   $${DAEMON_SRC_DIR} \
                $$CREPORTER_SRC_DIR/libs/coredir \
+               $$CREPORTER_SRC_DIR/libs/httpclient \
                $$CREPORTER_SRC_DIR/libs/utils \
                $$CREPORTER_SRC_DIR/libs \
 

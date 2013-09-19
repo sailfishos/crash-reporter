@@ -103,6 +103,18 @@ bool CReporterNwSessionMgr::opened() const
     }
 }
 
+bool CReporterNwSessionMgr::unpaidConnectionAvailable()
+{
+    QNetworkConfigurationManager &manager =
+            CReporterNwSessionMgrPrivate::networkManager();
+
+    QNetworkConfiguration config(manager.defaultConfiguration());
+
+    return ((config.bearerType() == QNetworkConfiguration::BearerWLAN) ||
+            (config.bearerType() == QNetworkConfiguration::BearerEthernet)) &&
+           ((config.state() & QNetworkConfiguration::Active) == QNetworkConfiguration::Active);
+}
+
 // ----------------------------------------------------------------------------
 // CReporterNwSessionMgr::open
 // ----------------------------------------------------------------------------

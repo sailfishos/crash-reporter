@@ -13,7 +13,8 @@ INCLUDEPATH += .  \
 
 DEPENDPATH += $$INCLUDEPATH
 
-TEST_STUBS += $${CREPORTER_STUBS_DIR}/qnetworksession.cpp
+TEST_STUBS += $${CREPORTER_STUBS_DIR}/qnetworkconfiguration.cpp \
+            $${CREPORTER_STUBS_DIR}/qnetworksession.cpp
 
 TEST_SOURCES += $${CLIENT_SRC_DIR}/creporternwsessionmgr.cpp
 

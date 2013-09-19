@@ -6,6 +6,7 @@ TARGET = ut_creporterdaemonmonitor
 
 INCLUDEPATH += . \
 			   $${DAEMON_SRC_DIR} \
+               $$CREPORTER_SRC_DIR/libs/httpclient \
                $$CREPORTER_SRC_DIR/libs/utils \
                $$CREPORTER_SRC_DIR/libs \
                $${CREPORTER_SRC_DIR}/dialogserver \
@@ -18,11 +19,15 @@ DEPENDPATH += $$INCLUDEPATH \
 
 # stubs
 TEST_STUBS += $${CREPORTER_STUBS_DIR}/mgconfitem_stub.cpp \
+    $${CREPORTER_STUBS_DIR}/qnetworkconfiguration.cpp \
+    $${CREPORTER_STUBS_DIR}/qnetworksession.cpp
 
 # unit
 TEST_SOURCES += $${DAEMON_SRC_DIR}/creporterdaemonmonitor.cpp \
 	
 HEADERS += $${CREPORTER_STUBS_DIR}/mgconfitem_stub.h \
+           $${CREPORTER_STUBS_DIR}/qnetworkconfigmanager.h \
+           $${CREPORTER_STUBS_DIR}/qnetworksession.h \
            $${DAEMON_SRC_DIR}/creporterdaemonmonitor.h \
            $${DAEMON_SRC_DIR}/creporterdaemonmonitor_p.h \
            $${CREPORTER_SRC_DIR}/dialogserver/creporterdialogserverdbusadaptor.h \
@@ -30,6 +35,7 @@ HEADERS += $${CREPORTER_STUBS_DIR}/mgconfitem_stub.h \
            $${CREPORTER_SRC_DIR}/libs/coredir/creportercoredir_p.h \
            $${CREPORTER_SRC_DIR}/libs/coredir/creportercoreregistry.h \
            $${CREPORTER_SRC_DIR}/libs/coredir/creportercoreregistry_p.h \
+           $${CREPORTER_SRC_DIR}/libs/httpclient/creporternwsessionmgr.h \
            $${CREPORTER_SRC_DIR}/libs/utils/creporterutils.h \
            $${CREPORTER_SRC_DIR}/libs/serviceif/creporterdialogserverproxy.h \
            $${CREPORTER_SRC_DIR}/libs/serviceif/creporterautouploaderproxy.h \
@@ -48,6 +54,7 @@ SOURCES += $$TEST_SOURCES \
            $${CREPORTER_SRC_DIR}/dialogserver/creporterdialogserverdbusadaptor.cpp \
            $${CREPORTER_SRC_DIR}/libs/coredir/creportercoredir.cpp \
            $${CREPORTER_SRC_DIR}/libs/coredir/creportercoreregistry.cpp \
+           $${CREPORTER_SRC_DIR}/libs/httpclient/creporternwsessionmgr.cpp \
            $${CREPORTER_SRC_DIR}/libs/utils/creporterutils.cpp \
            $${CREPORTER_SRC_DIR}/libs/serviceif/creporterdialogserverproxy.cpp \
            $${CREPORTER_SRC_DIR}/libs/serviceif/creporterautouploaderproxy.cpp \

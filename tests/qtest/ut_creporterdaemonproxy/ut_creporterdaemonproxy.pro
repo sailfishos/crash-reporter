@@ -8,6 +8,7 @@ LIBS += ../../../lib/libcrashreporter.so
 
 INCLUDEPATH += . \
                $${CREPORTER_SRC_DIR}/libs/coredir \
+               $${CREPORTER_SRC_DIR}/libs/httpclient \
                $${CREPORTER_SRC_DIR}/libs/serviceif \
                $${CREPORTER_SRC_DIR}/libs/settings \
 			   $${DAEMON_SRC_DIR} \
@@ -32,6 +33,7 @@ HEADERS += $${CREPORTER_STUBS_DIR}/mgconfitem_stub.h \
            $${CREPORTER_SRC_DIR}/libs/coredir/creportercoreregistry_p.h \
            $${CREPORTER_SRC_DIR}/libs/coredir/creportercoredir.h \
            $${CREPORTER_SRC_DIR}/libs/coredir/creportercoreregistry.h \
+           $${CREPORTER_SRC_DIR}/libs/httpclient/creporternwsessionmgr.h \
            $${CREPORTER_SRC_DIR}/libs/notification/creporternotification.h \
            ut_creporterdaemonproxy.h \
 
