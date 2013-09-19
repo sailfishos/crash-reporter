@@ -129,11 +129,11 @@ make %{?jobs:-j%jobs}
 #/usr/lib/crash-reporter-ui-tests/testdata/*
 #/usr/share/crash-reporter-ui-tests/*
 
-%post
-# on first install
-if [ "$1" -eq 1 ]; then
-	add-oneshot --user --now crash-reporter-service-default
-fi
+#%post
+## on first install
+#if [ "$1" -eq 1 ]; then
+#	add-oneshot --user --now crash-reporter-service-default
+#fi
 
 %post -n libcrash-reporter0
 ldconfig
