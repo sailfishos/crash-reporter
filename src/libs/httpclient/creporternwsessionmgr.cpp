@@ -46,11 +46,18 @@
 class CReporterNwSessionMgrPrivate
 {
 public:
-    //! @arg Manages the network configurations provided by the system.
-    QNetworkConfigurationManager networkManager;
     //! @arg Provides control over the system's access points and enables session management.
     QNetworkSession *networkSession;
+
+    //! @return Manager of the network configurations provided by the system.
+    static QNetworkConfigurationManager& networkManager();
 };
+
+QNetworkConfigurationManager& CReporterNwSessionMgrPrivate::networkManager()
+{
+    static QNetworkConfigurationManager manager;
+    return manager;
+}
 
 // *** Class CReporterNwSessionMgr ****
 
@@ -106,9 +113,9 @@ bool CReporterNwSessionMgr::open()
     if (d->networkSession == 0) {
         qDebug() << __PRETTY_FUNCTION__ << "No existing network session.";
         // If there was no network session, create one.
-        d->networkManager.updateConfigurations();
+        d->networkManager().updateConfigurations();
         d->networkSession =
-                new QNetworkSession(d->networkManager.defaultConfiguration());
+                new QNetworkSession(d->networkManager().defaultConfiguration());
 
         connect(d->networkSession, SIGNAL(stateChanged(QNetworkSession::State)),
                 this, SLOT(networkStateChanged(QNetworkSession::State)));
