@@ -176,8 +176,6 @@ class CReporterUploadEnginePrivate : public QObject
         int totalFiles;
         //! @arg Number of files sent.
         int sentFiles;
-        //! @arg Set to True, if USB networking should be used.
-        bool usbNetworking;
         //! @arg State of the engine.
         State state;
 

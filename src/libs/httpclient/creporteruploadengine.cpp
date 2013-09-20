@@ -104,12 +104,10 @@ void CReporterUploadEnginePrivate::uploadItem(CReporterUploadItem *item)
     currentItem = item;
 
 #ifdef CREPORTER_LIBBEARER_ENABLED
-    if (!usbNetworking) {
-        stateChange(Connecting);
-        if (!networkSession->open()) {
-            // No network connection. Open new session and wait for sessionOpened() -signal.
-            return;
-        }
+    stateChange(Connecting);
+    if (!networkSession->open()) {
+        // No network connection. Open new session and wait for sessionOpened() -signal.
+        return;
     }
     qDebug() << __PRETTY_FUNCTION__ << "Network connection exists. => start upload.";
 #endif // CREPORTER_LIBBEARER_ENABLED
@@ -127,7 +125,7 @@ void CReporterUploadEnginePrivate::queueDone()
 
 #ifdef CREPORTER_LIBBEARER_ENABLED
     // Upload queue is empty. Close network session, if exists.
-    if (!usbNetworking && (state != NoConnection)) {
+    if (state != NoConnection) {
         stateChange(Closing);
         networkSession->close();
     }
@@ -282,7 +280,6 @@ void CReporterUploadEnginePrivate::emitFinished(CReporterUploadEngine::ErrorType
 
     d->queue = queue;
 
-    d->usbNetworking = CReporterApplicationSettings::instance()->usbNetworking();
     d_ptr->q_ptr = this;
 
     // Upload queue signals.
@@ -306,14 +303,6 @@ CReporterUploadEngine::~CReporterUploadEngine()
 QString CReporterUploadEngine::lastError() const
 {
     return d_ptr->errorMessage;
-}
-
-// ----------------------------------------------------------------------------
-// CReporterUploadEngine::usbNetworking
-// ----------------------------------------------------------------------------
-bool CReporterUploadEngine::usbNetworking() const
-{
-    return d_ptr->usbNetworking;
 }
 
 // ----------------------------------------------------------------------------

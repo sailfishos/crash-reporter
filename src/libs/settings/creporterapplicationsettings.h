@@ -62,15 +62,6 @@ namespace Proxy {
 }
 
 /*!
-  * @namespace Connectivity
-  * @brief Key/ value pairs for connectivity related settings.
-  *
-  */
-namespace Connectivity {
-    const QString ValueUsbNetworking = "Connectivity/usb_networking";
-}
-
-/*!
   * @namespace Logging
   * @brief Key/ value pairs for logging related settings.
   *
@@ -95,7 +86,6 @@ namespace DefaultApplicationSettings {
     const bool ValueUseProxyDefault = false;
     const QString ValueProxyAddressDefault = "";
     const QString ValueProxyPortDefault = "";
-    const bool ValueUsbNetworkingDefault = false;
     const bool ValueLoggerTypeDefault = "none";
 }
 
@@ -117,7 +107,6 @@ class CReporterApplicationSettings : public CReporterSettingsBase
     Q_PROPERTY(bool useProxy READ useProxy WRITE setUseProxy NOTIFY useProxyChanged)
     Q_PROPERTY(QString proxyUrl READ proxyUrl WRITE setProxyUrl NOTIFY proxyUrlChanged)
     Q_PROPERTY(int proxyPort READ proxyPort WRITE setProxyPort NOTIFY proxyPortChanged)
-    Q_PROPERTY(bool usbNetworking READ usbNetworking WRITE setUsbNetworking NOTIFY usbNetworkingChanged)
     Q_PROPERTY(QString loggerType READ loggerType WRITE setLoggerType NOTIFY loggerTypeChanged)
 
     public:
@@ -167,9 +156,6 @@ class CReporterApplicationSettings : public CReporterSettingsBase
         int proxyPort() const;
         void setProxyPort(int port);
 
-        bool usbNetworking() const;
-        void setUsbNetworking(bool state);
-
         QString loggerType() const;
         void setLoggerType(const QString &type);
 
@@ -183,7 +169,6 @@ class CReporterApplicationSettings : public CReporterSettingsBase
         void useProxyChanged();
         void proxyUrlChanged();
         void proxyPortChanged();
-        void usbNetworkingChanged();
         void loggerTypeChanged();
 
     protected:

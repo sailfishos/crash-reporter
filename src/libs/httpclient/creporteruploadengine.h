@@ -48,8 +48,6 @@ class CREPORTER_EXPORT CReporterUploadEngine : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool usbNetworkging READ usbNetworking)
-
     public:
         /*!
           * @enum ErrorType
@@ -88,13 +86,6 @@ class CREPORTER_EXPORT CReporterUploadEngine : public QObject
           * @return Last error string, if available; empty if no error or not valid.
           */
         QString lastError() const;
-
-        /*!
-          * @brief Checks, if USB bearer is used to connect network.
-          *
-          * @return True, if USB netwroking is enabled; otherwise false.
-          */
-        bool usbNetworking() const;
 
     Q_SIGNALS:
         /*!

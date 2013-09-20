@@ -216,18 +216,6 @@ void CReporterApplicationSettings::setProxyPort(int port)
         emit proxyPortChanged();
 }
 
-bool CReporterApplicationSettings::usbNetworking() const
-{
-    return value(Connectivity::ValueUsbNetworking,
-            DefaultApplicationSettings::ValueUsbNetworkingDefault).toBool();
-}
-
-void CReporterApplicationSettings::setUsbNetworking(bool state)
-{
-    if (setValue(Connectivity::ValueUsbNetworking, state))
-        emit usbNetworkingChanged();
-}
-
 QString CReporterApplicationSettings::loggerType() const
 {
     return value(Logging::ValueLoggerType,
