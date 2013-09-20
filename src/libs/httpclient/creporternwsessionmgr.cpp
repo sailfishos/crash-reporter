@@ -122,6 +122,15 @@ bool CReporterNwSessionMgr::unpaidConnectionAvailable()
     manager.updateConfigurations();
     QNetworkConfiguration config(manager.defaultConfiguration());
 
+#ifndef CREPORTER_UNIT_TEST
+        qDebug() << "Network configurations available:";
+        foreach(const QNetworkConfiguration& cfg, manager.allConfigurations()) {
+            qDebug() << ' ' << cfg.name() << cfg.bearerTypeName() << cfg.state()
+                     << cfg.identifier();
+        }
+        qDebug() << "Default configuration:" << config.name();
+#endif
+
     return (config.bearerType() == QNetworkConfiguration::BearerWLAN) ||
            (config.bearerType() == QNetworkConfiguration::BearerEthernet) ||
            !CReporterNwSessionMgrPrivate::connectionIsActive();
