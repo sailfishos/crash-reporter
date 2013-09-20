@@ -51,12 +51,23 @@ public:
 
     //! @return Manager of the network configurations provided by the system.
     static QNetworkConfigurationManager& networkManager();
+
+    //! @return True if default connection is in disconnected state.
+    static bool connectionIsActive();
 };
 
 QNetworkConfigurationManager& CReporterNwSessionMgrPrivate::networkManager()
 {
     static QNetworkConfigurationManager manager;
     return manager;
+}
+
+bool CReporterNwSessionMgrPrivate::connectionIsActive()
+{
+    QNetworkConfiguration config =
+            CReporterNwSessionMgrPrivate::networkManager().defaultConfiguration();
+
+    return ((config.state() & QNetworkConfiguration::Active) == QNetworkConfiguration::Active);
 }
 
 // *** Class CReporterNwSessionMgr ****
@@ -110,9 +121,9 @@ bool CReporterNwSessionMgr::unpaidConnectionAvailable()
 
     QNetworkConfiguration config(manager.defaultConfiguration());
 
-    return ((config.bearerType() == QNetworkConfiguration::BearerWLAN) ||
-            (config.bearerType() == QNetworkConfiguration::BearerEthernet)) &&
-           ((config.state() & QNetworkConfiguration::Active) == QNetworkConfiguration::Active);
+    return (config.bearerType() == QNetworkConfiguration::BearerWLAN) ||
+           (config.bearerType() == QNetworkConfiguration::BearerEthernet) ||
+           !CReporterNwSessionMgrPrivate::connectionIsActive();
 }
 
 // ----------------------------------------------------------------------------
@@ -123,6 +134,16 @@ bool CReporterNwSessionMgr::open()
     Q_D(CReporterNwSessionMgr);
 
     if (d->networkSession == 0) {
+        /* Device USB network might not be reported by a configuration manager.
+         * If we detect the default connection is inactive, try to bypass
+         * the manager and go on without QNetworkSession. If the  cable is
+         * plugged in, connection has still a chance to succeed. */
+        if (!CReporterNwSessionMgrPrivate::connectionIsActive()) {
+            qDebug() << "No active connection is available. "
+                    "Going on, there still might be USB cable connected...";
+            return true;
+        }
+
         qDebug() << __PRETTY_FUNCTION__ << "No existing network session.";
         // If there was no network session, create one.
         d->networkManager().updateConfigurations();
