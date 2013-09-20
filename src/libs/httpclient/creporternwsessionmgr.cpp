@@ -119,6 +119,7 @@ bool CReporterNwSessionMgr::unpaidConnectionAvailable()
     QNetworkConfigurationManager &manager =
             CReporterNwSessionMgrPrivate::networkManager();
 
+    manager.updateConfigurations();
     QNetworkConfiguration config(manager.defaultConfiguration());
 
     return (config.bearerType() == QNetworkConfiguration::BearerWLAN) ||
@@ -146,7 +147,6 @@ bool CReporterNwSessionMgr::open()
 
         qDebug() << __PRETTY_FUNCTION__ << "No existing network session.";
         // If there was no network session, create one.
-        d->networkManager().updateConfigurations();
         d->networkSession =
                 new QNetworkSession(d->networkManager().defaultConfiguration());
 
