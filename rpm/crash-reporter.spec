@@ -86,9 +86,6 @@ make %{?jobs:-j%jobs}
 %defattr(-,root,root,-)
 %doc README COPYING
 /usr/bin/crash*
-#/usr/lib/duicontrolpanel/*.desktop
-#/usr/lib/duicontrolpanel/applets/*crash*.so*
-#/usr/lib/crash-reporter/dialogplugins/*
 /usr/lib/oneshot.d/*
 /usr/lib/systemd/user/*
 /usr/share/crash-reporter/*
