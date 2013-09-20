@@ -243,17 +243,26 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
 
                     notification.reset(new CReporterNotification(
                             CReporter::AutoUploaderNotificationEventType,
-                            summary, "Uploading automatically...",
-                            this));
+                            summary, "", this));
                 }
-                // In AutoUpload-mode try to upload all core files each time a new one has appeared
-                QStringList fileList = registry->collectAllCoreFiles();
-                if (!q_ptr->notifyAutoUploader(fileList))
-                {
-                    qWarning() << __PRETTY_FUNCTION__ << "Failed to start Auto Uploader.";
+                if (!CReporterNwSessionMgr::unpaidConnectionAvailable()) {
+                    qDebug() << __PRETTY_FUNCTION__
+                             << "WiFi not available, not uploading now.";
+                } else {
                     if (notification) {
-                        notification->update(summary,
-                                "Auto uploader failed to start, send the report manually");
+                            notification->update(summary,
+                                    "Uploading automatically...");
+                    }
+
+                    /* In auto-upload mode try to upload all crash reports each
+                     * time a new one appears. */
+                    if (!q_ptr->notifyAutoUploader(registry->collectAllCoreFiles())) {
+                        qWarning() << __PRETTY_FUNCTION__
+                                   << "Failed to start Auto Uploader.";
+                        if (notification) {
+                            notification->update(summary,
+                                    "Auto uploader failed to start, send the report manually");
+                        }
                     }
                 }
             }
@@ -436,12 +445,6 @@ bool CReporterDaemonMonitor::notifyCrashReporterUI(const QString &dialogName,
 // ----------------------------------------------------------------------------
 bool CReporterDaemonMonitor::notifyAutoUploader(const QStringList &filesToUpload)
 {
-    if (!CReporterNwSessionMgr::unpaidConnectionAvailable()) {
-        qDebug() << __PRETTY_FUNCTION__
-                 << "WiFi not available, not uploading now.";
-        return true;
-    }
-
     qDebug() << __PRETTY_FUNCTION__ << "Sending " << filesToUpload.size() << " to be uploaded.";
     CReporterAutoUploaderProxy proxy(CReporter::AutoUploaderServiceName,
                                         CReporter::AutoUploaderObjectPath, QDBusConnection::sessionBus());
