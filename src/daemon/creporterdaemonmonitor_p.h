@@ -27,9 +27,8 @@
 
 // System includes.
 
+#include <QDateTime>
 #include <QFileSystemWatcher>
-#include <QString>
-#include <QList>
 
 // Forward declarations.
 
@@ -77,6 +76,8 @@ class CReporterHandledRichCore
         qint64 lowerLimit;
         //! @arg Counter for duplicates.
         int count;
+        //! @arg When duplicate counter was last set to zero.
+        QDateTime lastCountReset;
 };
 
 /*!

@@ -54,7 +54,8 @@
 // ----------------------------------------------------------------------------
 // CReporterHandledRichCore::CReporterHandledRichCore
 // ----------------------------------------------------------------------------
-CReporterHandledRichCore::CReporterHandledRichCore(const QString &filePath)
+CReporterHandledRichCore::CReporterHandledRichCore(const QString &filePath):
+  lastCountReset(QDateTime::currentDateTimeUtc())
 {
     // Parse needed info for file path.
     QStringList rCoreInfo = CReporterUtils::parseCrashInfoFromFilename(filePath);
@@ -330,6 +331,16 @@ bool CReporterDaemonMonitorPrivate::checkForDuplicates(const QString &path)
                << ", Lower:" << handled->lowerLimit << ", Upper:" << handled->upperLimit;
 
         if (*handled == *rCore) {
+            /* Check if more than a day has passed from last duplicate counter
+             * reset. */
+            QDateTime now(QDateTime::currentDateTimeUtc());
+            if (handled->lastCountReset.addDays(1) < now) {
+                qDebug() << __PRETTY_FUNCTION__ << "More than a day has passed,"
+                            " resetting duplicate counter";
+                handled->count = 0;
+                handled->lastCountReset = now;
+            }
+
             handled->count++;
             // Duplicate found. Increment counter.
             qDebug() << __PRETTY_FUNCTION__  << "Matches. Count is now:" << handled->count;
