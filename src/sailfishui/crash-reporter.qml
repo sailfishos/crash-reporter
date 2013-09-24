@@ -90,10 +90,10 @@ Page {
             TextSwitch {
                 automaticCheck: false
                 checked: PrivacySettings.coreDumping
-                //% "Include core dump"
-                text: qsTrId("settings_crash-reporter_include_core")
-                //% "Includes an application core dump into the crash report."
-                description: qsTrId("settings_crash-reporter_include_core_description")
+                //% "Create crash reports"
+                text: qsTrId("settings_crash-reporter_create reports")
+                //% "When an application crashes, a report is created including a core dump and other information to help the developers in tracing the bug."
+                description: qsTrId("settings_crash-reporter_create reports_description")
                 onClicked: PrivacySettings.coreDumping = !PrivacySettings.coreDumping
             }
 
