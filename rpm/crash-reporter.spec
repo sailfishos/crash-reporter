@@ -66,12 +66,6 @@ Requires:               %{name} = %{version}-%{release}
 %description            tests
 Test binaries for testing Crash Reporter.
 
-#%package                ui-tests
-#Summary:                UI tests for crash-reporter
-#Requires:               %{name} = %{version}-%{release}
-#%description            ui-tests
-#MATTI test cases for Crash Reporter UI.
-
 %prep
 %setup -q -n %{name}-%{version}
 
@@ -121,10 +115,6 @@ make %{?jobs:-j%jobs}
 %defattr(-,root,root,-)
 /usr/lib/crash-reporter-tests/*
 /usr/share/crash-reporter-tests/*
-
-#%files ui-tests
-#/usr/lib/crash-reporter-ui-tests/testdata/*
-#/usr/share/crash-reporter-ui-tests/*
 
 #%post
 ## on first install
