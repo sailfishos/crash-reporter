@@ -143,7 +143,7 @@ void Ut_CReporterDaemonProxy::cleanupTestCase()
 {
     CReporterTestUtils::removeTestMountpoints();
 
-    system("rm -rf /tmp/crash-reporter-tests");
+    UNUSED_RESULT(system("rm -rf /tmp/crash-reporter-tests"));
 }
 
 void Ut_CReporterDaemonProxy::cleanup()

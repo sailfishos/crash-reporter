@@ -38,3 +38,5 @@ public:
 
 	static QStringList* getCoreDumpPaths();
 };
+
+#define UNUSED_RESULT(x) if(x){}

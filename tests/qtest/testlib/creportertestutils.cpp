@@ -91,7 +91,7 @@ void CReporterTestUtils::cleanupDirectories( const QStringList& paths )
 		command.append("/*");
 
 		qDebug() << command;
-		system(command.toLatin1().data());
+		UNUSED_RESULT(system(command.toLatin1().data()));
 	}
 }
 
@@ -105,7 +105,7 @@ void CReporterTestUtils::removeDirectories( const QStringList& paths )
 		command.append(paths.at(i));
 
 		qDebug() << command;
-		system(command.toLatin1().data());
+		UNUSED_RESULT(system(command.toLatin1().data()));
 	}
 }
 
@@ -117,7 +117,7 @@ void CReporterTestUtils::removeDirectory( const QString& path )
 	command.append( path );
 
 	qDebug() << command;
-	system(command.toLatin1().data());
+	UNUSED_RESULT(system(command.toLatin1().data()));
 }
 
 #ifdef CREPORTER_UNIT_TEST
@@ -133,7 +133,7 @@ void CReporterTestUtils::createTestMountpoints()
 void CReporterTestUtils::removeTestMountpoints()
 {
     QDir::setCurrent(QDir::homePath());
-    system("rm -rf crash-reporter-tests");
+    UNUSED_RESULT(system("rm -rf crash-reporter-tests"));
 }
 #endif // CREPORTER_UNIT_TEST
 

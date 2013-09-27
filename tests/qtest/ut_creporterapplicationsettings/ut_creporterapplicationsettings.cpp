@@ -30,6 +30,7 @@
 #include "ut_creporterapplicationsettings.h"
 #include "creporterapplicationsettings.h"
 #include "creportersettingsinit_p.h"
+#include "creportertestutils.h"
 
 const QString systemSettingsPath("/tmp/crash-reporter-settings/system");
 const QString userSettingsPath("/tmp/crash-reporter-settings/user");
@@ -89,7 +90,7 @@ void Ut_CReporterApplicationSettings::cleanupTestCase()
 
 void Ut_CReporterApplicationSettings::cleanup()
 {
-    system("rm -rf /tmp/crash-reporter-settings");
+    UNUSED_RESULT(system("rm -rf /tmp/crash-reporter-settings"));
 }
 
 QTEST_MAIN(Ut_CReporterApplicationSettings)

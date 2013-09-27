@@ -43,7 +43,7 @@ void Ut_CReporterCoreDir::initTestCase()
 void Ut_CReporterCoreDir::init()
 {
     QString mkDir = QString("mkdir -p -m 777 %1 %2").arg(testMountPoint1).arg(testMountPoint2);
-    system(mkDir.toLatin1());
+    UNUSED_RESULT(system(mkDir.toLatin1()));
 }
 
 void Ut_CReporterCoreDir::testCreationOfDirectoryForCores()
@@ -117,14 +117,14 @@ void Ut_CReporterCoreDir::cleanupTestCase()
 {
     QDir::setCurrent(QDir::homePath());
     QString rm = QString("rm -r -f /tmp/crash-reporter-tests");
-    system(rm.toLatin1());
+    UNUSED_RESULT(system(rm.toLatin1()));
 }
 
 void Ut_CReporterCoreDir::cleanup()
 {
     QDir::setCurrent(QDir::homePath());
     QString rm = QString("rm -r -f %1 %2").arg(testMountPoint1).arg(testMountPoint2);
-    system(rm.toLatin1());
+    UNUSED_RESULT(system(rm.toLatin1()));
 
     if (dir) {
         delete dir;
