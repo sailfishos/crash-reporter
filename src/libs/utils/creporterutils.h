@@ -106,6 +106,20 @@ public:
      * @return Size in string.
      */
     static QString fileSizeToString(const quint64 size);
+
+    /*!
+     * @brief Returns the device ID used in SSU requests.
+     *
+     * @return Device ID.
+     */
+    static QString deviceUid();
+
+    /*!
+     * @brief Returns on what kind of system this application is running.
+     *
+     * @return Model of the device
+     */
+    static QString deviceModel();
 };
 
 #endif // CREPORTERUTILS_H

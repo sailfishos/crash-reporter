@@ -30,6 +30,10 @@
 #include <sys/types.h> // for stat()
 #include <sys/stat.h>
 
+#ifndef CREPORTER_UNIT_TEST
+#include <ssudeviceinfo.h>
+#endif
+
 #include <QDebug>
 #include <QFileInfo>
 #include <QDir>
@@ -243,6 +247,24 @@ QString CReporterUtils::fileSizeToString(const quint64 size)
         }
     }
     return text;
+}
+
+QString CReporterUtils::deviceUid()
+{
+#ifndef CREPORTER_UNIT_TEST
+    return SsuDeviceInfo().deviceUid();
+#else
+    return "1234";
+#endif
+}
+
+QString CReporterUtils::deviceModel()
+{
+#ifndef CREPORTER_UNIT_TEST
+    return SsuDeviceInfo().deviceModel();
+#else
+    return "Device";
+#endif
 }
 
 // End of file

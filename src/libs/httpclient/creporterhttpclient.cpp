@@ -39,8 +39,6 @@
 #include <QNetworkProxy>
 #include <QTime>
 
-#include <ssudeviceinfo.h>
-
 // User includes.
 
 #include "creportercoreregistry.h"
@@ -151,8 +149,8 @@ bool CReporterHttpClientPrivate::createRequest(const QString &file)
 
     url.setPath(serverPath);
 
-    SsuDeviceInfo deviceInfo;
-    url.setQuery("uuid=" + deviceInfo.deviceUid() + "&model=" + deviceInfo.deviceModel());
+    url.setQuery("uuid=" + CReporterUtils::deviceUid() +
+            "&model=" + CReporterUtils::deviceModel());
 
     request.setUrl(url);
     qDebug() << __PRETTY_FUNCTION__ << "Upload URL:" << url.toString();
