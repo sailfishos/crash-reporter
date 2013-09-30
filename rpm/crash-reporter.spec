@@ -19,6 +19,7 @@ BuildRequires:          qt5-qtdeclarative-devel
 BuildRequires:          qt5-qtgui-devel
 BuildRequires:          qt5-qtnetwork-devel
 BuildRequires:          qt5-qttest-devel
+BuildRequires:          qt5-qttools-linguist
 BuildRequires:          ssu-devel
 Requires:               sp-rich-core >= 1.71.2
 Requires:               oneshot
