@@ -6,6 +6,6 @@ includedir=${prefix}/include/crash-reporter
 Name: libcrash-reporter
 Description: Crash Reporter library
 Version: @VERSION@
-Requires: QtCore QtDBus QtGui QtBearer meegotouch
+Requires: QtCore QtDBus QtGui QtNetwork
 Cflags: -I${includedir}
 Libs: -L${libdir} -lcrash-reporter
