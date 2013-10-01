@@ -8,4 +8,4 @@ Description: Crash Reporter library
 Version: @VERSION@
 Requires: Qt5Core Qt5DBus Qt5Gui Qt5Network
 Cflags: -I${includedir}
-Libs: -L${libdir} -lcrash-reporter
+Libs: -L${libdir} -lcrashreporter
