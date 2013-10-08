@@ -1,0 +1,18 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+ <interface name="org.freedesktop.Notifications">
+  <method name="Notify">
+   <arg type="s" name="app_name" direction="in"/>
+   <arg type="u" name="replaces_id" direction="in"/>
+   <arg type="s" name="app_icon" direction="in"/>
+   <arg type="s" name="summary" direction="in"/>
+   <arg type="s" name="body" direction="in"/>
+   <arg type="as" name="actions" direction="in"/>
+   <annotation name="org.qtproject.QtDBus.QtTypeName.In6" value="QVariantMap"/>
+   <arg type="a{sv}" name="hints" direction="in"/>
+   <arg type="i" name="expire_timeout" direction="in"/>
+   <arg type="u" name="id" direction="out"/>
+  </method>
+ </interface>
+</node>

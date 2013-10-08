@@ -47,6 +47,7 @@
 // Forward declarations.
 
 class CReporterNotification;
+class NotificationProxy;
 
 /*!
   * @class CReporterNotificationPrivate
@@ -97,6 +98,8 @@ class CReporterNotificationPrivate : public QObject
         QDBusPendingCallWatcher *callWatcher;
         //! Category of the notification, e.g. "x-nokia.crash-reporter.autouploader".
         QString category;
+        //! DBus proxy of org.freedesktop.Notification
+        NotificationProxy *proxy;
         //! @arg Pointer to public class.
         CReporterNotification *q_ptr;
 };

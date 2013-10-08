@@ -25,11 +25,11 @@
  *
  */
 
-#include <QDBusConnection>
 #include <QDebug>
 
 // User includes.
 
+#include "notificationproxy.h" // generated
 #include "creporternotification.h"
 #include "creporternotification_p.h"
 
@@ -42,7 +42,9 @@
 // ----------------------------------------------------------------------------
 CReporterNotificationPrivate::CReporterNotificationPrivate(const QString &eventType,
                                      const QString &summary, const QString &body) :
-  id(0), category(eventType)
+  id(0), category(eventType),
+  proxy(new NotificationProxy("org.freedesktop.Notifications",
+          "/org/freedesktop/Notifications", QDBusConnection::sessionBus(), this))
 {
     QDBusPendingReply<quint32> reply = sendDBusNotify(summary, body);
     callWatcher = new QDBusPendingCallWatcher(reply, this);
@@ -57,26 +59,21 @@ QDBusPendingReply<quint32>
 CReporterNotificationPrivate::sendDBusNotify(const QString &summary,
                                              const QString &body)
 {
-    QDBusMessage message =
-            QDBusMessage::createMethodCall("org.freedesktop.Notifications",
-                    "/org/freedesktop/Notifications",
-                    "org.freedesktop.Notifications", "Notify");
-
-    QVariantHash hints;
+    QVariantMap hints;
     hints.insert("category", category);
     hints.insert("x-nemo-preview-summary", summary);
     hints.insert("x-nemo-preview-body", body);
 
-    message.setArguments(QVariantList()
-            << QString() << id << QString() << summary << body << QStringList()
-            << hints << -1);
+    QDBusPendingReply<quint32> reply =
+            proxy->Notify(QString(), id, QString(), summary, body,
+                    QStringList(), hints, -1);
 
     qDebug() << __PRETTY_FUNCTION__
              << "Sending Notify for notification" << id
              << "of category" << category
              << "with summary" << summary << "and body" << body;
 
-    return QDBusConnection::sessionBus().asyncCall(message);
+    return reply;
 }
 
 void CReporterNotificationPrivate::retrieveNotificationId()
