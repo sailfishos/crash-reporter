@@ -161,7 +161,14 @@ void CReporterNotification::update(const QString &summary, const QString &body)
 // ----------------------------------------------------------------------------
 void CReporterNotification::remove()
 {
-    // TODO: Re-implement notification removal for Sailfish
+    Q_D(CReporterNotification);
+
+    d->retrieveNotificationId();
+
+    if (d->id != 0) {
+        d->proxy->CloseNotification(d->id);
+        d->id = 0;
+    }
 }
 
 // ----------------------------------------------------------------------------

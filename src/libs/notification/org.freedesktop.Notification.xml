@@ -14,5 +14,8 @@
    <arg type="i" name="expire_timeout" direction="in"/>
    <arg type="u" name="id" direction="out"/>
   </method>
+  <method name="CloseNotification">
+   <arg type="u" name="id" direction="in"/>
+  </method>
  </interface>
 </node>
