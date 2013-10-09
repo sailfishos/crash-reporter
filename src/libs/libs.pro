@@ -68,6 +68,7 @@ SOURCES += coredir/creportercoredir.cpp \
             serviceif/creporterdaemonproxy.cpp \
             serviceif/creporterautouploaderproxy.cpp \
             settings/creporterprivacysettingsmodel.cpp \
+           settings/creportersavedstate.cpp \
             settings/creportersettingsbase.cpp \
             settings/creportersettingsobserver.cpp \
             settings/creporterapplicationsettings.cpp \
@@ -92,6 +93,7 @@ PUBLIC_HEADERS += creporternamespace.h \
                   serviceif/creporterautouploaderproxy.h \
                   serviceif/creportermetatypes.h \
                   settings/creporterprivacysettingsmodel.h \
+                  settings/creportersavedstate.h \
                   settings/creportersettingsbase.h \
                   settings/creportersettingsobserver.h \
                   settings/creporterapplicationsettings.h \
