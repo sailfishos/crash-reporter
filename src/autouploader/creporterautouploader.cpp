@@ -35,6 +35,7 @@
 #include "creporterautouploader.h"
 #include "creporternamespace.h"
 #include "creporternwsessionmgr.h"
+#include "creportersavedstate.h"
 #include "creporterautouploaderdbusadaptor.h"
 #include "creporteruploadqueue.h"
 #include "creporteruploaditem.h"
@@ -61,9 +62,12 @@ class CReporterAutoUploaderPrivate
         bool activated;
         //! @arg files that have been added to upload queue during this auto uploader session
         QStringList addedFiles;
-        /*! Notification object associated with this uploader, giving user
-         *  a notice of the progress.*/
-        CReporterNotification *notification;
+        /*! Notification object giving user a notice that upload is in progress.*/
+        CReporterNotification *progressNotification;
+        /*! Notification object giving user a notice of successful uploads.*/
+        CReporterNotification *successNotification;
+        /*! Notification object giving user a notice of failed uploads.*/
+        CReporterNotification *failedNotification;
 
         /*!
          * Checks whether given file list belongs to a quick feedback upload
@@ -90,7 +94,18 @@ CReporterAutoUploader::CReporterAutoUploader() : d_ptr(new CReporterAutoUploader
 {
     d_ptr->engine = 0;
     d_ptr->activated = false;
-    d_ptr->notification = 0;
+    d_ptr->progressNotification =
+            new CReporterNotification(CReporter::AutoUploaderNotificationEventType,
+            0, this);
+    d_ptr->successNotification =
+            new CReporterNotification(CReporter::AutoUploaderNotificationEventType,
+                    CReporterSavedState::instance()->uploadSuccessNotificationId(),
+                    this);
+    d_ptr->failedNotification =
+            new CReporterNotification(CReporter::AutoUploaderNotificationEventType,
+                    CReporterSavedState::instance()->uploadFailedNotificationId(),
+                    this);
+
     // Create adaptor class. Needs to be taken from the stack.
     new CReporterAutoUploaderDBusAdaptor(this);
     // Register service name and object.
@@ -110,6 +125,8 @@ CReporterAutoUploader::~CReporterAutoUploader()
         delete d_ptr;
         d_ptr = 0;
     }
+
+    CReporterSavedState::freeSingleton();
 
     qDebug() << __PRETTY_FUNCTION__ << "Service closed.";
 
@@ -157,15 +174,8 @@ bool CReporterAutoUploader::uploadFiles(const QStringList &fileList)
 
     if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
     {
-        if (d_ptr->notification) {
-            d_ptr->notification->deleteLater();
-        }
-
-        d_ptr->notification = new CReporterNotification(
-                CReporter::AutoUploaderNotificationEventType,
-                QString("Crash report upload started"),
-                QString("Uploading %1 report(s)").arg(fileList.count()),
-                this);
+        d_ptr->progressNotification->update(QString("Uploading crash reports"),
+                QString("%1 report(s) to upload").arg(fileList.count()));
     }
 
     return true;
@@ -246,20 +256,31 @@ void CReporterAutoUploader::engineFinished(int error, int sent, int total)
         }
     }
 
-    if (CReporterPrivacySettingsModel::instance()->notificationsEnabled() &&
-        d_ptr->notification) {
-        QString summary;
-        QString body;
+    if (CReporterPrivacySettingsModel::instance()->notificationsEnabled()) {
+        d_ptr->progressNotification->remove();
 
         if (total > sent) {
-            summary = "Failed to send all crash reports";
-            body = QString("%1 out of %2 sent").arg(sent).arg(total);
+            int failures = total - sent;
+            d_ptr->failedNotification->update("Failed to send all crash reports",
+                    QString("%1 uploads failed").arg(failures), failures);
         } else {
-            summary = "Crash report upload finished";
-            body = QString("%1 report(s) sent successfully").arg(sent);
+            d_ptr->failedNotification->remove();
         }
 
-        d_ptr->notification->update(summary, body);
+        CReporterSavedState *state = CReporterSavedState::instance();
+
+        if (sent > 0) {
+            sent += state->uploadSuccessCount();
+
+            const char *body = (sent == 1) ?
+                    "%1 crash reported" : "%1 crashes reported";
+            d_ptr->successNotification->update("Crash reports uploaded",
+                                QString(body).arg(sent), sent);
+        }
+
+        state->setUploadSuccessNotificationId(d_ptr->successNotification->id());
+        state->setUploadFailedNotificationId(d_ptr->failedNotification->id());
+        state->setUploadSuccessCount(sent);
     }
 
     qDebug() << __PRETTY_FUNCTION__ << "Message: " << message;

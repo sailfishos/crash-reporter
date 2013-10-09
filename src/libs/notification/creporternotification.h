@@ -6,6 +6,9 @@
  * Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
  * Author: Riku Halonen <riku.halonen@nokia.com>
  *
+ * Copyright (C) 2013 Jolla Ltd.
+ * Contact: Jakub Adam <jakub.adam@jollamobile.com>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
  * version 2.1 as published by the Free Software Foundation.
@@ -63,10 +66,36 @@ class CREPORTER_EXPORT CReporterNotification : public QObject
                               QObject *parent = 0);
 
         /*!
+         * Creates new CReporterNotification to represent an existing operating
+         * system notification element.
+         *
+         * Use this constructor if you want the object to reuse and update
+         * existing notification already shown in OS notification area. New
+         * notification element is opened only when a notification with given id
+         * doesn't exist. How the notification is presented to the user is
+         * system specific.
+         *
+         * Just creating a CReporterNotification won't trigger any update of
+         * the notification element, call update() to change its summary and
+         * body.
+         *
+         * @param eventType Type of the notification.
+         * @param id Handle of existing element in system notification area.
+         * @param parent Parent object.
+         */
+        CReporterNotification(const QString &eventType, int id,
+                              QObject *parent = 0);
+
+        /*!
           * @brief Class destructor.
           *
           */
         virtual ~CReporterNotification();
+
+        /*!
+         * @return Handle to a notification element in the operating system.
+         */
+        int id();
 
         /*!
           * @brief Returns true if @a other is a @e copy of this notification; otherwise returns false.
@@ -86,9 +115,11 @@ class CREPORTER_EXPORT CReporterNotification : public QObject
           *
           * @param summary Summary text to be used in the notification. Defaults to no summary text.
           * @param body Body text to be used in the notification. Defaults to no body text.
+          * @param count Number of events this notification represents.
           */
         void update(const QString &summary = QString(),
-                              const QString &body = QString());
+                    const QString &body = QString(),
+                    int count = 1);
 
         /*!
           * @brief Returns whether notification is published or not.

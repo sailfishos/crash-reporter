@@ -46,6 +46,10 @@
 #include "creporterautouploaderproxy.h"
 #include "creporternotification.h"
 
+#ifndef CREPORTER_UNIT_TEST
+#include "creportersavedstate.h"
+#endif
+
 // ======== MEMBER FUNCTIONS ========
 
 // ----------------------------------------------------------------------------
@@ -145,6 +149,12 @@ bool CReporterDaemon::initiateDaemon()
 
     connect(d->settingsObserver, SIGNAL(valueChanged(QString,QVariant)),
                 this, SLOT(settingValueChanged(QString,QVariant)));
+
+#ifndef CREPORTER_UNIT_TEST
+    // Each time daemon is started, we count successful core uploads from zero.
+    CReporterSavedState::instance()->setUploadSuccessCount(0);
+    CReporterSavedState::freeSingleton();
+#endif
 
     if (CReporterPrivacySettingsModel::instance()->automaticSendingEnabled())
     {

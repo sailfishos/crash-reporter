@@ -40,29 +40,24 @@
 // ----------------------------------------------------------------------------
 // CReporterNotificationPrivate::CReporterNotificationPrivate
 // ----------------------------------------------------------------------------
-CReporterNotificationPrivate::CReporterNotificationPrivate(const QString &eventType,
-                                     const QString &summary, const QString &body) :
-  id(0), category(eventType),
+CReporterNotificationPrivate::CReporterNotificationPrivate(const QString &eventType) :
+  id(0), callWatcher(0), category(eventType),
   proxy(new NotificationProxy("org.freedesktop.Notifications",
           "/org/freedesktop/Notifications", QDBusConnection::sessionBus(), this))
-{
-    QDBusPendingReply<quint32> reply = sendDBusNotify(summary, body);
-    callWatcher = new QDBusPendingCallWatcher(reply, this);
-}
+{}
 
 // ----------------------------------------------------------------------------
 // CReporterNotificationPrivate::~CReporterNotificationPrivate
 // ----------------------------------------------------------------------------
 CReporterNotificationPrivate::~CReporterNotificationPrivate() {}
 
-QDBusPendingReply<quint32>
-CReporterNotificationPrivate::sendDBusNotify(const QString &summary,
-                                             const QString &body)
+void CReporterNotificationPrivate::sendDBusNotify()
 {
     QVariantMap hints;
     hints.insert("category", category);
     hints.insert("x-nemo-preview-summary", summary);
     hints.insert("x-nemo-preview-body", body);
+    hints.insert("x-nemo-item-count", count);
 
     QDBusPendingReply<quint32> reply =
             proxy->Notify(QString(), id, QString(), summary, body,
@@ -73,7 +68,7 @@ CReporterNotificationPrivate::sendDBusNotify(const QString &summary,
              << "of category" << category
              << "with summary" << summary << "and body" << body;
 
-    return reply;
+    callWatcher = new QDBusPendingCallWatcher(reply, this);
 }
 
 void CReporterNotificationPrivate::retrieveNotificationId()
@@ -89,6 +84,12 @@ void CReporterNotificationPrivate::retrieveNotificationId()
 
     if (reply.isValid()) {
         id = reply.argumentAt<0>();
+        if (id == 0) {
+            // Notification didn't exist, create a new one.
+            sendDBusNotify();
+            retrieveNotificationId();
+            return;
+        }
         qDebug() << __PRETTY_FUNCTION__
                  << "Create notification with id: " << id;
     } else if (reply.isError()) {
@@ -118,9 +119,18 @@ CReporterNotification::CReporterNotification(const QString &eventType,
                                              const QString &summary, const QString &body,
                                              QObject *parent) :
     QObject(parent),
-    d_ptr(new CReporterNotificationPrivate(eventType, summary, body))
+    d_ptr(new CReporterNotificationPrivate(eventType))
 {
     d_ptr->q_ptr = this;
+    update(summary, body);
+}
+
+CReporterNotification::CReporterNotification(const QString &eventType, int id,
+                                             QObject *parent):
+  QObject(parent),
+  d_ptr(new CReporterNotificationPrivate(eventType))
+{
+    d_ptr->id = id;
 }
 
 // ----------------------------------------------------------------------------
@@ -130,6 +140,15 @@ CReporterNotification::~CReporterNotification()
 {
     delete d_ptr;
     d_ptr = 0;
+}
+
+int CReporterNotification::id()
+{
+    Q_D(CReporterNotification);
+
+    d->retrieveNotificationId();
+
+    return d->id;
 }
 
 // ----------------------------------------------------------------------------
@@ -143,17 +162,17 @@ bool CReporterNotification::operator==(const CReporterNotification &other) const
 // ----------------------------------------------------------------------------
 // CReporterNotification::update
 // ----------------------------------------------------------------------------
-void CReporterNotification::update(const QString &summary, const QString &body)
+void CReporterNotification::update(const QString &summary, const QString &body,
+                                   int count)
 {
     Q_D(CReporterNotification);
 
     d->retrieveNotificationId();
+    d->summary = summary;
+    d->body = body;
+    d->count = count;
 
-    if (d->id != 0) {
-        d->sendDBusNotify(summary, body);
-    } else {
-        qDebug() << __PRETTY_FUNCTION__ << "Couldn't update notification.";
-    }
+    d->sendDBusNotify();
 }
 
 // ----------------------------------------------------------------------------

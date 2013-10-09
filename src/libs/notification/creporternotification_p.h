@@ -28,9 +28,7 @@
 #ifndef CREPORTERNOTIFICATION_P_H
 #define CREPORTERNOTIFICATION_P_H
 
-// System includes.
-
-#include <QDBusPendingReply>
+#include <QDBusPendingCall>
 
 /*!
   * @def CREPORTER_DBUS_NTF_OBJECT_PATH
@@ -61,17 +59,12 @@ class CReporterNotificationPrivate : public QObject
 
     public:
 
-    /*!
-      * @brief Class constructor.
-      *
-      * @param eventType Type of the notification.
-      * @param summary Summary text to be used in the notification. Defaults to no summary text.
-      * @param body Body text to be used in the notification. Defaults to no body text.
-      * @param action Remote action to invoke. Uses default action if 0
-      */
-        CReporterNotificationPrivate(const QString &eventType,
-                                     const QString &summary = QString(),
-                                     const QString &body = QString());
+    /**
+     * @brief Class constructor.
+     *
+     * @param eventType Type of the notification.
+     */
+    CReporterNotificationPrivate(const QString &eventType);
 
         /*!
           * @brief Class destructor.
@@ -79,8 +72,7 @@ class CReporterNotificationPrivate : public QObject
           */
         virtual ~CReporterNotificationPrivate();
 
-        QDBusPendingReply<quint32> sendDBusNotify(const QString &summary,
-                                                  const QString &body);
+    void sendDBusNotify();
         void retrieveNotificationId();
 
     public Q_SLOTS:
@@ -98,6 +90,15 @@ class CReporterNotificationPrivate : public QObject
         QDBusPendingCallWatcher *callWatcher;
         //! Category of the notification, e.g. "x-nokia.crash-reporter.autouploader".
         QString category;
+        //! Notification's summary string.
+        QString summary;
+        //! Notification's body.
+        QString body;
+        /**
+         * Number of events this notification represents, i.e.
+         * "x-nemo-item-count" hint.
+         */
+        int count;
         //! DBus proxy of org.freedesktop.Notification
         NotificationProxy *proxy;
         //! @arg Pointer to public class.

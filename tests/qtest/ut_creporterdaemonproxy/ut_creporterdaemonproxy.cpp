@@ -61,10 +61,12 @@ CReporterNotification::CReporterNotification(const QString &eventType,
 CReporterNotification::~CReporterNotification()
 {}
 
-void CReporterNotification::update(const QString &summary, const QString &body)
+void CReporterNotification::update(const QString &summary, const QString &body,
+                                   int count)
 {
     Q_UNUSED(summary);
     Q_UNUSED(body);
+    Q_UNUSED(count);
 }
 
 void CReporterNotification::remove()
