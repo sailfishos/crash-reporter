@@ -68,13 +68,7 @@ class CReporterHandledRichCore
         QString binaryName;
         //! @arg Signal number (SIGNUM).
         int signalNumber;
-        //! @arg File size.
-        qint64 size;
         //! @arg Upper file size limit.
-        qint64 upperLimit;
-        //! @arg Lower file size limit.
-        qint64 lowerLimit;
-        //! @arg Counter for duplicates.
         int count;
         //! @arg When duplicate counter was last set to zero.
         QDateTime lastCountReset;

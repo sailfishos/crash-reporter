@@ -64,14 +64,10 @@ CReporterHandledRichCore::CReporterHandledRichCore(const QString &filePath):
     signalNumber = rCoreInfo[2].toInt();
 
     QFileInfo fi(filePath);
-    size = fi.size();
-    lowerLimit = (size * 95) / 100;
-    upperLimit = (size * 105) / 100;
 
     count = 0;
 
-    qDebug() << __PRETTY_FUNCTION__ << "Name:" << binaryName << ", Signal:" << signalNumber
-            << ", Size:" << size << ", Lower:" << lowerLimit << ", Upper:" << upperLimit;
+    qDebug() << __PRETTY_FUNCTION__ << "Name:" << binaryName << ", Signal:" << signalNumber;
 }
 
 // ----------------------------------------------------------------------------
@@ -86,12 +82,8 @@ CReporterHandledRichCore::~CReporterHandledRichCore()
 // ----------------------------------------------------------------------------
 bool CReporterHandledRichCore::operator==(const CReporterHandledRichCore &other) const
 {
-    if ((binaryName == other.binaryName) && (signalNumber == other.signalNumber) &&
-        (other.size >= lowerLimit) && (other.size <= upperLimit)) {
-        return true;
-    }
-
-    return false;
+    return (binaryName == other.binaryName) &&
+           (signalNumber == other.signalNumber);
 }
 
 // ******** Class CReporterDaemonMonitorPrivate ********
@@ -327,8 +319,7 @@ bool CReporterDaemonMonitorPrivate::checkForDuplicates(const QString &path)
     foreach (CReporterHandledRichCore *handled, handledRichCores) {
         // Loop through list to find duplicates.
         qDebug() << __PRETTY_FUNCTION__  << "Compare to:"
-               << "Name:" << handled->binaryName << ", Signal:" << handled->signalNumber
-               << ", Lower:" << handled->lowerLimit << ", Upper:" << handled->upperLimit;
+               << "Name:" << handled->binaryName << ", Signal:" << handled->signalNumber;
 
         if (*handled == *rCore) {
             /* Check if more than a day has passed from last duplicate counter
