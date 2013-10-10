@@ -66,9 +66,6 @@ QDBusReply<bool> QDBusConnectionInterface::isServiceRegistered(const QString &se
     return reply;
 }
 
-static QString ntfEventType;
-static QString ntfSummary;
-static QString ntfBody;
 static bool notificationCreated;
 static bool notificationUpdated;
 
@@ -77,27 +74,46 @@ CReporterNotification::CReporterNotification(const QString &eventType,
                                              const QString &summary, const QString &body,
                                              QObject *parent)
 {
-    ntfEventType = eventType;
-    ntfSummary = summary;
-    ntfBody = body;
+    Q_UNUSED(eventType);
+    Q_UNUSED(summary);
+    Q_UNUSED(body);
     notificationCreated = true;
     Q_UNUSED(parent);
+}
+
+CReporterNotification::CReporterNotification(const QString &eventType, int id,
+                                             QObject *parent)
+{
+    Q_UNUSED(eventType);
+    Q_UNUSED(id);
+    Q_UNUSED(parent);
+
+    notificationCreated = true;
 }
 
 CReporterNotification::~CReporterNotification()
 {}
 
+int CReporterNotification::id()
+{
+    return 10;
+}
+
 void CReporterNotification::update(const QString &summary, const QString &body,
                                    int count)
 {
     notificationUpdated = true;
-    ntfSummary = summary;
     Q_UNUSED(body);
     Q_UNUSED(count)
 }
 
 void CReporterNotification::remove()
 {}
+
+void CReporterNotification::setTimeout(int ms)
+{
+    Q_UNUSED(ms);
+}
 
 const QString testSettingsFile("/tmp/crash-reporter-tests/user_settings/crash-reporter-settings/crash-reporter-privacy.conf");
 
@@ -144,9 +160,6 @@ void Ut_CReporterDaemon::initTestCase()
 
 void Ut_CReporterDaemon::init()
 {
-    ntfEventType.clear();
-    ntfSummary.clear();
-    ntfBody.clear();
     notificationCreated = false;
     notificationUpdated = false;
     serviceRegisteredReply = true;

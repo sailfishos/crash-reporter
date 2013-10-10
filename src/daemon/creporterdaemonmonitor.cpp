@@ -40,6 +40,7 @@
 #include "creporterdaemonmonitor_p.h"
 #include "creportercoreregistry.h"
 #include "creporternwsessionmgr.h"
+#include "creportersavedstate.h"
 #include "creporterutils.h"
 #include "creporterdialogserverproxy.h"
 #include "creporterautouploaderproxy.h"
@@ -94,8 +95,14 @@ bool CReporterHandledRichCore::operator==(const CReporterHandledRichCore &other)
 // CReporterDaemonMonitorPrivate::CReporterDaemonMonitorPrivate
 // ----------------------------------------------------------------------------
 CReporterDaemonMonitorPrivate::CReporterDaemonMonitorPrivate() :
-        autoDelete(false), autoDeleteMaxSimilarCores(0), autoUpload(false)
+  autoDelete(false), autoDeleteMaxSimilarCores(0), autoUpload(false),
+  crashNotification(new CReporterNotification(
+          CReporter::AutoUploaderNotificationEventType,
+          CReporterSavedState::instance()->crashNotificationId(), this)),
+  crashCount(0)
 {
+    connect(crashNotification, &CReporterNotification::timeouted,
+            this, &CReporterDaemonMonitorPrivate::resetCrashCount);
 }
 
 // ----------------------------------------------------------------------------
@@ -103,6 +110,9 @@ CReporterDaemonMonitorPrivate::CReporterDaemonMonitorPrivate() :
 // ----------------------------------------------------------------------------
 CReporterDaemonMonitorPrivate::~CReporterDaemonMonitorPrivate()
 {
+    CReporterSavedState *state = CReporterSavedState::instance();
+    state->setCrashNotificationId(crashNotification->id());
+
     qDeleteAll(handledRichCores);
 }
 
@@ -171,10 +181,15 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
                 // exeeded, delete file.
                 if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
                 {
-                    CReporterNotification notification(
-                            CReporter::ApplicationNotificationEventType,
-                            QString("%1 has crashed once again.").arg(details.at(0)),
-                            QString("Duplicate crash report was deleted."));
+                    CReporterNotification *notification =
+                            new CReporterNotification(
+                                    CReporter::ApplicationNotificationEventType,
+                                    0, this);
+                    notification->setTimeout(5000);
+                    connect(notification, &CReporterNotification::timeouted,
+                            notification, &QObject::deleteLater);
+                    notification->update(QString("%1 has crashed again.").arg(details[0]),
+                            "Duplicate crash report was deleted.");
                 }
                 CReporterUtils::removeFile(filePath);
                 return;
@@ -222,36 +237,27 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
             }
             else
             {
-                QScopedPointer<CReporterNotification> notification;
-                QString summary;
-
                 if (CReporterPrivacySettingsModel::instance()->notificationsEnabled() &&
                     !filePath.contains(CReporter::LifelogPackagePrefix)) {
 
-                    summary = QString("%1 has crashed.").arg(details.at(0));
+                    QString body;
+                    if (++crashCount > 1) {
+                        body = QString("%1 crashes total").arg(crashCount);
+                    }
 
-                    notification.reset(new CReporterNotification(
-                            CReporter::AutoUploaderNotificationEventType,
-                            summary, "", this));
+                    crashNotification->update(
+                            QString("%1 has crashed.").arg(details.at(0)),
+                            body, crashCount);
                 }
                 if (!CReporterNwSessionMgr::unpaidConnectionAvailable()) {
                     qDebug() << __PRETTY_FUNCTION__
                              << "WiFi not available, not uploading now.";
                 } else {
-                    if (notification) {
-                            notification->update(summary,
-                                    "Uploading automatically...");
-                    }
-
                     /* In auto-upload mode try to upload all crash reports each
                      * time a new one appears. */
                     if (!q_ptr->notifyAutoUploader(registry->collectAllCoreFiles())) {
                         qWarning() << __PRETTY_FUNCTION__
                                    << "Failed to start Auto Uploader.";
-                        if (notification) {
-                            notification->update(summary,
-                                    "Auto uploader failed to start, send the report manually");
-                        }
                     }
                 }
             }
@@ -362,6 +368,12 @@ void CReporterDaemonMonitorPrivate::handleNotificationEvent()
     if (notification != 0) {
         delete notification;
     }
+}
+
+void CReporterDaemonMonitorPrivate::resetCrashCount()
+{
+    crashCount = 0;
+    qDebug() << __PRETTY_FUNCTION__ << "Crash counter was reset.";
 }
 
 // ******** Class CReporterDaemonMonitor ********

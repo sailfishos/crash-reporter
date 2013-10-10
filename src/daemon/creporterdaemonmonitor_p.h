@@ -34,6 +34,7 @@
 
 class CReporterCoreRegistry;
 class CReporterDaemonMonitor;
+class CReporterNotification;
 
 /*!
   * @class CReporterHandledRichCore
@@ -134,6 +135,11 @@ class CReporterDaemonMonitorPrivate : public QObject
           */
         void handleNotificationEvent();
 
+        /**
+         * Resets the crash counter counter.
+         */
+        void resetCrashCount();
+
     public:
         /*!
          * @brief Checks for duplicate rich-cores, if auto-delete setting is enabled.
@@ -164,6 +170,15 @@ class CReporterDaemonMonitorPrivate : public QObject
         Q_DECLARE_PUBLIC(CReporterDaemonMonitor)
         //! @arg Pointer to public class.
         CReporterDaemonMonitor *q_ptr;
+
+    private:
+        /*!
+         * A notification object informing user that some process has crashed
+         * and about the count of crashes since the daemon launched.
+         */
+        CReporterNotification *crashNotification;
+        //! Counts processed crash reports.
+        int crashCount;
 };
 
 #endif // CREPORTERDAEMONMONITOR_P_H

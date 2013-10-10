@@ -38,9 +38,6 @@
 #include "creporterdaemonmonitor_p.h"
 #include "creporternotification.h"
 
-static QString ntfEventType;
-static QString ntfSummary;
-static QString ntfBody;
 static bool notificationCreated;
 static bool notificationUpdated;
 
@@ -60,27 +57,47 @@ CReporterNotification::CReporterNotification(const QString &eventType,
                                              const QString &summary, const QString &body,
                                              QObject *parent)
 {
-    ntfEventType = eventType;
-    ntfSummary = summary;
-    ntfBody = body;
+    Q_UNUSED(eventType);
+    Q_UNUSED(summary);
+    Q_UNUSED(body);
     notificationCreated = true;
     Q_UNUSED(parent);
+}
+
+CReporterNotification::CReporterNotification(const QString &eventType, int id,
+                                             QObject *parent)
+{
+    Q_UNUSED(eventType);
+    Q_UNUSED(id);
+    Q_UNUSED(parent);
+
+    notificationCreated = true;
 }
 
 CReporterNotification::~CReporterNotification()
 {}
 
+int CReporterNotification::id()
+{
+    return 10;
+}
+
 void CReporterNotification::update(const QString &summary, const QString &body,
                                    int count)
 {
     notificationUpdated = true;
-    ntfSummary = summary;
     Q_UNUSED(body);
     Q_UNUSED(count)
+    Q_UNUSED(summary);
 }
 
 void CReporterNotification::remove()
 {}
+
+void CReporterNotification::setTimeout(int ms)
+{
+    Q_UNUSED(ms);
+}
 
 TestDialogServer::TestDialogServer()
 {
@@ -119,9 +136,6 @@ void Ut_CReporterDaemonMonitor::initTestCase()
 
 void Ut_CReporterDaemonMonitor::init()
 {
-    ntfEventType.clear();
-    ntfSummary.clear();
-    ntfBody.clear();
     notificationCreated = false;
     notificationUpdated = false;
     serviceRegisteredReply = true;

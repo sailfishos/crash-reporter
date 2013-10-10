@@ -26,6 +26,7 @@
  * @namespace SavedState
  */
 namespace SavedState {
+    const QString CrashNotificationId = "SavedState/crash_notification_id";
     const QString UploadSuccessNotificationId = "SavedState/upload_success_notification_id";
     const QString UploadFailedNotificationId = "SavedState/upload_failed_notification_id";
     const QString UploadSuccessCount = "SavedState/upload_success_count";
@@ -77,6 +78,18 @@ void CReporterSavedState::freeSingleton() {
 }
 
 CReporterSavedState::~CReporterSavedState() {}
+
+quint32 CReporterSavedState::crashNotificationId() const {
+    const Q_D(CReporterSavedState);
+
+    return d->intValue(SavedState::CrashNotificationId, 0);
+}
+
+void CReporterSavedState::setCrashNotificationId(quint32 id) {
+    if (setValue(SavedState::CrashNotificationId, id)) {
+        emit crashNotificationIdChanged();
+    }
+}
 
 quint32 CReporterSavedState::uploadSuccessNotificationId() const {
     const Q_D(CReporterSavedState);

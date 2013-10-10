@@ -37,6 +37,7 @@
 #include "creporterdaemonadaptor.h"
 #include "creporterdaemonmonitor.h"
 #include "creporternwsessionmgr.h"
+#include "creportersavedstate.h"
 #include "creportercoreregistry.h"
 #include "creporterutils.h"
 #include "creportersettingsobserver.h"
@@ -92,6 +93,7 @@ CReporterDaemon::~CReporterDaemon()
     d->registry = 0;
 
     CReporterPrivacySettingsModel::instance()->freeSingleton();
+    CReporterSavedState::freeSingleton();
 
 	delete d_ptr;
     d_ptr = 0;
@@ -152,8 +154,9 @@ bool CReporterDaemon::initiateDaemon()
 
 #ifndef CREPORTER_UNIT_TEST
     // Each time daemon is started, we count successful core uploads from zero.
-    CReporterSavedState::instance()->setUploadSuccessCount(0);
-    CReporterSavedState::freeSingleton();
+    CReporterSavedState *state = CReporterSavedState::instance();
+    state->setUploadSuccessCount(0);
+    state->writeSettings();
 #endif
 
     if (CReporterPrivacySettingsModel::instance()->automaticSendingEnabled())

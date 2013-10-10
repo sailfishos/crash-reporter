@@ -34,6 +34,7 @@ HEADERS += $${CREPORTER_STUBS_DIR}/mgconfitem_stub.h \
     $${CREPORTER_SRC_DIR}/libs/coredir/creportercoreregistry.h \
     $${CREPORTER_SRC_DIR}/libs/coredir/creportercoreregistry_p.h \
     $${CREPORTER_SRC_DIR}/libs/httpclient/creporternwsessionmgr.h \
+    $${CREPORTER_SRC_DIR}/libs/settings/creportersavedstate.h \
     $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsbase.h \
     $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsbase_p.h \
     $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsinit_p.h \
@@ -55,6 +56,7 @@ SOURCES += $$TEST_SOURCES \
     $${CREPORTER_SRC_DIR}/libs/coredir/creportercoredir.cpp \
     $${CREPORTER_SRC_DIR}/libs/coredir/creportercoreregistry.cpp \
     $${CREPORTER_SRC_DIR}/libs/httpclient/creporternwsessionmgr.cpp \
+    $${CREPORTER_SRC_DIR}/libs/settings/creportersavedstate.cpp \
     $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsinit.cpp \
     $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsbase.cpp \
     $${CREPORTER_SRC_DIR}/libs/settings/creporterprivacysettingsmodel.cpp \
