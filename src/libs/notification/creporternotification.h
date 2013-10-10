@@ -98,6 +98,14 @@ class CREPORTER_EXPORT CReporterNotification : public QObject
         int id();
 
         /*!
+         * Sets the period after which the notification is removed from system
+         * notification area.
+         *
+         * @param ms Expiration timeout in milliseconds.
+         */
+        void setTimeout(int ms);
+
+        /*!
           * @brief Returns true if @a other is a @e copy of this notification; otherwise returns false.
           *
           */
@@ -159,6 +167,10 @@ class CREPORTER_EXPORT CReporterNotification : public QObject
         Q_DECLARE_PRIVATE(CReporterNotification);
         //! @arg Pointer to private class.
         CReporterNotificationPrivate *d_ptr;
+
+#ifndef CREPORTER_UNIT_TEST
+        Q_PRIVATE_SLOT(d_func(), void removeAfterTimeout());
+#endif
 };
 
 #endif // CREPORTERNOTIFICATION_H

@@ -57,6 +57,5 @@ include(version.pri)
 CRVERSION = $$VERSION
 DEFINES += CREPORTERVERSION=\\\"$$CRVERSION\\\"
 
-MOC_DIR	= .moc
 OBJECTS_DIR = .obj
 DESTDIR = .out

@@ -41,7 +41,7 @@
 // CReporterNotificationPrivate::CReporterNotificationPrivate
 // ----------------------------------------------------------------------------
 CReporterNotificationPrivate::CReporterNotificationPrivate(const QString &eventType) :
-  id(0), callWatcher(0), category(eventType),
+  id(0), timeout(-1), callWatcher(0), category(eventType),
   proxy(new NotificationProxy("org.freedesktop.Notifications",
           "/org/freedesktop/Notifications", QDBusConnection::sessionBus(), this))
 {}
@@ -99,6 +99,16 @@ void CReporterNotificationPrivate::retrieveNotificationId()
     }
 }
 
+void CReporterNotificationPrivate::removeAfterTimeout()
+{
+    retrieveNotificationId();
+
+    if (id != 0) {
+        Q_Q(CReporterNotification);
+        q->remove();
+        emit q->timeouted();
+    }
+}
 
 // ----------------------------------------------------------------------------
 // CReporterNotificationPrivate::activate
@@ -151,6 +161,13 @@ int CReporterNotification::id()
     return d->id;
 }
 
+void CReporterNotification::setTimeout(int ms)
+{
+    Q_D(CReporterNotification);
+
+    d->timeout = ms;
+}
+
 // ----------------------------------------------------------------------------
 // CReporterNotification::operator==
 // ----------------------------------------------------------------------------
@@ -173,6 +190,10 @@ void CReporterNotification::update(const QString &summary, const QString &body,
     d->count = count;
 
     d->sendDBusNotify();
+
+    if (d->timeout > 0) {
+        QTimer::singleShot(d->timeout, this, SLOT(removeAfterTimeout()));
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -207,4 +228,4 @@ void CReporterNotification::removeAll()
 	// TODO: Re-implement for Sailfish
 }
 
-// End of file.
+#include "moc_creporternotification.cpp"

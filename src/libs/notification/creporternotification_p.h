@@ -74,6 +74,7 @@ class CReporterNotificationPrivate : public QObject
 
     void sendDBusNotify();
         void retrieveNotificationId();
+    void removeAfterTimeout();
 
     public Q_SLOTS:
 
@@ -86,6 +87,8 @@ class CReporterNotificationPrivate : public QObject
     public:
         //! Id of the notification assigned by the notification manager.
         quint32 id;
+        //! Notification's expiration time in milliseconds.
+        int timeout;
         //! Pending reply on the notification creation from the notification manager.
         QDBusPendingCallWatcher *callWatcher;
         //! Category of the notification, e.g. "x-nokia.crash-reporter.autouploader".
@@ -101,6 +104,9 @@ class CReporterNotificationPrivate : public QObject
         int count;
         //! DBus proxy of org.freedesktop.Notification
         NotificationProxy *proxy;
+
+private:
+    Q_DECLARE_PUBLIC(CReporterNotification)
         //! @arg Pointer to public class.
         CReporterNotification *q_ptr;
 };
