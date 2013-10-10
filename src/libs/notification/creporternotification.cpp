@@ -40,10 +40,12 @@
 // ----------------------------------------------------------------------------
 // CReporterNotificationPrivate::CReporterNotificationPrivate
 // ----------------------------------------------------------------------------
-CReporterNotificationPrivate::CReporterNotificationPrivate(const QString &eventType) :
+CReporterNotificationPrivate::CReporterNotificationPrivate(const QString &eventType,
+                                                           CReporterNotification *q):
   id(0), timeout(-1), callWatcher(0), category(eventType),
   proxy(new NotificationProxy("org.freedesktop.Notifications",
-          "/org/freedesktop/Notifications", QDBusConnection::sessionBus(), this))
+          "/org/freedesktop/Notifications", QDBusConnection::sessionBus(), this)),
+  q_ptr(q)
 {}
 
 // ----------------------------------------------------------------------------
@@ -129,16 +131,15 @@ CReporterNotification::CReporterNotification(const QString &eventType,
                                              const QString &summary, const QString &body,
                                              QObject *parent) :
     QObject(parent),
-    d_ptr(new CReporterNotificationPrivate(eventType))
+    d_ptr(new CReporterNotificationPrivate(eventType, this))
 {
-    d_ptr->q_ptr = this;
     update(summary, body);
 }
 
 CReporterNotification::CReporterNotification(const QString &eventType, int id,
                                              QObject *parent):
   QObject(parent),
-  d_ptr(new CReporterNotificationPrivate(eventType))
+  d_ptr(new CReporterNotificationPrivate(eventType, this))
 {
     d_ptr->id = id;
 }

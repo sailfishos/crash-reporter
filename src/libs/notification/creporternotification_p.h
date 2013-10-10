@@ -63,8 +63,9 @@ class CReporterNotificationPrivate : public QObject
      * @brief Class constructor.
      *
      * @param eventType Type of the notification.
+     * @param q Owner CReporterNotification instance.
      */
-    CReporterNotificationPrivate(const QString &eventType);
+    CReporterNotificationPrivate(const QString &eventType, CReporterNotification *q);
 
         /*!
           * @brief Class destructor.
