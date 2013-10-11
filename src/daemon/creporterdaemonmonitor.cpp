@@ -103,11 +103,7 @@ CReporterDaemonMonitorPrivate::CReporterDaemonMonitorPrivate() :
 // ----------------------------------------------------------------------------
 CReporterDaemonMonitorPrivate::~CReporterDaemonMonitorPrivate()
 {
-    QList<CReporterHandledRichCore *> rCores =  handledRichCores;
-    // Clear list.
-    handledRichCores.clear();
-    // Delete entries.
-    qDeleteAll(rCores);
+    qDeleteAll(handledRichCores);
 }
 
 // ----------------------------------------------------------------------------
