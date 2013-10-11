@@ -6,6 +6,9 @@
  * Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
  * Author: Riku Halonen <riku.halonen@nokia.com>
  *
+ * Copyright (C) 2013 Jolla Ltd.
+ * Contact: Jakub Adam <jakub.adam@jollamobile.com>
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
  * version 2.1 as published by the Free Software Foundation.
@@ -23,6 +26,8 @@
  */
 
 // System includes
+
+#include <csignal>
 
 #include <QCoreApplication>
 #include <QDebug>
@@ -84,6 +89,12 @@ bool getPid(QCoreApplication &app)
     return firstStartup;
 }
 
+void signalHandler(int signal) {
+    Q_UNUSED(signal)
+
+    QCoreApplication::exit(0);
+}
+
 /*!
   * @brief Crash Reporter daemon main function.
   *
@@ -92,6 +103,9 @@ bool getPid(QCoreApplication &app)
   */
 int main(int argc, char **argv)
 {
+    signal(SIGINT, &signalHandler);
+    signal(SIGTERM, &signalHandler);
+
 #ifndef QT_NO_DEBUG_OUTPUT
     g_progname = (char *) "crash-reporter-daemon";
     Logger logger(CReporterApplicationSettings::instance()->loggerType());
