@@ -46,7 +46,10 @@ CReporterNotificationPrivate::CReporterNotificationPrivate(const QString &eventT
   proxy(new NotificationProxy("org.freedesktop.Notifications",
           "/org/freedesktop/Notifications", QDBusConnection::sessionBus(), this)),
   q_ptr(q)
-{}
+{
+    connect(proxy, &NotificationProxy::NotificationClosed,
+            this, &CReporterNotificationPrivate::onNotificationRemoved);
+}
 
 // ----------------------------------------------------------------------------
 // CReporterNotificationPrivate::~CReporterNotificationPrivate
@@ -108,6 +111,17 @@ void CReporterNotificationPrivate::removeAfterTimeout()
     if (id != 0) {
         Q_Q(CReporterNotification);
         q->remove();
+    }
+}
+
+void CReporterNotificationPrivate::onNotificationRemoved(quint32 id)
+{
+    retrieveNotificationId();
+
+    if ((id == this->id) && (id != 0)) {
+        Q_Q(CReporterNotification);
+
+        this->id = 0;
         emit q->timeouted();
     }
 }
@@ -200,7 +214,6 @@ void CReporterNotification::remove()
 
     if (d->id != 0) {
         d->proxy->CloseNotification(d->id);
-        d->id = 0;
     }
 }
 

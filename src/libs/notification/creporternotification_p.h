@@ -77,6 +77,9 @@ class CReporterNotificationPrivate : public QObject
         void retrieveNotificationId();
     void removeAfterTimeout();
 
+private slots:
+    void onNotificationRemoved(quint32 id);
+
     public:
         //! Id of the notification assigned by the notification manager.
         quint32 id;

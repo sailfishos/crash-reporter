@@ -17,5 +17,9 @@
   <method name="CloseNotification">
    <arg type="u" name="id" direction="in"/>
   </method>
+  <signal name="NotificationClosed">
+   <arg name="id" type="u"/>
+   <arg name="reason" type="u"/>
+  </signal>
  </interface>
 </node>
