@@ -112,14 +112,6 @@ void CReporterNotificationPrivate::removeAfterTimeout()
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterNotificationPrivate::activate
-// ----------------------------------------------------------------------------
-void CReporterNotificationPrivate::activate()
-{
-    emit q_ptr->activated();
-}
-
 // ======== Class CReporterNotification ========
 
 // ======== MEMBER FUNCTIONS ========

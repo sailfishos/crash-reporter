@@ -77,14 +77,6 @@ class CReporterNotificationPrivate : public QObject
         void retrieveNotificationId();
     void removeAfterTimeout();
 
-    public Q_SLOTS:
-
-        /*!
-          * @brief Called to emit activated signal.
-          *
-          */
-        void activate();
-
     public:
         //! Id of the notification assigned by the notification manager.
         quint32 id;
