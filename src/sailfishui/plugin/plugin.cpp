@@ -22,7 +22,9 @@
 #include <QtQml>
 
 #include "creporterapplicationsettings.h"
+#include "creportercoreregistry.h"
 #include "creporterprivacysettingsmodel.h"
+#include "creporterutils.h"
 #include "systemdservice.h"
 
 // using custom translator so it gets properly removed from qApp when engine is deleted
@@ -84,6 +86,8 @@ public:
 
         AppTranslator *translator = new AppTranslator(engine);
         translator->load(QLocale(), "crash-reporter", "-", "/usr/share/translations");
+
+        engine->rootContext()->setContextProperty("crashReporterPlugin", this);
     }
 
     void registerTypes(const char *uri)
@@ -101,6 +105,11 @@ public:
         qmlRegisterSingletonType<SystemdService>(
                 "com.jolla.settings.crashreporter", 1, 0,
                 "CrashReporterService", reporterserviceSingletontypeProvider);
+    }
+
+    Q_INVOKABLE void uploadAllCrashReports() const
+    {
+        CReporterUtils::notifyAutoUploader(CReporterCoreRegistry().collectAllCoreFiles());
     }
 };
 

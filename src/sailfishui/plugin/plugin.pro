@@ -16,8 +16,11 @@ import.path = $$TARGETPATH
 
 target.path = $$TARGETPATH
 
-INCLUDEPATH += ../../libs \
-	../../libs/settings
+INCLUDEPATH += \
+	../../libs \
+	../../libs/coredir \
+	../../libs/settings \
+	../../libs/utils \
 
 LIBS += ../../../lib/libcrashreporter.so
 

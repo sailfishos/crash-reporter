@@ -40,6 +40,16 @@ Page {
                 title: qsTrId("settings_crash-reporter")
             }
 
+            PullDownMenu {
+                MenuItem {
+                    //% "Upload crash reports now"
+                    text: qsTrId("quick-feedback_upload_now")
+                    onClicked: {
+                        crashReporterPlugin.uploadAllCrashReports();
+                    }
+                }
+            }
+
             TextSwitch {
                 id: reporterSwitch
                 automaticCheck: false
