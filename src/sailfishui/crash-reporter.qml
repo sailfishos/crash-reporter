@@ -45,7 +45,7 @@ Page {
                 automaticCheck: false
                 //% "Report application crashes"
                 text: qsTrId("settings_crash-reporter_report_crashes")
-                //% "Collects and uploads a report when application crashes."
+                //% "Uploads created crash reports to a server when WiFi or USB network is available."
                 description: qsTrId("settings_crash-reporter_report_crashes_description")
 
                 onClicked: {
