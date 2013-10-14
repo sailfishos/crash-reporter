@@ -255,7 +255,7 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
                 } else {
                     /* In auto-upload mode try to upload all crash reports each
                      * time a new one appears. */
-                    if (!q_ptr->notifyAutoUploader(registry->collectAllCoreFiles())) {
+                    if (!CReporterUtils::notifyAutoUploader(registry->collectAllCoreFiles())) {
                         qWarning() << __PRETTY_FUNCTION__
                                    << "Failed to start Auto Uploader.";
                     }
@@ -446,36 +446,6 @@ bool CReporterDaemonMonitor::notifyCrashReporterUI(const QString &dialogName,
                 return false;
             }
         }
-    }
-    return true;
-}
-
-// ----------------------------------------------------------------------------
-// CReporterDaemonMonitor::notifyAutoUploader
-// ----------------------------------------------------------------------------
-bool CReporterDaemonMonitor::notifyAutoUploader(const QStringList &filesToUpload)
-{
-    qDebug() << __PRETTY_FUNCTION__ << "Sending " << filesToUpload.size() << " to be uploaded.";
-    CReporterAutoUploaderProxy proxy(CReporter::AutoUploaderServiceName,
-                                        CReporter::AutoUploaderObjectPath, QDBusConnection::sessionBus());
-
-    QDBusPendingReply <bool> reply = proxy.uploadFiles(filesToUpload);
-    // This blocks.
-    reply.waitForFinished();
-
-    if (reply.isError())
-    {
-        qWarning() << __PRETTY_FUNCTION__ << "D-Bus error occured.";
-
-        // Trace error.
-        QDBusError dBusError(reply.error());
-        QString errorName = dBusError.name();
-
-        qDebug() << __PRETTY_FUNCTION__ << "Name:" << errorName;
-        qDebug() << __PRETTY_FUNCTION__ << "Message:" << dBusError.message();
-        qDebug() << __PRETTY_FUNCTION__ << "Error string:" << dBusError.errorString(dBusError.type());
-
-        return false;
     }
     return true;
 }

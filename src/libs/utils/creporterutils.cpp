@@ -42,6 +42,8 @@
 // User includes.
 
 #include "creporterutils.h"
+
+#include "creporterautouploaderproxy.h"
 #include "creporternamespace.h"
 
 // Local constants.
@@ -267,4 +269,31 @@ QString CReporterUtils::deviceModel()
 #endif
 }
 
-// End of file
+bool CReporterUtils::notifyAutoUploader(const QStringList &filesToUpload)
+{
+    qDebug() << __PRETTY_FUNCTION__
+             << "Requesting crash-reporter-autouploader to upload"
+             << filesToUpload.size() << "files.";
+
+    CReporterAutoUploaderProxy proxy(CReporter::AutoUploaderServiceName,
+            CReporter::AutoUploaderObjectPath, QDBusConnection::sessionBus());
+
+    QDBusPendingReply <bool> reply = proxy.uploadFiles(filesToUpload);
+    // This blocks.
+    reply.waitForFinished();
+
+    if (reply.isError()) {
+        qWarning() << __PRETTY_FUNCTION__ << "D-Bus error occurred.";
+
+        // Trace error.
+        QDBusError dBusError(reply.error());
+
+        qDebug() << __PRETTY_FUNCTION__ << "Name:" << dBusError.name();
+        qDebug() << __PRETTY_FUNCTION__ << "Message:" << dBusError.message();
+        qDebug() << __PRETTY_FUNCTION__
+                 << "Error string:" << dBusError.errorString(dBusError.type());
+
+        return false;
+    }
+    return true;
+}

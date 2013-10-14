@@ -120,6 +120,14 @@ public:
      * @return Model of the device
      */
     static QString deviceModel();
+
+    /*!
+     * Sends a request for auto uploader daemon to add files into upload queue.
+     *
+     * @param filesToUpload A list of files we want to upload to the server.
+     * @return @c true if files were successfully added, otherwise @c true.
+     */
+    static bool notifyAutoUploader(const QStringList &filesToUpload);
 };
 
 #endif // CREPORTERUTILS_H

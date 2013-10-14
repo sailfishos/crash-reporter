@@ -165,7 +165,7 @@ bool CReporterDaemon::initiateDaemon()
 
         if (!files.isEmpty() &&
             CReporterNwSessionMgr::unpaidConnectionAvailable() &&
-            !CReporterDaemonMonitor::notifyAutoUploader(files))
+            !CReporterUtils::notifyAutoUploader(files))
         {
             qDebug() << __PRETTY_FUNCTION__ << "Failed to add files to the queue.";
         }

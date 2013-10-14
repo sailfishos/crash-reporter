@@ -78,15 +78,6 @@ class CReporterDaemonMonitor : public QObject
                                           const QVariantList &arguments);
 
         /*!
-          * @brief Send a list of new files to Auto Uploader.
-          *
-          * @param filesToUpload List of files to be uploaded.
-          *
-          * @return True, if files were successfully added to the upload queue.
-          */
-        static bool notifyAutoUploader(const QStringList &filesToUpload);
-
-        /*!
           * @brief Returns auto-delete property.
           *
           * @return True, if enabled; otherwise false.
