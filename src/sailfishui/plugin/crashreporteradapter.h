@@ -19,19 +19,21 @@
  * 02110-1301 USA
  */
 
-#ifndef CRASHREPORTERQMLPLUGIN_H
-#define CRASHREPORTERQMLPLUGIN_H
+#ifndef CRASHREPORTERADAPTER_H
+#define CRASHREPORTERADAPTER_H
 
-#include <QQmlExtensionPlugin>
+#include <QObject>
 
-class CrashReporterQmlPlugin: public QQmlExtensionPlugin {
+class CrashReporterAdapter: public QObject {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "com.jolla.settings.crashreporter")
 
 public:
-    void initializeEngine(QQmlEngine *engine, const char *uri);
+    CrashReporterAdapter(QObject *parent = 0);
 
-    void registerTypes(const char *uri);
+    Q_INVOKABLE void uploadAllCrashReports() const;
+
+private:
+    Q_DISABLE_COPY(CrashReporterAdapter)
 };
 
-#endif // CRASHREPORTERQMLPLUGIN_H
+#endif // CRASHREPORTERADAPTER_H

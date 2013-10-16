@@ -31,6 +31,7 @@ QDBUS_GENERATED_HEADERS = \
 
 HEADERS += \
 	$$QDBUS_GENERATED_HEADERS \
+	crashreporteradapter.h \
 	crashreporterqmlplugin.h \
 	systemdservice.h \
 
@@ -41,6 +42,7 @@ QDBUS_GENERATED_SOURCES = \
 
 SOURCES += \
 	$$QDBUS_GENERATED_SOURCES \
+	crashreporteradapter.cpp \
 	crashreporterqmlplugin.cpp \
 	systemdservice.cpp \
 	unitfilechange.cpp

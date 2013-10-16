@@ -45,7 +45,7 @@ Page {
                     //% "Upload crash reports now"
                     text: qsTrId("quick-feedback_upload_now")
                     onClicked: {
-                        crashReporterPlugin.uploadAllCrashReports();
+                        Adapter.uploadAllCrashReports();
                     }
                 }
             }
