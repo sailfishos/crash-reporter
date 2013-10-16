@@ -51,8 +51,6 @@ namespace Settings
     const QString ValueAutomaticSending("Settings/automaticsending");
     //! This setting affects crash-reporter. If true, crash notification dialogs open up instantly (without requiring the user to tap a system notification)
     const QString ValueInstantDialogs("Settings/instantdialogs");
-    //! This setting is used for saving the last contact info entered in the crash notification dialog
-    const QString ValueContactInfo("Settings/contactinfo");
 }
 
 /*!
@@ -179,14 +177,6 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
         bool instantDialogsEnabled() const;
 
         /*!
-          * @brief Reads value for saved contact info and returns it.
-          *
-          * @note This setting used by the crash-reporter.
-          * @return Saved contact info. Empty string if none.
-          */
-        QString contactInfo() const;
-
-        /*!
           * @brief Reads setting value for including core and returns it.
           *
           * @note This setting used by the rich-core.
@@ -293,14 +283,6 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
             * @param True to enable feature; false to disable.
             */
          void setInstantDialogsEnabled(bool value);
-
-         /*!
-            * @brief Save contact info string
-            *
-            * @note This setting used by the crash-reporter.
-            * @param new contact info value
-            */
-         void setContactInfo(QString value);
 
         /*!
           * @brief Enables or disables for including core in the crash report.

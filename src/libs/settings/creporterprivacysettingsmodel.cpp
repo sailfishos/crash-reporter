@@ -146,14 +146,6 @@ bool CReporterPrivacySettingsModel::instantDialogsEnabled() const
 }
 
 // ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::contactInfo
-// ----------------------------------------------------------------------------
-QString CReporterPrivacySettingsModel::contactInfo() const
-{
-    return value(Settings::ValueContactInfo, QVariant(QString())).toString();
-}
-
-// ----------------------------------------------------------------------------
 // CReporterPrivacySettingsModel::includeCore
 // ----------------------------------------------------------------------------
 bool CReporterPrivacySettingsModel::includeCore() const
@@ -253,14 +245,6 @@ void CReporterPrivacySettingsModel::setAutomaticSendingEnabled(bool value)
 void CReporterPrivacySettingsModel::setInstantDialogsEnabled(bool value)
 {
     setValue(Settings::ValueInstantDialogs, QVariant(value));
-}
-
-// ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::setContactInfo
-// ----------------------------------------------------------------------------
-void CReporterPrivacySettingsModel::setContactInfo(QString value)
-{
-    setValue(Settings::ValueContactInfo, QVariant(value));
 }
 
 // ----------------------------------------------------------------------------
