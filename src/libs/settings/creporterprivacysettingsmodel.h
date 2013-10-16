@@ -37,10 +37,6 @@
 #include "creportersettingsbase.h"
 #include "creporterexport.h"
 
-// Forward declarations.
-
-class CReporterPrivacySettingsModelPrivate;
-
 // Public namespaces.
 
 /*!
@@ -376,12 +372,9 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
 
     private:
         Q_DISABLE_COPY(CReporterPrivacySettingsModel)
-        Q_DECLARE_PRIVATE(CReporterPrivacySettingsModel);
 
         //! @arg Static class reference.
         static CReporterPrivacySettingsModel *sm_Instance;
-        //! @arg Pointer to private data.
-        CReporterPrivacySettingsModelPrivate *d_ptr;
 };
 
 #endif // CREPORTERPRIVACYSETTINGSMODEL_H
