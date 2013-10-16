@@ -24,16 +24,29 @@
 
 #include <QObject>
 
+class CrashReporterAdapterPrivate;
+
 class CrashReporterAdapter: public QObject {
     Q_OBJECT
+    Q_PROPERTY(int reportsToUpload READ reportsToUpload NOTIFY reportsToUploadChanged)
 
 public:
     CrashReporterAdapter(QObject *parent = 0);
 
+    int reportsToUpload() const;
+
     Q_INVOKABLE void uploadAllCrashReports() const;
+
+signals:
+    void reportsToUploadChanged();
 
 private:
     Q_DISABLE_COPY(CrashReporterAdapter)
+
+    Q_DECLARE_PRIVATE(CrashReporterAdapter);
+    QScopedPointer<CrashReporterAdapterPrivate> d_ptr;
+
+    Q_PRIVATE_SLOT(d_func(), void countCrashReports());
 };
 
 #endif // CRASHREPORTERADAPTER_H

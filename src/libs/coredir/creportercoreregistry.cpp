@@ -112,9 +112,9 @@ CReporterCoreRegistry::~CReporterCoreRegistry()
 	delete d_ptr;
 }
 
-QStringList CReporterCoreRegistry::collectAllCoreFiles()
+QStringList CReporterCoreRegistry::collectAllCoreFiles() const
 {
-    Q_D(CReporterCoreRegistry);
+    Q_D(const CReporterCoreRegistry);
 
     QStringList out;
 	QListIterator<CReporterCoreDir*> iter(d->coreDirs); 

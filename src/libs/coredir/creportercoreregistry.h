@@ -65,7 +65,7 @@ public:
      * @return List to be populated with rich core file paths.
 	 * 
 	 */
-     QStringList collectAllCoreFiles();
+     QStringList collectAllCoreFiles() const;
 
 	/*!
      * @brief This function returns a list of core directory paths.

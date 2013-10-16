@@ -42,11 +42,19 @@ Page {
 
             PullDownMenu {
                 MenuItem {
+                    enabled: Adapter.reportsToUpload > 0
                     //% "Upload crash reports now"
                     text: qsTrId("quick-feedback_upload_now")
                     onClicked: {
                         Adapter.uploadAllCrashReports();
                     }
+                }
+                MenuLabel {
+                    text: Adapter.reportsToUpload + ((Adapter.reportsToUpload == 1) ?
+                        //% " report to upload"
+                        qsTrId("quick-feedback_report_to_upload") :
+                        //% " reports to upload"
+                        qsTrId("quick-feedback_reports_to_upload"));
                 }
             }
 
