@@ -53,8 +53,8 @@ Page {
             TextSwitch {
                 id: reporterSwitch
                 automaticCheck: false
-                //% "Report application crashes"
-                text: qsTrId("settings_crash-reporter_report_crashes")
+                //% "Upload reports automatically"
+                text: qsTrId("settings_crash-reporter_upload_automatically")
                 //% "Uploads created crash reports to a server when WiFi or USB network is available."
                 description: qsTrId("settings_crash-reporter_report_crashes_description")
 
