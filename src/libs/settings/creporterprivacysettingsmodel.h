@@ -28,16 +28,7 @@
 #ifndef CREPORTERPRIVACYSETTINGSMODEL_H
 #define CREPORTERPRIVACYSETTINGSMODEL_H
 
-// System includes.
-
-#include <QObject>
-
-// User includes.
-
 #include "creportersettingsbase.h"
-#include "creporterexport.h"
-
-// Public namespaces.
 
 /*!
   * @namespace Settings
