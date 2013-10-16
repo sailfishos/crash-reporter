@@ -98,6 +98,7 @@ Page {
             }
 
             TextSwitch {
+                id: createReportsSwitch
                 automaticCheck: false
                 checked: PrivacySettings.coreDumping
                 //% "Create crash reports"
@@ -144,6 +145,7 @@ Page {
 
             TextSwitch {
                 id: includeStackTraceSwitch
+                enabled: createReportsSwitch.checked
                 automaticCheck: false
                 checked: PrivacySettings.includeStackTrace
                 //% "Include stack trace"
