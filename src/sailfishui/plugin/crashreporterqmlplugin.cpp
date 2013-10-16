@@ -21,6 +21,8 @@
 
 #include <QtQml>
 
+#include "crashreporterqmlplugin.h"
+
 #include "creporterapplicationsettings.h"
 #include "creportercoreregistry.h"
 #include "creporterprivacysettingsmodel.h"
@@ -71,46 +73,38 @@ static QObject *reporterserviceSingletontypeProvider(QQmlEngine *engine, QJSEngi
     return instance;
 }
 
-class CrashReporterQmlPlugin : public QQmlExtensionPlugin
+
+void CrashReporterQmlPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 {
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID "com.jolla.settings.crashreporter")
+    Q_UNUSED(uri)
 
-public:
-    void initializeEngine(QQmlEngine *engine, const char *uri)
-    {
-        Q_UNUSED(uri)
+    AppTranslator *engineeringEnglish = new AppTranslator(engine);
+    engineeringEnglish->load("crash-reporter_eng_en", "/usr/share/translations");
 
-        AppTranslator *engineeringEnglish = new AppTranslator(engine);
-        engineeringEnglish->load("crash-reporter_eng_en", "/usr/share/translations");
+    AppTranslator *translator = new AppTranslator(engine);
+    translator->load(QLocale(), "crash-reporter", "-", "/usr/share/translations");
 
-        AppTranslator *translator = new AppTranslator(engine);
-        translator->load(QLocale(), "crash-reporter", "-", "/usr/share/translations");
+    engine->rootContext()->setContextProperty("crashReporterPlugin", this);
+}
 
-        engine->rootContext()->setContextProperty("crashReporterPlugin", this);
-    }
+void CrashReporterQmlPlugin::registerTypes(const char *uri)
+{
+    Q_UNUSED(uri)
 
-    void registerTypes(const char *uri)
-    {
-        Q_UNUSED(uri)
+    qmlRegisterSingletonType<CReporterApplicationSettings>(
+            "com.jolla.settings.crashreporter", 1, 0,
+            "ApplicationSettings", applicationsettingsSingletontypeProvider);
 
-        qmlRegisterSingletonType<CReporterApplicationSettings>(
-                "com.jolla.settings.crashreporter", 1, 0,
-                "ApplicationSettings", applicationsettingsSingletontypeProvider);
+    qmlRegisterSingletonType<CReporterPrivacySettingsModel>(
+            "com.jolla.settings.crashreporter", 1, 0,
+            "PrivacySettings", privacysettingsSingletontypeProvider);
 
-        qmlRegisterSingletonType<CReporterPrivacySettingsModel>(
-                "com.jolla.settings.crashreporter", 1, 0,
-                "PrivacySettings", privacysettingsSingletontypeProvider);
+    qmlRegisterSingletonType<SystemdService>(
+            "com.jolla.settings.crashreporter", 1, 0,
+            "CrashReporterService", reporterserviceSingletontypeProvider);
+}
 
-        qmlRegisterSingletonType<SystemdService>(
-                "com.jolla.settings.crashreporter", 1, 0,
-                "CrashReporterService", reporterserviceSingletontypeProvider);
-    }
-
-    Q_INVOKABLE void uploadAllCrashReports() const
-    {
-        CReporterUtils::notifyAutoUploader(CReporterCoreRegistry().collectAllCoreFiles());
-    }
-};
-
-#include "plugin.moc"
+void CrashReporterQmlPlugin::uploadAllCrashReports() const
+{
+    CReporterUtils::notifyAutoUploader(CReporterCoreRegistry().collectAllCoreFiles());
+}
