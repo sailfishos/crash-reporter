@@ -11,8 +11,8 @@ TARGETPATH = $$[QT_INSTALL_QML]/$$MODULENAME
 QT += dbus qml
 CONFIG += plugin
 
-import.files = qmldir
-import.path = $$TARGETPATH
+qml.files = qmldir *.qml
+qml.path = $$TARGETPATH
 
 target.path = $$TARGETPATH
 
@@ -47,7 +47,7 @@ SOURCES += \
 	systemdservice.cpp \
 	unitfilechange.cpp
 
-INSTALLS += target import
+INSTALLS += target qml
 
 QMAKE_DISTCLEAN += \
 	systemdmanagerproxy.h systemdmanagerproxy.cpp \

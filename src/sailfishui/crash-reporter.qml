@@ -241,4 +241,6 @@ Page {
             }
         }
     }
+
+    PrivacyNotice {}
 }

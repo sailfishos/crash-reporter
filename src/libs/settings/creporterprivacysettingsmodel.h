@@ -51,6 +51,8 @@ namespace Settings
     const QString ValueAutomaticSending("Settings/automaticsending");
     //! This setting affects crash-reporter. If true, crash notification dialogs open up instantly (without requiring the user to tap a system notification)
     const QString ValueInstantDialogs("Settings/instantdialogs");
+    //! If set to true, user has accepted crash reporter's privacy notice.
+    const QString ValueNoticeAccepted("Settings/privacy-notice-accepted");
 }
 
 /*!
@@ -93,6 +95,7 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
     Q_PROPERTY(bool lifelog READ lifelogEnabled WRITE setLifelogEnabled NOTIFY lifelogEnabledChanged)
     Q_PROPERTY(bool includeStackTrace READ includeStackTrace WRITE setIncludeStackTrace NOTIFY includeStackTraceChanged)
     Q_PROPERTY(bool downloadDebuginfo READ downloadDebuginfo WRITE setDownloadDebuginfo NOTIFY downloadDebuginfoChanged)
+    Q_PROPERTY(bool privacyNoticeAccepted READ privacyNoticeAccepted WRITE setPrivacyNoticeAccepted NOTIFY privacyNoticeAcceptedChanged)
 
     public:
        /*!
@@ -228,6 +231,14 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
          */
         bool downloadDebuginfo() const;
 
+        /*!
+         * Checks whether user accepted a notice about possible privacy breach
+         * from using crash reporter application.
+         *
+         * @return @c true if notice was accepted; otherwise false.
+         */
+        bool privacyNoticeAccepted() const;
+
           /*!
           * @brief Enables or disables core dumping.
           *
@@ -325,6 +336,13 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
         void setDownloadDebuginfo(bool value);
 
         /*!
+         * Accepts or declines crash reporter's privacy notice.
+         *
+         * @param value true to accept the notice; false to decline.
+         */
+        void setPrivacyNoticeAccepted(bool value);
+
+        /*!
           * @brief Enables or disables core-dump size shrinking.
           *
           * @note This setting used by the rich-core.
@@ -339,6 +357,7 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
         void lifelogEnabledChanged();
         void includeStackTraceChanged();
         void downloadDebuginfoChanged();
+        void privacyNoticeAcceptedChanged();
 
     protected:
         CReporterPrivacySettingsModel();

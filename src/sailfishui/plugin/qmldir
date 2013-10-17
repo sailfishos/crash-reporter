@@ -1,2 +1,3 @@
 module com.jolla.settings.crashreporter
 plugin settingsplugin
+PrivacyNotice 1.0 PrivacyNotice.qml

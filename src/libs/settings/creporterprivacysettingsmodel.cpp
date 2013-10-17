@@ -179,6 +179,11 @@ bool CReporterPrivacySettingsModel::downloadDebuginfo() const
     return value(Privacy::ValueDownloadDebuginfo, QVariant(false)).toBool();
 }
 
+bool CReporterPrivacySettingsModel::privacyNoticeAccepted() const
+{
+    return value(Settings::ValueNoticeAccepted, QVariant(false)).toBool();
+}
+
 // ----------------------------------------------------------------------------
 // CReporterPrivacySettingsModel::reduceCore
 // ----------------------------------------------------------------------------
@@ -281,6 +286,12 @@ void CReporterPrivacySettingsModel::setDownloadDebuginfo(bool value)
 {
     if (setValue(Privacy::ValueDownloadDebuginfo, QVariant(value)))
         emit downloadDebuginfoChanged();
+}
+
+void CReporterPrivacySettingsModel::setPrivacyNoticeAccepted(bool value)
+{
+    if (setValue(Settings::ValueNoticeAccepted, QVariant(value)))
+        emit privacyNoticeAcceptedChanged();
 }
 
 // ----------------------------------------------------------------------------
