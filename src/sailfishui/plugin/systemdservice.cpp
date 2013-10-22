@@ -21,15 +21,18 @@
 
 #include "systemdservice.h"
 
-#include "propertiesproxy.h"
-#include "systemdmanagerproxy.h"
-#include "systemdunitproxy.h"
+#include "unitfilechange.h"
+#include "manager_interface.h" // generated
+#include "manager_interface.cpp" // generated
+#include "moc_manager_interface.cpp" // generated
+#include "properties_interface.h" // generated
+#include "unit_interface.h" // generated
 
 class SystemdServicePrivate {
 public:
     QString serviceName;
-    SystemdManagerProxy *manager;
-    SystemdUnitProxy *unit;
+    OrgFreedesktopSystemd1ManagerInterface *manager;
+    OrgFreedesktopSystemd1UnitInterface *unit;
 
     void gotUnitPath(QDBusPendingCallWatcher *call);
     void propertiesChanged(const QString &interface,
@@ -61,12 +64,12 @@ void SystemdServicePrivate::gotUnitPath(QDBusPendingCallWatcher *call) {
     } else {
         QString path = reply.argumentAt<0>().path();
 
-        unit = new SystemdUnitProxy("org.freedesktop.systemd1", path,
-                QDBusConnection::sessionBus(), q);
+        unit = new OrgFreedesktopSystemd1UnitInterface("org.freedesktop.systemd1",
+                path, QDBusConnection::sessionBus(), q);
 
-        PropertiesProxy *crashReporterProperties = new PropertiesProxy(
-                "org.freedesktop.systemd1", path, QDBusConnection::sessionBus(),
-                q);
+        OrgFreedesktopDBusPropertiesInterface *crashReporterProperties =
+                new OrgFreedesktopDBusPropertiesInterface("org.freedesktop.systemd1",
+                        path, QDBusConnection::sessionBus(), q);
 
         QObject::connect(crashReporterProperties,SIGNAL(PropertiesChanged(const QString &, const QVariantMap &, const QStringList &)),
                          q, SLOT(propertiesChanged(const QString &, const QVariantMap &, const QStringList &)));
@@ -91,7 +94,7 @@ void SystemdServicePrivate::propertiesChanged(const QString &interface,
                                               const QStringList &invalidatedProperties) {
     Q_Q(SystemdService);
 
-    if (interface != SystemdUnitProxy::staticInterfaceName())
+    if (interface != OrgFreedesktopSystemd1UnitInterface::staticInterfaceName())
         return;
 
     Q_ASSERT(unit);
@@ -197,7 +200,7 @@ SystemdService::SystemdService(const QString& serviceName):
     d->serviceName = serviceName;
     d->state = Inactive;
 
-    d->manager = new SystemdManagerProxy("org.freedesktop.systemd1",
+    d->manager = new OrgFreedesktopSystemd1ManagerInterface("org.freedesktop.systemd1",
             "/org/freedesktop/systemd1", QDBusConnection::sessionBus(), this);
     d->unit = 0;
 

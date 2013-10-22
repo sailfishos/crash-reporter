@@ -26,8 +26,6 @@
 #
 include(../../crash-reporter-conf.pri)
 
-system(qdbusxml2cpp notification/org.freedesktop.Notification.xml -c NotificationProxy -p notification/notificationproxy.h:notification/notificationproxy.cpp)
-
 TEMPLATE = lib
 CONFIG += dll
 QT += network dbus
@@ -56,6 +54,9 @@ INCLUDEPATH += . \
 
 DEPENDPATH = $$INCLUDEPATH
 
+DBUS_INTERFACES = \
+	notification/org.freedesktop.Notification.xml \
+
 SOURCES += coredir/creportercoredir.cpp \
            coredir/creportercoreregistry.cpp \
            httpclient/creporterhttpclient.cpp \
@@ -74,7 +75,6 @@ SOURCES += coredir/creportercoredir.cpp \
             settings/creporterapplicationsettings.cpp \
             settings/creportersettingsinit.cpp \
             notification/creporternotification.cpp \
-           notification/notificationproxy.cpp \
 
 # Public headers
 PUBLIC_HEADERS += creporternamespace.h \
@@ -98,7 +98,6 @@ PUBLIC_HEADERS += creporternamespace.h \
                   settings/creportersettingsobserver.h \
                   settings/creporterapplicationsettings.h \
                   notification/creporternotification.h \
-                  notification/notificationproxy.h \
                   creporterexport.h \
 
 # Local headers
@@ -138,6 +137,3 @@ pkgconfig.depends = createpkgconfig
 INSTALLS += target \
             pkgconfig \
             headers \
-
-QMAKE_DISTCLEAN += \
-	notification/notificationproxy.h notification/notificationproxy.cpp

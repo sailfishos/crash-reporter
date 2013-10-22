@@ -45,7 +45,7 @@
 // Forward declarations.
 
 class CReporterNotification;
-class NotificationProxy;
+class OrgFreedesktopNotificationsInterface;
 
 /*!
   * @class CReporterNotificationPrivate
@@ -99,7 +99,7 @@ private slots:
          */
         int count;
         //! DBus proxy of org.freedesktop.Notification
-        NotificationProxy *proxy;
+        OrgFreedesktopNotificationsInterface *proxy;
 
 private:
     Q_DECLARE_PUBLIC(CReporterNotification)

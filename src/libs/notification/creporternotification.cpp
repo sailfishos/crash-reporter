@@ -27,9 +27,7 @@
 
 #include <QDebug>
 
-// User includes.
-
-#include "notificationproxy.h" // generated
+#include "../notification_interface.h" // generated
 #include "creporternotification.h"
 #include "creporternotification_p.h"
 
@@ -43,11 +41,11 @@
 CReporterNotificationPrivate::CReporterNotificationPrivate(const QString &eventType,
                                                            CReporterNotification *q):
   id(0), timeout(-1), callWatcher(0), category(eventType),
-  proxy(new NotificationProxy("org.freedesktop.Notifications",
+  proxy(new OrgFreedesktopNotificationsInterface("org.freedesktop.Notifications",
           "/org/freedesktop/Notifications", QDBusConnection::sessionBus(), this)),
   q_ptr(q)
 {
-    connect(proxy, &NotificationProxy::NotificationClosed,
+    connect(proxy, &OrgFreedesktopNotificationsInterface::NotificationClosed,
             this, &CReporterNotificationPrivate::onNotificationRemoved);
 }
 
