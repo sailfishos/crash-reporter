@@ -255,12 +255,17 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
             !filePath.contains(CReporter::LifelogPackagePrefix)) {
 
             QString body;
-            if (++crashCount > 1) {
-                body = QString("%1 crashes total").arg(crashCount);
+            QString summary;
+
+            if (isUserTerminated) {
+                summary = "%1 was terminated.";
+            } else {
+                if (++crashCount > 1) {
+                    body = QString("%1 crashes total").arg(crashCount);
+                }
+                summary = "%1 has crashed.";
             }
 
-            QString summary = isUserTerminated ?
-                    "%1 was terminated." : "%1 has crashed.";
             crashNotification->update(summary.arg(details.at(0)), body,
                     crashCount);
         }
