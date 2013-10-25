@@ -191,10 +191,11 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
     qDebug() << __PRETTY_FUNCTION__ << "New rich-core file found: " << filePath;
 
     QStringList details = CReporterUtils::parseCrashInfoFromFilename(filePath);
+    bool isUserTerminated = (details[2].toInt() == SIGQUIT);
 
     emit q_ptr->richCoreNotify(filePath);
 
-    if (autoDelete && checkForDuplicates(filePath)
+    if (!isUserTerminated && autoDelete && checkForDuplicates(filePath)
         && !filePath.contains(CReporter::LifelogPackagePrefix)) {
         /* Check for duplicates if auto-deleting is enabled. If Maximum number
          * of duplicates is exceeded, delete file. */
@@ -258,7 +259,7 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
                 body = QString("%1 crashes total").arg(crashCount);
             }
 
-            QString summary = (details[2].toInt() == SIGQUIT) ?
+            QString summary = isUserTerminated ?
                     "%1 was terminated." : "%1 has crashed.";
             crashNotification->update(summary.arg(details.at(0)), body,
                     crashCount);
