@@ -77,17 +77,16 @@ public:
     static bool removeFile(const QString &path);
 
     /*!
-      * @brief This function parses needed information from *rcore.lzo filename.
-      *
-      * Function takes the path to the rich core file as an argument and parses
-      * application name, IMEI (4 last digits), PID and signal from it. Data can be accessed
-      * by referencing indexes of the returned QStringList. Index: 0 = Application name,
-      * 1 = IMEI, 2 = SIGNUM and 3 = PID.
-      *
-      * @param Absolute file path to rich core file.
-      * @return Data extracted to string list.
-      *
-      */
+     * Parses the components of *rcore.lzo filename.
+     *
+     * Method takes the path to the rich core file and parses application name,
+     * HWID, PID and signal from it. Data can be accessed by referencing
+     * indexes of the returned QStringList (0 = Application name, 1 = HWID,
+     * 2 = SIGNUM and 3 = PID).
+     *
+     * @param Absolute file path to rich core file.
+     * @return Data extracted to string list.
+     */
     static QStringList parseCrashInfoFromFilename(const QString &filePath);
 
     /*!
