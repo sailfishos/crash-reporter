@@ -161,122 +161,118 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
     qDebug() << __PRETTY_FUNCTION__ << "Directory:" << path << "has changed.";
 
     QDir changedDir(path);
-    // Sanity check. QFileSystemWatcher will send signal, if monitored directory was removed.
-    if (changedDir.exists()) {
-        qDebug() << __PRETTY_FUNCTION__ << "Changed directory exists.";
-        // Check for new cores in changed directory.
-        QString filePath = registry->checkDirectoryForCores(path);
-
-        if (!filePath.isEmpty()) {
-            // New core found.
-            qDebug() << __PRETTY_FUNCTION__ << "New rich-core file found: " << filePath;
-
-            QStringList details = CReporterUtils::parseCrashInfoFromFilename(filePath);
-
-            emit q_ptr->richCoreNotify(filePath);
-
-            if (autoDelete && checkForDuplicates(filePath)
-                && !filePath.contains(CReporter::LifelogPackagePrefix)) {
-                // Check for dublicates, if auto-deleting is enabled. If Maximum number of duplicates
-                // exeeded, delete file.
-                if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
-                {
-                    CReporterNotification *notification =
-                            new CReporterNotification(
-                                    CReporter::ApplicationNotificationEventType,
-                                    0, this);
-                    notification->setTimeout(5000);
-                    connect(notification, &CReporterNotification::timeouted,
-                            notification, &QObject::deleteLater);
-                    notification->update(QString("%1 has crashed again.").arg(details[0]),
-                            "Duplicate crash report was deleted.");
-                }
-                CReporterUtils::removeFile(filePath);
-                return;
-            }
-
-            if (!autoUpload)
-            {
-                QVariantList arguments;
-                arguments << filePath;
-
-                /* TODO: Here multiple-choice notification should be displayed
-                 * with options to send or delete the crash report. So far
-                 * disabling auto upload is not possible in the UI and we never
-                 * get here. This code now at least leaks CReporterNotification
-                 * and has to be re-implemented. Standard Sailfish notifications
-                 * don't support multiple actions so far.*/
-
-                if (!q_ptr->notifyCrashReporterUI(CReporter::NotifyNewDialogType, arguments)) {
-                    // UI failed to launch. Try to show notification instead.
-                    // Daemon is not a Meego Touch application, thus translation with MLocale
-                    // won't work here.
-
-                    QString notificationSummary;
-                    if (filePath.contains(CReporter::LifelogPackagePrefix))
-                    {
-                        notificationSummary = "New lifelog report is ready.";
-                    }
-                    else
-                    {
-                        notificationSummary = "The application %1 crashed.";
-                        notificationSummary = notificationSummary.arg(details.at(0));
-                    }
-
-
-                    QString notificationBody("Unable to start Crash Reporter UI");
-
-                    CReporterNotification *notification = new CReporterNotification(
-                            CReporter::ApplicationNotificationEventType,
-                            notificationSummary, notificationBody);
-                    notification->setParent(this);
-
-                    connect(notification, SIGNAL(activated()), this, SLOT(handleNotificationEvent()));
-                    connect(notification, SIGNAL(timeouted()), this, SLOT(handleNotificationEvent()));
-                }
-            }
-            else
-            {
-                if (CReporterPrivacySettingsModel::instance()->notificationsEnabled() &&
-                    !filePath.contains(CReporter::LifelogPackagePrefix)) {
-
-                    QString body;
-                    if (++crashCount > 1) {
-                        body = QString("%1 crashes total").arg(crashCount);
-                    }
-
-                    crashNotification->update(
-                            QString("%1 has crashed.").arg(details.at(0)),
-                            body, crashCount);
-                }
-                if (!CReporterNwSessionMgr::unpaidConnectionAvailable()) {
-                    qDebug() << __PRETTY_FUNCTION__
-                             << "WiFi not available, not uploading now.";
-                } else {
-                    /* In auto-upload mode try to upload all crash reports each
-                     * time a new one appears. */
-                    if (!CReporterUtils::notifyAutoUploader(registry->collectAllCoreFiles())) {
-                        qWarning() << __PRETTY_FUNCTION__
-                                   << "Failed to start Auto Uploader.";
-                    }
-                }
-            }
-        }
-    }
-    else // Monitored directory was deleted
-    {
-        // Re-add core dirs when the parent dir changes so that monitoring is resumed
-        // after usb mass storage mode has been disconnected
-        QDir changedDir(path);
-        if (changedDir.cd("../.."))
-        {
-            connect(&parentDirWatcher, SIGNAL(directoryChanged(QString)), SLOT(handleParentDirectoryChanged()));
+    // QFileSystemWatcher will send signal if monitored directory was removed.
+    if (!changedDir.exists()) {
+        /* Re-add core dirs when the parent dir changes, so that monitoring is
+         * resumed after USB mass storage mode has been disconnected */
+        if (changedDir.cd("../..")) {
+            connect(&parentDirWatcher, SIGNAL(directoryChanged(QString)),
+                    SLOT(handleParentDirectoryChanged()));
             parentDirWatcher.addPath(changedDir.absolutePath());
-            qDebug() << __PRETTY_FUNCTION__ << "Directory was deleted. Started parent dir monitoring.";
+            qDebug() << __PRETTY_FUNCTION__
+                     << "Directory was deleted. Started parent dir monitoring.";
+        } else {
+            qDebug() << __PRETTY_FUNCTION__
+                     << "Directory was deleted. Parent dir does not exist.";
         }
-        else
-        {
-            qDebug() << __PRETTY_FUNCTION__ << "Directory was deleted. Parent dir does not exist.";
+
+        return;
+    }
+
+    qDebug() << __PRETTY_FUNCTION__ << "Changed directory exists.";
+    // Check for new cores in changed directory.
+    QString filePath = registry->checkDirectoryForCores(path);
+
+    if (!filePath.isEmpty()) {
+        // New core found.
+        qDebug() << __PRETTY_FUNCTION__ << "New rich-core file found: " << filePath;
+
+        QStringList details = CReporterUtils::parseCrashInfoFromFilename(filePath);
+
+        emit q_ptr->richCoreNotify(filePath);
+
+        if (autoDelete && checkForDuplicates(filePath)
+            && !filePath.contains(CReporter::LifelogPackagePrefix)) {
+            // Check for dublicates, if auto-deleting is enabled. If Maximum number of duplicates
+            // exeeded, delete file.
+            if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
+            {
+                CReporterNotification *notification =
+                        new CReporterNotification(
+                                CReporter::ApplicationNotificationEventType,
+                                0, this);
+                notification->setTimeout(5000);
+                connect(notification, &CReporterNotification::timeouted,
+                        notification, &QObject::deleteLater);
+                notification->update(QString("%1 has crashed again.").arg(details[0]),
+                        "Duplicate crash report was deleted.");
+            }
+            CReporterUtils::removeFile(filePath);
+            return;
+        }
+
+        if (!autoUpload) {
+            QVariantList arguments;
+            arguments << filePath;
+
+            /* TODO: Here multiple-choice notification should be displayed
+             * with options to send or delete the crash report. So far
+             * disabling auto upload is not possible in the UI and we never
+             * get here. This code now at least leaks CReporterNotification
+             * and has to be re-implemented. Standard Sailfish notifications
+             * don't support multiple actions so far.*/
+
+            if (!q_ptr->notifyCrashReporterUI(CReporter::NotifyNewDialogType, arguments)) {
+                // UI failed to launch. Try to show notification instead.
+                // Daemon is not a Meego Touch application, thus translation with MLocale
+                // won't work here.
+
+                QString notificationSummary;
+                if (filePath.contains(CReporter::LifelogPackagePrefix))
+                {
+                    notificationSummary = "New lifelog report is ready.";
+                }
+                else
+                {
+                    notificationSummary = "The application %1 crashed.";
+                    notificationSummary = notificationSummary.arg(details.at(0));
+                }
+
+
+                QString notificationBody("Unable to start Crash Reporter UI");
+
+                CReporterNotification *notification = new CReporterNotification(
+                        CReporter::ApplicationNotificationEventType,
+                        notificationSummary, notificationBody);
+                notification->setParent(this);
+
+                connect(notification, SIGNAL(activated()), this, SLOT(handleNotificationEvent()));
+                connect(notification, SIGNAL(timeouted()), this, SLOT(handleNotificationEvent()));
+            }
+        } else {
+            if (CReporterPrivacySettingsModel::instance()->notificationsEnabled() &&
+                !filePath.contains(CReporter::LifelogPackagePrefix)) {
+
+                QString body;
+                if (++crashCount > 1) {
+                    body = QString("%1 crashes total").arg(crashCount);
+                }
+
+                crashNotification->update(
+                        QString("%1 has crashed.").arg(details.at(0)),
+                        body, crashCount);
+            }
+            if (!CReporterNwSessionMgr::unpaidConnectionAvailable()) {
+                qDebug() << __PRETTY_FUNCTION__
+                         << "WiFi not available, not uploading now.";
+            } else {
+                /* In auto-upload mode try to upload all crash reports each
+                 * time a new one appears. */
+                if (!CReporterUtils::notifyAutoUploader(registry->collectAllCoreFiles())) {
+                    qWarning() << __PRETTY_FUNCTION__
+                               << "Failed to start Auto Uploader.";
+                }
+            }
         }
     }
 }
