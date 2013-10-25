@@ -25,7 +25,7 @@
  *
  */
  
-// System includes.
+#include <csignal>
 
 #include <QListIterator>
 #include <QStringList>
@@ -258,9 +258,10 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
                 body = QString("%1 crashes total").arg(crashCount);
             }
 
-            crashNotification->update(
-                    QString("%1 has crashed.").arg(details.at(0)),
-                    body, crashCount);
+            QString summary = (details[2].toInt() == SIGQUIT) ?
+                    "%1 was terminated." : "%1 has crashed.";
+            crashNotification->update(summary.arg(details.at(0)), body,
+                    crashCount);
         }
         if (!CReporterNwSessionMgr::unpaidConnectionAvailable()) {
             qDebug() << __PRETTY_FUNCTION__
