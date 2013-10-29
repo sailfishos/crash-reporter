@@ -99,15 +99,12 @@ void CReporterCoreDir::collectAllCoreFilesAtLocation(QStringList& coreList)
     QDirIterator iter(d->directory, filters, QDir::Files | QDir::NoDotAndDotDot);
 
     while (iter.hasNext()) {
-		QString file = iter.next();
+        QString filePath = iter.next();
 	
-		qDebug() << __PRETTY_FUNCTION__ << "File found:" << file << "--> validate.";
-		
-        if (CReporterUtils::validateCore(iter.fileInfo())) {
-			qDebug() << __PRETTY_FUNCTION__ << "File:" << iter.filePath() << "added to list.";
-			coreList << iter.filePath();
-			}
-	}
+        if (CReporterUtils::validateCore(filePath)) {
+            coreList << filePath;
+        }
+    }
 }
 
 QString CReporterCoreDir::checkDirectoryForCores()
@@ -130,7 +127,7 @@ QString CReporterCoreDir::checkDirectoryForCores()
 		fi = iter.fileInfo();
 
         if (!d->coresAtDirectory.contains(fi.fileName()) &&
-                CReporterUtils::validateCore(fi)) {
+                CReporterUtils::validateCore(fi.fileName())) {
 				// This is valid rich core file, which hasn't been processed before.
 				d->coresAtDirectory << fi.fileName();
 				coreFilePath = fi.absoluteFilePath();

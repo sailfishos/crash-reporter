@@ -57,33 +57,10 @@ const QString coreSuffixRcoreLzo = "rcore.lzo";
 // ----------------------------------------------------------------------------
 // CReporterUtils::validateCore
 // ----------------------------------------------------------------------------
-bool CReporterUtils::validateCore(const QFileInfo &file)
+bool CReporterUtils::validateCore(const QString &path)
 {
-	QString base = file.baseName(); // remove suffix
-	qDebug() << __PRETTY_FUNCTION__ << "Base name:" << base;
-	
-    if (base.length() == 0) {
-        // Ignore the partially created cores, these have "." -prefix
-        // and thus the base name is empty.
-		qDebug() << __PRETTY_FUNCTION__ << "Partial core -> Not valid.";
-		return false;
-	} 
-    /*else if (base.lastIndexOf(CReporter::UIBinaryName) != -1 ||
-             base.lastIndexOf(CReporter::DaemonBinaryName) != -1 ||
-             base.lastIndexOf(CReporter::AutoUploaderBinaryName) != -1) {
-		// Ignore crash_reporter_ui && crash_reporter_daemon cores.
-        qDebug() << __PRETTY_FUNCTION__ << "crash-reporter* core -> Not valid.";
-		return false;
-    }*/
-    else if (file.completeSuffix().endsWith(coreSuffixRcore, Qt::CaseInsensitive) ||
-             file.completeSuffix().endsWith(coreSuffixRcoreLzo, Qt::CaseInsensitive)) {
-		qDebug() << __PRETTY_FUNCTION__ << "Core file is valid.";
-		return true;
-	}
-	else {
-		qDebug() << __PRETTY_FUNCTION__ << "Not valid file.";
-		return false;
-	}
+    return (path.endsWith(coreSuffixRcoreLzo, Qt::CaseInsensitive) ||
+            path.endsWith(coreSuffixRcore, Qt::CaseInsensitive));
 }
 
 // ----------------------------------------------------------------------------

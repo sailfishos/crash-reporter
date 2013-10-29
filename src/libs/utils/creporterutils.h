@@ -41,16 +41,15 @@ class CREPORTER_EXPORT CReporterUtils : public QObject
 public:
 
 	/*!
-     * @brief This function checks, if the file generated can be accepted for upload.
+     * Checks if the file at given path can be accepted for upload.
      *
-	 * Valid files are those, which have .rcore or .rcore.lzo suffix. Function 
-	 * will reject the file, if it has no suitable suffix, starts with "." 
-     * or is a crash-reporter rich core.
-	 *
+     * Valid files are those which have .rcore or .rcore.lzo suffix, the others
+     * are rejected by the method.
+     *
      * @param path rich core file path
-     * @param true, if it can be accepted otherwise false
+     * @return true if it can be accepted, otherwise false
 	 */
-    static bool validateCore(const QFileInfo &path);
+    static bool validateCore(const QString &path);
 
 	/*!
      * @brief This function converts QString to char* format.
