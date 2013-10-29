@@ -189,13 +189,16 @@ void CReporterCoreDir::updateCoreList()
 	qDebug() << __PRETTY_FUNCTION__ << "Refreshing core directory list.";
 
     QDir dir(d->directory);
+    dir.setFilter(QDir::Files | QDir::NoDotAndDotDot);
+    dir.setNameFilters(QStringList() << rcore_file_name_filter << rcore_lzo_file_name_filter);
 
-	QStringList filters;
-    filters << QString(rcore_file_name_filter) << QString(rcore_lzo_file_name_filter);
 	// Remove old entries.
 	d->coresAtDirectory.clear();
-	// Update current entries.
-    d->coresAtDirectory = dir.entryList(filters, QDir::Files | QDir::NoDotAndDotDot, QDir::Time);
+
+    QDirIterator it(dir);
+    while (it.hasNext()) {
+        d->coresAtDirectory.append(it.next());
+    }
 }
 
 // End of file
