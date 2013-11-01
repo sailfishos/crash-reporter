@@ -43,6 +43,14 @@ Page {
             PullDownMenu {
                 MenuItem {
                     enabled: Adapter.reportsToUpload > 0
+                    //% "Delete unsent reports"
+                    text: qsTrId("quick-feedback_delete_reports")
+                    onClicked: {
+                        deleteReportsRemorse.run()
+                    }
+                }
+                MenuItem {
+                    enabled: Adapter.reportsToUpload > 0
                     //% "Upload crash reports now"
                     text: qsTrId("quick-feedback_upload_now")
                     onClicked: {
@@ -55,6 +63,17 @@ Page {
                         qsTrId("quick-feedback_report_to_upload") :
                         //% " reports to upload"
                         qsTrId("quick-feedback_reports_to_upload"));
+                }
+            }
+
+            RemorsePopup {
+                id: deleteReportsRemorse
+                function run() {
+                    //% "Deleting %n crash report(s)"
+                    execute(qsTrId("quick-feedback_deleting", Adapter.reportsToUpload),
+                        function() {
+                            Adapter.deleteAllReports()
+                        })
                 }
             }
 

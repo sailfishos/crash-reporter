@@ -83,4 +83,13 @@ void CrashReporterAdapter::uploadAllCrashReports() const
     CReporterUtils::notifyAutoUploader(d->registry.collectAllCoreFiles());
 }
 
+void CrashReporterAdapter::deleteAllCrashReports() const
+{
+    Q_D(const CrashReporterAdapter);
+
+    foreach (const QString &filename, d->registry.collectAllCoreFiles()) {
+        QFile(filename).remove();
+    }
+}
+
 #include "moc_crashreporteradapter.cpp"

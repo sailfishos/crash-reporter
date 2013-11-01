@@ -36,6 +36,7 @@ public:
     int reportsToUpload() const;
 
     Q_INVOKABLE void uploadAllCrashReports() const;
+    Q_INVOKABLE void deleteAllCrashReports() const;
 
 signals:
     void reportsToUploadChanged();
