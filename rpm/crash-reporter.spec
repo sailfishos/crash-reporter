@@ -49,7 +49,6 @@ Crash Reporter default setting files.
 Summary:                Crash Reporter Settings UI for Jolla Sailfish OS
 Group:                  System/GUI/Other
 Requires:               %{name} = %{version}-%{release}
-Requires:               qt5-qtsvg-plugin-imageformat-svg
 %description -n         jolla-settings-crash-reporter
 Crash Reporter settings plugin for the Sailfish OS Settings application.
 
@@ -102,7 +101,6 @@ make %{?jobs:-j%jobs}
 /usr/lib/qt5/qml/*
 /usr/share/jolla-settings/pages/crash-reporter/*
 /usr/share/jolla-settings/entries/*
-/usr/share/themes/*
 
 %files devel
 %defattr(-,root,root,-)

@@ -50,10 +50,6 @@ notifications.path = $${CREPORTER_SYSTEM_SHARE}/lipstick/notificationcategories/
 notifications.files = data/x-nokia.crash-reporter.autouploader.conf \
                       data/x-nokia.crash-reporter.notification.conf
 
-icons.path = $${CREPORTER_SYSTEM_SHARE}/themes/jolla-ambient/meegotouch/icons
-icons.files = data/icon-s-crash-reporter.svg \
-              data/icon-m-crash-reporter.svg
-
 settings.path = $$CREPORTER_SETTINGS_PATH
 settings.files += data/crash-reporter-privacy.conf \
 	data/crash-reporter.conf
@@ -64,4 +60,4 @@ systemd_service.files = data/crash-reporter.service
 oneshot.path = $${CREPORTER_SYSTEM_ONESHOT}
 oneshot.files = scripts/crash-reporter-service-default
 
-INSTALLS += scripts notifications icons settings systemd_service oneshot
+INSTALLS += scripts notifications settings systemd_service oneshot
