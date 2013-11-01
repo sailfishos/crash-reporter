@@ -194,7 +194,8 @@ void CReporterCoreDir::updateCoreList()
 
     QDirIterator it(dir);
     while (it.hasNext()) {
-        d->coresAtDirectory.append(it.next());
+        it.next();
+        d->coresAtDirectory.append(it.fileName());
     }
 }
 
