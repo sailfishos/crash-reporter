@@ -72,7 +72,7 @@ Page {
                     //% "Deleting %n crash report(s)"
                     execute(qsTrId("quick-feedback_deleting", Adapter.reportsToUpload),
                         function() {
-                            Adapter.deleteAllReports()
+                            Adapter.deleteAllCrashReports()
                         })
                 }
             }
