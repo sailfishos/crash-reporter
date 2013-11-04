@@ -78,6 +78,7 @@ make %{?jobs:-j%jobs}
 %files
 %defattr(-,root,root,-)
 %doc README COPYING
+/lib/systemd/system/*
 /usr/bin/crash*
 /usr/lib/oneshot.d/*
 /usr/lib/systemd/user/*

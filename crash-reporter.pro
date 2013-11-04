@@ -57,11 +57,14 @@ settings.files += data/crash-reporter-privacy.conf \
 systemd_service.path = $${CREPORTER_SYSTEM_SYSTEMD_USER_SERVICES}
 systemd_service.files = data/crash-reporter.service
 
+systemd_endurance.path = $${CREPORTER_SYSTEM_SYSTEMD_SYSTEM_SERVICES}
+systemd_endurance.files = data/crash-reporter-endurance.*
+
 endurance_script.path = $${CREPORTER_SYSTEM_LIBEXEC}
 endurance_script.files = scripts/endurance-collect
 
 oneshot.path = $${CREPORTER_SYSTEM_ONESHOT}
 oneshot.files = scripts/crash-reporter-service-default
 
-INSTALLS += scripts notifications settings systemd_service endurance_script \
-	oneshot
+INSTALLS += scripts notifications settings systemd_service systemd_endurance \
+	endurance_script oneshot

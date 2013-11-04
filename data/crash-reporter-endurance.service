@@ -1,0 +1,6 @@
+[Unit]
+Description=Crash reporter integration with sp-endurance
+
+[Service]
+Type=simple
+ExecStart=/usr/libexec/endurance-collect

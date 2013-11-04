@@ -35,6 +35,7 @@ CREPORTER_SYSTEM_SHARE = /usr/share
 CREPORTER_SYSTEM_BIN = /usr/bin
 CREPORTER_SYSTEM_DBUS_SERVICES = /usr/share/dbus-1/services
 CREPORTER_SYSTEM_SYSTEMD_USER_SERVICES = /usr/lib/systemd/user
+CREPORTER_SYSTEM_SYSTEMD_SYSTEM_SERVICES = /lib/systemd/system
 CREPORTER_SYSTEM_ONESHOT = /usr/lib/oneshot.d
 CREPORTER_SETTINGS_PATH = $${CREPORTER_SYSTEM_SHARE}/crash-reporter-settings
 CREPORTER_DLG_PLUGINS_PATH = /usr/lib/crash-reporter/dialogplugins
