@@ -22,21 +22,27 @@
 #ifndef SYSTEMDSERVICE_H
 #define SYSTEMDSERVICE_H
 
-#include <QObject>
+#include <QQmlParserStatus>
 
 class SystemdServicePrivate;
 
-class SystemdService: public QObject {
+class SystemdService: public QObject, public QQmlParserStatus {
     Q_OBJECT
 
     Q_ENUMS(State)
 
+    Q_INTERFACES(QQmlParserStatus)
+
+    Q_PROPERTY(QString serviceName READ serviceName WRITE setServiceName NOTIFY serviceNameChanged)
     Q_PROPERTY(State state READ state NOTIFY stateChanged)
     Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
     Q_PROPERTY(bool masked READ masked WRITE setMasked NOTIFY maskedChanged)
 
 public:
-    SystemdService(const QString& serviceName);
+    SystemdService(QObject *parent = 0);
+
+    QString serviceName() const;
+    void setServiceName(const QString& serviceName);
 
     enum State {
         Inactive,
@@ -55,8 +61,12 @@ public:
     bool masked() const;
     void setMasked(bool state);
 
+    void classBegin();
+    void componentComplete();
+
     ~SystemdService();
 signals:
+    void serviceNameChanged();
     void stateChanged();
     void enabledChanged();
     void maskedChanged();

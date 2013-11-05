@@ -34,6 +34,7 @@ public:
     OrgFreedesktopSystemd1ManagerInterface *manager;
     OrgFreedesktopSystemd1UnitInterface *unit;
 
+    void initializeDBusInterface();
     void gotUnitPath(QDBusPendingCallWatcher *call);
     void propertiesChanged(const QString &interface,
                            const QVariantMap &changedProperties,
@@ -53,6 +54,37 @@ private:
 
     void changeState(const QString &state);
 };
+
+void SystemdServicePrivate::initializeDBusInterface() {
+    Q_Q(SystemdService);
+
+    manager = new OrgFreedesktopSystemd1ManagerInterface("org.freedesktop.systemd1",
+            "/org/freedesktop/systemd1", QDBusConnection::sessionBus(), q);
+
+    /* Ensure systemd configuration is up to date with unit files, for example
+     * after change by package update. */
+    QDBusPendingCall reply = manager->Reload();
+    reply.waitForFinished();
+    if (reply.isError()) {
+        qDebug() << "Couldn't reload systemd unit files";
+    }
+
+    qDBusRegisterMetaType<UnitFileChange>();
+    qDBusRegisterMetaType<QList<UnitFileChange> >();
+
+    // Calling subscribe allows us to receive DBus signals from systemd
+    reply = manager->Subscribe();
+    reply.waitForFinished();
+    if (reply.isError()) {
+        qDebug() << "Couldn't subscribe to systemd manager";
+    }
+
+    reply = manager->LoadUnit(serviceName);
+    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(reply, q);
+
+    QObject::connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher *)),
+                     q, SLOT(gotUnitPath(QDBusPendingCallWatcher *)));
+}
 
 void SystemdServicePrivate::gotUnitPath(QDBusPendingCallWatcher *call) {
     Q_Q(SystemdService);
@@ -193,40 +225,34 @@ void SystemdServicePrivate::changeState(const QString &state) {
     }
 }
 
-SystemdService::SystemdService(const QString& serviceName):
-  d_ptr(new SystemdServicePrivate) {
+SystemdService::SystemdService(QObject *parent):
+  QObject(parent), d_ptr(new SystemdServicePrivate) {
     Q_D(SystemdService);
     d->q_ptr = this;
-    d->serviceName = serviceName;
     d->state = Inactive;
 
-    d->manager = new OrgFreedesktopSystemd1ManagerInterface("org.freedesktop.systemd1",
-            "/org/freedesktop/systemd1", QDBusConnection::sessionBus(), this);
+    d->manager = 0;
     d->unit = 0;
+}
 
-    /* Ensure systemd configuration is up to date with unit files, for example
-     * after change by package update. */
-    QDBusPendingCall reply = d->manager->Reload();
-    reply.waitForFinished();
-    if (reply.isError()) {
-        qDebug() << "Couldn't reload systemd unit files";
+QString SystemdService::serviceName() const {
+    Q_D(const SystemdService);
+
+    return d->serviceName;
+}
+
+void SystemdService::setServiceName(const QString& serviceName) {
+    Q_D(SystemdService);
+
+    if (!d->serviceName.isEmpty()) {
+        qDebug() << "Changing systemd service name not supported";
+        return;
     }
 
-    qDBusRegisterMetaType<UnitFileChange>();
-    qDBusRegisterMetaType<QList<UnitFileChange> >();
-
-    // Calling subscribe allows us to receive DBus signals from systemd
-    reply = d->manager->Subscribe();
-    reply.waitForFinished();
-    if (reply.isError()) {
-        qDebug() << "Couldn't subscribe to systemd manager";
+    if (d->serviceName != serviceName) {
+        d->serviceName = serviceName;
+        emit serviceNameChanged();
     }
-
-    reply = d->manager->LoadUnit(d->serviceName);
-    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(reply, this);
-
-    connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher *)),
-            this, SLOT(gotUnitPath(QDBusPendingCallWatcher *)));
 }
 
 SystemdService::State SystemdService::state() const {
@@ -335,6 +361,19 @@ bool SystemdService::masked() const {
     Q_D(const SystemdService);
 
     return (d->unit && d->unit->loadState() == "masked");
+}
+
+void SystemdService::classBegin() {}
+
+void SystemdService::componentComplete() {
+    Q_D(SystemdService);
+
+    if (d->serviceName.isEmpty()) {
+        qDebug() << "Systemd service name must be specified!";
+        return;
+    }
+
+    d->initializeDBusInterface();
 }
 
 SystemdService::~SystemdService() {

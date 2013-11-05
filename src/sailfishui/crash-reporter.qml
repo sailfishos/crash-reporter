@@ -26,6 +26,12 @@ import com.jolla.settings.crashreporter 1.0
 
 Page {
 
+    SystemdService {
+        id: crashReporterService
+
+        serviceName: "crash-reporter.service"
+    }
+
     SilicaFlickable {
         anchors.fill: parent
         contentHeight: content.height
@@ -87,28 +93,28 @@ Page {
 
                 onClicked: {
                     var newState = !checked
-                    CrashReporterService.enabled = newState
+                    crashReporterService.enabled = newState
                     if (newState) {
-                        CrashReporterService.start()
+                        crashReporterService.start()
                     } else {
-                        CrashReporterService.stop()
+                        crashReporterService.stop()
                     }
                 }
 
                 states: [
                     State {
                         name: "inactive"
-                        when: (CrashReporterService.state == CrashReporterService.Inactive)
+                        when: (crashReporterService.state == SystemdService.Inactive)
                         PropertyChanges { target: reporterSwitch; checked: false }
                     },
                     State {
                         name: "activating"
-                        when: (CrashReporterService.state == CrashReporterService.Activating)
+                        when: (crashReporterService.state == SystemdService.Activating)
                         PropertyChanges { target: reporterSwitch; checked: true; busy: true }
                     },
                     State {
                         name: "active"
-                        when: (CrashReporterService.state == CrashReporterService.Active)
+                        when: (crashReporterService.state == SystemdService.Active)
                         PropertyChanges { target: reporterSwitch; checked: true }
                     }
                 ]
