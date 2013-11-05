@@ -171,6 +171,36 @@ Page {
                 onClicked: PrivacySettings.lifelog = !PrivacySettings.lifelog
             }
 
+            TextSwitch {
+                automaticCheck: false
+                checked: enduranceService.state == SystemdService.Active
+                //% "Endurance reports"
+                text: qsTrId("settings_crash-reporter_enable_endurance")
+                //% "Reports system statistics helping diagnose problems that "
+                //% "manifest themselves only after a long-term use of the "
+                //% "device like memory leaks, excessive battery drain, or "
+                //% "decreasing performance."
+                description: qsTrId("settings_crash-reporter_enable_endurance_description")
+
+                SystemdService {
+                    id: enduranceService
+
+                    serviceName: "crash-reporter-endurance.timer"
+                    managerType: SystemdService.SystemManager
+                    setuidHelper: "/usr/libexec/endurance-helper"
+                }
+
+                onClicked: {
+                    var newState = !checked
+                    enduranceService.enabled = newState
+                    if (newState) {
+                        enduranceService.start()
+                    } else {
+                        enduranceService.stop()
+                    }
+                }
+            }
+
             SectionHeader {
                 //% "Stack trace"
                 text: qsTrId("settings_crash-reporter_stack_trace")
