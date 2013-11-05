@@ -31,6 +31,8 @@
 class SystemdServicePrivate {
 public:
     QString serviceName;
+    SystemdService::ManagerType managerType;
+
     OrgFreedesktopSystemd1ManagerInterface *manager;
     OrgFreedesktopSystemd1UnitInterface *unit;
 
@@ -58,8 +60,11 @@ private:
 void SystemdServicePrivate::initializeDBusInterface() {
     Q_Q(SystemdService);
 
+    QDBusConnection connection = (managerType == SystemdService::UserManager) ?
+            QDBusConnection::sessionBus() : QDBusConnection::systemBus();
+
     manager = new OrgFreedesktopSystemd1ManagerInterface("org.freedesktop.systemd1",
-            "/org/freedesktop/systemd1", QDBusConnection::sessionBus(), q);
+            "/org/freedesktop/systemd1", connection, q);
 
     /* Ensure systemd configuration is up to date with unit files, for example
      * after change by package update. */
@@ -97,11 +102,11 @@ void SystemdServicePrivate::gotUnitPath(QDBusPendingCallWatcher *call) {
         QString path = reply.argumentAt<0>().path();
 
         unit = new OrgFreedesktopSystemd1UnitInterface("org.freedesktop.systemd1",
-                path, QDBusConnection::sessionBus(), q);
+                path, manager->connection(), q);
 
         OrgFreedesktopDBusPropertiesInterface *crashReporterProperties =
                 new OrgFreedesktopDBusPropertiesInterface("org.freedesktop.systemd1",
-                        path, QDBusConnection::sessionBus(), q);
+                        path, manager->connection(), q);
 
         QObject::connect(crashReporterProperties,SIGNAL(PropertiesChanged(const QString &, const QVariantMap &, const QStringList &)),
                          q, SLOT(propertiesChanged(const QString &, const QVariantMap &, const QStringList &)));
@@ -229,6 +234,7 @@ SystemdService::SystemdService(QObject *parent):
   QObject(parent), d_ptr(new SystemdServicePrivate) {
     Q_D(SystemdService);
     d->q_ptr = this;
+    d->managerType = UserManager;
     d->state = Inactive;
 
     d->manager = 0;
@@ -252,6 +258,21 @@ void SystemdService::setServiceName(const QString& serviceName) {
     if (d->serviceName != serviceName) {
         d->serviceName = serviceName;
         emit serviceNameChanged();
+    }
+}
+
+SystemdService::ManagerType SystemdService::managerType() const {
+    Q_D(const SystemdService);
+
+    return d->managerType;
+}
+
+void SystemdService::setManagerType(SystemdService::ManagerType managerType) {
+    Q_D(SystemdService);
+
+    if (d->managerType != managerType) {
+        d->managerType = managerType;
+        emit managerTypeChanged();
     }
 }
 
