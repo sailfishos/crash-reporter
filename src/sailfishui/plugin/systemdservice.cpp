@@ -32,11 +32,13 @@ class SystemdServicePrivate {
 public:
     QString serviceName;
     SystemdService::ManagerType managerType;
+    QString setuidHelper;
 
     OrgFreedesktopSystemd1ManagerInterface *manager;
     OrgFreedesktopSystemd1UnitInterface *unit;
 
     void initializeDBusInterface();
+    bool invokeSetuidHelper(const QString &action);
     void gotUnitPath(QDBusPendingCallWatcher *call);
     void propertiesChanged(const QString &interface,
                            const QVariantMap &changedProperties,
@@ -89,6 +91,28 @@ void SystemdServicePrivate::initializeDBusInterface() {
 
     QObject::connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher *)),
                      q, SLOT(gotUnitPath(QDBusPendingCallWatcher *)));
+}
+
+bool SystemdServicePrivate::invokeSetuidHelper(const QString &action) {
+    Q_Q(SystemdService);
+
+    if (setuidHelper.isEmpty()) {
+        return false;
+    }
+
+    QProcess *helper = new QProcess(q);
+    helper->start(setuidHelper, QStringList() << action);
+    if (!helper->waitForStarted()) {
+        qDebug() << "Couldn't start SETUID helper process: " << setuidHelper;
+        helper->deleteLater();
+        return false;
+    }
+
+    typedef void (QProcess::*ProcessFinishedSignal)(int, QProcess::ExitStatus);
+    QObject::connect(helper, (ProcessFinishedSignal) &QProcess::finished,
+                     helper, &QProcess::deleteLater);
+
+    return true;
 }
 
 void SystemdServicePrivate::gotUnitPath(QDBusPendingCallWatcher *call) {
@@ -276,6 +300,21 @@ void SystemdService::setManagerType(SystemdService::ManagerType managerType) {
     }
 }
 
+QString SystemdService::setuidHelper() const {
+    Q_D(const SystemdService);
+
+    return d->setuidHelper;
+}
+
+void SystemdService::setSetuidHelper(const QString& file) {
+    Q_D(SystemdService);
+
+    if (d->setuidHelper != file) {
+        d->setuidHelper = file;
+        emit setuidHelperChanged();
+    }
+}
+
 SystemdService::State SystemdService::state() const {
     Q_D(const SystemdService);
 
@@ -284,6 +323,10 @@ SystemdService::State SystemdService::state() const {
 
 void SystemdService::start() {
     Q_D(SystemdService);
+
+    if (d->invokeSetuidHelper("start")) {
+        return;
+    }
 
     if (!d->unit) {
         qDebug() << "Systemd unit proxy not initialized!";
@@ -302,6 +345,10 @@ void SystemdService::start() {
 
 void SystemdService::stop() {
     Q_D(SystemdService);
+
+    if (d->invokeSetuidHelper("stop")) {
+        return;
+    }
 
     if (!d->unit) {
         qDebug() << "Systemd unit proxy not initialized!";
@@ -327,6 +374,9 @@ bool SystemdService::enabled() const {
 void SystemdService::setEnabled(bool state) {
     Q_D(SystemdService);
 
+    if (d->invokeSetuidHelper(state ? "enable" : "disable")) {
+        return;
+    }
 
     QDBusPendingCallWatcher *watcher;
 

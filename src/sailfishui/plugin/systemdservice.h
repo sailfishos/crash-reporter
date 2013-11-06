@@ -36,6 +36,7 @@ class SystemdService: public QObject, public QQmlParserStatus {
 
     Q_PROPERTY(QString serviceName READ serviceName WRITE setServiceName NOTIFY serviceNameChanged)
     Q_PROPERTY(ManagerType managerType READ managerType WRITE setManagerType NOTIFY managerTypeChanged)
+    Q_PROPERTY(QString setuidHelper READ setuidHelper WRITE setSetuidHelper NOTIFY setuidHelperChanged)
     Q_PROPERTY(State state READ state NOTIFY stateChanged)
     Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
     Q_PROPERTY(bool masked READ masked WRITE setMasked NOTIFY maskedChanged)
@@ -53,6 +54,9 @@ public:
 
     ManagerType managerType() const;
     void setManagerType(ManagerType managerType);
+
+    QString setuidHelper() const;
+    void setSetuidHelper(const QString& file);
 
     enum State {
         Inactive,
@@ -78,6 +82,7 @@ public:
 signals:
     void serviceNameChanged();
     void managerTypeChanged();
+    void setuidHelperChanged();
     void stateChanged();
     void enabledChanged();
     void maskedChanged();
