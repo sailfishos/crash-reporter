@@ -83,6 +83,7 @@ make %{?jobs:-j%jobs}
 /usr/lib/oneshot.d/*
 /usr/lib/systemd/user/*
 /usr/libexec/endurance-collect
+%attr(4755,root,root) /usr/libexec/endurance-helper
 /usr/share/crash-reporter/*
 /usr/share/dbus-1/services/*.service
 /usr/share/man/man1/*
