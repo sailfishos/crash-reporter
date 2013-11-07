@@ -23,6 +23,7 @@ BuildRequires:          qt5-qttools-linguist
 BuildRequires:          qt5-qtxml-devel
 BuildRequires:          ssu-devel
 Requires:               sp-rich-core >= 1.71.2
+Requires:               sp-endurance
 Requires:               oneshot
 %{_oneshot_requires_post}
 Source0:                %{name}-%{version}.tar.gz
