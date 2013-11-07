@@ -81,6 +81,7 @@ make %{?jobs:-j%jobs}
 /usr/bin/crash*
 /usr/lib/oneshot.d/*
 /usr/lib/systemd/user/*
+/usr/libexec/endurance-collect
 /usr/share/crash-reporter/*
 /usr/share/dbus-1/services/*.service
 /usr/share/man/man1/*

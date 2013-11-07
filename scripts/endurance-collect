@@ -1,0 +1,78 @@
+#!/bin/sh
+
+CORE_DIR=/var/cache/core-dumps
+ENDURANCE_DIR=$CORE_DIR/endurance
+SNAPSHOTS_TO_PACK=12
+
+_print_header()
+{
+  printf '\n[---rich-core: %s---]\n' "$@"
+}
+
+_section_device_uid()
+{
+  _print_header device-uid
+  ssu s | sed -n 's|Device UID: \([^\s]\+\)|\1|p'
+}
+
+_extract_btime()
+{
+  cat $1 | grep btime | cut -d' ' -f 2
+}
+
+_section_boot_time()
+{
+  _print_header boot-time
+  _extract_btime /proc/stat
+}
+
+_section_endurance_snapshot_pack()
+{
+  _print_header endurance-snapshot-pack.tar.xz
+  for snapshot in *; do
+    if [ -d $snapshot ]; then
+      SNAPSHOTS="$SNAPSHOTS $snapshot"
+      for lzofile in $(ls $snapshot/*.lzo 2>/dev/null); do
+        lzop -d $lzofile
+        rm -f $lzofile
+      done
+    fi
+  done
+
+  tar c $SNAPSHOTS | xz --stdout
+}
+
+_create_endurance_package()
+{
+  work_dir=$ENDURANCE_DIR.$(date +%s)
+  mv $ENDURANCE_DIR $work_dir 
+
+  hwid=$(ssu model -s)
+  reportbasename=Endurance-${hwid}-$(date +%s)-
+
+  (
+    cd $work_dir
+    _section_device_uid
+    _section_boot_time
+    _section_endurance_snapshot_pack
+  ) | lzop > "${reportbasename}.tmp"
+
+  rm -r $work_dir
+
+  mv "${reportbasename}.tmp" "${reportbasename}.rcore.lzo"
+}
+
+cd $CORE_DIR
+
+boot_time=$(_extract_btime /proc/stat)
+statfile=$(find $ENDURANCE_DIR -type f -name stat -print -quit)
+if [ -f "$statfile" ] && [ "$boot_time" != "$(_extract_btime $statfile)" ]; then
+  # after reboot, package the remaining snapshots from previous session
+  _create_endurance_package
+fi
+
+/usr/bin/endurance-snapshot endurance
+
+if [ $(ls -d1 $ENDURANCE_DIR/*/ | wc -l) -ge $SNAPSHOTS_TO_PACK ]; then
+  _create_endurance_package
+fi
