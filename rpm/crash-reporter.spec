@@ -122,7 +122,8 @@ make %{?jobs:-j%jobs}
 /usr/lib/crash-reporter-tests/*
 /usr/share/crash-reporter-tests/*
 
-#%post
+%post
+systemctl daemon-reload
 ## on first install
 #if [ "$1" -eq 1 ]; then
 #	add-oneshot --user --now crash-reporter-service-default
