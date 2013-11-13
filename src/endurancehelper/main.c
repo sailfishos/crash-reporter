@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
     }
 
     char *args[] =
-            { "systemctl", argv[1], "crash-reporter-endurance.timer", NULL };
+            { "systemctl", argv[1], "crash-reporter-endurance.service", NULL };
     if (execvp(args[0], args)) {
         fprintf(stderr, "Couldn't execute systemctl\n");
         return EXIT_FAILURE;

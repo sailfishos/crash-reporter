@@ -22,6 +22,9 @@ BuildRequires:          qt5-qttest-devel
 BuildRequires:          qt5-qttools-linguist
 BuildRequires:          qt5-qtxml-devel
 BuildRequires:          ssu-devel
+BuildRequires:          pkgconfig(dbus-1)
+BuildRequires:          pkgconfig(libiphb)
+BuildRequires:          pkgconfig(mce)
 Requires:               sp-rich-core >= 1.71.2
 Requires:               sp-endurance
 Requires:               oneshot
@@ -84,6 +87,7 @@ make %{?jobs:-j%jobs}
 /usr/lib/oneshot.d/*
 /usr/lib/systemd/user/*
 /usr/libexec/endurance-collect
+/usr/libexec/endurance-collect-daemon
 %attr(4755,root,root) /usr/libexec/endurance-helper
 /usr/share/crash-reporter/*
 /usr/share/dbus-1/services/*.service

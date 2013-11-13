@@ -1,6 +1,11 @@
 [Unit]
 Description=Crash reporter integration with sp-endurance
+After=syslog.target mce.service
 
 [Service]
 Type=simple
-ExecStart=/usr/libexec/endurance-collect
+ExecStart=/usr/libexec/endurance-collect-daemon
+Restart=always
+
+[Install]
+WantedBy=basic.target

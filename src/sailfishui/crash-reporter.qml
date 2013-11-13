@@ -185,7 +185,7 @@ Page {
                 SystemdService {
                     id: enduranceService
 
-                    serviceName: "crash-reporter-endurance.timer"
+                    serviceName: "crash-reporter-endurance.service"
                     managerType: SystemdService.SystemManager
                     setuidHelper: "/usr/libexec/endurance-helper"
                 }
