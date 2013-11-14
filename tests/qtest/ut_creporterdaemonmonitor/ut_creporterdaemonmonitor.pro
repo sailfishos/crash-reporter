@@ -37,7 +37,6 @@ HEADERS += $${CREPORTER_STUBS_DIR}/mgconfitem_stub.h \
            $${CREPORTER_SRC_DIR}/libs/coredir/creportercoreregistry_p.h \
            $${CREPORTER_SRC_DIR}/libs/httpclient/creporternwsessionmgr.h \
            $${CREPORTER_SRC_DIR}/libs/utils/creporterutils.h \
-           $${CREPORTER_SRC_DIR}/libs/serviceif/creporterdialogserverproxy.h \
            $${CREPORTER_SRC_DIR}/libs/serviceif/creporterautouploaderproxy.h \
            $${CREPORTER_SRC_DIR}/libs/notification/creporternotification.h \
     $${CREPORTER_SRC_DIR}/libs/settings/creportersavedstate.h \
@@ -57,7 +56,6 @@ SOURCES += $$TEST_SOURCES \
            $${CREPORTER_SRC_DIR}/libs/coredir/creportercoreregistry.cpp \
            $${CREPORTER_SRC_DIR}/libs/httpclient/creporternwsessionmgr.cpp \
            $${CREPORTER_SRC_DIR}/libs/utils/creporterutils.cpp \
-           $${CREPORTER_SRC_DIR}/libs/serviceif/creporterdialogserverproxy.cpp \
            $${CREPORTER_SRC_DIR}/libs/serviceif/creporterautouploaderproxy.cpp \
     $${CREPORTER_SRC_DIR}/libs/settings/creportersavedstate.cpp \
     $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsinit.cpp \

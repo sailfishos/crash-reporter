@@ -65,7 +65,6 @@ SOURCES += coredir/creportercoredir.cpp \
             httpclient/creporteruploadengine.cpp \
             utils/creporterutils.cpp \
             logger/creporterlogger.cpp \
-            serviceif/creporterdialogserverproxy.cpp \
             serviceif/creporterdaemonproxy.cpp \
             serviceif/creporterautouploaderproxy.cpp \
             settings/creporterprivacysettingsmodel.cpp \
@@ -89,7 +88,6 @@ PUBLIC_HEADERS += creporternamespace.h \
                   dialoginterface/creporterdialogserverinterface.h \
                   logger/creporterlogger.h \
                   serviceif/creporterdaemonproxy.h \
-                  serviceif/creporterdialogserverproxy.h \
                   serviceif/creporterautouploaderproxy.h \
                   serviceif/creportermetatypes.h \
                   settings/creporterprivacysettingsmodel.h \

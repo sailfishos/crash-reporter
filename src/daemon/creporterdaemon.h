@@ -113,14 +113,6 @@ private Q_SLOTS:
       */
     virtual void timerEvent(QTimerEvent *event);
 
-    /*!
-      * @brief Called, when signal is received from CReporterNotification class.
-      *
-      * @sa CReporterNotification::activated()
-      * @sa CReporterNotification::timeouted()
-      */
-    void handleNotificationEvent();
-
     /*! @brief Start or stop lifelogging
       * @param enabled Lifelog enabled/disabled
       */

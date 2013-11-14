@@ -42,7 +42,6 @@
 #include "creporternwsessionmgr.h"
 #include "creportersavedstate.h"
 #include "creporterutils.h"
-#include "creporterdialogserverproxy.h"
 #include "creporterautouploaderproxy.h"
 #include "creporternamespace.h"
 #include "creporternotification.h"
@@ -221,9 +220,8 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
         /* TODO: Here multiple-choice notification should be displayed
          * with options to send or delete the crash report. So far
          * disabling auto upload is not possible in the UI and we never
-         * get here. This code now at least leaks CReporterNotification
-         * and has to be re-implemented. Standard Sailfish notifications
-         * don't support multiple actions so far.*/
+         * get here. Standard Sailfish notifications don't support multiple
+         * actions so far. */
 
         if (!q_ptr->notifyCrashReporterUI(CReporter::NotifyNewDialogType, arguments)) {
             // UI failed to launch. Try to show notification instead.
@@ -242,13 +240,10 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
 
             CReporterNotification *notification = new CReporterNotification(
                     CReporter::ApplicationNotificationEventType,
-                    notificationSummary, notificationBody);
-            notification->setParent(this);
+                    notificationSummary, notificationBody, this);
 
-            connect(notification, SIGNAL(activated()),
-                    this, SLOT(handleNotificationEvent()));
-            connect(notification, SIGNAL(timeouted()),
-                    this, SLOT(handleNotificationEvent()));
+            connect(notification, &CReporterNotification::timeouted,
+                    notification, &CReporterNotification::deleteLater);
         }
     } else {
         if (CReporterPrivacySettingsModel::instance()->notificationsEnabled() &&
@@ -412,43 +407,8 @@ CReporterDaemonMonitor::~CReporterDaemonMonitor()
 bool CReporterDaemonMonitor::notifyCrashReporterUI(const QString &dialogName,
                                               const QVariantList &arguments)
 {
-    qDebug() << __PRETTY_FUNCTION__ << "Sending rich-core(s) to the client.";
-
-    CReporterDialogServerProxy proxy(CReporter::DialogServerServiceName,
-                                     CReporter::DialogServerObjectPath, QDBusConnection::sessionBus());
-
-    QDBusPendingReply <bool> pReply =
-            proxy.requestDialog(dialogName, arguments);
-    // This blocks.
-    pReply.waitForFinished();
-
-    if (pReply.isError()) {
-        qWarning() << __PRETTY_FUNCTION__ << "D-Bus error occured.";
-
-        // Trace error.
-        QDBusError dBusError(pReply.error());
-        QString errorName = dBusError.name();
-
-        qDebug() << __PRETTY_FUNCTION__ << "Name:" << errorName;
-        qDebug() << __PRETTY_FUNCTION__ << "Message:" << dBusError.message();
-        qDebug() << __PRETTY_FUNCTION__ << "Error string:" << dBusError.errorString(dBusError.type());
-
-        if (errorName != "org.freedesktop.DBus.Error.Spawn.ChildSignaled") {
-            // If crash-reporter-ui exited by another reason than on a signal.
-            // Check, if Crash Reporter UI was started. If, not then system has encountered a
-            // serious error preventing UI from starting and DBus message was not delivered.
-            QDBusConnection connection = proxy.connection();
-            QDBusReply<bool> reply =
-                    connection.interface()->isServiceRegistered(CReporter::DialogServerServiceName);
-
-            qDebug() << __PRETTY_FUNCTION__ << "Crash Reporter UI launched:" << reply.value();
-
-            if (!reply.value()) {
-                // Launcing UI failed.
-                return false;
-            }
-        }
-    }
+    Q_UNUSED(dialogName)
+    Q_UNUSED(arguments)
     return true;
 }
 

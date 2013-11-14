@@ -43,7 +43,6 @@
 #include "creportersettingsobserver.h"
 #include "creporternamespace.h"
 #include "creporterprivacysettingsmodel.h"
-#include "creporterdialogserverproxy.h"
 #include "creporterautouploaderproxy.h"
 #include "creporternotification.h"
 
@@ -172,46 +171,16 @@ bool CReporterDaemon::initiateDaemon()
     }
     else if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
     {
-        // Collect rich-cores from the system and notify UI, if notifications are enabled.
         QStringList files = collectAllCoreFiles();
 
-        if (!files.isEmpty())
-        {
-            QVariantList arguments;
-            arguments << files;
+        if (!files.isEmpty()) {
+            CReporterNotification *notification = new CReporterNotification(
+                    CReporter::ApplicationNotificationEventType,
+                    tr("This system has stored crash reports."),
+                    QString(), this);
 
-            bool openViaNotification = true; // Show notification
-            arguments << openViaNotification;
-
-            // Request dialog from the UI to send or delete crash reports.
-            // old way
-            //if (!CReporterDaemonMonitor::notifyCrashReporterUI(CReporter::SendAllDialogType,
-            //                                                   arguments)) {
-            if (!CReporterDaemonMonitor::notifyCrashReporterUI(CReporter::SendSelectedDialogType,
-                                                               arguments))
-            {
-                // UI failed to launch did not succeed. Try to show notification instead.
-                // Daemon is not a Meego Touch application, thus translation with MLocale
-                // won't work here.
-                QString notificationSummary("This system has stored reports.");
-                QString notificationBody("Unable to start Crash Reporter UI.");
-                CReporterNotification *notification = 0;
-
-                try
-                {
-                    notification = new CReporterNotification(CReporter::ApplicationNotificationEventType,
-                                                             notificationSummary, notificationBody);
-                }
-                catch (...)
-                {
-                    // Don't care if MNotifications bug
-                    return true;
-                }
-                notification->setParent(this);
-
-                connect(notification, SIGNAL(activated()), this, SLOT(handleNotificationEvent()));
-                connect(notification, SIGNAL(timeouted()), this, SLOT(handleNotificationEvent()));
-            }
+            connect(notification, &CReporterNotification::timeouted,
+                    notification, &CReporterNotification::deleteLater);
         }
     }
 
@@ -347,20 +316,6 @@ void CReporterDaemon::timerEvent(QTimerEvent *event)
     if (!initiateDaemon()) {
         // If D-Bus registration fails, quit application.
         qApp->quit();
-    }
-}
-
-// ----------------------------------------------------------------------------
-//  CReporterDaemon::handleNotificationEvent
-// ----------------------------------------------------------------------------
-void CReporterDaemon::handleNotificationEvent()
-{
-    // Handle timeouted and activated signals from CReporterNotification
-    // and destroy instance.
-    CReporterNotification *notification = qobject_cast<CReporterNotification *>(sender());
-
-    if (notification != 0) {
-        delete notification;
     }
 }
 

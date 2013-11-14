@@ -42,7 +42,6 @@ HEADERS += $${CREPORTER_STUBS_DIR}/mgconfitem_stub.h \
     $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsobserver.h \
     $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsobserver_p.h \
     $${CREPORTER_SRC_DIR}/libs/utils/creporterutils.h \
-    $${CREPORTER_SRC_DIR}/libs/serviceif/creporterdialogserverproxy.h \
     $${CREPORTER_SRC_DIR}/libs/serviceif/creporterautouploaderproxy.h \
     $${CREPORTER_SRC_DIR}/libs/notification/creporternotification.h \
     ut_creporterdaemon.h
@@ -62,7 +61,6 @@ SOURCES += $$TEST_SOURCES \
     $${CREPORTER_SRC_DIR}/libs/settings/creporterprivacysettingsmodel.cpp \
     $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsobserver.cpp \
     $${CREPORTER_SRC_DIR}/libs/utils/creporterutils.cpp \
-    $${CREPORTER_SRC_DIR}/libs/serviceif/creporterdialogserverproxy.cpp \
     $${CREPORTER_SRC_DIR}/libs/serviceif/creporterautouploaderproxy.cpp \
     ut_creporterdaemon.cpp
 include(../ut_coverage.pri)
