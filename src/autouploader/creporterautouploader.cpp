@@ -175,7 +175,7 @@ bool CReporterAutoUploader::uploadFiles(const QStringList &fileList)
     if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
     {
         d_ptr->progressNotification->update(
-                //% "Uploading crash reports"
+                //% "Uploading reports"
                 qtTrId("crash_reporter-notify-uploading_reports"),
                 //% "%1 report(s) to upload"
                 qtTrId("crash_reporter-notify-num_to_upload").arg(fileList.count()));
@@ -265,7 +265,7 @@ void CReporterAutoUploader::engineFinished(int error, int sent, int total)
         if (total > sent) {
             int failures = total - sent;
             d_ptr->failedNotification->update(
-                    //% "Failed to send all crash reports"
+                    //% "Failed to send all reports"
                     qtTrId("crash_reporter-notify-send_failed"),
                     //% "%1 uploads failed"
                     qtTrId("crash_reporter-notify-num_failed").arg(failures),
@@ -279,13 +279,12 @@ void CReporterAutoUploader::engineFinished(int error, int sent, int total)
         if (sent > 0) {
             sent += state->uploadSuccessCount();
 
-            QString body = (sent == 1) ?
-                    //% "1 crash reported"
-                    qtTrId("crash_reporter-notify-one_crash_reported") :
-                    //% "%1 crashes reported"
-                    qtTrId("crash_reporter-notify-num_crashes_reported").arg(sent);
-            d_ptr->successNotification->update("Crash reports uploaded",
-                                body, sent);
+            QString summary = (sent == 1) ?
+                    //% "Report uploaded"
+                    qtTrId("crash_reporter-notify-report_uploaded") :
+                    //% "Reports uploaded"
+                    qtTrId("crash_reporter-notify-reports_uploaded");
+            d_ptr->successNotification->update(summary, QString(), sent);
         }
 
         state->setUploadSuccessNotificationId(d_ptr->successNotification->id());
