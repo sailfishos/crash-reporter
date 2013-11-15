@@ -176,7 +176,8 @@ bool CReporterDaemon::initiateDaemon()
         if (!files.isEmpty()) {
             CReporterNotification *notification = new CReporterNotification(
                     CReporter::ApplicationNotificationEventType,
-                    tr("This system has stored crash reports."),
+                    //% "This system has stored crash reports."
+                    qtTrId("crash_reporter-notify-has_stored_cores"),
                     QString(), this);
 
             connect(notification, &CReporterNotification::timeouted,

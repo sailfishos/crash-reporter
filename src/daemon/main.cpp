@@ -31,8 +31,7 @@
 
 #include <QCoreApplication>
 #include <QDebug>
-#include <QDir>
-#include <QTimer>
+#include <QTranslator>
 
 // User includes.
 
@@ -112,6 +111,10 @@ int main(int argc, char **argv)
 #endif // QT_NO_DEBUG_OUTPUT
 
     QCoreApplication app(argc, argv);
+
+    QTranslator *translator = new QTranslator(qApp);
+    translator->load("crash-reporter_eng_en", "/usr/share/translations");
+    app.installTranslator(translator);
 
     bool firstStartup = getPid(app);
 	

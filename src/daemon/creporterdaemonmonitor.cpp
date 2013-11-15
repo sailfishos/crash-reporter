@@ -206,8 +206,11 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
             notification->setTimeout(5000);
             connect(notification, &CReporterNotification::timeouted,
                     notification, &QObject::deleteLater);
-            notification->update(QString("%1 has crashed again.").arg(details[0]),
-                    "Duplicate crash report was deleted.");
+            //% "%1 has crashed again."
+            notification->update(
+                    qtTrId("crash_reporter-notify-crashed_again").arg(details[0]),
+                    //% "Duplicate crash report was deleted."
+                    qtTrId("crash_reporter-notify-duplicate_deleted"));
         }
         CReporterUtils::removeFile(filePath);
         return;
@@ -227,12 +230,15 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
             QString summary;
 
             if (isUserTerminated) {
-                summary = "%1 was terminated.";
+                //% "%1 was terminated."
+                summary = qtTrId("crash_reporter-notify-app_terminated");
             } else {
                 if (++crashCount > 1) {
-                    body = QString("%1 crashes total").arg(crashCount);
+                    //% "%1 crashes total"
+                    body = qtTrId("crash_reporter-notify-total_crashes").arg(crashCount);
                 }
-                summary = "%1 has crashed.";
+                //% "%1 has crashed."
+                summary = qtTrId("crash_reporter-notify-app_crashed");
             }
 
             crashNotification->update(summary.arg(details.at(0)), body,
