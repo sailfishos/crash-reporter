@@ -82,7 +82,7 @@ class CReporterAutoUploaderPrivate
 bool CReporterAutoUploaderPrivate::isQuickieUpload(const QStringList &fileList)
 {
     return (fileList.size() == 1) &&
-           (QFileInfo(fileList[0]).baseName().startsWith("Quickie-"));
+           (QFileInfo(fileList[0]).baseName().startsWith(CReporter::QuickFeedbackPrefix));
 }
 
 // ******** Class CReporterAutoUploader ********
