@@ -141,13 +141,11 @@ class CReporterDaemonMonitorPrivate : public QObject
         void resetCrashCount();
 
     public:
-        /*!
-         * @brief Checks for duplicate rich-cores, if auto-delete setting is enabled.
+        /**
+         * Checks whether 'similar' rich core was already handled.
          *
-         * Deletes rich-core file, if maximum number of similar files have been handled.
-         *
-         * @param Path to rich-core file to check.
-         * @return True, if file was dublicate and can be deleted; otherwise false.
+         * @param path File path of rich core to check.
+         * @return @c true if duplicate was found, otherwise @c false.
          */
         bool checkForDuplicates(const QString &path);
 
