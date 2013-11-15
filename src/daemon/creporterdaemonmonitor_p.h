@@ -141,15 +141,6 @@ class CReporterDaemonMonitorPrivate : public QObject
         void resetCrashCount();
 
     public:
-        /**
-         * Checks whether 'similar' rich core was already handled.
-         *
-         * @param path File path of rich core to check.
-         * @return @c true if duplicate was found, otherwise @c false.
-         */
-        bool checkForDuplicates(const QString &path);
-
-    public:
         //! @arg Pointer to the registry instance.
         CReporterCoreRegistry *registry;
         //! @arg For monitoring directories.
@@ -177,6 +168,14 @@ class CReporterDaemonMonitorPrivate : public QObject
         CReporterNotification *crashNotification;
         //! Counts processed crash reports.
         int crashCount;
+
+        /**
+         * Checks whether 'similar' rich core was already handled.
+         *
+         * @param path File path of rich core to check.
+         * @return @c true if duplicate was found, otherwise @c false.
+         */
+        bool checkForDuplicates(const QString &path);
 };
 
 #endif // CREPORTERDAEMONMONITOR_P_H
