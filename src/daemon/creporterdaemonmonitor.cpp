@@ -194,10 +194,9 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
 
     emit q_ptr->richCoreNotify(filePath);
 
-    if (!isUserTerminated && autoDelete && checkForDuplicates(filePath)
-        && !filePath.contains(CReporter::LifelogPackagePrefix)) {
-        /* Check for duplicates if auto-deleting is enabled. If Maximum number
-         * of duplicates is exceeded, delete file. */
+    /* Check for duplicates if auto-deleting is enabled. If Maximum number
+     * of duplicates is exceeded, delete the file. */
+    if (!isUserTerminated && autoDelete && checkForDuplicates(filePath)) {
         if (CReporterPrivacySettingsModel::instance()->notificationsEnabled()) {
             CReporterNotification *notification =
                     new CReporterNotification(
@@ -297,6 +296,13 @@ void CReporterDaemonMonitorPrivate::handleParentDirectoryChanged()
 // ----------------------------------------------------------------------------
 bool CReporterDaemonMonitorPrivate::checkForDuplicates(const QString &path)
 {
+    // Ignore reports that don't contain core dumps.
+    if (path.contains(CReporter::LifelogPackagePrefix) ||
+        path.contains(CReporter::QuickFeedbackPrefix) ||
+        path.contains(CReporter::EndurancePackagePrefix)) {
+        return false;
+    }
+
     qDebug() << __PRETTY_FUNCTION__ << "Checking, if" << path << "has been handled for"
             << autoDeleteMaxSimilarCores << "times.";
 
