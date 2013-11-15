@@ -223,13 +223,21 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
          * get here. Standard Sailfish notifications don't support multiple
          * actions so far. */
     } else {
-        if (CReporterPrivacySettingsModel::instance()->notificationsEnabled() &&
-            !filePath.contains(CReporter::LifelogPackagePrefix)) {
+        if (CReporterPrivacySettingsModel::instance()->notificationsEnabled()) {
 
             QString body;
             QString summary;
 
-            if (isUserTerminated) {
+            if (filePath.contains(CReporter::LifelogPackagePrefix)) {
+                //% "New LifeLog report is ready."
+                summary = qtTrId("crash_reporter-notify-lifelog_ready");
+            } else if (filePath.contains(CReporter::QuickFeedbackPrefix)) {
+                //% "New feedback message is ready."
+                summary = qtTrId("crash_reporter-notify-quickie_ready");
+            } else if (filePath.contains(CReporter::EndurancePackagePrefix)) {
+                //% "New endurance report is ready."
+                summary = qtTrId("crash_reporter-notify-endurance_ready");
+            } else if (isUserTerminated) {
                 //% "%1 was terminated."
                 summary = qtTrId("crash_reporter-notify-app_terminated");
             } else {

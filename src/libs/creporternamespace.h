@@ -164,6 +164,12 @@ namespace CReporter {
        //! Prefix for lifelog lzop packages
        const QString LifelogPackagePrefix = "LifelogReport";
 
+       //! Prefix for message and core packages created by Quick Feedback
+       const QString QuickFeedbackPrefix = "Quickie";
+
+       //! Prefix for pack of endurance snapshots
+       const QString EndurancePackagePrefix = "Endurance";
+
        //! Event type for crash reporter notifications
        const QString ApplicationNotificationEventType = "x-nokia.crash-reporter.notification";
 
