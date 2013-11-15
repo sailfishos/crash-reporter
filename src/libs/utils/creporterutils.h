@@ -120,6 +120,14 @@ public:
     static QString deviceModel();
 
     /*!
+     * Checks whether @c fileName is an application crash report.
+     *
+     * @return @c false if given filename is a lifelog report, quickie, or
+     * endurance pack, @c true otherwise.
+     */
+    static bool reportIncludesCrash(const QString &fileName);
+
+    /*!
      * Sends a request for auto uploader daemon to add files into upload queue.
      *
      * @param filesToUpload A list of files we want to upload to the server.

@@ -297,9 +297,7 @@ void CReporterDaemonMonitorPrivate::handleParentDirectoryChanged()
 bool CReporterDaemonMonitorPrivate::checkForDuplicates(const QString &path)
 {
     // Ignore reports that don't contain core dumps.
-    if (path.contains(CReporter::LifelogPackagePrefix) ||
-        path.contains(CReporter::QuickFeedbackPrefix) ||
-        path.contains(CReporter::EndurancePackagePrefix)) {
+    if (CReporterUtils::reportIncludesCrash(path)) {
         return false;
     }
 

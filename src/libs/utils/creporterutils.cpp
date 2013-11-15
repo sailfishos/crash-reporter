@@ -246,6 +246,13 @@ QString CReporterUtils::deviceModel()
 #endif
 }
 
+bool CReporterUtils::reportIncludesCrash(const QString &fileName)
+{
+    return fileName.contains(CReporter::LifelogPackagePrefix) ||
+           fileName.contains(CReporter::QuickFeedbackPrefix) ||
+           fileName.contains(CReporter::EndurancePackagePrefix);
+}
+
 bool CReporterUtils::notifyAutoUploader(const QStringList &filesToUpload)
 {
     qDebug() << __PRETTY_FUNCTION__
