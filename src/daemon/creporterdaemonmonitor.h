@@ -65,19 +65,6 @@ class CReporterDaemonMonitor : public QObject
         ~CReporterDaemonMonitor();
 
         /*!
-          * @brief Requests dialog from Crash Reporter UI.
-          *
-          * @param dialogName Dialog type to reaquest.
-          * @param arguments Request arguments.
-          *
-          * @return True, if request succeeds; otherwise false.
-          *
-          * @note This function call is synchronous.
-          */
-        static bool notifyCrashReporterUI(const QString &dialogName,
-                                          const QVariantList &arguments);
-
-        /*!
           * @brief Returns auto-delete property.
           *
           * @return True, if enabled; otherwise false.

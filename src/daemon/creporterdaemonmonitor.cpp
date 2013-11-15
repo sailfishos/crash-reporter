@@ -214,37 +214,11 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
     }
 
     if (!autoUpload) {
-        QVariantList arguments;
-        arguments << filePath;
-
         /* TODO: Here multiple-choice notification should be displayed
          * with options to send or delete the crash report. So far
          * disabling auto upload is not possible in the UI and we never
          * get here. Standard Sailfish notifications don't support multiple
          * actions so far. */
-
-        if (!q_ptr->notifyCrashReporterUI(CReporter::NotifyNewDialogType, arguments)) {
-            // UI failed to launch. Try to show notification instead.
-            // Daemon is not a Meego Touch application, thus translation with MLocale
-            // won't work here.
-
-            QString notificationSummary;
-            if (filePath.contains(CReporter::LifelogPackagePrefix)) {
-                notificationSummary = "New lifelog report is ready.";
-            } else {
-                notificationSummary = "The application %1 crashed.";
-                notificationSummary = notificationSummary.arg(details.at(0));
-            }
-
-            QString notificationBody("Unable to start Crash Reporter UI");
-
-            CReporterNotification *notification = new CReporterNotification(
-                    CReporter::ApplicationNotificationEventType,
-                    notificationSummary, notificationBody, this);
-
-            connect(notification, &CReporterNotification::timeouted,
-                    notification, &CReporterNotification::deleteLater);
-        }
     } else {
         if (CReporterPrivacySettingsModel::instance()->notificationsEnabled() &&
             !filePath.contains(CReporter::LifelogPackagePrefix)) {
@@ -399,17 +373,6 @@ CReporterDaemonMonitor::~CReporterDaemonMonitor()
 
 	delete d_ptr;
     d_ptr = 0;
-}
-
-// ----------------------------------------------------------------------------
-// CReporterDaemonMonitor::notifyCrashReporterUI
-// ----------------------------------------------------------------------------
-bool CReporterDaemonMonitor::notifyCrashReporterUI(const QString &dialogName,
-                                              const QVariantList &arguments)
-{
-    Q_UNUSED(dialogName)
-    Q_UNUSED(arguments)
-    return true;
 }
 
 // ----------------------------------------------------------------------------
