@@ -56,6 +56,7 @@ DEPENDPATH = $$INCLUDEPATH
 
 DBUS_INTERFACES = \
 	notification/org.freedesktop.Notification.xml \
+	utils/org.nemo.ssu.xml \
 
 SOURCES += coredir/creportercoredir.cpp \
            coredir/creportercoreregistry.cpp \

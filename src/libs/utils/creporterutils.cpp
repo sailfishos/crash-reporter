@@ -45,6 +45,7 @@
 
 #include "creporterautouploaderproxy.h"
 #include "creporternamespace.h"
+#include "../ssu_interface.h" // generated
 
 // Local constants.
 
@@ -231,7 +232,21 @@ QString CReporterUtils::fileSizeToString(const quint64 size)
 QString CReporterUtils::deviceUid()
 {
 #ifndef CREPORTER_UNIT_TEST
-    return SsuDeviceInfo().deviceUid();
+    static OrgNemoSsuInterface *ssuProxy = 0;
+    if (!ssuProxy) {
+        ssuProxy = new OrgNemoSsuInterface("org.nemo.ssu", "/org/nemo/ssu",
+                QDBusConnection::systemBus(), qApp);
+    }
+
+    QDBusPendingReply<QString> reply = ssuProxy->deviceUid();
+    reply.waitForFinished();
+    if (reply.isError()){
+        qDebug() << __PRETTY_FUNCTION__
+                 << "DBus unavailable, UUID might be incorrect.";
+        return SsuDeviceInfo().deviceUid();
+    } else {
+        return reply.value();
+    }
 #else
     return "1234";
 #endif
