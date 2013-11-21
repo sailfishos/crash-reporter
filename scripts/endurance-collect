@@ -23,7 +23,7 @@ _extract_btime()
 _section_boot_time()
 {
   _print_header boot-time
-  _extract_btime /proc/stat
+  echo $boot_time
 }
 
 _section_endurance_snapshot_pack()
@@ -48,7 +48,7 @@ _create_endurance_package()
   mv $ENDURANCE_DIR $work_dir 
 
   hwid=$(ssu model -s)
-  reportbasename=Endurance-${hwid}-$(date +%s)-
+  reportbasename=Endurance-${hwid}-$(date +%s)-${boot_time}
 
   (
     cd $work_dir
