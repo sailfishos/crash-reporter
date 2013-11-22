@@ -17,7 +17,9 @@ _section_device_uid()
 
 _extract_btime()
 {
-  cat $1 | grep btime | cut -d' ' -f 2
+  if [ -f "$1" ]; then
+    cat $1 | grep btime | cut -d' ' -f 2
+  fi
 }
 
 _section_boot_time()
@@ -64,9 +66,10 @@ _create_endurance_package()
 
 cd $CORE_DIR
 
-boot_time=$(_extract_btime /proc/stat)
 statfile=$(find $ENDURANCE_DIR -type f -name stat -print -quit)
-if [ -f "$statfile" ] && [ "$boot_time" != "$(_extract_btime $statfile)" ]; then
+boot_time=$(_extract_btime $statfile)
+
+if [ -n "$boot_time" ] && [ "$boot_time" != "$(_extract_btime /proc/stat)" ]; then
   # after reboot, package the remaining snapshots from previous session
   _create_endurance_package
 fi
