@@ -2,7 +2,9 @@
 
 CORE_DIR=/var/cache/core-dumps
 ENDURANCE_DIR=$CORE_DIR/endurance
+SNAPSHOT_COUNT_FILE=$ENDURANCE_DIR/snapshot_count
 SNAPSHOTS_TO_PACK=12
+MIN_SESSION_LENGTH=2
 
 _print_header()
 {
@@ -70,12 +72,28 @@ cd $CORE_DIR
 statfile=$(find $ENDURANCE_DIR -type f -name stat -print -quit)
 boot_time=$(_extract_btime $statfile)
 
+if [ -f "$SNAPSHOT_COUNT_FILE" ]; then
+  snapshots_in_session=$(cat "$SNAPSHOT_COUNT_FILE")
+fi
+if [ -z "$snapshots_in_session" ]; then
+  snapshots_in_session=0
+fi
+
 if [ -n "$boot_time" ] && [ "$boot_time" != "$(_extract_btime /proc/stat)" ]; then
-  # after reboot, package the remaining snapshots from previous session
-  _create_endurance_package
+  # After reboot, current session ends.
+  if [ $snapshots_in_session -lt $MIN_SESSION_LENGTH ]; then
+    # Too few snapshots were collected, discard the last session.
+    rm -rf "$ENDURANCE_DIR"
+  else
+    # Package the remaining snapshots from previous session.
+    _create_endurance_package
+  fi
+  snapshots_in_session=0
 fi
 
 /usr/bin/endurance-snapshot endurance
+snapshots_in_session=$(($snapshots_in_session + 1))
+echo -n $snapshots_in_session > "$SNAPSHOT_COUNT_FILE"
 
 if [ $(ls -d1 $ENDURANCE_DIR/*/ | wc -l) -ge $SNAPSHOTS_TO_PACK ]; then
   _create_endurance_package
