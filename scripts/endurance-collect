@@ -72,11 +72,17 @@ cd $CORE_DIR
 statfile=$(find $ENDURANCE_DIR -type f -name stat -print -quit)
 boot_time=$(_extract_btime $statfile)
 
+if [ -d "$ENDURANCE_DIR" ]; then
+  snapshots_not_uploaded=$(ls -d1 $ENDURANCE_DIR/*/ | wc -l)
+else
+  snapshots_not_uploaded=0
+fi
+
 if [ -f "$SNAPSHOT_COUNT_FILE" ]; then
   snapshots_in_session=$(cat "$SNAPSHOT_COUNT_FILE")
 fi
 if [ -z "$snapshots_in_session" ]; then
-  snapshots_in_session=0
+  snapshots_in_session=$snapshots_not_uploaded
 fi
 
 if [ -n "$boot_time" ] && [ "$boot_time" != "$(_extract_btime /proc/stat)" ]; then
@@ -92,9 +98,10 @@ if [ -n "$boot_time" ] && [ "$boot_time" != "$(_extract_btime /proc/stat)" ]; th
 fi
 
 /usr/bin/endurance-snapshot endurance
+snapshots_not_uploaded=$(($snapshots_not_uploaded + 1))
 snapshots_in_session=$(($snapshots_in_session + 1))
 echo -n $snapshots_in_session > "$SNAPSHOT_COUNT_FILE"
 
-if [ $(ls -d1 $ENDURANCE_DIR/*/ | wc -l) -ge $SNAPSHOTS_TO_PACK ]; then
+if [ $snapshots_not_uploaded -ge $SNAPSHOTS_TO_PACK ]; then
   _create_endurance_package
 fi
