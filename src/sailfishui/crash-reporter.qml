@@ -93,12 +93,12 @@ Page {
 
                 onClicked: {
                     var newState = !checked
-                    crashReporterService.enabled = newState
                     if (newState) {
                         crashReporterService.start()
                     } else {
                         crashReporterService.stop()
                     }
+                    crashReporterService.enabled = newState
                 }
 
                 states: [
