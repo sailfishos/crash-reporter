@@ -47,7 +47,8 @@ _section_endurance_snapshot_pack()
 _create_endurance_package()
 {
   work_dir=$ENDURANCE_DIR.$(date +%s)
-  mv $ENDURANCE_DIR $work_dir 
+  mkdir "$work_dir"
+  mv $ENDURANCE_DIR/??? "$work_dir"
 
   hwid=$(ssu model -s)
   reportbasename=Endurance-${hwid}-$(date +%s)-${boot_time}
