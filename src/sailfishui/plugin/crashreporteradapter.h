@@ -47,7 +47,7 @@ private:
     Q_DECLARE_PRIVATE(CrashReporterAdapter);
     QScopedPointer<CrashReporterAdapterPrivate> d_ptr;
 
-    Q_PRIVATE_SLOT(d_func(), void countCrashReports());
+    Q_PRIVATE_SLOT(d_func(), void updateCoreDirectoryModels());
 };
 
 #endif // CRASHREPORTERADAPTER_H

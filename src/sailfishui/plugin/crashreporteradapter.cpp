@@ -34,7 +34,7 @@ public:
     int reportsToUpload;
 
 private:
-    void countCrashReports();
+    void updateCoreDirectoryModels();
 
     QFileSystemWatcher watcher;
 
@@ -47,15 +47,15 @@ CrashReporterAdapterPrivate::CrashReporterAdapterPrivate(CrashReporterAdapter *q
 {
     Q_Q(CrashReporterAdapter);
 
-    countCrashReports();
-    // Recalculate the reports left to upload when directory contents change.
+    updateCoreDirectoryModels();
+    // Recalculate the models when directory contents change.
     QObject::connect(&watcher, SIGNAL(directoryChanged(const QString&)),
-                     q, SLOT(countCrashReports()));
+                     q, SLOT(updateCoreDirectoryModels()));
 
     watcher.addPaths(*registry.getCoreLocationPaths());
 }
 
-void CrashReporterAdapterPrivate::countCrashReports()
+void CrashReporterAdapterPrivate::updateCoreDirectoryModels()
 {
     Q_Q(CrashReporterAdapter);
 
