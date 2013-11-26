@@ -25,6 +25,7 @@
 
 #include "creportercoreregistry.h"
 #include "creporterutils.h"
+#include "pendinguploadsmodel.h"
 
 class CrashReporterAdapterPrivate {
 public:
@@ -32,6 +33,7 @@ public:
 
     CReporterCoreRegistry registry;
     int reportsToUpload;
+    PendingUploadsModel pendingUploadsModel;
 
 private:
     void updateCoreDirectoryModels();
@@ -59,11 +61,15 @@ void CrashReporterAdapterPrivate::updateCoreDirectoryModels()
 {
     Q_Q(CrashReporterAdapter);
 
-    int newCoresToUpload = registry.collectAllCoreFiles().count();
+    QStringList coreFiles(registry.collectAllCoreFiles());
+
+    int newCoresToUpload = coreFiles.count();
     if (newCoresToUpload != reportsToUpload) {
         reportsToUpload = newCoresToUpload;
         emit q->reportsToUploadChanged();
     }
+
+    pendingUploadsModel.setData(coreFiles);
 }
 
 CrashReporterAdapter::CrashReporterAdapter(QObject *parent):
@@ -74,6 +80,13 @@ int CrashReporterAdapter::reportsToUpload() const
     Q_D(const CrashReporterAdapter);
 
     return d->reportsToUpload;
+}
+
+QAbstractListModel * CrashReporterAdapter::pendingUploads()
+{
+    Q_D(CrashReporterAdapter);
+
+    return &d->pendingUploadsModel;
 }
 
 void CrashReporterAdapter::uploadAllCrashReports() const

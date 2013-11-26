@@ -103,4 +103,6 @@ void CrashReporterQmlPlugin::registerTypes(const char *uri)
 
     qmlRegisterType<SystemdService>(
             "com.jolla.settings.crashreporter", 1, 0, "SystemdService");
+
+    qmlRegisterType<QAbstractListModel>();
 }

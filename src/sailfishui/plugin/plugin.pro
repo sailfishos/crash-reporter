@@ -28,11 +28,13 @@ DBUS_INTERFACES = \
 HEADERS += \
 	crashreporteradapter.h \
 	crashreporterqmlplugin.h \
+	pendinguploadsmodel.h \
 	systemdservice.h \
 
 SOURCES += \
 	crashreporteradapter.cpp \
 	crashreporterqmlplugin.cpp \
+	pendinguploadsmodel.cpp \
 	systemdservice.cpp \
 	unitfilechange.cpp
 
