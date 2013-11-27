@@ -25,32 +25,73 @@ import Sailfish.Silica.theme 1.0
 import com.jolla.settings.crashreporter 1.0
 
 Page {
-    SilicaListView {
+    SilicaFlickable {
         anchors.fill: parent
+        contentHeight: content.height
 
-        header: PageHeader {
-            //% "Pending uploads"
-            title: qsTrId("crash-reporter_pending_uploads")
+        PullDownMenu {
+            MenuItem {
+                enabled: Adapter.reportsToUpload > 0
+                //% "Delete unsent reports"
+                text: qsTrId("quick-feedback_delete_reports")
+                onClicked: {
+                    deleteReportsRemorse.run()
+                }
+            }
+            MenuItem {
+                enabled: Adapter.reportsToUpload > 0
+                //% "Upload crash reports now"
+                text: qsTrId("quick-feedback_upload_now")
+                onClicked: {
+                    Adapter.uploadAllCrashReports();
+                }
+            }
         }
 
-        model: Adapter.pendingUploads
-
-        VerticalScrollDecorator {}
-
-        delegate: ListItem {
-            x: Theme.paddingLarge
-            width: parent.width - (2 * Theme.paddingLarge)
-
-            Label {
-                id: appLabel
-
-                text: model.application
+        RemorsePopup {
+            id: deleteReportsRemorse
+            function run() {
+                //% "Deleting %n crash report(s)"
+                execute(qsTrId("quick-feedback_deleting", Adapter.reportsToUpload),
+                    function() {
+                        Adapter.deleteAllCrashReports()
+                    })
             }
-            Label {
-                anchors.right: parent.right
+        }
 
-                text: model.reportCount
-                color: Theme.highlightColor
+        SilicaListView {
+            anchors.fill: parent
+
+            header: PageHeader {
+                //% "Pending uploads"
+                title: qsTrId("crash-reporter_pending_uploads")
+            }
+
+            model: Adapter.pendingUploads
+
+            VerticalScrollDecorator {}
+
+            delegate: ListItem {
+                x: Theme.paddingLarge
+                width: parent.width - (2 * Theme.paddingLarge)
+
+                Label {
+                    id: appLabel
+
+                    text: model.application
+                }
+                Label {
+                    anchors.right: parent.right
+
+                    text: model.reportCount
+                    color: Theme.highlightColor
+                }
+            }
+
+            onCountChanged: {
+                if (count == 0) {
+                    pageStack.pop()
+                }
             }
         }
     }
