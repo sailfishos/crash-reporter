@@ -183,7 +183,7 @@ int main() {
             set_timer(keepalivefd, 0);
             discard_input(childexitfd);
             mce_method(MCE_CPU_KEEPALIVE_STOP_REQ);
-            if (iphb_wait(iphb, SNAPSHOT_INTERVAL, SNAPSHOT_INTERVAL, 0) < 0) {
+            if (iphb_wait(iphb, SNAPSHOT_INTERVAL - 10, SNAPSHOT_INTERVAL + 10, 0) < 0) {
                 syslog(LOG_CRIT, "Couldn't wait for heartbeat timer.");
                 break;
             }
