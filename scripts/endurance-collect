@@ -3,6 +3,9 @@
 CORE_DIR=/var/cache/core-dumps
 ENDURANCE_DIR=$CORE_DIR/endurance
 SNAPSHOT_COUNT_FILE=$ENDURANCE_DIR/snapshot_count
+BOOT_TIME_FILE=$ENDURANCE_DIR/boot_time
+# BOOT_MARK_FILE should be on a filesystem that doesn't survive reboot.
+BOOT_MARK_FILE=/tmp/endurance-collect-boot-mark
 SNAPSHOTS_TO_PACK=12
 MIN_SESSION_LENGTH=2
 
@@ -78,6 +81,14 @@ else
   snapshots_not_uploaded=0
 fi
 
+if [ -f "$BOOT_TIME_FILE" ]; then
+  boot_time=$(cat "$BOOT_TIME_FILE")
+else
+  # Legacy code for smooth transition from older endurance-collect.
+  statfile=$(find $ENDURANCE_DIR -type f -name stat -print -quit)
+  boot_time=$(_extract_btime $statfile)
+fi
+
 if [ -f "$SNAPSHOT_COUNT_FILE" ]; then
   snapshots_in_session=$(cat "$SNAPSHOT_COUNT_FILE")
 fi
@@ -85,7 +96,7 @@ if [ -z "$snapshots_in_session" ]; then
   snapshots_in_session=$snapshots_not_uploaded
 fi
 
-if [ -n "$boot_time" ] && [ "$boot_time" != "$(_extract_btime /proc/stat)" ]; then
+if [ ! -f "$BOOT_MARK_FILE" ]; then
   # After reboot, current session ends.
   if [ $snapshots_in_session -lt $MIN_SESSION_LENGTH ]; then
     # Too few snapshots were collected, discard the last session.
@@ -94,7 +105,13 @@ if [ -n "$boot_time" ] && [ "$boot_time" != "$(_extract_btime /proc/stat)" ]; th
     # Package the remaining snapshots from previous session.
     _create_endurance_package
   fi
+
+  # Initialize new session.
+  mkdir -p "$ENDURANCE_DIR"
   snapshots_in_session=0
+  touch "$BOOT_MARK_FILE"
+  boot_time=$(_extract_btime /proc/stat)
+  echo -n $boot_time > "$BOOT_TIME_FILE"
 fi
 
 /usr/bin/endurance-snapshot endurance
