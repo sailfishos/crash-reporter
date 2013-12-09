@@ -25,17 +25,9 @@
 #ifndef CREPORTERDAEMON_P_H
 #define CREPORTERDAEMON_P_H
 
-// System includes.
-
-#include <QString>
-#include <QDateTime>
-
-// Forward declarations.
-
 class CReporterDaemonMonitor;
 class CReporterCoreRegistry;
 class CReporterSettingsObserver;
-class QTimer;
 
 /*!
  * \class CReporterDaemonPrivate
@@ -54,12 +46,6 @@ public:
     CReporterSettingsObserver *settingsObserver;
     //! @arg Startup delay timer Id.
     int timerId;
-    //! @arg Lifelog timer pointer. Null if lifelogging is disabled.
-    QTimer* lifelogTimer;
-    //! @arg Time of last lifelog update
-    QDateTime lifelogLastUpdate;
-    //! @arg Lifelog update counter
-    int lifelogUpdateCount;
 };
 
 #endif // CREPORTERDAEMON_P_H

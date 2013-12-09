@@ -227,10 +227,7 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
             QString body;
             QString summary;
 
-            if (filePath.contains(CReporter::LifelogPackagePrefix)) {
-                //% "New LifeLog report is ready."
-                summary = qtTrId("crash_reporter-notify-lifelog_ready");
-            } else if (filePath.contains(CReporter::QuickFeedbackPrefix)) {
+            if (filePath.contains(CReporter::QuickFeedbackPrefix)) {
                 //% "New feedback message is ready."
                 summary = qtTrId("crash_reporter-notify-quickie_ready");
             } else if (filePath.contains(CReporter::EndurancePackagePrefix)) {

@@ -45,8 +45,6 @@ namespace Settings
     const QString ValueAutoDeleteDuplicates("Settings/avoid-dups");
     //! Number of how many similar core dumps are kept when AutoDeleteDuplicates is enabled
     const QString ValueAutoDeleteMaxSimilarCores("Settings/maxsimilarcores");
-    //! This setting affects to crash-reporter. If set to true, lifelogging is enabled.
-    const QString ValueLifelog("Settings/lifelog");
     //! This setting affects to crash-reporter. If set to true, crash-reporter tries to upload rich-core dumps automatically.
     const QString ValueAutomaticSending("Settings/automaticsending");
     //! This setting affects crash-reporter. If true, crash notification dialogs open up instantly (without requiring the user to tap a system notification)
@@ -92,7 +90,6 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
     Q_PROPERTY(bool coreDumping READ coreDumpingEnabled WRITE setCoreDumpingEnabled NOTIFY coreDumpingEnabledChanged)
     Q_PROPERTY(bool notifications READ notificationsEnabled WRITE setNotificationsEnabled NOTIFY notificationsEnabledChanged)
     Q_PROPERTY(bool autoDeleteDuplicates READ autoDeleteDuplicates WRITE setAutoDeleteDuplicates NOTIFY autoDeleteDuplicatesChanged)
-    Q_PROPERTY(bool lifelog READ lifelogEnabled WRITE setLifelogEnabled NOTIFY lifelogEnabledChanged)
     Q_PROPERTY(bool includeStackTrace READ includeStackTrace WRITE setIncludeStackTrace NOTIFY includeStackTraceChanged)
     Q_PROPERTY(bool downloadDebuginfo READ downloadDebuginfo WRITE setDownloadDebuginfo NOTIFY downloadDebuginfoChanged)
     Q_PROPERTY(bool privacyNoticeAccepted READ privacyNoticeAccepted WRITE setPrivacyNoticeAccepted NOTIFY privacyNoticeAcceptedChanged)
@@ -151,15 +148,6 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
           * @return The amount of similar cores kept
           */
         int autoDeleteMaxSimilarCores() const;
-
-        /*!
-          * @brief Reads setting value for lifelog functionality and returns it.
-          *
-          * @note This setting used by the crash-reporter.
-          * @return Returns true, if lifelog is enabled; otherwise false. If value doesn't
-          *     exist, default value is returned.
-          */
-        bool lifelogEnabled() const;
 
         /*!
           * @brief Reads setting value for automatic sending and returns it.
@@ -264,14 +252,6 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
         void setAutoDeleteDuplicates(bool value);
 
         /*!
-          * @brief Enables or disables lifelog.
-          *
-          * @note This setting used by the crash-reporter.
-          * @param True to enable feature; false to disable.
-          */
-        void setLifelogEnabled(bool value);
-
-        /*!
           * @brief Set the amount of cores kept when auto delete is enabled
           *
           * @note This setting used by the crash-reporter.
@@ -354,7 +334,6 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
         void coreDumpingEnabledChanged();
         void notificationsEnabledChanged();
         void autoDeleteDuplicatesChanged();
-        void lifelogEnabledChanged();
         void includeStackTraceChanged();
         void downloadDebuginfoChanged();
         void privacyNoticeAcceptedChanged();

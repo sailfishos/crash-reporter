@@ -155,15 +155,6 @@ namespace CReporter {
             LogFile,
         } LogType;
 
-       //! Lifelog update interval (MSECS!)
-       const int LifelogUpdateInterval = 60 * 60 * 1000;
-
-       //! Lifelog minimum update interval when starting/stopping lifelogging etc (SECS!)
-       const int LifelogMinimumUpdateInterval = 15 * 60;
-
-       //! Prefix for lifelog lzop packages
-       const QString LifelogPackagePrefix = "LifelogReport";
-
        //! Prefix for message and core packages created by Quick Feedback
        const QString QuickFeedbackPrefix = "Quickie";
 

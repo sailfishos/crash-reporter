@@ -86,7 +86,6 @@
     coredumping=true
     sending=true
     avoid-dups=true
-    lifelog=true
 
     [Privacy]
     INCLUDE_CORE=true

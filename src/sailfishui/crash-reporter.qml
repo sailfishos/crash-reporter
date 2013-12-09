@@ -144,16 +144,6 @@ Page {
 
             TextSwitch {
                 automaticCheck: false
-                checked: PrivacySettings.lifelog
-                //% "Life logging"
-                text: qsTrId("settings_crash-reporter_lifelog")
-                //% "Every hour collects CPU load, memory usage, uptime, telephony status, and other system statistics."
-                description: qsTrId("settings_crash-reporter_lifelog_description")
-                onClicked: PrivacySettings.lifelog = !PrivacySettings.lifelog
-            }
-
-            TextSwitch {
-                automaticCheck: false
                 checked: enduranceService.state == SystemdService.Active
                 //% "Endurance reports"
                 text: qsTrId("settings_crash-reporter_enable_endurance")

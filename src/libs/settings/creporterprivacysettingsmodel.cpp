@@ -122,14 +122,6 @@ int CReporterPrivacySettingsModel::autoDeleteMaxSimilarCores() const
 }
 
 // ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::lifelogEnabled
-// ----------------------------------------------------------------------------
-bool CReporterPrivacySettingsModel::lifelogEnabled() const
-{
-    return value(Settings::ValueLifelog, QVariant(true)).toBool();
-}
-
-// ----------------------------------------------------------------------------
 // CReporterPrivacySettingsModel::automaticSendingEnabled
 // ----------------------------------------------------------------------------
 bool CReporterPrivacySettingsModel::automaticSendingEnabled() const
@@ -217,15 +209,6 @@ void CReporterPrivacySettingsModel::setAutoDeleteDuplicates(bool value)
 {
     if (setValue(Settings::ValueAutoDeleteDuplicates, QVariant(value)))
         emit autoDeleteDuplicatesChanged();
-}
-
-// ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::setLifelogEnabled
-// ----------------------------------------------------------------------------
-void CReporterPrivacySettingsModel::setLifelogEnabled(bool value)
-{
-    if (setValue(Settings::ValueLifelog, QVariant(value)))
-        emit lifelogEnabledChanged();
 }
 
 // ----------------------------------------------------------------------------

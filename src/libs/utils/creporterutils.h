@@ -122,8 +122,8 @@ public:
     /*!
      * Checks whether @c fileName is an application crash report.
      *
-     * @return @c false if given filename is a lifelog report, quickie, or
-     * endurance pack, @c true otherwise.
+     * @return @c false if given filename is a quickie, or endurance pack,
+     * @c true otherwise.
      */
     static bool reportIncludesCrash(const QString &fileName);
 

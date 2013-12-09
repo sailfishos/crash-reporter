@@ -113,20 +113,6 @@ private Q_SLOTS:
       */
     virtual void timerEvent(QTimerEvent *event);
 
-    /*! @brief Start or stop lifelogging
-      * @param enabled Lifelog enabled/disabled
-      */
-    void setLifelogEnabled(bool enabled);
-
-    /*! @brief Called, when setting value has changed.
-      */
-    void updateLifelog();
-
-    /*! @brief Note the new core dump in lifelog (if it's enabled)
-      * @param fileName Path of the rich core dump file
-      */
-    void newCoreDump(const QString& filePath);
-
 private:
     /*!
       * @brief Starts D-Bus service and registers object.

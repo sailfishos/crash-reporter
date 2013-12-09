@@ -55,7 +55,6 @@ void Ut_CReporterPrivacySettingsModel::init()
     m_settings->setValue(Settings::ValueNotifications, false);
     m_settings->setValue(Settings::ValueCoreDumping, true);
     m_settings->setValue(Settings::ValueAutoDeleteDuplicates, true);
-    m_settings->setValue(Settings::ValueLifelog, false);
     m_settings->setValue(Settings::ValueAutomaticSending, true);
 
     m_settings->setValue(Privacy::ValueIncludeCore, true);
@@ -79,9 +78,6 @@ void Ut_CReporterPrivacySettingsModel::testReadSettings()
 
     enabled = CReporterPrivacySettingsModel::instance()->autoDeleteDuplicates();
     QVERIFY(enabled == true);
-
-    enabled = CReporterPrivacySettingsModel::instance()->lifelogEnabled();
-    QVERIFY(enabled == false);
 
     enabled = CReporterPrivacySettingsModel::instance()->automaticSendingEnabled();
     QVERIFY(enabled == true);
