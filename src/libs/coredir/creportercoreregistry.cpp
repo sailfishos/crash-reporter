@@ -87,10 +87,8 @@ CReporterCoreRegistryPrivate::~CReporterCoreRegistryPrivate()
     delete mapper;
 }
 
-// ======== MEMBER FUNCTIONS ========
-
-CReporterCoreRegistry::CReporterCoreRegistry() :
-    d_ptr(new CReporterCoreRegistryPrivate())
+CReporterCoreRegistry::CReporterCoreRegistry(QObject *parent):
+  QObject(parent), d_ptr(new CReporterCoreRegistryPrivate())
 {
 	createCoreLocationRegistry();
 

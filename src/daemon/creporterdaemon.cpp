@@ -71,11 +71,7 @@ CReporterDaemon::CReporterDaemon() :
 // ----------------------------------------------------------------------------
 CReporterDaemon::~CReporterDaemon()
 {	
-    Q_D(CReporterDaemon);
     qDebug() << __PRETTY_FUNCTION__ << "Daemon destroyed.";
-
-	delete d->registry;
-    d->registry = 0;
 
     CReporterPrivacySettingsModel::instance()->freeSingleton();
     CReporterSavedState::freeSingleton();

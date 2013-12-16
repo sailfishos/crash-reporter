@@ -45,13 +45,13 @@ class CReporterCoreRegistry : public QObject
 	Q_OBJECT
 		
 public:
+    /*!
+     * Creates new core registry.
+     *
+     * @param parent the parent QObject
+     */
+    CReporterCoreRegistry(QObject *parent = 0);
 
-	/*!
-     * @brief Class constructor.
-	 *
-	 */
-	CReporterCoreRegistry();
-	
 	/*!
      * @brief Class destructor.
 	 *
