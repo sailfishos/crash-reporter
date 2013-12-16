@@ -108,7 +108,6 @@ void CReporterDaemon::setDelayedStartup(int timeout)
 // ----------------------------------------------------------------------------
 bool CReporterDaemon::initiateDaemon()
 {
-    Q_D( CReporterDaemon );
     qDebug() << __PRETTY_FUNCTION__ << "Starting daemon...";
 
     if (!CReporterPrivacySettingsModel::instance()->isValid())
@@ -125,8 +124,6 @@ bool CReporterDaemon::initiateDaemon()
 		return false;
 	}
 
-    d->settingsObserver = new CReporterSettingsObserver(filename, this);
-
     if (CReporterPrivacySettingsModel::instance()->notificationsEnabled()
         || CReporterPrivacySettingsModel::instance()->automaticSendingEnabled())
     {
@@ -134,13 +131,16 @@ bool CReporterDaemon::initiateDaemon()
         startCoreMonitoring();
     }
 
-    // Add watcher to monitor changes in settings.
-    d->settingsObserver->addWatcher(Settings::ValueNotifications);
-    d->settingsObserver->addWatcher(Settings::ValueAutomaticSending);
-    d->settingsObserver->addWatcher(Settings::ValueAutoDeleteDuplicates);
+    // Create observer to monitor changes in settings.
+    CReporterSettingsObserver *settingsObserver =
+            new CReporterSettingsObserver(filename, this);
 
-    connect(d->settingsObserver, SIGNAL(valueChanged(QString,QVariant)),
-                this, SLOT(settingValueChanged(QString,QVariant)));
+    settingsObserver->addWatcher(Settings::ValueNotifications);
+    settingsObserver->addWatcher(Settings::ValueAutomaticSending);
+    settingsObserver->addWatcher(Settings::ValueAutoDeleteDuplicates);
+
+    connect(settingsObserver, SIGNAL(valueChanged(QString,QVariant)),
+            this, SLOT(settingValueChanged(QString,QVariant)));
 
 #ifndef CREPORTER_UNIT_TEST
     // Each time daemon is started, we count successful core uploads from zero.

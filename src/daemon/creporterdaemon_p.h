@@ -27,7 +27,6 @@
 
 class CReporterDaemonMonitor;
 class CReporterCoreRegistry;
-class CReporterSettingsObserver;
 
 /*!
  * \class CReporterDaemonPrivate
@@ -42,8 +41,6 @@ public:
     CReporterDaemonMonitor *monitor;
     //! @arg Pointer to registry object.
     CReporterCoreRegistry *registry;
-    //! @arg Pointer to settings observer object.
-    CReporterSettingsObserver *settingsObserver;
     //! @arg Startup delay timer Id.
     int timerId;
 };
