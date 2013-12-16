@@ -194,8 +194,6 @@ void CReporterDaemon::startCoreMonitoring(const bool fromDBus)
         d->monitor = new CReporterDaemonMonitor(d->registry);
         Q_CHECK_PTR(d->monitor);
 
-        connect(d->monitor, SIGNAL(richCoreNotify(QString)), SLOT(newCoreDump(QString)));
-
         qDebug() << __PRETTY_FUNCTION__ << "Core monitoring started.";
 
         if (fromDBus) {
