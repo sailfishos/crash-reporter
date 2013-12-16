@@ -369,8 +369,9 @@ void CReporterDaemonMonitorPrivate::resetCrashCount()
 // ----------------------------------------------------------------------------
 // CReporterDaemonMonitor::CReporterDaemonMonitor
 // ----------------------------------------------------------------------------
-CReporterDaemonMonitor::CReporterDaemonMonitor(CReporterCoreRegistry *reg) :
-    d_ptr(new CReporterDaemonMonitorPrivate())
+CReporterDaemonMonitor::CReporterDaemonMonitor(CReporterCoreRegistry *reg,
+        QObject *parent):
+  QObject(parent), d_ptr(new CReporterDaemonMonitorPrivate())
 {
     d_ptr->q_ptr = this;
     d_ptr->registry = reg;

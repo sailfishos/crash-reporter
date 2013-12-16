@@ -74,12 +74,6 @@ CReporterDaemon::~CReporterDaemon()
     Q_D(CReporterDaemon);
     qDebug() << __PRETTY_FUNCTION__ << "Daemon destroyed.";
 
-    if (d->monitor) {
-        // Delete monitor instance and stop core monitoring.
-        delete d->monitor;
-        d->monitor = 0;
-    }
-
 	delete d->registry;
     d->registry = 0;
 
