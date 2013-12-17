@@ -288,3 +288,21 @@ bool CReporterUtils::notifyAutoUploader(const QStringList &filesToUpload)
     }
     return true;
 }
+
+QProcess *CReporterUtils::invokeLogCollection(const QString &label)
+{
+    QScopedPointer<QProcess> richCoreHelper(new QProcess(qApp));
+
+    richCoreHelper->start("/usr/libexec/rich-core-helper",
+            QStringList() << label);
+    if (!richCoreHelper->waitForStarted()) {
+        qDebug() << "Problem invoking rich-core-dumper.";
+        return 0;
+    }
+
+    typedef void (QProcess::*FinishedSignal)(int, QProcess::ExitStatus);
+    connect(richCoreHelper.data(), (FinishedSignal) &QProcess::finished,
+            richCoreHelper.data(), &QProcess::deleteLater);
+
+    return richCoreHelper.take();
+}

@@ -33,6 +33,8 @@
 
 #include "creporterexport.h"
 
+class QProcess;
+
 /*! @class CReporterUtils
  *  @brief This class implements utility functions.
  */
@@ -134,6 +136,20 @@ public:
      * @return @c true if files were successfully added, otherwise @c true.
      */
     static bool notifyAutoUploader(const QStringList &filesToUpload);
+
+    /*!
+     * Runs rich-core-dumper that subsequently collects system logs and creates
+     * a rich core report (in *.rcore.lzo format).
+     *
+     * @param label A string that should be used in the rich core filename
+     *              at the place of application name.
+     * @return a @c QProcess instance for the invoked rich-core-dumper that you
+     * can use for example to connect to its finished() signal. The instance is
+     * automatically destroyed next time the application enters message loop
+     * after finished() is emitted. If rich-core-dumper fails to start,
+     * the method returns @c NULL.
+     */
+    static QProcess *invokeLogCollection(const QString &label);
 };
 
 #endif // CREPORTERUTILS_H
