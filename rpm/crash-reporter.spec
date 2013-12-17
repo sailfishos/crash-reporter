@@ -24,6 +24,7 @@ BuildRequires:          qt5-qtxml-devel
 BuildRequires:          ssu-devel
 BuildRequires:          pkgconfig(dbus-1)
 BuildRequires:          pkgconfig(libiphb)
+BuildRequires:          pkgconfig(libudev)
 BuildRequires:          pkgconfig(mce)
 Requires:               sp-rich-core >= 1.71.2
 Requires:               sp-endurance

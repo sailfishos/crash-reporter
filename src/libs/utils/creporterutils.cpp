@@ -257,7 +257,8 @@ QString CReporterUtils::deviceModel()
 bool CReporterUtils::reportIncludesCrash(const QString &fileName)
 {
     return fileName.contains(CReporter::QuickFeedbackPrefix) ||
-           fileName.contains(CReporter::EndurancePackagePrefix);
+           fileName.contains(CReporter::EndurancePackagePrefix) ||
+           fileName.contains(CReporter::PowerExcessPrefix);
 }
 
 bool CReporterUtils::notifyAutoUploader(const QStringList &filesToUpload)

@@ -39,16 +39,8 @@
 #include "creporternamespace.h"
 #include "creporterprivacysettingsmodel.h"
 #include "creporternotification.h"
+#include "powerexcesshandler.h"
 
-#ifndef CREPORTER_UNIT_TEST
-#include "creportersavedstate.h"
-#endif
-
-// ======== MEMBER FUNCTIONS ========
-
-// ----------------------------------------------------------------------------
-// CReporterDaemon::CReporterDaemon
-// ----------------------------------------------------------------------------
 CReporterDaemon::CReporterDaemon() :
     d_ptr(new CReporterDaemonPrivate())
 {
@@ -64,6 +56,10 @@ CReporterDaemon::CReporterDaemon() :
     // Adaptor class is deleted automatically, when the class, it is
     // attached to is deleted.
     new CReporterDaemonAdaptor(this);
+
+#ifndef CREPORTER_UNIT_TEST
+    new PowerExcessHandler(this);
+#endif
 }
 
 // ----------------------------------------------------------------------------

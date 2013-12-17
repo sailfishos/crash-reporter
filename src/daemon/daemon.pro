@@ -26,6 +26,11 @@ include(../../crash-reporter-conf.pri)
 TEMPLATE = app
 TARGET = crash-reporter-daemon
 
+CONFIG += link_pkgconfig
+
+PKGCONFIG += \
+    libudev
+
 INCLUDEPATH += . \
                ../libs/coredir \
                ../libs/httpclient \
@@ -46,12 +51,14 @@ SOURCES += main.cpp \
            creporterdaemon.cpp \
            creporterdaemonadaptor.cpp \
            creporterdaemonmonitor.cpp \
+           powerexcesshandler.cpp \
 
 HEADERS += creporterdaemon.h \
            creporterdaemon_p.h \
            creporterdaemonadaptor.h \
            creporterdaemonmonitor.h \
            creporterdaemonmonitor_p.h \
+           powerexcesshandler.h \
 
 service.files = com.nokia.CrashReporter.Daemon.service
 service.path = $$CREPORTER_SYSTEM_DBUS_SERVICES

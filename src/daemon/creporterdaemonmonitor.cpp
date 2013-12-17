@@ -233,6 +233,9 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
             } else if (filePath.contains(CReporter::EndurancePackagePrefix)) {
                 //% "New endurance report is ready."
                 summary = qtTrId("crash_reporter-notify-endurance_ready");
+            } else if (filePath.contains(CReporter::PowerExcessPrefix)) {
+                //% "Power excess detected."
+                summary = qtTrId("crash_reporter-notify-power_excess_detected");
             } else if (isUserTerminated) {
                 //% "%1 was terminated."
                 summary = qtTrId("crash_reporter-notify-app_terminated");

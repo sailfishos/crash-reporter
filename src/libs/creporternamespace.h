@@ -161,6 +161,9 @@ namespace CReporter {
        //! Prefix for pack of endurance snapshots
        const QString EndurancePackagePrefix = "Endurance";
 
+       //! Prefix for system log packages created on power excess uevent.
+       const QString PowerExcessPrefix = "PowerExcess";
+
        //! Event type for crash reporter notifications
        const QString ApplicationNotificationEventType = "x-nokia.crash-reporter.notification";
 
