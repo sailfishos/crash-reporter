@@ -56,11 +56,11 @@ Requires:               %{name} = %{version}-%{release}
 %description -n         jolla-settings-crash-reporter
 Crash Reporter settings plugin for the Sailfish OS Settings application.
 
-%package                devel
+%package -n             libcrash-reporter0-devel
 Summary:                Development files for crash-reporter
 Group:                  Development/Libraries
-Requires:               %{name} = %{version}-%{release}
-%description            devel
+Requires:               libcrash-reporter0 = %{version}-%{release}
+%description -n         libcrash-reporter0-devel
 Development headers and libraries for crash-reporter.
 
 %package                tests
@@ -109,7 +109,7 @@ make %{?jobs:-j%jobs}
 /usr/share/jolla-settings/pages/crash-reporter/*
 /usr/share/jolla-settings/entries/*
 
-%files devel
+%files -n libcrash-reporter0-devel
 %defattr(-,root,root,-)
 %doc COPYING
 /usr/include/crash-reporter/*.h
