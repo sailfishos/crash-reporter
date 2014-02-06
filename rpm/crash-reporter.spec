@@ -124,6 +124,11 @@ make %{?jobs:-j%jobs}
 /usr/share/crash-reporter-tests/*
 
 %post
+# Move enabled endurance service into multi-user target.
+[ -f /etc/systemd/system/basic.target.wants/crash-reporter-endurance.service ] && \
+  mkdir -p /etc/systemd/system/multi-user.target.wants && \
+  mv /etc/systemd/system/basic.target.wants/crash-reporter-endurance.service \
+     /etc/systemd/system/multi-user.target.wants
 systemctl daemon-reload
 ## on first install
 #if [ "$1" -eq 1 ]; then
