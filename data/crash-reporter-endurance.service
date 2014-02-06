@@ -1,6 +1,6 @@
 [Unit]
 Description=Crash reporter integration with sp-endurance
-After=syslog.target mce.service
+After=syslog.target
 
 [Service]
 Type=simple
