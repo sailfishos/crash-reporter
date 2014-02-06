@@ -124,6 +124,8 @@ make %{?jobs:-j%jobs}
 /usr/share/crash-reporter-tests/*
 
 %post
+# Remove timer unit symlink potentially left by old installation.
+rm -f /etc/systemd/system/basic.target.wants/crash-reporter-endurance.timer
 # Move enabled endurance service into multi-user target.
 [ -f /etc/systemd/system/basic.target.wants/crash-reporter-endurance.service ] && \
   mkdir -p /etc/systemd/system/multi-user.target.wants && \
