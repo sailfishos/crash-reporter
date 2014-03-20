@@ -25,24 +25,34 @@
 
 #include "creporterutils.h"
 
+class PendingUploadsModelPrivate {
+public:
+    QMap<QString, int> contents;
+};
+
 PendingUploadsModel::PendingUploadsModel(QObject *parent):
-  QAbstractListModel(parent) {}
+  QAbstractListModel(parent), d_ptr(new PendingUploadsModelPrivate) {}
 
 int PendingUploadsModel::rowCount(const QModelIndex &parent) const
 {
+    Q_D(const PendingUploadsModel);
+
     Q_UNUSED(parent);
-    return contents.size();
+
+    return d->contents.size();
 }
 
 QVariant PendingUploadsModel::data(const QModelIndex &index, int role) const
 {
-    Q_ASSERT(index.row() < contents.size());
+    Q_D(const PendingUploadsModel);
+
+    Q_ASSERT(index.row() < d->contents.size());
 
     switch (role) {
         case Application:
-            return contents.keys()[index.row()];
+            return d->contents.keys()[index.row()];
         case ReportCount:
-            return contents.values()[index.row()];
+            return d->contents.values()[index.row()];
         default:
             return QVariant();
     }
@@ -59,20 +69,24 @@ QHash<int,QByteArray> PendingUploadsModel::roleNames() const
 
 void PendingUploadsModel::setData(const QStringList &data)
 {
+    Q_D(PendingUploadsModel);
+
     beginResetModel();
 
-    contents.clear();
+    d->contents.clear();
 
     foreach (const QString &filePath, data) {
         QString filename =
                 CReporterUtils::parseCrashInfoFromFilename(filePath)[0];
-        if (contents.contains(filename)) {
-            int count = contents[filename];
-            contents[filename] = ++count;
+        if (d->contents.contains(filename)) {
+            int count = d->contents[filename];
+            d->contents[filename] = ++count;
         } else {
-            contents[filename] = 1;
+            d->contents[filename] = 1;
         }
     }
 
     endResetModel();
 }
+
+PendingUploadsModel::~PendingUploadsModel() {}

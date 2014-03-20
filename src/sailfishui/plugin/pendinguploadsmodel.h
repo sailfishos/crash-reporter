@@ -24,6 +24,8 @@
 
 #include <QAbstractListModel>
 
+class PendingUploadsModelPrivate;
+
 class PendingUploadsModel: public QAbstractListModel {
     Q_OBJECT
 public:
@@ -40,8 +42,11 @@ public:
     QHash<int,QByteArray> roleNames() const;
 
     void setData(const QStringList &data);
+
+    ~PendingUploadsModel();
 private:
-    QMap<QString, int> contents;
+    Q_DECLARE_PRIVATE(PendingUploadsModel);
+    QScopedPointer<PendingUploadsModelPrivate> d_ptr;
 };
 
 #endif // PENDINGUPLOADSMODEL_H
