@@ -22,12 +22,18 @@
 #include "pendinguploadsmodel.h"
 
 #include <QStringList>
+#include <QDateTime>
 
 #include "creporterutils.h"
 
 class PendingUploadsModelPrivate {
 public:
-    QMap<QString, int> contents;
+    struct Item {
+        QString applicationName;
+        QDateTime dateCreated;
+    };
+
+    QMap<QString, Item> contents;
 };
 
 PendingUploadsModel::PendingUploadsModel(QObject *parent):
@@ -50,9 +56,9 @@ QVariant PendingUploadsModel::data(const QModelIndex &index, int role) const
 
     switch (role) {
         case Application:
-            return d->contents.keys()[index.row()];
-        case ReportCount:
-            return d->contents.values()[index.row()];
+            return d->contents.values()[index.row()].applicationName;
+        case DateCreated:
+            return d->contents.values()[index.row()].dateCreated;
         default:
             return QVariant();
     }
@@ -62,7 +68,7 @@ QHash<int,QByteArray> PendingUploadsModel::roleNames() const
 {
     QHash<int,QByteArray> result;
     result.insert(Application, "application");
-    result.insert(ReportCount, "reportCount");
+    result.insert(DateCreated, "dateCreated");
 
     return result;
 }
@@ -76,14 +82,10 @@ void PendingUploadsModel::setData(const QStringList &data)
     d->contents.clear();
 
     foreach (const QString &filePath, data) {
-        QString filename =
+        PendingUploadsModelPrivate::Item &item = d->contents[filePath];
+        item.applicationName =
                 CReporterUtils::parseCrashInfoFromFilename(filePath)[0];
-        if (d->contents.contains(filename)) {
-            int count = d->contents[filename];
-            d->contents[filename] = ++count;
-        } else {
-            d->contents[filename] = 1;
-        }
+        item.dateCreated = QFileInfo(filePath).created();
     }
 
     endResetModel();

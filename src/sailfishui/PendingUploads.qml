@@ -79,7 +79,7 @@ Page {
             Label {
                 anchors.right: parent.right
 
-                text: model.reportCount
+                text: Qt.formatDateTime(model.dateCreated)
                 color: Theme.highlightColor
             }
         }

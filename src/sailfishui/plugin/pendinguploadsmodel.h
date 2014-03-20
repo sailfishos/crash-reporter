@@ -35,7 +35,7 @@ public:
 
     enum DataRole {
         Application = Qt::UserRole + 1,
-        ReportCount
+        DateCreated
     };
 
     QVariant data(const QModelIndex &index, int role) const;
