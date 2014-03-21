@@ -135,7 +135,7 @@ public:
      * @param filesToUpload A list of files we want to upload to the server.
      * @return @c true if files were successfully added, otherwise @c true.
      */
-    static bool notifyAutoUploader(const QStringList &filesToUpload);
+    Q_INVOKABLE static bool notifyAutoUploader(const QStringList &filesToUpload);
 
     /*!
      * Runs rich-core-dumper that subsequently collects system logs and creates

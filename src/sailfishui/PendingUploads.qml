@@ -71,6 +71,18 @@ Page {
             x: Theme.paddingLarge
             width: parent.width - (2 * Theme.paddingLarge)
 
+            menu: Component {
+                ContextMenu {
+                    MenuItem {
+                        //% "Upload"
+                        text: qsTrId("settings_crash-reporter_upload")
+                        onClicked: {
+                            Utils.notifyAutoUploader([ model.filePath ])
+                        }
+                    }
+                }
+            }
+
             Label {
                 id: appLabel
 
