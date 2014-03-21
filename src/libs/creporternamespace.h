@@ -164,6 +164,14 @@ namespace CReporter {
        //! Prefix for system log packages created on power excess uevent.
        const QString PowerExcessPrefix = "PowerExcess";
 
+       /// Prefix for system log packages created when oneshot script failure is
+       /// detected.
+       const QString OneshotFailurePrefix = "OneshotFailure";
+
+       // Prefixes for HW reboot logs.
+       const QString HWrebootPrefix = "HWreboot";
+       const QString HWSMPLPrefix = "HWSMPL";
+
        //! Event type for crash reporter notifications
        const QString ApplicationNotificationEventType = "x-nokia.crash-reporter.notification";
 
