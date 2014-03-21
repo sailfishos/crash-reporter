@@ -37,6 +37,7 @@ public:
         Application = Qt::UserRole + 1,
         PID,
         Signal,
+        FilePath,
         DateCreated,
     };
 

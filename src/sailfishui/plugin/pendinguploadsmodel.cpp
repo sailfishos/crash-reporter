@@ -32,6 +32,7 @@ public:
         QString applicationName;
         pid_t pid;
         QString signal;
+        QString filePath;
         QDateTime dateCreated;
     };
 
@@ -65,6 +66,8 @@ QVariant PendingUploadsModel::data(const QModelIndex &index, int role) const
             return item.pid;
         case Signal:
             return item.signal;
+        case FilePath:
+            return item.filePath;
         case DateCreated:
             return item.dateCreated;
         default:
@@ -78,6 +81,7 @@ QHash<int,QByteArray> PendingUploadsModel::roleNames() const
     result.insert(Application, "application");
     result.insert(PID, "pid");
     result.insert(Signal, "signal");
+    result.insert(FilePath, "filePath");
     result.insert(DateCreated, "dateCreated");
 
     return result;
@@ -98,6 +102,7 @@ void PendingUploadsModel::setData(const QStringList &data)
         item.applicationName = info[0];
         item.pid = info[3].toInt();
         item.signal = strsignal(info[2].toInt());
+        item.filePath = filePath;
         item.dateCreated = QFileInfo(filePath).created();
     }
 
