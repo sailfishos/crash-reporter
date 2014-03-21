@@ -90,7 +90,12 @@ Page {
                 anchors.left: parent.left
 
                 Label {
-                    text: "PID "
+                    text: model.signal
+                    font.pixelSize: Theme.fontSizeExtraSmall
+                    color: Theme.primaryColor
+                }
+                Label {
+                    text: " PID "
                     font.pixelSize: Theme.fontSizeExtraSmall
                     color: Theme.secondaryColor
                 }

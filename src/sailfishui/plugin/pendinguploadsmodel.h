@@ -36,6 +36,7 @@ public:
     enum DataRole {
         Application = Qt::UserRole + 1,
         PID,
+        Signal,
         DateCreated,
     };
 
