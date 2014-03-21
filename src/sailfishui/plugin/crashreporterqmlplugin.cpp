@@ -74,6 +74,14 @@ static QObject *applicationsettingsSingletontypeProvider(QQmlEngine *engine, QJS
     return CReporterApplicationSettings::instance();
 }
 
+static QObject *utilsSingletonProvider(QQmlEngine *engine, QJSEngine *scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    return CReporterUtils::instance();
+}
+
 void CrashReporterQmlPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 {
     Q_UNUSED(uri)
@@ -100,6 +108,10 @@ void CrashReporterQmlPlugin::registerTypes(const char *uri)
     qmlRegisterSingletonType<CReporterPrivacySettingsModel>(
             "com.jolla.settings.crashreporter", 1, 0,
             "PrivacySettings", privacysettingsSingletontypeProvider);
+
+    qmlRegisterSingletonType<CReporterUtils>(
+            "com.jolla.settings.crashreporter", 1, 0,
+            "Utils", utilsSingletonProvider);
 
     qmlRegisterType<SystemdService>(
             "com.jolla.settings.crashreporter", 1, 0, "SystemdService");

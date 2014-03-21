@@ -38,8 +38,8 @@ class QProcess;
 /*! @class CReporterUtils
  *  @brief This class implements utility functions.
  */
-class CREPORTER_EXPORT CReporterUtils : public QObject
-{
+class CREPORTER_EXPORT CReporterUtils: public QObject {
+    Q_OBJECT
 public:
 
 	/*!
@@ -127,7 +127,7 @@ public:
      * @return @c false if given filename is a quickie, or endurance pack,
      * @c true otherwise.
      */
-    static bool reportIncludesCrash(const QString &fileName);
+    Q_INVOKABLE static bool reportIncludesCrash(const QString &fileName);
 
     /*!
      * Sends a request for auto uploader daemon to add files into upload queue.
@@ -150,6 +150,13 @@ public:
      * the method returns @c NULL.
      */
     static QProcess *invokeLogCollection(const QString &label);
+
+    static CReporterUtils *instance();
+
+private:
+    Q_DISABLE_COPY(CReporterUtils)
+
+    CReporterUtils();
 };
 
 #endif // CREPORTERUTILS_H

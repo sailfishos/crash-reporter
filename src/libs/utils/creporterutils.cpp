@@ -53,7 +53,7 @@ const QString richCoreTmpNoteFile = "/tmp/rich-core-note.txt";
 const QString coreSuffixRcore = "rcore";
 const QString coreSuffixRcoreLzo = "rcore.lzo";
 
-// ======== MEMBER FUNCTIONS ========
+CReporterUtils::CReporterUtils() {}
 
 // ----------------------------------------------------------------------------
 // CReporterUtils::validateCore
@@ -309,4 +309,16 @@ QProcess *CReporterUtils::invokeLogCollection(const QString &label)
             richCoreHelper.data(), &QProcess::deleteLater);
 
     return richCoreHelper.take();
+}
+
+CReporterUtils *CReporterUtils::instance()
+{
+    /* Will be set to zero when someone outside calls delete on the object. This
+     * happens when qmlRegisterSingletonType() is used with the instance. */
+    static QPointer<CReporterUtils> instance;
+    if (!instance) {
+        instance = new CReporterUtils;
+    }
+
+    return instance.data();
 }
