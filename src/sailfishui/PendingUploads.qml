@@ -80,7 +80,25 @@ Page {
                 anchors.right: parent.right
 
                 text: Qt.formatDateTime(model.dateCreated)
-                color: Theme.highlightColor
+                font.pixelSize: Theme.fontSizeExtraSmall
+                color: Theme.primaryColor
+            }
+            Row {
+                visible: Utils.reportIncludesCrash(model.application)
+
+                anchors.top: appLabel.bottom
+                anchors.left: parent.left
+
+                Label {
+                    text: "PID "
+                    font.pixelSize: Theme.fontSizeExtraSmall
+                    color: Theme.secondaryColor
+                }
+                Label {
+                    text: model.pid
+                    font.pixelSize: Theme.fontSizeExtraSmall
+                    color: Theme.primaryColor
+                }
             }
         }
 

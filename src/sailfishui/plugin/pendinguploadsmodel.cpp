@@ -30,6 +30,7 @@ class PendingUploadsModelPrivate {
 public:
     struct Item {
         QString applicationName;
+        pid_t pid;
         QDateTime dateCreated;
     };
 
@@ -54,11 +55,15 @@ QVariant PendingUploadsModel::data(const QModelIndex &index, int role) const
 
     Q_ASSERT(index.row() < d->contents.size());
 
+    PendingUploadsModelPrivate::Item item = d->contents.values()[index.row()];
+
     switch (role) {
         case Application:
-            return d->contents.values()[index.row()].applicationName;
+            return item.applicationName;
+        case PID:
+            return item.pid;
         case DateCreated:
-            return d->contents.values()[index.row()].dateCreated;
+            return item.dateCreated;
         default:
             return QVariant();
     }
@@ -68,6 +73,7 @@ QHash<int,QByteArray> PendingUploadsModel::roleNames() const
 {
     QHash<int,QByteArray> result;
     result.insert(Application, "application");
+    result.insert(PID, "pid");
     result.insert(DateCreated, "dateCreated");
 
     return result;
@@ -82,9 +88,11 @@ void PendingUploadsModel::setData(const QStringList &data)
     d->contents.clear();
 
     foreach (const QString &filePath, data) {
+        QStringList info(CReporterUtils::parseCrashInfoFromFilename(filePath));
+
         PendingUploadsModelPrivate::Item &item = d->contents[filePath];
-        item.applicationName =
-                CReporterUtils::parseCrashInfoFromFilename(filePath)[0];
+        item.applicationName = info[0];
+        item.pid = info[3].toInt();
         item.dateCreated = QFileInfo(filePath).created();
     }
 
