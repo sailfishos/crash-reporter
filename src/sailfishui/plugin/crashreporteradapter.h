@@ -39,6 +39,8 @@ public:
     QAbstractListModel * pendingUploads();
 
     Q_INVOKABLE void uploadAllCrashReports() const;
+
+    Q_INVOKABLE void deleteCrashReport(const QString &filePath) const;
     Q_INVOKABLE void deleteAllCrashReports() const;
 
 signals:

@@ -89,6 +89,11 @@ QAbstractListModel * CrashReporterAdapter::pendingUploads()
     return &d->pendingUploadsModel;
 }
 
+void CrashReporterAdapter::deleteCrashReport(const QString &filePath) const
+{
+    QFile::remove(filePath);
+}
+
 void CrashReporterAdapter::uploadAllCrashReports() const
 {
     Q_D(const CrashReporterAdapter);

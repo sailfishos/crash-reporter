@@ -71,6 +71,15 @@ Page {
             x: Theme.paddingLarge
             width: parent.width - (2 * Theme.paddingLarge)
 
+            function remove() {
+                 //% "Deleting "
+                 var remorseMessage = qsTrId("settings_crash-reporter_deleting") + model.application
+
+                 remorseAction(remorseMessage, function() {
+                     Adapter.deleteCrashReport(model.filePath)
+                 })
+            }
+
             menu: Component {
                 ContextMenu {
                     MenuItem {
@@ -78,6 +87,13 @@ Page {
                         text: qsTrId("settings_crash-reporter_upload")
                         onClicked: {
                             Utils.notifyAutoUploader([ model.filePath ])
+                        }
+                    }
+                    MenuItem {
+                        //% "Delete"
+                        text: qsTrId("settings_crash-reporter_delete")
+                        onClicked: {
+                            remove()
                         }
                     }
                 }
