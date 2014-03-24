@@ -36,7 +36,7 @@ public:
         QDateTime dateCreated;
     };
 
-    QMap<QString, Item> contents;
+    QList<Item> contents;
 };
 
 PendingUploadsModel::PendingUploadsModel(QObject *parent):
@@ -57,7 +57,7 @@ QVariant PendingUploadsModel::data(const QModelIndex &index, int role) const
 
     Q_ASSERT(index.row() < d->contents.size());
 
-    PendingUploadsModelPrivate::Item item = d->contents.values()[index.row()];
+    const PendingUploadsModelPrivate::Item &item = d->contents.at(index.row());
 
     switch (role) {
         case Application:
@@ -98,12 +98,14 @@ void PendingUploadsModel::setData(const QStringList &data)
     foreach (const QString &filePath, data) {
         QStringList info(CReporterUtils::parseCrashInfoFromFilename(filePath));
 
-        PendingUploadsModelPrivate::Item &item = d->contents[filePath];
+        PendingUploadsModelPrivate::Item item;
         item.applicationName = info[0];
         item.pid = info[3].toInt();
         item.signal = strsignal(info[2].toInt());
         item.filePath = filePath;
         item.dateCreated = QFileInfo(filePath).created();
+
+        d->contents.append(item);
     }
 
     endResetModel();
