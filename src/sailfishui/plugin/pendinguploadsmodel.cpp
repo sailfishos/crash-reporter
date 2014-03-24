@@ -91,11 +91,28 @@ void PendingUploadsModel::setData(const QStringList &data)
 {
     Q_D(PendingUploadsModel);
 
-    beginResetModel();
+    QStringList newData(data);
 
-    d->contents.clear();
+    for (int i = 0; i != d->contents.size(); ++i) {
+        int index = newData.indexOf(d->contents.at(i).filePath);
+        if (index == -1) {
+            beginRemoveRows(QModelIndex(), i, i);
+            d->contents.removeAt(i--);
+            endRemoveRows();
+        } else {
+            // We already have that item.
+            newData.removeAt(index);
+        }
+    }
 
-    foreach (const QString &filePath, data) {
+    if (newData.isEmpty()) {
+        return;
+    }
+
+    // Append new items.
+    beginInsertRows(QModelIndex(),
+            d->contents.size(), d->contents.size() + newData.size() - 1);
+    foreach (const QString &filePath, newData) {
         QStringList info(CReporterUtils::parseCrashInfoFromFilename(filePath));
 
         PendingUploadsModelPrivate::Item item;
@@ -107,8 +124,7 @@ void PendingUploadsModel::setData(const QStringList &data)
 
         d->contents.append(item);
     }
-
-    endResetModel();
+    endInsertRows();
 }
 
 PendingUploadsModel::~PendingUploadsModel() {}
