@@ -168,6 +168,10 @@ namespace CReporter {
        /// detected.
        const QString OneshotFailurePrefix = "OneshotFailure";
 
+       /// Prefix for system log packages created when shutdown from overheating
+       /// is detected.
+       const QString OverheatShutdownPrefix = "OverheatShutdown";
+
        // Prefixes for HW reboot logs.
        const QString HWrebootPrefix = "HWreboot";
        const QString HWSMPLPrefix = "HWSMPL";

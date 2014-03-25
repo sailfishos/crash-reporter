@@ -261,7 +261,8 @@ bool CReporterUtils::reportIncludesCrash(const QString &fileName)
              fileName.contains(CReporter::PowerExcessPrefix) ||
              fileName.contains(CReporter::OneshotFailurePrefix) ||
              fileName.contains(CReporter::HWrebootPrefix) ||
-             fileName.contains(CReporter::HWSMPLPrefix));
+             fileName.contains(CReporter::HWSMPLPrefix) ||
+             fileName.contains(CReporter::OverheatShutdownPrefix));
 }
 
 bool CReporterUtils::notifyAutoUploader(const QStringList &filesToUpload)
