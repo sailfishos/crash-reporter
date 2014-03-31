@@ -89,7 +89,6 @@ make %{?jobs:-j%jobs}
 /usr/lib/oneshot.d/*
 /usr/lib/systemd/user/*
 %attr(0755,root,root) /usr/libexec/endurance-collect*
-%attr(4755,root,root) /usr/libexec/endurance-helper
 %attr(4755,root,root) /usr/libexec/rich-core-helper
 /usr/share/crash-reporter/*
 /usr/share/dbus-1/services/*.service

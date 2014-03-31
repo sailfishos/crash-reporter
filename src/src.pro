@@ -6,5 +6,4 @@ TEMPLATE = subdirs
 
 CONFIG += ordered
 
-SUBDIRS += libs daemon autouploader sailfishui endurancehelper \
-	endurancecollect richcorehelper
+SUBDIRS += libs daemon autouploader sailfishui endurancecollect richcorehelper
