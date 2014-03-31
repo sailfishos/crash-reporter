@@ -125,6 +125,9 @@ void CReporterDaemonMonitorPrivate::addDirectoryWatcher()
     // Subscribe to receive signals for changed directories.
     connect(&watcher, SIGNAL(directoryChanged(const QString&)),
             this, SLOT(handleDirectoryChanged(const QString&)));
+
+    CReporterCoreRegistry *registry = CReporterCoreRegistry::instance();
+
     // Subscribe to receive signals for changes in core registry.
     connect(registry, SIGNAL(coreLocationsUpdated()),
                 this, SLOT(addDirectoryWatcher()));
@@ -179,6 +182,9 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
     }
 
     qDebug() << __PRETTY_FUNCTION__ << "Changed directory exists.";
+
+    CReporterCoreRegistry *registry = CReporterCoreRegistry::instance();
+
     // Check for new cores in changed directory.
     QString filePath = registry->checkDirectoryForCores(path);
 
@@ -271,6 +277,9 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
 void CReporterDaemonMonitorPrivate::handleParentDirectoryChanged()
 {
     qDebug() << __PRETTY_FUNCTION__ << "Parent dir has changed. Trying to re-add directory watchers.";
+
+    CReporterCoreRegistry *registry = CReporterCoreRegistry::instance();
+
     QStringList* corePaths = registry->getCoreLocationPaths();
     int numWatchPaths = watcher.directories().count();
 
@@ -365,20 +374,11 @@ void CReporterDaemonMonitorPrivate::resetCrashCount()
     qDebug() << __PRETTY_FUNCTION__ << "Crash counter was reset.";
 }
 
-// ******** Class CReporterDaemonMonitor ********
-
-// ======== MEMBER FUNCTIONS ========
-
-// ----------------------------------------------------------------------------
-// CReporterDaemonMonitor::CReporterDaemonMonitor
-// ----------------------------------------------------------------------------
-CReporterDaemonMonitor::CReporterDaemonMonitor(CReporterCoreRegistry *reg,
-        QObject *parent):
+CReporterDaemonMonitor::CReporterDaemonMonitor(QObject *parent):
   QObject(parent), d_ptr(new CReporterDaemonMonitorPrivate())
 {
     d_ptr->q_ptr = this;
-    d_ptr->registry = reg;
-	
+
 	// Add watcher to core directories.
     d_ptr->addDirectoryWatcher();
 }

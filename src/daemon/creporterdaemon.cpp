@@ -49,10 +49,6 @@ CReporterDaemon::CReporterDaemon() :
     d->monitor = 0;
     d->timerId = 0;
 
-    // Create registry instance preserving core locations.
-    d->registry = new CReporterCoreRegistry();
-    Q_CHECK_PTR(d->registry);
-
     // Adaptor class is deleted automatically, when the class, it is
     // attached to is deleted.
     new CReporterDaemonAdaptor(this);
@@ -177,7 +173,7 @@ void CReporterDaemon::startCoreMonitoring(const bool fromDBus)
 
     if (!d->monitor) {
 		// Create monitor instance and start monitoring cores.
-        d->monitor = new CReporterDaemonMonitor(d->registry);
+        d->monitor = new CReporterDaemonMonitor(this);
         Q_CHECK_PTR(d->monitor);
 
         qDebug() << __PRETTY_FUNCTION__ << "Core monitoring started.";
@@ -219,9 +215,7 @@ void CReporterDaemon::stopCoreMonitoring(const bool fromDBus)
 // ----------------------------------------------------------------------------
 QStringList CReporterDaemon::collectAllCoreFiles()
 {
-    Q_D(CReporterDaemon);
-
-    return d->registry->collectAllCoreFiles();
+    return CReporterCoreRegistry::instance()->collectAllCoreFiles();
 }
 
 // ======== LOCAL FUNCTIONS ========

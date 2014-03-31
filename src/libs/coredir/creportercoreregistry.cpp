@@ -29,6 +29,7 @@
 
 #include <stdlib.h> // for getenv()
 
+#include <QCoreApplication>
 #include <QTimer>
 #include <QDebug>
 #include <QDir>
@@ -232,4 +233,13 @@ void CReporterCoreRegistry::createCoreLocationRegistry()
 	// Emit this signal to create directories for core dumps.
 	emit coreLocationsUpdated();
 }
-// End of file
+
+CReporterCoreRegistry *CReporterCoreRegistry::instance()
+{
+    static CReporterCoreRegistry *instance = 0;
+    if (!instance) {
+        instance = new CReporterCoreRegistry(qApp);
+    }
+
+    return instance;
+}

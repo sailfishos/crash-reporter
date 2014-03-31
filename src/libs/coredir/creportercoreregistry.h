@@ -45,12 +45,7 @@ class CReporterCoreRegistry : public QObject
 	Q_OBJECT
 		
 public:
-    /*!
-     * Creates new core registry.
-     *
-     * @param parent the parent QObject
-     */
-    CReporterCoreRegistry(QObject *parent = 0);
+    static CReporterCoreRegistry *instance();
 
 	/*!
      * @brief Class destructor.
@@ -118,6 +113,14 @@ private Q_SLOTS:
     void mmcStateChanged(const QString &key);
 
 private:
+    /**
+     * Creates new core registry.
+     *
+     * @param parent the parent QObject
+     */
+    CReporterCoreRegistry(QObject *parent);
+    Q_DISABLE_COPY(CReporterCoreRegistry)
+
     /*!
       * @brief Iniates registry and instantiates CReporterCoreDir objects.
       *

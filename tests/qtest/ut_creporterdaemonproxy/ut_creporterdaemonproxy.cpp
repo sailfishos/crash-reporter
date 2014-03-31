@@ -108,7 +108,7 @@ void Ut_CReporterDaemonProxy::testProxyCollectAllCoreFiles()
 
     daemon = new CReporterDaemon;
 
-    paths = daemon->d_ptr->registry->getCoreLocationPaths();
+    paths = CReporterCoreRegistry::instance()->getCoreLocationPaths();
     CReporterTestUtils::createTestDataFiles(*paths, compareFiles, test_files1);
 
     QVERIFY(daemon->initiateDaemon() == true);

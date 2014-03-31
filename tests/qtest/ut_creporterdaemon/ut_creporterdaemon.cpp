@@ -197,7 +197,7 @@ void Ut_CReporterDaemon::testInitiateDaemon()
     // Check that daemon is initiated successfully, registered to D-Bus and UI is launched.
     daemon = new CReporterDaemon;
 
-    paths = daemon->d_ptr->registry->getCoreLocationPaths();
+    paths = CReporterCoreRegistry::instance()->getCoreLocationPaths();
     CReporterTestUtils::createTestDataFiles(*paths, compareFiles, test_files1);
 
     QVERIFY(daemon->initiateDaemon() == true);
@@ -263,7 +263,7 @@ void Ut_CReporterDaemon::testCollectAllCoreFiles()
     daemon = new CReporterDaemon;
     QVERIFY(daemon->initiateDaemon() == true);
 
-    paths = daemon->d_ptr->registry->getCoreLocationPaths();
+    paths = CReporterCoreRegistry::instance()->getCoreLocationPaths();
 
     CReporterTestUtils::createTestDataFiles(*paths, compareFiles, test_files1);
 
@@ -284,7 +284,7 @@ void Ut_CReporterDaemon::testCollectAllCoreFilesNotValidFiles()
     daemon = new CReporterDaemon;
     QVERIFY(daemon->initiateDaemon() == true);
 
-    paths = daemon->d_ptr->registry->getCoreLocationPaths();
+    paths = CReporterCoreRegistry::instance()->getCoreLocationPaths();
 
     CReporterTestUtils::createTestDataFiles(*paths, compareFiles, test_files_invalid1);
 
@@ -300,7 +300,7 @@ void Ut_CReporterDaemon::testMonitoringEnabledFromSettings()
     daemon = new CReporterDaemon;
     QVERIFY(daemon->initiateDaemon() == true);
 
-    paths = daemon->d_ptr->registry->getCoreLocationPaths();
+    paths = CReporterCoreRegistry::instance()->getCoreLocationPaths();
 
     QString filePath(paths->at(0));
     filePath.append("/foobar_core.rcore.lzo");
@@ -334,7 +334,7 @@ void Ut_CReporterDaemon::testMonitoringDisabledFromSettings()
     daemon = new CReporterDaemon;
     QVERIFY(daemon->initiateDaemon() == true);
 
-    paths = daemon->d_ptr->registry->getCoreLocationPaths();
+    paths = CReporterCoreRegistry::instance()->getCoreLocationPaths();
 
     QString filePath(paths->at(0));
     filePath.append("/foobar_core.rcore.lzo");
@@ -360,7 +360,7 @@ void Ut_CReporterDaemon::testLaunchingUIFailed()
     // In this case error notification is created.
     QStringList compareFiles;
     daemon = new CReporterDaemon;
-    paths = daemon->d_ptr->registry->getCoreLocationPaths();
+    paths = CReporterCoreRegistry::instance()->getCoreLocationPaths();
     CReporterTestUtils::createTestDataFiles(*paths, compareFiles, test_files1);
 
     // Destroy UI.

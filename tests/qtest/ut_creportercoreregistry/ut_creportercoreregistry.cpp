@@ -44,12 +44,13 @@ void Ut_CReporterCoreRegistry::initTestCase()
 
 void Ut_CReporterCoreRegistry::init()
 {
-	registry = new CReporterCoreRegistry();
-	paths = registry->getCoreLocationPaths();
+	paths = CReporterCoreRegistry::instance()->getCoreLocationPaths();
 }
 
 void Ut_CReporterCoreRegistry::testRegistryRefreshNeededEmission()
 {	
+
+    CReporterCoreRegistry *registry = CReporterCoreRegistry::instance();
 	QSignalSpy registryRefreshNeededSpy( registry,
 			SIGNAL(registryRefreshNeeded()) );
 
@@ -60,7 +61,7 @@ void Ut_CReporterCoreRegistry::testRegistryRefreshNeededEmission()
 
 void Ut_CReporterCoreRegistry::testCoreLocationsUpdatedEmission()
 {
-    QSignalSpy coreLocationsUpdatedSpy(registry,
+    QSignalSpy coreLocationsUpdatedSpy(CReporterCoreRegistry::instance(),
             SIGNAL(coreLocationsUpdated()));
 
     MGConfItem *conf = gMGConfItems["/system/osso/af/mmc-cover-open"];
@@ -78,9 +79,6 @@ void Ut_CReporterCoreRegistry::cleanupTestCase()
 void Ut_CReporterCoreRegistry::cleanup()
 {	
 	CReporterTestUtils::removeDirectories( *paths );
-
-	delete registry;
-	registry = NULL;
 
 	delete paths;
 	paths = NULL;

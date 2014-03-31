@@ -79,7 +79,6 @@ private:
 
     QStringList *paths;
     CReporterDaemonMonitor *monitor;
-    CReporterCoreRegistry *registry;
     TestDialogServer *testDialogServer;
 };
 

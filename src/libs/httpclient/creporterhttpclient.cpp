@@ -278,7 +278,7 @@ void CReporterHttpClientPrivate::parseReply()
     submissionUrl.setPath("/");
     submissionUrl.setFragment(QString("submissions/%1").arg(submissionId));
 
-    QString corePath(coreRegistry().getCoreLocationPaths()->first());
+    QString corePath(CReporterCoreRegistry::instance()->getCoreLocationPaths()->first());
     QFile uploadlog(corePath + "/uploadlog");
     if (!uploadlog.open(QIODevice::WriteOnly | QIODevice::Append)) {
         qDebug() << "Couldn't open uploadlog for writing.";
@@ -369,15 +369,6 @@ bool CReporterHttpClientPrivate::createPutRequest(QNetworkRequest &request,
     request.setHeader(QNetworkRequest::ContentLengthHeader, dataToSend.size());
 
     return true;
-}
-
-CReporterCoreRegistry& CReporterHttpClientPrivate::coreRegistry()
-{
-    static CReporterCoreRegistry *registry = 0;
-    if (!registry) {
-        registry = new CReporterCoreRegistry();
-    }
-    return *registry;
 }
 
 // ******** Class CReporterHttpClient ********

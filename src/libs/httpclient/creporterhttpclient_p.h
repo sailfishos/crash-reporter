@@ -175,12 +175,6 @@ class CReporterHttpClientPrivate : public QObject
          */
         void parseReply();
 
-        /*!
-         * @return Registry of filesystem directories where core files
-         *         are stored.
-         */
-        static CReporterCoreRegistry& coreRegistry();
-
 	public:
         //! @arg QNetworkAccessManager object.
 		QNetworkAccessManager *m_manager;

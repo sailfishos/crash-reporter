@@ -31,7 +31,6 @@ class CrashReporterAdapterPrivate {
 public:
     CrashReporterAdapterPrivate(CrashReporterAdapter *qq);
 
-    CReporterCoreRegistry registry;
     int reportsToUpload;
     PendingUploadsModel pendingUploadsModel;
 
@@ -54,14 +53,14 @@ CrashReporterAdapterPrivate::CrashReporterAdapterPrivate(CrashReporterAdapter *q
     QObject::connect(&watcher, SIGNAL(directoryChanged(const QString&)),
                      q, SLOT(updateCoreDirectoryModels()));
 
-    watcher.addPaths(*registry.getCoreLocationPaths());
+    watcher.addPaths(*CReporterCoreRegistry::instance()->getCoreLocationPaths());
 }
 
 void CrashReporterAdapterPrivate::updateCoreDirectoryModels()
 {
     Q_Q(CrashReporterAdapter);
 
-    QStringList coreFiles(registry.collectAllCoreFiles());
+    QStringList coreFiles(CReporterCoreRegistry::instance()->collectAllCoreFiles());
 
     int newCoresToUpload = coreFiles.count();
     if (newCoresToUpload != reportsToUpload) {
@@ -96,16 +95,12 @@ void CrashReporterAdapter::deleteCrashReport(const QString &filePath) const
 
 void CrashReporterAdapter::uploadAllCrashReports() const
 {
-    Q_D(const CrashReporterAdapter);
-
-    CReporterUtils::notifyAutoUploader(d->registry.collectAllCoreFiles());
+    CReporterUtils::notifyAutoUploader(CReporterCoreRegistry::instance()->collectAllCoreFiles());
 }
 
 void CrashReporterAdapter::deleteAllCrashReports() const
 {
-    Q_D(const CrashReporterAdapter);
-
-    foreach (const QString &filename, d->registry.collectAllCoreFiles()) {
+    foreach (const QString &filename, CReporterCoreRegistry::instance()->collectAllCoreFiles()) {
         QFile(filename).remove();
     }
 }

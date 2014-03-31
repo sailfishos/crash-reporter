@@ -52,13 +52,11 @@ class CReporterDaemonMonitor : public QObject
         /*!
          * Creates new instance of coredump directory monitor.
          *
-         * @param reg the core registry managing directories we want to monitor
-         *            for changes.
          * @param parent the parent QObject.
          *
          * @sa CReporterCoreRegistry
          */
-        CReporterDaemonMonitor(CReporterCoreRegistry *reg, QObject *parent = 0);
+        CReporterDaemonMonitor(QObject *parent);
 
         /*!
          * @brief Class destructor.

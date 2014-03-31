@@ -48,7 +48,6 @@ private slots:
 private:
 
 	QStringList* paths;	
-	CReporterCoreRegistry* registry;
 };
 
 #endif /* UT_CREPORTERCOREREGISTRY_H */

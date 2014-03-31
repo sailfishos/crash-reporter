@@ -26,7 +26,6 @@
 #define CREPORTERDAEMON_P_H
 
 class CReporterDaemonMonitor;
-class CReporterCoreRegistry;
 
 /*!
  * \class CReporterDaemonPrivate
@@ -39,8 +38,6 @@ class CReporterDaemonPrivate
 public:
     //! @arg Pointer to monitor object.
     CReporterDaemonMonitor *monitor;
-    //! @arg Pointer to registry object.
-    CReporterCoreRegistry *registry;
     //! @arg Startup delay timer Id.
     int timerId;
 };

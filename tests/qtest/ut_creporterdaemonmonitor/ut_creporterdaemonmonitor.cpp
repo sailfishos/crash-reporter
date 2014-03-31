@@ -140,8 +140,7 @@ void Ut_CReporterDaemonMonitor::init()
     notificationUpdated = false;
     serviceRegisteredReply = true;
 
-    registry = new CReporterCoreRegistry();
-    paths = registry->getCoreLocationPaths();
+    paths = CReporterCoreRegistry::instance()->getCoreLocationPaths();
 
     testDialogServer = new TestDialogServer();
 }
@@ -149,7 +148,7 @@ void Ut_CReporterDaemonMonitor::init()
 void Ut_CReporterDaemonMonitor::testNewCoreFileFoundNotified()
 {
     // Check that rich-core file is sent to the UI.
-    monitor = new CReporterDaemonMonitor(registry);
+    monitor = new CReporterDaemonMonitor(this);
 	
     QSignalSpy richCoreNotifySpy(monitor, SIGNAL(richCoreNotify(QString)));
 
@@ -176,7 +175,7 @@ void Ut_CReporterDaemonMonitor::testNewCoreFileFoundNotified()
 
 void Ut_CReporterDaemonMonitor::testNewCoreFileFoundInvalidFile()
 {
-    monitor = new CReporterDaemonMonitor(registry);
+    monitor = new CReporterDaemonMonitor(this);
 		
     QString filePath(paths->at(0));
     filePath.append("/application-4321-10-1111.txt");
@@ -195,7 +194,7 @@ void Ut_CReporterDaemonMonitor::testNewCoreFileFoundInvalidFile()
 
 void Ut_CReporterDaemonMonitor::testNewCoreFileFoundByTheSameName()
 {
-    monitor = new CReporterDaemonMonitor(registry);
+    monitor = new CReporterDaemonMonitor(this);
 
     QString filePath(paths->at(0));
     filePath.append("/mytest-1234-11-4321.rcore.lzo");
@@ -242,7 +241,7 @@ void Ut_CReporterDaemonMonitor::testNewCoreFileFoundByTheSameName()
 
 void Ut_CReporterDaemonMonitor::testDirectoryDeletedNotNotified()
 {
-    monitor = new CReporterDaemonMonitor(registry);
+    monitor = new CReporterDaemonMonitor(this);
 
     CReporterTestUtils::removeDirectory(paths->at(0));
 
@@ -253,7 +252,7 @@ void Ut_CReporterDaemonMonitor::testDirectoryDeletedNotNotified()
 void Ut_CReporterDaemonMonitor::testAutoDeleteDublicateCores()
 {
     // Check, that file is deleted automatically after it has handled maximum number of times (10).   
-    monitor = new CReporterDaemonMonitor(registry);
+    monitor = new CReporterDaemonMonitor(this);
     monitor->setAutoDelete(true);
 
     QVERIFY(monitor->autoDeleteEnabled() == true);
@@ -284,7 +283,7 @@ void Ut_CReporterDaemonMonitor::testUIFailedToLaunch()
     delete testDialogServer;
     testDialogServer = 0;
 
-    monitor = new CReporterDaemonMonitor(registry);
+    monitor = new CReporterDaemonMonitor(this);
 
     QString filePath(paths->at(0));
     filePath.append("/test-1234-11-4321.rcore.lzo");
@@ -306,17 +305,7 @@ void Ut_CReporterDaemonMonitor::cleanupTestCase()
 }
 
 void Ut_CReporterDaemonMonitor::cleanup()
-{	
-    if (monitor != 0) {
-        delete monitor;
-        monitor = 0;
-    }
-
-    if (registry != 0) {
-        delete registry;
-        registry = 0;
-    }
-	
+{
     if (paths != 0) {
         CReporterTestUtils::removeDirectories(*paths);
         delete paths;

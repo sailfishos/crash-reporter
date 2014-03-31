@@ -141,8 +141,6 @@ class CReporterDaemonMonitorPrivate : public QObject
         void resetCrashCount();
 
     public:
-        //! @arg Pointer to the registry instance.
-        CReporterCoreRegistry *registry;
         //! @arg For monitoring directories.
         QFileSystemWatcher watcher;
         //! @arg Watcher for monitoring the return of an unmounted directory for when core-dumps dir has disappeared because of USB mass storage mode
