@@ -84,6 +84,7 @@ make %{?jobs:-j%jobs}
 %files
 %defattr(-,root,root,-)
 %doc README COPYING
+%{_sysconfdir}/dbus-1/system.d/crash-reporter-endurance.conf
 /lib/systemd/system/*
 /usr/bin/crash*
 /usr/lib/oneshot.d/*
