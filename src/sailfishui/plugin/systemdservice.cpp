@@ -216,10 +216,12 @@ void SystemdServicePrivate::changeState(const QString &state) {
     Q_Q(SystemdService);
 
     SystemdService::State newState;
-    if (state == "active" || state == "reloading" || state == "deactivating") {
+    if (state == "active" || state == "reloading") {
         newState = SystemdService::Active;
     } else if (state == "activating") {
         newState = SystemdService::Activating;
+    } else if (state ==  "deactivating") {
+        newState = SystemdService::Deactivating;
     } else /* "inactive", "failed", default */ {
         newState = SystemdService::Inactive;
     }

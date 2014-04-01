@@ -61,7 +61,7 @@ TextSwitch {
         },
         State {
             name: "activating"
-            when: (service.state == SystemdService.Activating)
+            when: (service.state == SystemdService.Activating || service.state == SystemdService.Deactivating)
             PropertyChanges { target: serviceSwitch; checked: true; busy: true }
         },
         State {

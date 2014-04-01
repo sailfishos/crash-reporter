@@ -57,7 +57,8 @@ public:
     enum State {
         Inactive,
         Activating,
-        Active
+        Active,
+        Deactivating
     };
 
     State state() const;
