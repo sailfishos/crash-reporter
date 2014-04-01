@@ -132,16 +132,14 @@ void CReporterDaemonMonitorPrivate::addDirectoryWatcher()
     connect(registry, SIGNAL(coreLocationsUpdated()),
                 this, SLOT(addDirectoryWatcher()));
 
-    QStringList* corePaths = registry->getCoreLocationPaths();
+    QStringList corePaths(registry->getCoreLocationPaths());
 
-    if (!corePaths->isEmpty()) {
+    if (!corePaths.isEmpty()) {
         registry->refreshRegistry();
         // Add monitored directories to QFileSystemWatcher. Paths are not added
         // if they do not exist, or if they are already being monitored by the file system watcher.
-        watcher.addPaths(*corePaths);
+        watcher.addPaths(corePaths);
     }
-
-    delete corePaths;
 }
 
 // ----------------------------------------------------------------------------
@@ -280,17 +278,15 @@ void CReporterDaemonMonitorPrivate::handleParentDirectoryChanged()
 
     CReporterCoreRegistry *registry = CReporterCoreRegistry::instance();
 
-    QStringList* corePaths = registry->getCoreLocationPaths();
+    QStringList corePaths(registry->getCoreLocationPaths());
     int numWatchPaths = watcher.directories().count();
 
-    if (!corePaths->isEmpty()) {
+    if (!corePaths.isEmpty()) {
         registry->refreshRegistry();
         // Add monitored directories to QFileSystemWatcher. Paths are not added
         // if they do not exist, or if they are already being monitored by the file system watcher.
-        watcher.addPaths(*corePaths);
+        watcher.addPaths(corePaths);
     }
-
-    delete corePaths;
 
     if (watcher.directories().count() > numWatchPaths)
     {

@@ -42,11 +42,6 @@ void Ut_CReporterCoreRegistry::initTestCase()
 	CReporterTestUtils::createTestMountpoints();
 }
 
-void Ut_CReporterCoreRegistry::init()
-{
-	paths = CReporterCoreRegistry::instance()->getCoreLocationPaths();
-}
-
 void Ut_CReporterCoreRegistry::testRegistryRefreshNeededEmission()
 {	
 
@@ -77,11 +72,9 @@ void Ut_CReporterCoreRegistry::cleanupTestCase()
 }
 
 void Ut_CReporterCoreRegistry::cleanup()
-{	
-	CReporterTestUtils::removeDirectories( *paths );
-
-	delete paths;
-	paths = NULL;
+{
+    QStringList corePaths(CReporterCoreRegistry::instance()->getCoreLocationPaths());
+    CReporterTestUtils::removeDirectories(corePaths);
 }
 
 QTEST_MAIN(Ut_CReporterCoreRegistry)

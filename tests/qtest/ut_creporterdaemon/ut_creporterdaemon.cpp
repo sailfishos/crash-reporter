@@ -152,7 +152,6 @@ void Ut_CReporterDaemon::initTestCase()
 {
 	CReporterTestUtils::createTestMountpoints();
     daemon = 0;
-    paths = 0;
     settings = 0;
 
     QDir dir;
@@ -197,8 +196,9 @@ void Ut_CReporterDaemon::testInitiateDaemon()
     // Check that daemon is initiated successfully, registered to D-Bus and UI is launched.
     daemon = new CReporterDaemon;
 
-    paths = CReporterCoreRegistry::instance()->getCoreLocationPaths();
-    CReporterTestUtils::createTestDataFiles(*paths, compareFiles, test_files1);
+    CReporterTestUtils::createTestDataFiles(
+            CReporterCoreRegistry::instance()->getCoreLocationPaths(),
+            compareFiles, test_files1);
 
     QVERIFY(daemon->initiateDaemon() == true);
 
@@ -263,9 +263,9 @@ void Ut_CReporterDaemon::testCollectAllCoreFiles()
     daemon = new CReporterDaemon;
     QVERIFY(daemon->initiateDaemon() == true);
 
-    paths = CReporterCoreRegistry::instance()->getCoreLocationPaths();
+    QStringList paths(CReporterCoreRegistry::instance()->getCoreLocationPaths());
 
-    CReporterTestUtils::createTestDataFiles(*paths, compareFiles, test_files1);
+    CReporterTestUtils::createTestDataFiles(paths, compareFiles, test_files1);
 
     QStringList files = daemon->collectAllCoreFiles();
 
@@ -273,7 +273,7 @@ void Ut_CReporterDaemon::testCollectAllCoreFiles()
 
     QCOMPARE(files, compareFiles);
 
-    CReporterTestUtils::removeDirectories(*paths);
+    CReporterTestUtils::removeDirectories(paths);
 }
 
 void Ut_CReporterDaemon::testCollectAllCoreFilesNotValidFiles()
@@ -284,15 +284,15 @@ void Ut_CReporterDaemon::testCollectAllCoreFilesNotValidFiles()
     daemon = new CReporterDaemon;
     QVERIFY(daemon->initiateDaemon() == true);
 
-    paths = CReporterCoreRegistry::instance()->getCoreLocationPaths();
+    QStringList paths(CReporterCoreRegistry::instance()->getCoreLocationPaths());
 
-    CReporterTestUtils::createTestDataFiles(*paths, compareFiles, test_files_invalid1);
+    CReporterTestUtils::createTestDataFiles(paths, compareFiles, test_files_invalid1);
 
     QStringList files = daemon->collectAllCoreFiles();
 
     QCOMPARE(files.count(), 0);
 
-    CReporterTestUtils::removeDirectories(*paths);
+    CReporterTestUtils::removeDirectories(paths);
 }
 
 void Ut_CReporterDaemon::testMonitoringEnabledFromSettings()
@@ -300,12 +300,12 @@ void Ut_CReporterDaemon::testMonitoringEnabledFromSettings()
     daemon = new CReporterDaemon;
     QVERIFY(daemon->initiateDaemon() == true);
 
-    paths = CReporterCoreRegistry::instance()->getCoreLocationPaths();
+    QStringList paths(CReporterCoreRegistry::instance()->getCoreLocationPaths());
 
-    QString filePath(paths->at(0));
+    QString filePath(paths.at(0));
     filePath.append("/foobar_core.rcore.lzo");
 
-    QDir::setCurrent(paths->at(0));
+    QDir::setCurrent(paths.at(0));
 
     QFile file;
     file.setFileName("foobar_core.rcore.lzo");
@@ -322,7 +322,7 @@ void Ut_CReporterDaemon::testMonitoringEnabledFromSettings()
 
     QFile::remove(testSettingsFile);
 
-    CReporterTestUtils::removeDirectories(*paths);
+    CReporterTestUtils::removeDirectories(paths);
 }
 
 void Ut_CReporterDaemon::testMonitoringDisabledFromSettings()
@@ -334,12 +334,12 @@ void Ut_CReporterDaemon::testMonitoringDisabledFromSettings()
     daemon = new CReporterDaemon;
     QVERIFY(daemon->initiateDaemon() == true);
 
-    paths = CReporterCoreRegistry::instance()->getCoreLocationPaths();
+    QStringList paths(CReporterCoreRegistry::instance()->getCoreLocationPaths());
 
-    QString filePath(paths->at(0));
+    QString filePath(paths.at(0));
     filePath.append("/foobar_core.rcore.lzo");
 
-    QDir::setCurrent(paths->at(0));
+    QDir::setCurrent(paths.at(0));
 
     QFile file;
     file.setFileName("foobar_core.rcore.lzo");
@@ -351,7 +351,7 @@ void Ut_CReporterDaemon::testMonitoringDisabledFromSettings()
     QVERIFY(testDialogServer->callReceivedCalled == false);
     QFile::remove(testSettingsFile);
 
-    CReporterTestUtils::removeDirectories(*paths);
+    CReporterTestUtils::removeDirectories(paths);
 }
 
 void Ut_CReporterDaemon::testLaunchingUIFailed()
@@ -360,8 +360,9 @@ void Ut_CReporterDaemon::testLaunchingUIFailed()
     // In this case error notification is created.
     QStringList compareFiles;
     daemon = new CReporterDaemon;
-    paths = CReporterCoreRegistry::instance()->getCoreLocationPaths();
-    CReporterTestUtils::createTestDataFiles(*paths, compareFiles, test_files1);
+    CReporterTestUtils::createTestDataFiles(
+            CReporterCoreRegistry::instance()->getCoreLocationPaths(),
+            compareFiles, test_files1);
 
     // Destroy UI.
     delete testDialogServer;
@@ -388,12 +389,6 @@ void Ut_CReporterDaemon::cleanup()
     if (daemon != 0) {
         delete daemon;
         daemon = 0;
-    }
-
-    if (paths != 0) {
-        CReporterTestUtils::removeDirectories(*paths);
-        delete paths;
-        paths = 0;
     }
 
     if (settings != 0) {

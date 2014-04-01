@@ -67,7 +67,7 @@ public:
 	 * 
      * @return List of directory paths.
 	 */
-	QStringList* getCoreLocationPaths();
+	QStringList getCoreLocationPaths();
 
 	/*! 
      * @brief Checks directory for new core files.

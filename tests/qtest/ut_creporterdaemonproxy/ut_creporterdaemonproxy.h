@@ -50,7 +50,6 @@ private:
 
     CReporterDaemonProxy *proxy;
     CReporterDaemon *daemon;
-    QStringList *paths;
     QSettings *settings;
 };
 

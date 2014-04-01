@@ -77,7 +77,7 @@ private slots:
 
 private:
 
-    QStringList *paths;
+    QStringList paths;
     CReporterDaemonMonitor *monitor;
     TestDialogServer *testDialogServer;
 };

@@ -37,17 +37,12 @@ class Ut_CReporterCoreRegistry : public QObject
 private slots:
 
 	void initTestCase();
-	void init();
 
 	void testRegistryRefreshNeededEmission();
 	void testCoreLocationsUpdatedEmission();
 	
 	void cleanupTestCase();
 	void cleanup();
-
-private:
-
-	QStringList* paths;	
 };
 
 #endif /* UT_CREPORTERCOREREGISTRY_H */

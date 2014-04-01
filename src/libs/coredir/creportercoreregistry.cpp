@@ -125,11 +125,11 @@ QStringList CReporterCoreRegistry::collectAllCoreFiles() const
     return out;
 }
 
-QStringList* CReporterCoreRegistry::getCoreLocationPaths()
+QStringList CReporterCoreRegistry::getCoreLocationPaths()
 {
 	Q_D( CReporterCoreRegistry );
-	QStringList* paths = new QStringList();
-	
+    QStringList paths;
+
 	QListIterator<CReporterCoreDir*> iter(d->coreDirs); 
 
 	while ( iter.hasNext() ) {
@@ -141,11 +141,12 @@ QStringList* CReporterCoreRegistry::getCoreLocationPaths()
 
 		if ( dir.exists() ) {
 			qDebug() << __PRETTY_FUNCTION__ << "Exists. Add to list";
-			paths->append( dir.absolutePath() );
+			paths.append(dir.absolutePath());
 		}
 	}
 
-	qDebug() << __PRETTY_FUNCTION__ << "Number of mounted locations:" << paths->count();
+    qDebug() << __PRETTY_FUNCTION__
+             << "Number of mounted locations:" << paths.count();
 	return paths;
 }
 

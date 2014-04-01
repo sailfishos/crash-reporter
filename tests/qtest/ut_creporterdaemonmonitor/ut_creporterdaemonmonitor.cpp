@@ -152,10 +152,10 @@ void Ut_CReporterDaemonMonitor::testNewCoreFileFoundNotified()
 	
     QSignalSpy richCoreNotifySpy(monitor, SIGNAL(richCoreNotify(QString)));
 
-    QString filePath(paths->at(0));
+    QString filePath(paths.at(0));
     filePath.append("/test-1234-11-4321.rcore.lzo");
 
-    QDir::setCurrent(paths->at(0));
+    QDir::setCurrent(paths.at(0));
 	
 	QFile file;
     file.setFileName("test-1234-11-4321.rcore.lzo");
@@ -177,10 +177,10 @@ void Ut_CReporterDaemonMonitor::testNewCoreFileFoundInvalidFile()
 {
     monitor = new CReporterDaemonMonitor(this);
 		
-    QString filePath(paths->at(0));
+    QString filePath(paths.at(0));
     filePath.append("/application-4321-10-1111.txt");
 
-    QDir::setCurrent(paths->at(0));
+    QDir::setCurrent(paths.at(0));
 	
 	QFile file;
     file.setFileName("application-4321-10-1111.txt");
@@ -196,10 +196,10 @@ void Ut_CReporterDaemonMonitor::testNewCoreFileFoundByTheSameName()
 {
     monitor = new CReporterDaemonMonitor(this);
 
-    QString filePath(paths->at(0));
+    QString filePath(paths.at(0));
     filePath.append("/mytest-1234-11-4321.rcore.lzo");
 
-    QDir::setCurrent(paths->at(0));
+    QDir::setCurrent(paths.at(0));
 	
 	QFile file;
     file.setFileName("mytest-1234-11-4321.rcore.lzo");
@@ -220,10 +220,10 @@ void Ut_CReporterDaemonMonitor::testNewCoreFileFoundByTheSameName()
 
     testDialogServer->callReceivedCalled = false;
 
-    QString dubFilePath(paths->at(0));
+    QString dubFilePath(paths.at(0));
     dubFilePath.append("/mytest-1234-11-4321.rcore.lzo");
 
-    QDir::setCurrent(paths->at(0));
+    QDir::setCurrent(paths.at(0));
 	
 	QFile dubFile;
     dubFile.setFileName("mytest-1234-11-4321.rcore.lzo");
@@ -243,7 +243,7 @@ void Ut_CReporterDaemonMonitor::testDirectoryDeletedNotNotified()
 {
     monitor = new CReporterDaemonMonitor(this);
 
-    CReporterTestUtils::removeDirectory(paths->at(0));
+    CReporterTestUtils::removeDirectory(paths.at(0));
 
     QTest::qWait(50);
     QVERIFY(testDialogServer->callReceivedCalled == false);
@@ -257,7 +257,7 @@ void Ut_CReporterDaemonMonitor::testAutoDeleteDublicateCores()
 
     QVERIFY(monitor->autoDeleteEnabled() == true);
 
-    QString filePath(paths->at(0));
+    QString filePath(paths.at(0));
     filePath.append("/crashapplication-0287-11-2260.rcore.lzo");
 
     int counter = 1;
@@ -285,10 +285,10 @@ void Ut_CReporterDaemonMonitor::testUIFailedToLaunch()
 
     monitor = new CReporterDaemonMonitor(this);
 
-    QString filePath(paths->at(0));
+    QString filePath(paths.at(0));
     filePath.append("/test-1234-11-4321.rcore.lzo");
 
-    QDir::setCurrent(paths->at(0));
+    QDir::setCurrent(paths.at(0));
 
     QFile file;
     file.setFileName("test-1234-11-4321.rcore.lzo");
@@ -306,11 +306,7 @@ void Ut_CReporterDaemonMonitor::cleanupTestCase()
 
 void Ut_CReporterDaemonMonitor::cleanup()
 {
-    if (paths != 0) {
-        CReporterTestUtils::removeDirectories(*paths);
-        delete paths;
-        paths = 0;
-    }
+    CReporterTestUtils::removeDirectories(paths);
 
     if (testDialogServer != 0) {
         delete testDialogServer;

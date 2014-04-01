@@ -77,7 +77,6 @@ void Ut_CReporterDaemonProxy::initTestCase()
 	CReporterTestUtils::createTestMountpoints();
     proxy = 0;
     daemon = 0;
-    paths = 0;
 
     QDir dir;
     dir.mkpath("/tmp/crash-reporter-tests/user_settings");
@@ -108,8 +107,8 @@ void Ut_CReporterDaemonProxy::testProxyCollectAllCoreFiles()
 
     daemon = new CReporterDaemon;
 
-    paths = CReporterCoreRegistry::instance()->getCoreLocationPaths();
-    CReporterTestUtils::createTestDataFiles(*paths, compareFiles, test_files1);
+    QStringList paths(CReporterCoreRegistry::instance()->getCoreLocationPaths());
+    CReporterTestUtils::createTestDataFiles(paths, compareFiles, test_files1);
 
     QVERIFY(daemon->initiateDaemon() == true);
 
@@ -159,11 +158,7 @@ void Ut_CReporterDaemonProxy::cleanup()
         daemon = NULL;
     }
 
-    if (paths != 0) {
-        CReporterTestUtils::removeDirectories(*paths);
-        delete paths;
-        paths = NULL;
-    }
+    CReporterTestUtils::removeDirectories(CReporterCoreRegistry::instance()->getCoreLocationPaths());
 
     if (settings != 0) {
         delete settings;

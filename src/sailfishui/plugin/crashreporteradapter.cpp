@@ -53,7 +53,7 @@ CrashReporterAdapterPrivate::CrashReporterAdapterPrivate(CrashReporterAdapter *q
     QObject::connect(&watcher, SIGNAL(directoryChanged(const QString&)),
                      q, SLOT(updateCoreDirectoryModels()));
 
-    watcher.addPaths(*CReporterCoreRegistry::instance()->getCoreLocationPaths());
+    watcher.addPaths(CReporterCoreRegistry::instance()->getCoreLocationPaths());
 }
 
 void CrashReporterAdapterPrivate::updateCoreDirectoryModels()
