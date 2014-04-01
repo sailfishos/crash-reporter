@@ -26,12 +26,6 @@ import com.jolla.settings.crashreporter 1.0
 
 Page {
 
-    SystemdService {
-        id: crashReporterService
-
-        serviceName: "crash-reporter.service"
-    }
-
     SilicaFlickable {
         anchors.fill: parent
         contentHeight: content.height
@@ -64,41 +58,17 @@ Page {
                 }
             }
 
-            TextSwitch {
-                id: reporterSwitch
-                automaticCheck: false
+            SystemdServiceSwitch {
+                serviceName: "crash-reporter.service"
+
                 //% "Upload reports automatically"
                 text: qsTrId("settings_crash-reporter_upload_automatically")
                 //% "Uploads created crash reports to a server when WiFi or USB network is available."
                 description: qsTrId("settings_crash-reporter_report_crashes_description")
 
-                onClicked: {
-                    var newState = !checked
-                    if (newState) {
-                        crashReporterService.start()
-                    } else {
-                        crashReporterService.stop()
-                    }
-                    crashReporterService.enabled = newState
+                onAfterStateChange: {
+                    serviceEnabled = newState
                 }
-
-                states: [
-                    State {
-                        name: "inactive"
-                        when: (crashReporterService.state == SystemdService.Inactive)
-                        PropertyChanges { target: reporterSwitch; checked: false }
-                    },
-                    State {
-                        name: "activating"
-                        when: (crashReporterService.state == SystemdService.Activating)
-                        PropertyChanges { target: reporterSwitch; checked: true; busy: true }
-                    },
-                    State {
-                        name: "active"
-                        when: (crashReporterService.state == SystemdService.Active)
-                        PropertyChanges { target: reporterSwitch; checked: true }
-                    }
-                ]
             }
 
             ValueButton {
@@ -142,9 +112,10 @@ Page {
                 onClicked: PrivacySettings.autoDeleteDuplicates = !PrivacySettings.autoDeleteDuplicates
             }
 
-            TextSwitch {
-                automaticCheck: false
-                checked: enduranceService.state == SystemdService.Active
+            SystemdServiceSwitch {
+                serviceName: "crash-reporter-endurance.service"
+                managerType: SystemdService.SystemManager
+
                 //% "Endurance reports"
                 text: qsTrId("settings_crash-reporter_enable_endurance")
                 //% "Reports system statistics helping diagnose problems that "
@@ -153,21 +124,8 @@ Page {
                 //% "decreasing performance."
                 description: qsTrId("settings_crash-reporter_enable_endurance_description")
 
-                SystemdService {
-                    id: enduranceService
-
-                    serviceName: "crash-reporter-endurance.service"
-                    managerType: SystemdService.SystemManager
-                }
-
-                onClicked: {
-                    var newState = !checked
+                onBeforeStateChange: {
                     PrivacySettings.endurance = newState
-                    if (newState) {
-                        enduranceService.start()
-                    } else {
-                        enduranceService.stop()
-                    }
                 }
             }
 

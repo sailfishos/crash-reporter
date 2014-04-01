@@ -1,3 +1,4 @@
 module com.jolla.settings.crashreporter
 plugin settingsplugin
 PrivacyNotice 1.0 PrivacyNotice.qml
+SystemdServiceSwitch 1.0 SystemdServiceSwitch.qml
