@@ -60,8 +60,14 @@ dbus_config.files = data/crash-reporter-endurance.conf
 systemd_service.path = $${CREPORTER_SYSTEM_SYSTEMD_USER_SERVICES}
 systemd_service.files = data/crash-reporter.service
 
+MULTI_USER_TARGET_WANTS = \
+	$(INSTALL_ROOT)/$$CREPORTER_SYSTEM_SYSTEMD_SYSTEM_SERVICES/multi-user.target.wants
 systemd_endurance.path = $${CREPORTER_SYSTEM_SYSTEMD_SYSTEM_SERVICES}
 systemd_endurance.files = data/crash-reporter-endurance.service
+systemd_endurance.commands = \
+	mkdir $$MULTI_USER_TARGET_WANTS; \
+	ln -s ../crash-reporter-endurance.service \
+		$$MULTI_USER_TARGET_WANTS/crash-reporter-endurance.service
 
 endurance_script.path = $${CREPORTER_SYSTEM_LIBEXEC}
 endurance_script.files = scripts/endurance-collect
