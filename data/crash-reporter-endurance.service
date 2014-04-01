@@ -1,6 +1,8 @@
 [Unit]
 Description=Crash reporter integration with sp-endurance
 
+ConditionPathExists=/var/cache/core-dumps/endurance-enabled-mark
+
 [Service]
 Type=simple
 ExecStart=/usr/libexec/endurance-collect-daemon

@@ -88,6 +88,7 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
     Q_OBJECT
 
     Q_PROPERTY(bool coreDumping READ coreDumpingEnabled WRITE setCoreDumpingEnabled NOTIFY coreDumpingEnabledChanged)
+    Q_PROPERTY(bool endurance READ enduranceEnabled WRITE setEnduranceEnabled NOTIFY enduranceEnabledChanged)
     Q_PROPERTY(bool notifications READ notificationsEnabled WRITE setNotificationsEnabled NOTIFY notificationsEnabledChanged)
     Q_PROPERTY(bool autoDeleteDuplicates READ autoDeleteDuplicates WRITE setAutoDeleteDuplicates NOTIFY autoDeleteDuplicatesChanged)
     Q_PROPERTY(bool includeStackTrace READ includeStackTrace WRITE setIncludeStackTrace NOTIFY includeStackTraceChanged)
@@ -122,6 +123,13 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
           *     exist, default value is returned.
           */
         bool coreDumpingEnabled() const;
+
+        /**
+         * Checks whether endurance snapshot collection is enabled.
+         *
+         * @return @c true if endurance is enabled, otherwise @c false.
+         */
+        bool enduranceEnabled() const;
 
         /*!
           * @brief Reads setting value for notifications and returns it.
@@ -235,6 +243,13 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
           */
        void setCoreDumpingEnabled(bool value);
 
+       /**
+        * Enables or disables endurance snapshot collection.
+        *
+        * @param value @c true to enable, @c false to disable.
+        */
+       void setEnduranceEnabled(bool value);
+
        /*!
           * @brief Enables or disables notifications.
           *
@@ -332,6 +347,7 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
 
     signals:
         void coreDumpingEnabledChanged();
+        void enduranceEnabledChanged();
         void notificationsEnabledChanged();
         void autoDeleteDuplicatesChanged();
         void includeStackTraceChanged();
@@ -343,6 +359,8 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
 
     private:
         Q_DISABLE_COPY(CReporterPrivacySettingsModel)
+
+        static QString enduranceCollectMark();
 
         //! @arg Static class reference.
         static CReporterPrivacySettingsModel *sm_Instance;

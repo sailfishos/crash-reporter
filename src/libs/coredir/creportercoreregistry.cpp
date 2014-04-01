@@ -40,7 +40,6 @@
 #include "creportercoreregistry.h"
 #include "creportercoreregistry_p.h"
 #include "creportercoredir.h"
-#include "creporterutils.h"
 
 // Local macros and definitions.
 

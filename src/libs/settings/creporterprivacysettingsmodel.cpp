@@ -36,6 +36,7 @@
 #include "creportersettingsbase.h"
 #include "creporterprivacysettingsmodel.h"
 #include "creporternamespace.h"
+#include "../coredir/creportercoreregistry.h"
 
 // Pointer to this class.
 CReporterPrivacySettingsModel* CReporterPrivacySettingsModel::sm_Instance = 0;
@@ -95,6 +96,17 @@ CReporterPrivacySettingsModel::~CReporterPrivacySettingsModel()
 bool CReporterPrivacySettingsModel::coreDumpingEnabled() const
 {
     return value(Settings::ValueCoreDumping, QVariant(true)).toBool();
+}
+
+QString CReporterPrivacySettingsModel::enduranceCollectMark()
+{
+    return CReporterCoreRegistry::instance()->getCoreLocationPaths().first() +
+           "/endurance-enabled-mark";
+}
+
+bool CReporterPrivacySettingsModel::enduranceEnabled() const
+{
+    return QFile::exists(enduranceCollectMark());
 }
 
 // ----------------------------------------------------------------------------
@@ -193,9 +205,21 @@ void CReporterPrivacySettingsModel::setCoreDumpingEnabled(bool value)
         emit coreDumpingEnabledChanged();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::setNotificationsEnabled
-// ----------------------------------------------------------------------------
+void CReporterPrivacySettingsModel::setEnduranceEnabled(bool value)
+{
+    if (value == enduranceEnabled()) {
+        return;
+    }
+
+    if (value) {
+        QFile(enduranceCollectMark()).open(QFile::WriteOnly);
+    } else {
+        QFile::remove(enduranceCollectMark());
+    }
+
+    emit enduranceEnabledChanged();
+}
+
 void CReporterPrivacySettingsModel::setNotificationsEnabled(bool value)
 {
     if (setValue(Settings::ValueNotifications, QVariant(value)))

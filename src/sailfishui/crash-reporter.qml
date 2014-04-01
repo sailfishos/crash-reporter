@@ -162,7 +162,7 @@ Page {
 
                 onClicked: {
                     var newState = !checked
-                    enduranceService.enabled = newState
+                    PrivacySettings.endurance = newState
                     if (newState) {
                         enduranceService.start()
                     } else {
