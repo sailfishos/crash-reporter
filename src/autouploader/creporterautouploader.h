@@ -63,21 +63,22 @@ class CReporterAutoUploader : public QObject
           */
         ~CReporterAutoUploader();
 
-    public Q_SLOTS:
+public slots:
+    /**
+     * Queues given rich core files for upload.
+     *
+     * @param fileList list of files to upload.
+     * @param obeyNetworkRestrictions @c false if the files should be uploaded
+     *                                regardless of the network connection type,
+     *                                i.e. also over paid mobile/3G.
+     * @return @c true if files were successfully queued for upload.
+     */
+    bool uploadFiles(const QStringList &fileList, bool obeyNetworkRestrictions);
 
-        /*!
-          * @brief Upload given rich-core files
-          *
-          * @param fileList List of files to upload
-          * @return True, if files were successfully queued for upload
-          */
-        bool uploadFiles(const QStringList &fileList);
-
-        /*!
-          * @brief Called to request auto uploader service to quit its main loop.
-          *
-          */
-        void quit();
+    /**
+     * Makes auto-uploader exit its main loop.
+     */
+    void quit();
 
     private Q_SLOTS:
 

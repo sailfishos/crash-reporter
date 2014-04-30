@@ -4,6 +4,7 @@
  <interface name="com.nokia.CrashReporter.AutoUploader">
   <method name="uploadFiles">
    <arg type="as" name="fileList" direction="in"/>
+   <arg type="b" name="obeyNetworkRestrictions" direction="in"/>
    <arg type="b" name="result" direction="out"/>
   </method>
   <method name="quit">

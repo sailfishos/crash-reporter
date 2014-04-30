@@ -265,7 +265,8 @@ bool CReporterUtils::reportIncludesCrash(const QString &fileName)
              fileName.contains(CReporter::OverheatShutdownPrefix));
 }
 
-bool CReporterUtils::notifyAutoUploader(const QStringList &filesToUpload)
+bool CReporterUtils::notifyAutoUploader(const QStringList &filesToUpload,
+        bool obeyNetworkRestrictions)
 {
     qDebug() << __PRETTY_FUNCTION__
              << "Requesting crash-reporter-autouploader to upload"
@@ -274,7 +275,8 @@ bool CReporterUtils::notifyAutoUploader(const QStringList &filesToUpload)
     ComNokiaCrashReporterAutoUploaderInterface proxy(CReporter::AutoUploaderServiceName,
             CReporter::AutoUploaderObjectPath, QDBusConnection::sessionBus());
 
-    QDBusPendingReply <bool> reply = proxy.uploadFiles(filesToUpload);
+    QDBusPendingReply <bool>reply =
+            proxy.uploadFiles(filesToUpload, obeyNetworkRestrictions);
     // This blocks.
     reply.waitForFinished();
 

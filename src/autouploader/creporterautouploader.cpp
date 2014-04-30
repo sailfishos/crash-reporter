@@ -131,10 +131,8 @@ CReporterAutoUploader::~CReporterAutoUploader()
 
 }
 
-// ----------------------------------------------------------------------------
-// CReporterAutoUploader::uploadFiles
-// ----------------------------------------------------------------------------
-bool CReporterAutoUploader::uploadFiles(const QStringList &fileList)
+bool CReporterAutoUploader::uploadFiles(const QStringList &fileList,
+        bool obeyNetworkRestrictions)
 {
     qDebug() << __PRETTY_FUNCTION__ << "Received a list of files to upload.";
 
@@ -148,7 +146,8 @@ bool CReporterAutoUploader::uploadFiles(const QStringList &fileList)
         connect(d_ptr->engine, SIGNAL(finished(int, int, int)), SLOT(engineFinished(int, int, int)));
     }
 
-    if (!CReporterAutoUploaderPrivate::isQuickieUpload(fileList) &&
+    if (obeyNetworkRestrictions &&
+        !CReporterAutoUploaderPrivate::isQuickieUpload(fileList) &&
         !CReporterNwSessionMgr::unpaidConnectionAvailable()) {
         qDebug() << __PRETTY_FUNCTION__
                  << "No unpaid network connection available, aborting crash report upload.";

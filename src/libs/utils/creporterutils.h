@@ -133,9 +133,13 @@ public:
      * Sends a request for auto uploader daemon to add files into upload queue.
      *
      * @param filesToUpload A list of files we want to upload to the server.
+     * @param obeyNetworkRestrictions @c false if the files should be uploaded
+     *                                regardless of the network connection type,
+     *                                i.e. also over paid mobile/3G.
      * @return @c true if files were successfully added, otherwise @c true.
      */
-    Q_INVOKABLE static bool notifyAutoUploader(const QStringList &filesToUpload);
+    Q_INVOKABLE static bool notifyAutoUploader(const QStringList &filesToUpload,
+            bool obeyNetworkRestrictions = true);
 
     /*!
      * Runs rich-core-dumper that subsequently collects system logs and creates
