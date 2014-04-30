@@ -42,10 +42,10 @@
 #include "creporternwsessionmgr.h"
 #include "creportersavedstate.h"
 #include "creporterutils.h"
-#include "creporterautouploaderproxy.h"
 #include "creporternamespace.h"
 #include "creporternotification.h"
 #include "creporterprivacysettingsmodel.h"
+#include "autouploader_interface.h" // generated
 
 // ******** Class CReporterHandledRichCore ********
 
@@ -439,12 +439,10 @@ void CReporterDaemonMonitor::setAutoUpload(bool state)
     if (!state)
     {
         qDebug() << __PRETTY_FUNCTION__ << "Calling quit() on Auto Uploader.";
-        CReporterAutoUploaderProxy proxy(CReporter::AutoUploaderServiceName,
-                                         CReporter::AutoUploaderObjectPath, QDBusConnection::sessionBus());
+        ComNokiaCrashReporterAutoUploaderInterface proxy(CReporter::AutoUploaderServiceName,
+                CReporter::AutoUploaderObjectPath, QDBusConnection::sessionBus());
 
-        QDBusPendingReply <bool> reply = proxy.quit();
-        // This blocks.
-        reply.waitForFinished();
+        proxy.quit();
     }
 }
 

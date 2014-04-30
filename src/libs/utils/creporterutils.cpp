@@ -43,8 +43,8 @@
 
 #include "creporterutils.h"
 
-#include "creporterautouploaderproxy.h"
 #include "creporternamespace.h"
+#include "../autouploader_interface.h" // generated
 #include "../ssu_interface.h" // generated
 
 // Local constants.
@@ -271,7 +271,7 @@ bool CReporterUtils::notifyAutoUploader(const QStringList &filesToUpload)
              << "Requesting crash-reporter-autouploader to upload"
              << filesToUpload.size() << "files.";
 
-    CReporterAutoUploaderProxy proxy(CReporter::AutoUploaderServiceName,
+    ComNokiaCrashReporterAutoUploaderInterface proxy(CReporter::AutoUploaderServiceName,
             CReporter::AutoUploaderObjectPath, QDBusConnection::sessionBus());
 
     QDBusPendingReply <bool> reply = proxy.uploadFiles(filesToUpload);

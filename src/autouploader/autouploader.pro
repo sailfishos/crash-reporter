@@ -43,10 +43,11 @@ LIBS += ../../lib/libcrashreporter.so \
 
 SOURCES += main.cpp \
            creporterautouploader.cpp \
-           creporterautouploaderdbusadaptor.cpp \
 
 HEADERS += creporterautouploader.h \
-           creporterautouploaderdbusadaptor.h \
+
+DBUS_ADAPTORS += \
+	com.nokia.CrashReporter.AutoUploader.xml \
 
 target.path = $$CREPORTER_SYSTEM_BIN
 

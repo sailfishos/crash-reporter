@@ -36,14 +36,13 @@
 #include "creporternamespace.h"
 #include "creporternwsessionmgr.h"
 #include "creportersavedstate.h"
-#include "creporterautouploaderdbusadaptor.h"
 #include "creporteruploadqueue.h"
 #include "creporteruploaditem.h"
 #include "creporteruploadengine.h"
 #include "creporternotification.h"
 #include "creporterprivacysettingsmodel.h"
 
-// ******** Class CReporterAutoUploaderPrivate ********
+#include "autouploader_adaptor.h" // generated
 
 /*! @class CReporterAutoUploaderPrivate
   * @brief Private CReporterAutoUploaderPrivate class.
@@ -107,7 +106,7 @@ CReporterAutoUploader::CReporterAutoUploader() : d_ptr(new CReporterAutoUploader
                     this);
 
     // Create adaptor class. Needs to be taken from the stack.
-    new CReporterAutoUploaderDBusAdaptor(this);
+    new AutoUploaderAdaptor(this);
     // Register service name and object.
     QDBusConnection::sessionBus().registerService(CReporter::AutoUploaderServiceName);
     QDBusConnection::sessionBus().registerObject(CReporter::AutoUploaderObjectPath, this);

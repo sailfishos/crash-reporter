@@ -29,7 +29,7 @@ BuildRequires:          pkgconfig(mce)
 Requires:               sp-rich-core >= 1.71.2
 Requires:               sp-endurance
 Requires:               oneshot
-Conflicts:              quick-feedback < 0.0.13
+Conflicts:              quick-feedback < 0.0.18
 %{_oneshot_requires_post}
 Source0:                %{name}-%{version}.tar.gz
 

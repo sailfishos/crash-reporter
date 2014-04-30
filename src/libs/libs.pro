@@ -57,6 +57,7 @@ DEPENDPATH = $$INCLUDEPATH
 DBUS_INTERFACES = \
 	notification/org.freedesktop.Notification.xml \
 	utils/org.nemo.ssu.xml \
+	../autouploader/com.nokia.CrashReporter.AutoUploader.xml \
 
 SOURCES += coredir/creportercoredir.cpp \
            coredir/creportercoreregistry.cpp \
@@ -67,7 +68,6 @@ SOURCES += coredir/creportercoredir.cpp \
             utils/creporterutils.cpp \
             logger/creporterlogger.cpp \
             serviceif/creporterdaemonproxy.cpp \
-            serviceif/creporterautouploaderproxy.cpp \
             settings/creporterprivacysettingsmodel.cpp \
            settings/creportersavedstate.cpp \
             settings/creportersettingsbase.cpp \
@@ -89,7 +89,6 @@ PUBLIC_HEADERS += creporternamespace.h \
                   dialoginterface/creporterdialogserverinterface.h \
                   logger/creporterlogger.h \
                   serviceif/creporterdaemonproxy.h \
-                  serviceif/creporterautouploaderproxy.h \
                   serviceif/creportermetatypes.h \
                   settings/creporterprivacysettingsmodel.h \
                   settings/creportersavedstate.h \
@@ -116,7 +115,9 @@ TARGET = $$qtLibraryTarget(crashreporter)
 
 target.path += $$[QT_INSTALL_LIBS]
 
-headers.files = $$PUBLIC_HEADERS
+headers.files = \
+	$$PUBLIC_HEADERS \
+	autouploader_interface.h
 headers.path = $$[QT_INSTALL_PREFIX]/include/crash-reporter
 
 # Pkg-config

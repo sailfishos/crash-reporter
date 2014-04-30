@@ -31,13 +31,13 @@ HEADERS += $${CREPORTER_STUBS_DIR}/mgconfitem_stub.h \
            $${DAEMON_SRC_DIR}/creporterdaemonmonitor.h \
            $${DAEMON_SRC_DIR}/creporterdaemonmonitor_p.h \
            $${CREPORTER_SRC_DIR}/dialogserver/creporterdialogserverdbusadaptor.h \
+    $${CREPORTER_SRC_DIR}/libs/autouploader_interface.h \
            $${CREPORTER_SRC_DIR}/libs/coredir/creportercoredir.h \
            $${CREPORTER_SRC_DIR}/libs/coredir/creportercoredir_p.h \
            $${CREPORTER_SRC_DIR}/libs/coredir/creportercoreregistry.h \
            $${CREPORTER_SRC_DIR}/libs/coredir/creportercoreregistry_p.h \
            $${CREPORTER_SRC_DIR}/libs/httpclient/creporternwsessionmgr.h \
            $${CREPORTER_SRC_DIR}/libs/utils/creporterutils.h \
-           $${CREPORTER_SRC_DIR}/libs/serviceif/creporterautouploaderproxy.h \
            $${CREPORTER_SRC_DIR}/libs/notification/creporternotification.h \
     $${CREPORTER_SRC_DIR}/libs/settings/creportersavedstate.h \
     $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsbase.h \
@@ -51,12 +51,12 @@ HEADERS += $${CREPORTER_STUBS_DIR}/mgconfitem_stub.h \
 # unit test and sources
 SOURCES += $$TEST_SOURCES \
            $$TEST_STUBS \
+    $${CREPORTER_SRC_DIR}/libs/autouploader_interface.cpp \
            $${CREPORTER_SRC_DIR}/dialogserver/creporterdialogserverdbusadaptor.cpp \
            $${CREPORTER_SRC_DIR}/libs/coredir/creportercoredir.cpp \
            $${CREPORTER_SRC_DIR}/libs/coredir/creportercoreregistry.cpp \
            $${CREPORTER_SRC_DIR}/libs/httpclient/creporternwsessionmgr.cpp \
            $${CREPORTER_SRC_DIR}/libs/utils/creporterutils.cpp \
-           $${CREPORTER_SRC_DIR}/libs/serviceif/creporterautouploaderproxy.cpp \
     $${CREPORTER_SRC_DIR}/libs/settings/creportersavedstate.cpp \
     $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsinit.cpp \
     $${CREPORTER_SRC_DIR}/libs/settings/creportersettingsbase.cpp \
