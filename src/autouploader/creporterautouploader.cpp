@@ -68,27 +68,8 @@ class CReporterAutoUploaderPrivate
         /*! Notification object giving user a notice of failed uploads.*/
         CReporterNotification *failedNotification;
 
-        /*!
-         * Checks whether given file list belongs to a quick feedback upload
-         * request.
-         *
-         * @param fileList a file list received as an argument to @c uploadFiles()
-         * @return @c true if list contains quick feedback, otherwise @c false
-         */
-        static bool isQuickieUpload(const QStringList &fileList);
 };
 
-bool CReporterAutoUploaderPrivate::isQuickieUpload(const QStringList &fileList)
-{
-    return (fileList.size() == 1) &&
-           (QFileInfo(fileList[0]).baseName().startsWith(CReporter::QuickFeedbackPrefix));
-}
-
-// ******** Class CReporterAutoUploader ********
-
-// ----------------------------------------------------------------------------
-// CReporterAutoUploader::CReporterAutoUploader
-// ----------------------------------------------------------------------------
 CReporterAutoUploader::CReporterAutoUploader() : d_ptr(new CReporterAutoUploaderPrivate)
 {
     d_ptr->engine = 0;
@@ -147,7 +128,6 @@ bool CReporterAutoUploader::uploadFiles(const QStringList &fileList,
     }
 
     if (obeyNetworkRestrictions &&
-        !CReporterAutoUploaderPrivate::isQuickieUpload(fileList) &&
         !CReporterNwSessionMgr::unpaidConnectionAvailable()) {
         qDebug() << __PRETTY_FUNCTION__
                  << "No unpaid network connection available, aborting crash report upload.";
