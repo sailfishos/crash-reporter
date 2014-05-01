@@ -117,7 +117,7 @@ target.path += $$[QT_INSTALL_LIBS]
 
 headers.files = \
 	$$PUBLIC_HEADERS \
-	autouploader_interface.h
+	$$OUT_PWD/autouploader_interface.h
 headers.path = $$[QT_INSTALL_PREFIX]/include/crash-reporter
 
 # Pkg-config
