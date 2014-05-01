@@ -95,7 +95,8 @@ void CrashReporterAdapter::deleteCrashReport(const QString &filePath) const
 
 void CrashReporterAdapter::uploadAllCrashReports() const
 {
-    CReporterUtils::notifyAutoUploader(CReporterCoreRegistry::instance()->collectAllCoreFiles());
+    CReporterCoreRegistry *registry = CReporterCoreRegistry::instance();
+    CReporterUtils::notifyAutoUploader(registry->collectAllCoreFiles(), false);
 }
 
 void CrashReporterAdapter::deleteAllCrashReports() const

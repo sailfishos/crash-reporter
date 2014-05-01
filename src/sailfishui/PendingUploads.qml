@@ -86,7 +86,7 @@ Page {
                         //% "Upload"
                         text: qsTrId("settings_crash-reporter_upload")
                         onClicked: {
-                            Utils.notifyAutoUploader([ model.filePath ])
+                            Utils.notifyAutoUploader([ model.filePath ], false)
                         }
                     }
                     MenuItem {
