@@ -1,12 +1,12 @@
 [Unit]
 Description=Crash file reporter daemon
 Requires=dbus.service
+After=user-session.target
 
 [Service]
 ExecStart=/usr/bin/crash-reporter-daemon
-Type=dbus
-BusName=com.nokia.CrashReporter.Daemon
+Type=simple
 Restart=always
 
 [Install]
-WantedBy=user-session.target
+WantedBy=post-user-session.target
