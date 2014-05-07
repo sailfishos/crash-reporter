@@ -276,4 +276,4 @@ void CReporterAutoUploader::engineFinished(int error, int sent, int total)
     quit();
 }
 
-        
+#include "moc_autouploader_adaptor.cpp"
