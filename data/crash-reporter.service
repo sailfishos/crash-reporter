@@ -2,6 +2,7 @@
 Description=Crash file reporter daemon
 Requires=dbus.service
 After=user-session.target
+ConditionPathExists=!/tmp/os-update-running
 
 [Service]
 ExecStart=/usr/bin/crash-reporter-daemon
