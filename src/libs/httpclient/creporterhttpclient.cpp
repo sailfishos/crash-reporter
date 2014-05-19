@@ -89,7 +89,6 @@ void CReporterHttpClientPrivate::init(bool deleteAfterSending)
 	qDebug() << __PRETTY_FUNCTION__ << "Initiating HTTP session.";
 	m_deleteFileFlag = deleteAfterSending;
 	m_userAborted = false;
-    m_httpError = false;
 
     if (CReporterApplicationSettings::instance()->useProxy()) {
         qDebug() << __PRETTY_FUNCTION__ << "Network proxy defined.";
@@ -242,8 +241,10 @@ void CReporterHttpClientPrivate::handleError(QNetworkReply::NetworkError error)
 		// Finished is emitted by QNetworkReply after this, inidicating that
 		// the connection is over.
 		qCritical() << __PRETTY_FUNCTION__ << "Upload failed.";
-        m_httpError = true;
-		QString errorString =m_reply->errorString();
+        QString errorString =m_reply->errorString();
+
+        m_reply = 0;
+
         qDebug() << __PRETTY_FUNCTION__ << "Error code:" << error << "," << errorString;
         emit uploadError(m_currentFile.fileName(), errorString);
 	}
@@ -299,7 +300,7 @@ void CReporterHttpClientPrivate::handleFinished()
 {
     qDebug() << __PRETTY_FUNCTION__ << "Uploading file:" << m_currentFile.fileName() << "finished.";
 
-    if (!m_httpError && !m_userAborted) {
+    if (m_reply && !m_userAborted) {
         // Upload was successful.
         parseReply();
 
@@ -323,7 +324,7 @@ void CReporterHttpClientPrivate::handleUploadProgress(qint64 bytesSent, qint64 b
 {
     qDebug() << __PRETTY_FUNCTION__ << "Sent:" << bytesSent << "Total:" << bytesTotal;
 
-    if (m_userAborted || m_httpError) {
+    if (m_userAborted || !m_reply) {
         // Do not update, if aborted.
         return;
     }

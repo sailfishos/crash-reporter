@@ -188,8 +188,7 @@ class CReporterHttpClientPrivate : public QObject
 		CReporterHttpClient::State m_clientState;
         //! @arg Set to True, if request was cancelled.
 		bool m_userAborted;
-        //! @arg Set to True, if HTTP error was encountered.
-        bool m_httpError;
+
         Q_DECLARE_PUBLIC(CReporterHttpClient)
 
 	protected:
