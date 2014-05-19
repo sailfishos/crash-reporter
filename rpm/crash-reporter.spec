@@ -9,7 +9,7 @@ BuildRoot:              %{buildroot}
 Summary:                Crash Reporting Tool for Mer
 License:                LGPL
 Name:                   crash-reporter
-Version:                1.10.54
+Version:                1.10.55
 Release:                %{release}
 Prefix:                 /usr
 Group:                  Development/Tools
