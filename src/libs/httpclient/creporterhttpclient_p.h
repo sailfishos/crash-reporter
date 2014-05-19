@@ -55,11 +55,7 @@ class CReporterHttpClientPrivate : public QObject
 	Q_OBJECT
 
 	public:
-        /*!
-         * Class constructor.
-         *
-         */
-		CReporterHttpClientPrivate();
+        CReporterHttpClientPrivate(CReporterHttpClient *parent);
 
         /*!
          * Class destructor.

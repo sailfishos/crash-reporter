@@ -49,16 +49,11 @@
 
 const char *clientstate_string[] = {"None", "Init", "Connecting", "Sending", "Aborting"};
 
-// ******** Class CReporterHttpClientPrivate ********
-
-// ======== MEMBER FUNCTIONS ========
-
-// ----------------------------------------------------------------------------
-// CReporterHttpClientPrivate::CReporterHttpClientPrivate
-// ----------------------------------------------------------------------------
-CReporterHttpClientPrivate::CReporterHttpClientPrivate() :
-		m_manager( 0 ),
-        m_reply( 0 )
+CReporterHttpClientPrivate::CReporterHttpClientPrivate(CReporterHttpClient *parent):
+  QObject(parent),
+  m_manager(0),
+  m_reply(0),
+  q_ptr(parent)
 {
 		m_clientState = CReporterHttpClient::None;
 }
@@ -371,19 +366,11 @@ bool CReporterHttpClientPrivate::createPutRequest(QNetworkRequest &request,
     return true;
 }
 
-// ******** Class CReporterHttpClient ********
-
-// ======== MEMBER FUNCTIONS ========
-
-// ----------------------------------------------------------------------------
-// CReporterHttpClient::CReporterHttpClient
-// ----------------------------------------------------------------------------
-CReporterHttpClient::CReporterHttpClient(QObject *parent) :
-        QObject(parent) ,
-        d_ptr(new CReporterHttpClientPrivate())
+CReporterHttpClient::CReporterHttpClient(QObject *parent):
+  QObject(parent) ,
+  d_ptr(new CReporterHttpClientPrivate(this))
 {
     Q_D(CReporterHttpClient);
-	d->q_ptr = this;
 
 	connect( d, SIGNAL(stateChanged(CReporterHttpClient::State)),
 			 this, SIGNAL(clientStateChanged(CReporterHttpClient::State)) );
@@ -397,9 +384,6 @@ CReporterHttpClient::CReporterHttpClient(QObject *parent) :
 CReporterHttpClient::~CReporterHttpClient()
 {
     qDebug() << __PRETTY_FUNCTION__ << "Client destroyed.";
-
-	delete d_ptr;
-	d_ptr = NULL;
 }
 
 // ----------------------------------------------------------------------------
