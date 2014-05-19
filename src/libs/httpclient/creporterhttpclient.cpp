@@ -173,6 +173,8 @@ bool CReporterHttpClientPrivate::createRequest(const QString &file)
     connect(m_reply, SIGNAL(error(QNetworkReply::NetworkError)),
             this, SLOT(handleError(QNetworkReply::NetworkError)));
     connect(m_reply, SIGNAL(finished()), this, SLOT(handleFinished()));
+    connect(m_reply, &QNetworkReply::uploadProgress,
+            this, &CReporterHttpClientPrivate::handleUploadProgress);
 
     stateChange(CReporterHttpClient::Connecting);
     return true;
@@ -204,10 +206,9 @@ void CReporterHttpClientPrivate::cancel()
 void CReporterHttpClientPrivate::handleAuthenticationRequired(QNetworkReply *reply,
                                                         QAuthenticator *authenticator)
 {
-	qDebug() << __PRETTY_FUNCTION__ << "Fill in the credentials.";
+    Q_UNUSED(reply)
 
-    connect(reply, SIGNAL(uploadProgress(qint64,qint64)),
-            this, SLOT(handleUploadProgress(qint64,qint64)));
+	qDebug() << __PRETTY_FUNCTION__ << "Fill in the credentials.";
 
 	// Fill in the credentials.
     authenticator->setUser(CReporterApplicationSettings::instance()->username());
