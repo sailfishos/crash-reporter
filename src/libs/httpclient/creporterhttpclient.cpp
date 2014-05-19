@@ -88,7 +88,6 @@ void CReporterHttpClientPrivate::init(bool deleteAfterSending)
 {
 	qDebug() << __PRETTY_FUNCTION__ << "Initiating HTTP session.";
 	m_deleteFileFlag = deleteAfterSending;
-	m_userAborted = false;
 
     if (CReporterApplicationSettings::instance()->useProxy()) {
         qDebug() << __PRETTY_FUNCTION__ << "Network proxy defined.";
@@ -184,14 +183,13 @@ bool CReporterHttpClientPrivate::createRequest(const QString &file)
 // ----------------------------------------------------------------------------
 void CReporterHttpClientPrivate::cancel()
 {
-    qDebug() <<  __PRETTY_FUNCTION__ << "User aborted transaction.";
-	m_userAborted = true;
 	stateChange( CReporterHttpClient::Aborting );
 
     if (m_reply != 0) {
-        qDebug() << __PRETTY_FUNCTION__ << "Canceling transaction.";
+        qDebug() << __PRETTY_FUNCTION__ << "Canceling HTTP transaction.";
 		// Abort ongoing transactions.
 		m_reply->abort();
+        m_reply = 0;
 	}
 	// Clean up.
 	handleFinished();
@@ -300,7 +298,7 @@ void CReporterHttpClientPrivate::handleFinished()
 {
     qDebug() << __PRETTY_FUNCTION__ << "Uploading file:" << m_currentFile.fileName() << "finished.";
 
-    if (m_reply && !m_userAborted) {
+    if (m_reply) {
         // Upload was successful.
         parseReply();
 
@@ -324,7 +322,7 @@ void CReporterHttpClientPrivate::handleUploadProgress(qint64 bytesSent, qint64 b
 {
     qDebug() << __PRETTY_FUNCTION__ << "Sent:" << bytesSent << "Total:" << bytesTotal;
 
-    if (m_userAborted || !m_reply) {
+    if (!m_reply) {
         // Do not update, if aborted.
         return;
     }

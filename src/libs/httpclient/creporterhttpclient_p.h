@@ -186,8 +186,6 @@ class CReporterHttpClientPrivate : public QObject
         QFileInfo m_currentFile;
         //! @arg Client state.
 		CReporterHttpClient::State m_clientState;
-        //! @arg Set to True, if request was cancelled.
-		bool m_userAborted;
 
         Q_DECLARE_PUBLIC(CReporterHttpClient)
 
