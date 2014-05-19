@@ -48,14 +48,19 @@
 #include "creporterutils.h"
 
 const char *clientstate_string[] = {"None", "Init", "Connecting", "Sending", "Aborting"};
+const int CONNECTION_TIMEOUT_MS = 2 * 60 * 1000;
 
 CReporterHttpClientPrivate::CReporterHttpClientPrivate(CReporterHttpClient *parent):
   QObject(parent),
   m_manager(0),
   m_reply(0),
+  m_connectionTimeout(this),
   q_ptr(parent)
 {
 		m_clientState = CReporterHttpClient::None;
+    m_connectionTimeout.setInterval(CONNECTION_TIMEOUT_MS);
+    connect(&m_connectionTimeout, &QTimer::timeout,
+            q_ptr, &CReporterHttpClient::cancel);
 }
 
 // ----------------------------------------------------------------------------
@@ -168,6 +173,7 @@ bool CReporterHttpClientPrivate::createRequest(const QString &file)
     connect(m_reply, SIGNAL(finished()), this, SLOT(handleFinished()));
     connect(m_reply, &QNetworkReply::uploadProgress,
             this, &CReporterHttpClientPrivate::handleUploadProgress);
+    m_connectionTimeout.start();
 
     stateChange(CReporterHttpClient::Connecting);
     return true;
@@ -293,6 +299,8 @@ void CReporterHttpClientPrivate::handleFinished()
 {
     qDebug() << __PRETTY_FUNCTION__ << "Uploading file:" << m_currentFile.fileName() << "finished.";
 
+    m_connectionTimeout.stop();
+
     if (m_reply) {
         // Upload was successful.
         parseReply();
@@ -316,6 +324,9 @@ void CReporterHttpClientPrivate::handleFinished()
 void CReporterHttpClientPrivate::handleUploadProgress(qint64 bytesSent, qint64 bytesTotal)
 {
     qDebug() << __PRETTY_FUNCTION__ << "Sent:" << bytesSent << "Total:" << bytesTotal;
+
+    // Upload has started; stop the connection timeout.
+    m_connectionTimeout.stop();
 
     if (!m_reply) {
         // Do not update, if aborted.

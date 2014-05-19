@@ -30,7 +30,7 @@
 #include  <QList>
 #include <QNetworkReply>
 #include <QFileInfo>
-#include <QHostInfo>
+#include <QTimer>
 
 // User includes.
 
@@ -182,6 +182,11 @@ class CReporterHttpClientPrivate : public QObject
         QFileInfo m_currentFile;
         //! @arg Client state.
 		CReporterHttpClient::State m_clientState;
+        /*!
+         * Cancels running HTTP request if a connection isn't established within
+         * a predefined period of time.
+         */
+        QTimer m_connectionTimeout;
 
         Q_DECLARE_PUBLIC(CReporterHttpClient)
 
