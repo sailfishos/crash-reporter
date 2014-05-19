@@ -337,9 +337,11 @@ void CReporterHttpClientPrivate::handleUploadProgress(qint64 bytesSent, qint64 b
         stateChange(CReporterHttpClient::Sending);
     }
 
-    int done = (int)((bytesSent * 100) / bytesTotal);
-    qDebug() << __PRETTY_FUNCTION__ << "Done:" << done << "%";
-    emit q_ptr->updateProgress(done);
+    if (bytesTotal != 0) {
+        int done = (int)((bytesSent * 100) / bytesTotal);
+        qDebug() << __PRETTY_FUNCTION__ << "Done:" << done << "%";
+        emit q_ptr->updateProgress(done);
+    }
 }
 
 // ----------------------------------------------------------------------------
