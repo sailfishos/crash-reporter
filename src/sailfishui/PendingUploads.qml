@@ -25,18 +25,9 @@ import Sailfish.Silica.theme 1.0
 import com.jolla.settings.crashreporter 1.0
 
 Page {
-    RemorsePopup {
-        id: deleteReportsRemorse
-        function run() {
-            //% "Deleting %n crash report(s)"
-            execute(qsTrId("quick-feedback_deleting", Adapter.reportsToUpload),
-                function() {
-                    Adapter.deleteAllCrashReports()
-                })
-        }
-    }
-
     SilicaListView {
+        id: uploadsView
+
         anchors.fill: parent
 
         PullDownMenu {
@@ -44,9 +35,7 @@ Page {
                 enabled: Adapter.reportsToUpload > 0
                 //% "Delete unsent reports"
                 text: qsTrId("quick-feedback_delete_reports")
-                onClicked: {
-                    deleteReportsRemorse.run()
-                }
+                onClicked: uploadsView.headerItem.showDeleteReportsRemorse()
             }
             MenuItem {
                 enabled: Adapter.reportsToUpload > 0
@@ -58,9 +47,45 @@ Page {
             }
         }
 
-        header: PageHeader {
-            //% "Pending uploads"
-            title: qsTrId("crash-reporter_pending_uploads")
+        header: Item {
+            width: parent.width
+            height: childrenRect.height
+
+            PageHeader {
+                id: header
+
+                //% "Pending uploads"
+                title: qsTrId("crash-reporter_pending_uploads")
+            }
+            Item {
+                id: remorseArea
+
+                anchors.top: header.bottom
+                height: 0
+                width: parent.width
+                visible: false
+
+                RemorseItem {
+                    id: remorse
+
+                    onCanceled: _collapse()
+                    onTriggered: _collapse()
+
+                    function _collapse() {
+                        remorseArea.height = 0
+                        height = 0
+                    }
+                }
+            }
+
+            function showDeleteReportsRemorse() {
+                remorseArea.height = Theme.itemSizeSmall
+                //% "Deleting %n crash report(s)"
+                remorse.execute(remorseArea, qsTrId("quick-feedback_deleting", Adapter.reportsToUpload),
+                    function() {
+                        Adapter.deleteAllCrashReports()
+                    })
+            }
         }
 
         model: Adapter.pendingUploads
