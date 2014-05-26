@@ -46,6 +46,10 @@ SOURCES += main.cpp \
 
 HEADERS += creporterautouploader.h \
 
+PRE_TARGETDEPS = \
+	compiler_dbus_adaptor_header_make_all \
+	compiler_dbus_adaptor_source_make_all \
+
 DBUS_ADAPTORS += \
 	com.nokia.CrashReporter.AutoUploader.xml \
 
