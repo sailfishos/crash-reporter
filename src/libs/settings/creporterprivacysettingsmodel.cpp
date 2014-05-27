@@ -142,14 +142,6 @@ bool CReporterPrivacySettingsModel::automaticSendingEnabled() const
 }
 
 // ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::instantDialogsEnabled
-// ----------------------------------------------------------------------------
-bool CReporterPrivacySettingsModel::instantDialogsEnabled() const
-{
-    return value(Settings::ValueInstantDialogs, QVariant(false)).toBool();
-}
-
-// ----------------------------------------------------------------------------
 // CReporterPrivacySettingsModel::includeCore
 // ----------------------------------------------------------------------------
 bool CReporterPrivacySettingsModel::includeCore() const
@@ -249,14 +241,6 @@ void CReporterPrivacySettingsModel::setAutoDeleteMaxSimilarCores(int value)
 void CReporterPrivacySettingsModel::setAutomaticSendingEnabled(bool value)
 {
     setValue(Settings::ValueAutomaticSending, QVariant(value));
-}
-
-// ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::setInstantDialogsEnabled
-// ----------------------------------------------------------------------------
-void CReporterPrivacySettingsModel::setInstantDialogsEnabled(bool value)
-{
-    setValue(Settings::ValueInstantDialogs, QVariant(value));
 }
 
 // ----------------------------------------------------------------------------

@@ -47,8 +47,6 @@ namespace Settings
     const QString ValueAutoDeleteMaxSimilarCores("Settings/maxsimilarcores");
     //! This setting affects to crash-reporter. If set to true, crash-reporter tries to upload rich-core dumps automatically.
     const QString ValueAutomaticSending("Settings/automaticsending");
-    //! This setting affects crash-reporter. If true, crash notification dialogs open up instantly (without requiring the user to tap a system notification)
-    const QString ValueInstantDialogs("Settings/instantdialogs");
     //! If set to true, user has accepted crash reporter's privacy notice.
     const QString ValueNoticeAccepted("Settings/privacy-notice-accepted");
 }
@@ -167,15 +165,6 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
         bool automaticSendingEnabled() const;
 
         /*!
-          * @brief Reads setting value for instant dialogs and returns it.
-          *
-          * @note This setting used by the crash-reporter.
-          * @return Returns true, if instant dialogs are enabled; otherwise false. If value doesn't
-          *     exist, default value is returned.
-          */
-        bool instantDialogsEnabled() const;
-
-        /*!
           * @brief Reads setting value for including core and returns it.
           *
           * @note This setting used by the rich-core.
@@ -281,14 +270,6 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
            * @param True to enable feature; false to disable.
            */
          void setAutomaticSendingEnabled(bool value);
-
-         /*!
-            * @brief Enables or disables instant dialogs
-            *
-            * @note This setting used by the crash-reporter.
-            * @param True to enable feature; false to disable.
-            */
-         void setInstantDialogsEnabled(bool value);
 
         /*!
           * @brief Enables or disables for including core in the crash report.
