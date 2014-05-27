@@ -65,20 +65,6 @@ class CReporterDaemonMonitor : public QObject
         ~CReporterDaemonMonitor();
 
         /*!
-          * @brief Returns auto-delete property.
-          *
-          * @return True, if enabled; otherwise false.
-          */
-        bool autoDeleteEnabled();
-
-        /*!
-          * @brief Sets auto-delete property.
-          *
-          * @param status True or False.
-          */
-        void setAutoDelete(bool state);
-
-        /*!
           * @brief Returns auto-delete max similar cores property
           *
           * @return Number of similar cores to keep

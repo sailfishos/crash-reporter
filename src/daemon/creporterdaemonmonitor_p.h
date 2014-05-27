@@ -147,8 +147,6 @@ class CReporterDaemonMonitorPrivate : public QObject
         QFileSystemWatcher parentDirWatcher;
         //! @arg List of handled rich-cores.
         QList <CReporterHandledRichCore *> handledRichCores;
-        //! @arg State of auto-delete feature (enabled/ disabled).
-        bool autoDelete;
         //! @arg Number of similar cores to keep when auto-delete is enabled
         int autoDeleteMaxSimilarCores;
 

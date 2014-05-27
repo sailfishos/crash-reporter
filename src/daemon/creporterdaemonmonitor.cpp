@@ -94,7 +94,7 @@ bool CReporterHandledRichCore::operator==(const CReporterHandledRichCore &other)
 // CReporterDaemonMonitorPrivate::CReporterDaemonMonitorPrivate
 // ----------------------------------------------------------------------------
 CReporterDaemonMonitorPrivate::CReporterDaemonMonitorPrivate() :
-  autoDelete(false), autoDeleteMaxSimilarCores(0),
+  autoDeleteMaxSimilarCores(0),
   crashNotification(new CReporterNotification(
           CReporter::AutoUploaderNotificationEventType,
           CReporterSavedState::instance()->crashNotificationId(), this)),
@@ -207,7 +207,8 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
 
     /* Check for duplicates if auto-deleting is enabled. If Maximum number
      * of duplicates is exceeded, delete the file. */
-    if (!isUserTerminated && autoDelete && checkForDuplicates(filePath)) {
+    if (!isUserTerminated && settings.autoDeleteDuplicates() &&
+        checkForDuplicates(filePath)) {
         if (settings.notificationsEnabled()) {
             CReporterNotification *notification =
                     new CReporterNotification(
@@ -410,22 +411,6 @@ CReporterDaemonMonitor::~CReporterDaemonMonitor()
 
 	delete d_ptr;
     d_ptr = 0;
-}
-
-// ----------------------------------------------------------------------------
-// CReporterDaemonMonitor::autoDeleteEnabled
-// ----------------------------------------------------------------------------
-bool CReporterDaemonMonitor::autoDeleteEnabled()
-{
-    return d_ptr->autoDelete;
-}
-
-// ----------------------------------------------------------------------------
-// CReporterDaemonMonitor::setAutoDelete
-// ----------------------------------------------------------------------------
-void CReporterDaemonMonitor::setAutoDelete(bool state)
-{
-    d_ptr->autoDelete = state;
 }
 
 // ----------------------------------------------------------------------------

@@ -118,7 +118,6 @@ bool CReporterDaemon::initiateDaemon()
             new CReporterSettingsObserver(filename, this);
 
     settingsObserver->addWatcher(Settings::ValueNotifications);
-    settingsObserver->addWatcher(Settings::ValueAutoDeleteDuplicates);
 
     connect(settingsObserver, SIGNAL(valueChanged(QString,QVariant)),
             this, SLOT(settingValueChanged(QString,QVariant)));
@@ -181,7 +180,6 @@ void CReporterDaemon::startCoreMonitoring(const bool fromDBus)
             CReporterPrivacySettingsModel::instance()->setNotificationsEnabled(true);
             CReporterPrivacySettingsModel::instance()->writeSettings();
         }
-        d->monitor->setAutoDelete(CReporterPrivacySettingsModel::instance()->autoDeleteDuplicates());
         d->monitor->setAutoDeleteMaxSimilarCores(
                 CReporterPrivacySettingsModel::instance()->autoDeleteMaxSimilarCores());
     }
@@ -233,13 +231,6 @@ void CReporterDaemon::settingValueChanged(const QString &key, const QVariant &va
         else if (!CReporterPrivacySettingsModel::instance()->automaticSendingEnabled())
         {
             stopCoreMonitoring();
-        }
-    }
-    else if (key == Settings::ValueAutoDeleteDuplicates)
-    {
-        if (d_ptr->monitor)
-        {
-            d_ptr->monitor->setAutoDelete(value.toBool());
         }
     }
 }
