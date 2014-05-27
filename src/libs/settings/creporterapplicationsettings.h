@@ -70,25 +70,6 @@ namespace Logging {
     const QString ValueLoggerType = "Logging/logger_type";
 }
 
-
-/*!
-  * @namespace DefaultApplicationSettings
-  * @brief Default settings for application. Used as a fallback, if reguested setting is not found.
-  *
-  */
-namespace DefaultApplicationSettings {
-    const QString ValueUsernameDefault = "nitrouser";
-    const QString ValuePasswordDefault = "uwbJCi4fh";
-    const QString ValueServerAddressDefault = "https://crashes.projects.maemo.org";
-    const int ValueServerPortDefault = 8080;
-    const QString ValueServerPathDefault = "/nitro";
-    const bool ValueUseSslDefault = false;
-    const bool ValueUseProxyDefault = false;
-    const QString ValueProxyAddressDefault = "";
-    const QString ValueProxyPortDefault = "";
-    const bool ValueLoggerTypeDefault = "none";
-}
-
 /*!
   * @class CReporterApplicationSettings
   * @brief This a singleton class for reading and writing crash-reporter application settings.

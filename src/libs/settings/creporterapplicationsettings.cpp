@@ -107,7 +107,7 @@ CReporterApplicationSettings::~CReporterApplicationSettings()
 QString CReporterApplicationSettings::serverUrl() const
 {
     return value(Server::ValueServerAddress,
-            DefaultApplicationSettings::ValueServerAddressDefault).toString();
+            QStringLiteral("https://crashes.projects.maemo.org")).toString();
 }
 
 void CReporterApplicationSettings::setServerUrl(const QString &url)
@@ -120,8 +120,7 @@ int CReporterApplicationSettings::serverPort() const
 {
     const Q_D(CReporterApplicationSettings);
 
-    return d->intValue(Server::ValueServerPort,
-            DefaultApplicationSettings::ValueServerPortDefault);
+    return d->intValue(Server::ValueServerPort, 8080);
 }
 
 void CReporterApplicationSettings::setServerPort(int port)
@@ -132,8 +131,7 @@ void CReporterApplicationSettings::setServerPort(int port)
 
 QString CReporterApplicationSettings::serverPath() const
 {
-    return value(Server::ValueServerPath,
-            DefaultApplicationSettings::ValueServerPathDefault).toString();
+    return value(Server::ValueServerPath, QStringLiteral("/nitro")).toString();
 }
 
 void CReporterApplicationSettings::setServerPath(const QString &path)
@@ -144,8 +142,7 @@ void CReporterApplicationSettings::setServerPath(const QString &path)
 
 bool CReporterApplicationSettings::useSsl() const
 {
-    return value(Server::ValueUseSsl,
-            DefaultApplicationSettings::ValueUseSslDefault).toBool();
+    return value(Server::ValueUseSsl, false).toBool();
 }
 
 void CReporterApplicationSettings::setUseSsl(bool state)
@@ -156,8 +153,7 @@ void CReporterApplicationSettings::setUseSsl(bool state)
 
 QString CReporterApplicationSettings::username() const
 {
-    return value(Server::ValueUsername,
-            DefaultApplicationSettings::ValueUsernameDefault).toString();
+    return value(Server::ValueUsername, QStringLiteral("nitrouser")).toString();
 }
 
 void CReporterApplicationSettings::setUsername(const QString &username)
@@ -168,8 +164,7 @@ void CReporterApplicationSettings::setUsername(const QString &username)
 
 QString CReporterApplicationSettings::password() const
 {
-    return value(Server::ValuePassword,
-            DefaultApplicationSettings::ValuePasswordDefault).toString();
+    return value(Server::ValuePassword, QStringLiteral("uwbJCi4fh")).toString();
 }
 
 void CReporterApplicationSettings::setPassword(const QString &password)
@@ -180,8 +175,7 @@ void CReporterApplicationSettings::setPassword(const QString &password)
 
 bool CReporterApplicationSettings::useProxy() const
 {
-    return value(Server::ValueUseProxy,
-            DefaultApplicationSettings::ValueUseProxyDefault).toBool();
+    return value(Server::ValueUseProxy, false).toBool();
 }
 
 void CReporterApplicationSettings::setUseProxy(bool state)
@@ -192,8 +186,7 @@ void CReporterApplicationSettings::setUseProxy(bool state)
 
 QString CReporterApplicationSettings::proxyUrl() const
 {
-    return value(Proxy::ValueProxyAddress,
-            DefaultApplicationSettings::ValueProxyAddressDefault).toString();
+    return value(Proxy::ValueProxyAddress, QStringLiteral("")).toString();
 }
 
 void CReporterApplicationSettings::setProxyUrl(const QString &url)
@@ -206,8 +199,7 @@ int CReporterApplicationSettings::proxyPort() const
 {
     const Q_D(CReporterApplicationSettings);
 
-    return d->intValue(Proxy::ValueProxyPort,
-            DefaultApplicationSettings::ValueProxyPortDefault);
+    return d->intValue(Proxy::ValueProxyPort, 0);
 }
 
 void CReporterApplicationSettings::setProxyPort(int port)
@@ -218,8 +210,7 @@ void CReporterApplicationSettings::setProxyPort(int port)
 
 QString CReporterApplicationSettings::loggerType() const
 {
-    return value(Logging::ValueLoggerType,
-            DefaultApplicationSettings::ValueLoggerTypeDefault).toString();
+    return value(Logging::ValueLoggerType, "none").toString();
 }
 
 void CReporterApplicationSettings::setLoggerType(const QString &type)
