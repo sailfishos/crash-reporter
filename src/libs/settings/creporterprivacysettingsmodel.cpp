@@ -240,7 +240,8 @@ void CReporterPrivacySettingsModel::setAutoDeleteMaxSimilarCores(int value)
 // ----------------------------------------------------------------------------
 void CReporterPrivacySettingsModel::setAutomaticSendingEnabled(bool value)
 {
-    setValue(Settings::ValueAutomaticSending, QVariant(value));
+    if (setValue(Settings::ValueAutomaticSending, QVariant(value)))
+        emit automaticSendingEnabledChanged();
 }
 
 // ----------------------------------------------------------------------------

@@ -331,6 +331,7 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
         void enduranceEnabledChanged();
         void notificationsEnabledChanged();
         void autoDeleteDuplicatesChanged();
+        void automaticSendingEnabledChanged();
         void includeStackTraceChanged();
         void downloadDebuginfoChanged();
         void privacyNoticeAcceptedChanged();
