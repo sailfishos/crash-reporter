@@ -18,7 +18,6 @@ BuildRequires:          qt5-qtdbus-devel
 BuildRequires:          qt5-qtdeclarative-devel
 BuildRequires:          qt5-qtgui-devel
 BuildRequires:          qt5-qtnetwork-devel
-BuildRequires:          qt5-qttest-devel
 BuildRequires:          qt5-qttools-linguist
 BuildRequires:          qt5-qtxml-devel
 BuildRequires:          ssu-devel
@@ -64,12 +63,6 @@ Group:                  Development/Libraries
 Requires:               libcrash-reporter0 = %{version}-%{release}
 %description -n         libcrash-reporter0-devel
 Development headers and libraries for crash-reporter.
-
-%package                tests
-Summary:                Tests for crash-reporter
-Requires:               %{name} = %{version}-%{release}
-%description            tests
-Test binaries for testing Crash Reporter.
 
 %prep
 %setup -q -n %{name}-%{version}
@@ -118,11 +111,6 @@ make %{?jobs:-j%jobs}
 /usr/include/crash-reporter/*.h
 /usr/lib/*.so
 /usr/lib/pkgconfig/*.pc
-
-%files tests
-%defattr(-,root,root,-)
-/usr/lib/crash-reporter-tests/*
-/usr/share/crash-reporter-tests/*
 
 %post
 # Remove timer unit symlink potentially left by old installation.
