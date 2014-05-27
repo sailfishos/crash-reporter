@@ -202,10 +202,13 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
 
     emit q_ptr->richCoreNotify(filePath);
 
+    CReporterPrivacySettingsModel &settings =
+            *CReporterPrivacySettingsModel::instance();
+
     /* Check for duplicates if auto-deleting is enabled. If Maximum number
      * of duplicates is exceeded, delete the file. */
     if (!isUserTerminated && autoDelete && checkForDuplicates(filePath)) {
-        if (CReporterPrivacySettingsModel::instance()->notificationsEnabled()) {
+        if (settings.notificationsEnabled()) {
             CReporterNotification *notification =
                     new CReporterNotification(
                             CReporter::ApplicationNotificationEventType,
@@ -223,14 +226,14 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
         return;
     }
 
-    if (!CReporterPrivacySettingsModel::instance()->automaticSendingEnabled()) {
+    if (!settings.automaticSendingEnabled()) {
         /* TODO: Here multiple-choice notification should be displayed
          * with options to send or delete the crash report. So far
          * disabling auto upload is not possible in the UI and we never
          * get here. Standard Sailfish notifications don't support multiple
          * actions so far. */
     } else {
-        if (CReporterPrivacySettingsModel::instance()->notificationsEnabled()) {
+        if (settings.notificationsEnabled()) {
 
             QString body;
             QString summary;
