@@ -42,17 +42,17 @@
  * application settings. */
 namespace Settings {
     //! When true, rich-core dumps are produced.
-    const QString ValueCoreDumping("Settings/coredumping");
+    const QString CoreDumping("Settings/coredumping");
     //! When true, user notifications are displayed.
-    const QString ValueNotifications("Settings/notifications");
+    const QString Notifications("Settings/notifications");
     //! When true, duplicate rich cores are deleted automatically.
-    const QString ValueAutoDeleteDuplicates("Settings/avoid-dups");
+    const QString AutoDeleteDuplicates("Settings/avoid-dups");
     //! Stores how many similar core dumps are kept when avoid-dups is enabled.
-    const QString ValueAutoDeleteMaxSimilarCores("Settings/maxsimilarcores");
+    const QString AutoDeleteMaxSimilarCores("Settings/maxsimilarcores");
     //! When true, crash-reporter tries to upload rich-core dumps automatically.
-    const QString ValueAutomaticSending("Settings/automaticsending");
+    const QString AutomaticSending("Settings/automaticsending");
     //! True when user has accepted crash reporter's privacy notice.
-    const QString ValueNoticeAccepted("Settings/privacy-notice-accepted");
+    const QString NoticeAccepted("Settings/privacy-notice-accepted");
 }
 
 /*!
@@ -60,23 +60,23 @@ namespace Settings {
  */
 namespace Privacy {
     //! If set to true, core dump is included in the crash report.
-    const QString ValueIncludeCore("Privacy/INCLUDE_CORE");
+    const QString IncludeCore("Privacy/INCLUDE_CORE");
     //! If set to true, syslog is included in the crash reporter.
-    const QString ValueIncludeSysLog("Privacy/INCLUDE_SYSLOG");
+    const QString IncludeSysLog("Privacy/INCLUDE_SYSLOG");
     //! If set to true, package list is included in the crash reporter.
-    const QString ValueIncludePkgList("Privacy/INCLUDE_PKGLIST");
+    const QString IncludePkgList("Privacy/INCLUDE_PKGLIST");
     //! If set to true, stack trace is included in the crash report.
-    const QString ValueIncludeStackTrace("Privacy/INCLUDE_STACK_TRACE");
+    const QString IncludeStackTrace("Privacy/INCLUDE_STACK_TRACE");
     /*!
      * If set to true, core dump size is reduced before it's included in
      * the crash reporter.
      */
-    const QString ValueReduceCore("Privacy/REDUCE_CORE");
+    const QString ReduceCore("Privacy/REDUCE_CORE");
     /*!
      * If set to true, rich-core-dumper will attempt to download missing debug
      * symbols before generating a stack trace.
      */
-    const QString ValueDownloadDebuginfo("Privacy/DOWNLOAD_DEBUGINFO");
+    const QString DownloadDebuginfo("Privacy/DOWNLOAD_DEBUGINFO");
 }
 
 CReporterPrivacySettingsModel* CReporterPrivacySettingsModel::sm_Instance = 0;
@@ -135,7 +135,7 @@ CReporterPrivacySettingsModel::~CReporterPrivacySettingsModel()
 // ----------------------------------------------------------------------------
 bool CReporterPrivacySettingsModel::coreDumpingEnabled() const
 {
-    return value(Settings::ValueCoreDumping, QVariant(true)).toBool();
+    return value(Settings::CoreDumping, QVariant(true)).toBool();
 }
 
 QString CReporterPrivacySettingsModel::enduranceCollectMark()
@@ -154,7 +154,7 @@ bool CReporterPrivacySettingsModel::enduranceEnabled() const
 // ----------------------------------------------------------------------------
 bool CReporterPrivacySettingsModel::notificationsEnabled() const
 {
-    return value(Settings::ValueNotifications, QVariant(true)).toBool();
+    return value(Settings::Notifications, QVariant(true)).toBool();
 }
 
 // ----------------------------------------------------------------------------
@@ -162,7 +162,7 @@ bool CReporterPrivacySettingsModel::notificationsEnabled() const
 // ----------------------------------------------------------------------------
 bool CReporterPrivacySettingsModel::autoDeleteDuplicates() const
 {
-    return value(Settings::ValueAutoDeleteDuplicates, QVariant(true)).toBool();
+    return value(Settings::AutoDeleteDuplicates, QVariant(true)).toBool();
 }
 
 // ----------------------------------------------------------------------------
@@ -170,7 +170,7 @@ bool CReporterPrivacySettingsModel::autoDeleteDuplicates() const
 // ----------------------------------------------------------------------------
 int CReporterPrivacySettingsModel::autoDeleteMaxSimilarCores() const
 {
-    return value(Settings::ValueAutoDeleteMaxSimilarCores, QVariant(5)).toInt();
+    return value(Settings::AutoDeleteMaxSimilarCores, QVariant(5)).toInt();
 }
 
 // ----------------------------------------------------------------------------
@@ -178,7 +178,7 @@ int CReporterPrivacySettingsModel::autoDeleteMaxSimilarCores() const
 // ----------------------------------------------------------------------------
 bool CReporterPrivacySettingsModel::automaticSendingEnabled() const
 {
-    return value(Settings::ValueAutomaticSending, QVariant(true)).toBool();
+    return value(Settings::AutomaticSending, QVariant(true)).toBool();
 }
 
 // ----------------------------------------------------------------------------
@@ -186,7 +186,7 @@ bool CReporterPrivacySettingsModel::automaticSendingEnabled() const
 // ----------------------------------------------------------------------------
 bool CReporterPrivacySettingsModel::includeCore() const
 {
-    return value(Privacy::ValueIncludeCore, QVariant(true)).toBool();
+    return value(Privacy::IncludeCore, QVariant(true)).toBool();
 }
 
 // ----------------------------------------------------------------------------
@@ -194,7 +194,7 @@ bool CReporterPrivacySettingsModel::includeCore() const
 // ----------------------------------------------------------------------------
 bool CReporterPrivacySettingsModel::includeSystemLog() const
 {
-    return value(Privacy::ValueIncludeSysLog, QVariant(true)).toBool();
+    return value(Privacy::IncludeSysLog, QVariant(true)).toBool();
 }
 
 // ----------------------------------------------------------------------------
@@ -202,22 +202,22 @@ bool CReporterPrivacySettingsModel::includeSystemLog() const
 // ----------------------------------------------------------------------------
 bool CReporterPrivacySettingsModel::includePackageList() const
 {
-    return value(Privacy::ValueIncludePkgList, QVariant(true)).toBool();
+    return value(Privacy::IncludePkgList, QVariant(true)).toBool();
 }
 
 bool CReporterPrivacySettingsModel::includeStackTrace() const
 {
-    return value(Privacy::ValueIncludeStackTrace, QVariant(false)).toBool();
+    return value(Privacy::IncludeStackTrace, QVariant(false)).toBool();
 }
 
 bool CReporterPrivacySettingsModel::downloadDebuginfo() const
 {
-    return value(Privacy::ValueDownloadDebuginfo, QVariant(false)).toBool();
+    return value(Privacy::DownloadDebuginfo, QVariant(false)).toBool();
 }
 
 bool CReporterPrivacySettingsModel::privacyNoticeAccepted() const
 {
-    return value(Settings::ValueNoticeAccepted, QVariant(false)).toBool();
+    return value(Settings::NoticeAccepted, QVariant(false)).toBool();
 }
 
 // ----------------------------------------------------------------------------
@@ -225,7 +225,7 @@ bool CReporterPrivacySettingsModel::privacyNoticeAccepted() const
 // ----------------------------------------------------------------------------
 bool CReporterPrivacySettingsModel::reduceCore() const
 {
-    return value(Privacy::ValueReduceCore, QVariant(true)).toBool();
+    return value(Privacy::ReduceCore, QVariant(true)).toBool();
 }
 
 // ----------------------------------------------------------------------------
@@ -233,7 +233,7 @@ bool CReporterPrivacySettingsModel::reduceCore() const
 // ----------------------------------------------------------------------------
 void CReporterPrivacySettingsModel::setCoreDumpingEnabled(bool value)
 {
-    if (setValue(Settings::ValueCoreDumping, QVariant(value)))
+    if (setValue(Settings::CoreDumping, QVariant(value)))
         emit coreDumpingEnabledChanged();
 }
 
@@ -254,7 +254,7 @@ void CReporterPrivacySettingsModel::setEnduranceEnabled(bool value)
 
 void CReporterPrivacySettingsModel::setNotificationsEnabled(bool value)
 {
-    if (setValue(Settings::ValueNotifications, QVariant(value)))
+    if (setValue(Settings::Notifications, QVariant(value)))
         emit notificationsEnabledChanged();
 }
 
@@ -263,7 +263,7 @@ void CReporterPrivacySettingsModel::setNotificationsEnabled(bool value)
 // ----------------------------------------------------------------------------
 void CReporterPrivacySettingsModel::setAutoDeleteDuplicates(bool value)
 {
-    if (setValue(Settings::ValueAutoDeleteDuplicates, QVariant(value)))
+    if (setValue(Settings::AutoDeleteDuplicates, QVariant(value)))
         emit autoDeleteDuplicatesChanged();
 }
 
@@ -272,7 +272,7 @@ void CReporterPrivacySettingsModel::setAutoDeleteDuplicates(bool value)
 // ----------------------------------------------------------------------------
 void CReporterPrivacySettingsModel::setAutoDeleteMaxSimilarCores(int value)
 {
-    setValue(Settings::ValueAutoDeleteMaxSimilarCores, QVariant(value));
+    setValue(Settings::AutoDeleteMaxSimilarCores, QVariant(value));
 }
 
 // ----------------------------------------------------------------------------
@@ -280,7 +280,7 @@ void CReporterPrivacySettingsModel::setAutoDeleteMaxSimilarCores(int value)
 // ----------------------------------------------------------------------------
 void CReporterPrivacySettingsModel::setAutomaticSendingEnabled(bool value)
 {
-    if (setValue(Settings::ValueAutomaticSending, QVariant(value)))
+    if (setValue(Settings::AutomaticSending, QVariant(value)))
         emit automaticSendingEnabledChanged();
 }
 
@@ -289,7 +289,7 @@ void CReporterPrivacySettingsModel::setAutomaticSendingEnabled(bool value)
 // ----------------------------------------------------------------------------
 void CReporterPrivacySettingsModel::setIncludeCore(bool value)
 {
-   setValue(Privacy::ValueIncludeCore, QVariant(value));
+   setValue(Privacy::IncludeCore, QVariant(value));
 }
 
 // ----------------------------------------------------------------------------
@@ -297,7 +297,7 @@ void CReporterPrivacySettingsModel::setIncludeCore(bool value)
 // ----------------------------------------------------------------------------
 void CReporterPrivacySettingsModel::setIncludeSystemLog(bool value)
 {
-   setValue(Privacy::ValueIncludeSysLog, QVariant(value));
+   setValue(Privacy::IncludeSysLog, QVariant(value));
 }
 
 // ----------------------------------------------------------------------------
@@ -305,24 +305,24 @@ void CReporterPrivacySettingsModel::setIncludeSystemLog(bool value)
 // ----------------------------------------------------------------------------
 void CReporterPrivacySettingsModel::setIncludePackageList(bool value)
 {
-   setValue(Privacy::ValueIncludePkgList, QVariant(value));
+   setValue(Privacy::IncludePkgList, QVariant(value));
 }
 
 void CReporterPrivacySettingsModel::setIncludeStackTrace(bool value)
 {
-    if (setValue(Privacy::ValueIncludeStackTrace, QVariant(value)))
+    if (setValue(Privacy::IncludeStackTrace, QVariant(value)))
         emit includeStackTraceChanged();
 }
 
 void CReporterPrivacySettingsModel::setDownloadDebuginfo(bool value)
 {
-    if (setValue(Privacy::ValueDownloadDebuginfo, QVariant(value)))
+    if (setValue(Privacy::DownloadDebuginfo, QVariant(value)))
         emit downloadDebuginfoChanged();
 }
 
 void CReporterPrivacySettingsModel::setPrivacyNoticeAccepted(bool value)
 {
-    if (setValue(Settings::ValueNoticeAccepted, QVariant(value)))
+    if (setValue(Settings::NoticeAccepted, QVariant(value)))
         emit privacyNoticeAcceptedChanged();
 }
 
@@ -331,7 +331,7 @@ void CReporterPrivacySettingsModel::setPrivacyNoticeAccepted(bool value)
 // ----------------------------------------------------------------------------
 void CReporterPrivacySettingsModel::setReduceCore(bool value)
 {
-    setValue(Privacy::ValueReduceCore, QVariant(value));
+    setValue(Privacy::ReduceCore, QVariant(value));
 }
 
 // End of file.
