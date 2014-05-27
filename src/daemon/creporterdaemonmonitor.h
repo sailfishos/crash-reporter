@@ -92,21 +92,7 @@ class CReporterDaemonMonitor : public QObject
           */
         void setAutoDeleteMaxSimilarCores(int value);
 
-        /*!
-          * @brief Returns auto-upload property.
-          *
-          * @return True, if enabled; otherwise false.
-          */
-        bool autoUploadEnabled();
-
-        /*!
-          * @brief Sets auto-upload property.
-          *
-          * @param status True or False.
-          */
-        void setAutoUpload(bool state);
-
-Q_SIGNALS:
+signals:
         /*!
           * @brief Sent, when new rich-core dump is found.
           *

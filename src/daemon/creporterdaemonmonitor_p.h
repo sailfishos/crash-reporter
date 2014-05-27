@@ -151,8 +151,6 @@ class CReporterDaemonMonitorPrivate : public QObject
         bool autoDelete;
         //! @arg Number of similar cores to keep when auto-delete is enabled
         int autoDeleteMaxSimilarCores;
-        //! @arg State of auto-upload feature (enabled/ disabled).
-        bool autoUpload;
 
         Q_DECLARE_PUBLIC(CReporterDaemonMonitor)
         //! @arg Pointer to public class.
@@ -174,6 +172,9 @@ class CReporterDaemonMonitorPrivate : public QObject
          * @return @c true if duplicate was found, otherwise @c false.
          */
         bool checkForDuplicates(const QString &path);
+
+private slots:
+    void onSetAutoUploadChanged();
 };
 
 #endif // CREPORTERDAEMONMONITOR_P_H

@@ -94,7 +94,7 @@ bool CReporterHandledRichCore::operator==(const CReporterHandledRichCore &other)
 // CReporterDaemonMonitorPrivate::CReporterDaemonMonitorPrivate
 // ----------------------------------------------------------------------------
 CReporterDaemonMonitorPrivate::CReporterDaemonMonitorPrivate() :
-  autoDelete(false), autoDeleteMaxSimilarCores(0), autoUpload(false),
+  autoDelete(false), autoDeleteMaxSimilarCores(0),
   crashNotification(new CReporterNotification(
           CReporter::AutoUploaderNotificationEventType,
           CReporterSavedState::instance()->crashNotificationId(), this)),
@@ -102,6 +102,10 @@ CReporterDaemonMonitorPrivate::CReporterDaemonMonitorPrivate() :
 {
     connect(crashNotification, &CReporterNotification::timeouted,
             this, &CReporterDaemonMonitorPrivate::resetCrashCount);
+
+    connect(CReporterPrivacySettingsModel::instance(),
+            &CReporterPrivacySettingsModel::automaticSendingEnabledChanged,
+            this, &CReporterDaemonMonitorPrivate::onSetAutoUploadChanged);
 }
 
 // ----------------------------------------------------------------------------
@@ -219,7 +223,7 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
         return;
     }
 
-    if (!autoUpload) {
+    if (!CReporterPrivacySettingsModel::instance()->automaticSendingEnabled()) {
         /* TODO: Here multiple-choice notification should be displayed
          * with options to send or delete the crash report. So far
          * disabling auto upload is not possible in the UI and we never
@@ -370,6 +374,21 @@ void CReporterDaemonMonitorPrivate::resetCrashCount()
     qDebug() << __PRETTY_FUNCTION__ << "Crash counter was reset.";
 }
 
+void CReporterDaemonMonitorPrivate::onSetAutoUploadChanged()
+{
+    if (CReporterPrivacySettingsModel::instance()->automaticSendingEnabled()) {
+        return;
+    }
+
+    qDebug() << __PRETTY_FUNCTION__
+             << "Calling quit() on crash-reporter-autouploader.";
+
+    ComNokiaCrashReporterAutoUploaderInterface proxy(CReporter::AutoUploaderServiceName,
+            CReporter::AutoUploaderObjectPath, QDBusConnection::sessionBus());
+
+    proxy.quit();
+}
+
 CReporterDaemonMonitor::CReporterDaemonMonitor(QObject *parent):
   QObject(parent), d_ptr(new CReporterDaemonMonitorPrivate())
 {
@@ -421,29 +440,3 @@ void CReporterDaemonMonitor::setAutoDeleteMaxSimilarCores(int value)
 {
     d_ptr->autoDeleteMaxSimilarCores = value;
 }
-
-// ----------------------------------------------------------------------------
-// CReporterDaemonMonitor::autoUploadEnabled
-// ----------------------------------------------------------------------------
-bool CReporterDaemonMonitor::autoUploadEnabled()
-{
-    return d_ptr->autoUpload;
-}
-
-// ----------------------------------------------------------------------------
-// CReporterDaemonMonitor::setAutoUpload
-// ----------------------------------------------------------------------------
-void CReporterDaemonMonitor::setAutoUpload(bool state)
-{
-    d_ptr->autoUpload = state;
-    if (!state)
-    {
-        qDebug() << __PRETTY_FUNCTION__ << "Calling quit() on Auto Uploader.";
-        ComNokiaCrashReporterAutoUploaderInterface proxy(CReporter::AutoUploaderServiceName,
-                CReporter::AutoUploaderObjectPath, QDBusConnection::sessionBus());
-
-        proxy.quit();
-    }
-}
-
-// End of file.

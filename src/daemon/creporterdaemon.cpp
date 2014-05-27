@@ -118,7 +118,6 @@ bool CReporterDaemon::initiateDaemon()
             new CReporterSettingsObserver(filename, this);
 
     settingsObserver->addWatcher(Settings::ValueNotifications);
-    settingsObserver->addWatcher(Settings::ValueAutomaticSending);
     settingsObserver->addWatcher(Settings::ValueAutoDeleteDuplicates);
 
     connect(settingsObserver, SIGNAL(valueChanged(QString,QVariant)),
@@ -185,7 +184,6 @@ void CReporterDaemon::startCoreMonitoring(const bool fromDBus)
         d->monitor->setAutoDelete(CReporterPrivacySettingsModel::instance()->autoDeleteDuplicates());
         d->monitor->setAutoDeleteMaxSimilarCores(
                 CReporterPrivacySettingsModel::instance()->autoDeleteMaxSimilarCores());
-        d->monitor->setAutoUpload(CReporterPrivacySettingsModel::instance()->automaticSendingEnabled());
     }
 }
 
@@ -226,22 +224,14 @@ QStringList CReporterDaemon::collectAllCoreFiles()
 void CReporterDaemon::settingValueChanged(const QString &key, const QVariant &value)
 {
     qDebug() << __PRETTY_FUNCTION__ << "Setting:" << key << "has changed; value:" << value;
-    if (key == Settings::ValueNotifications || key == Settings::ValueAutomaticSending)
+    if (key == Settings::ValueNotifications)
     {
         if (value.toBool())
         {
             startCoreMonitoring();
         }
-        else if (!CReporterPrivacySettingsModel::instance()->notificationsEnabled()
-               && !CReporterPrivacySettingsModel::instance()->automaticSendingEnabled())
+        else if (!CReporterPrivacySettingsModel::instance()->automaticSendingEnabled())
         {
-            if (key == Settings::ValueAutomaticSending)
-            {
-                if (d_ptr->monitor)
-                {
-                    d_ptr->monitor->setAutoUpload(value.toBool());
-                }
-            }
             stopCoreMonitoring();
         }
     }
@@ -250,14 +240,6 @@ void CReporterDaemon::settingValueChanged(const QString &key, const QVariant &va
         if (d_ptr->monitor)
         {
             d_ptr->monitor->setAutoDelete(value.toBool());
-        }
-    }
-
-    if (key == Settings::ValueAutomaticSending)
-    {
-        if (d_ptr->monitor)
-        {
-            d_ptr->monitor->setAutoUpload(value.toBool());
         }
     }
 }
