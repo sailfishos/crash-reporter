@@ -50,6 +50,7 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
     Q_PROPERTY(bool includeStackTrace READ includeStackTrace WRITE setIncludeStackTrace NOTIFY includeStackTraceChanged)
     Q_PROPERTY(bool downloadDebuginfo READ downloadDebuginfo WRITE setDownloadDebuginfo NOTIFY downloadDebuginfoChanged)
     Q_PROPERTY(bool privacyNoticeAccepted READ privacyNoticeAccepted WRITE setPrivacyNoticeAccepted NOTIFY privacyNoticeAcceptedChanged)
+    Q_PROPERTY(bool allowMobileData READ allowMobileData WRITE setAllowMobileData NOTIFY allowMobileDataChanged)
 
     public:
        /*!
@@ -182,6 +183,13 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
          */
         bool privacyNoticeAccepted() const;
 
+        /*!
+         * Checks whether data transfers through a mobile network are allowed.
+         *
+         * @return @c true if mobile data usage is allowed; otherwise false.
+         */
+        bool allowMobileData() const;
+
           /*!
           * @brief Enables or disables core dumping.
           *
@@ -277,6 +285,13 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
         void setPrivacyNoticeAccepted(bool value);
 
         /*!
+         * Allows or disables data transfers through a mobile network.
+         *
+         * @param value @c true to allow mobile data; @c false to block.
+         */
+        void setAllowMobileData(bool value);
+
+        /*!
           * @brief Enables or disables core-dump size shrinking.
           *
           * @note This setting used by the rich-core.
@@ -293,6 +308,7 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
         void includeStackTraceChanged();
         void downloadDebuginfoChanged();
         void privacyNoticeAcceptedChanged();
+        void allowMobileDataChanged();
 
     protected:
         CReporterPrivacySettingsModel();

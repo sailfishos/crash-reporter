@@ -53,6 +53,8 @@ namespace Settings {
     const QString AutomaticSending("Settings/automaticsending");
     //! True when user has accepted crash reporter's privacy notice.
     const QString NoticeAccepted("Settings/privacy-notice-accepted");
+    //! When true, crash-reporter can use mobile connection for data transfers.
+    const QString AllowMobileData("Settings/allow-mobile-data");
 }
 
 /*!
@@ -220,6 +222,11 @@ bool CReporterPrivacySettingsModel::privacyNoticeAccepted() const
     return value(Settings::NoticeAccepted, QVariant(false)).toBool();
 }
 
+bool CReporterPrivacySettingsModel::allowMobileData() const
+{
+    return value(Settings::AllowMobileData, QVariant(false)).toBool();
+}
+
 // ----------------------------------------------------------------------------
 // CReporterPrivacySettingsModel::reduceCore
 // ----------------------------------------------------------------------------
@@ -326,9 +333,12 @@ void CReporterPrivacySettingsModel::setPrivacyNoticeAccepted(bool value)
         emit privacyNoticeAcceptedChanged();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::setReduceCore
-// ----------------------------------------------------------------------------
+void CReporterPrivacySettingsModel::setAllowMobileData(bool value)
+{
+    if (setValue(Settings::AllowMobileData, QVariant(value)))
+        emit allowMobileDataChanged();
+}
+
 void CReporterPrivacySettingsModel::setReduceCore(bool value)
 {
     setValue(Privacy::ReduceCore, QVariant(value));
