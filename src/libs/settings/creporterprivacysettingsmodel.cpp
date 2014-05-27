@@ -38,7 +38,47 @@
 #include "creporternamespace.h"
 #include "../coredir/creportercoreregistry.h"
 
-// Pointer to this class.
+/* TODO: move what doesn't have to be shared with rich-core-dumper to
+ * application settings. */
+namespace Settings {
+    //! When true, rich-core dumps are produced.
+    const QString ValueCoreDumping("Settings/coredumping");
+    //! When true, user notifications are displayed.
+    const QString ValueNotifications("Settings/notifications");
+    //! When true, duplicate rich cores are deleted automatically.
+    const QString ValueAutoDeleteDuplicates("Settings/avoid-dups");
+    //! Stores how many similar core dumps are kept when avoid-dups is enabled.
+    const QString ValueAutoDeleteMaxSimilarCores("Settings/maxsimilarcores");
+    //! When true, crash-reporter tries to upload rich-core dumps automatically.
+    const QString ValueAutomaticSending("Settings/automaticsending");
+    //! True when user has accepted crash reporter's privacy notice.
+    const QString ValueNoticeAccepted("Settings/privacy-notice-accepted");
+}
+
+/*!
+ * Settings affecting what information is included in the crash reports.
+ */
+namespace Privacy {
+    //! If set to true, core dump is included in the crash report.
+    const QString ValueIncludeCore("Privacy/INCLUDE_CORE");
+    //! If set to true, syslog is included in the crash reporter.
+    const QString ValueIncludeSysLog("Privacy/INCLUDE_SYSLOG");
+    //! If set to true, package list is included in the crash reporter.
+    const QString ValueIncludePkgList("Privacy/INCLUDE_PKGLIST");
+    //! If set to true, stack trace is included in the crash report.
+    const QString ValueIncludeStackTrace("Privacy/INCLUDE_STACK_TRACE");
+    /*!
+     * If set to true, core dump size is reduced before it's included in
+     * the crash reporter.
+     */
+    const QString ValueReduceCore("Privacy/REDUCE_CORE");
+    /*!
+     * If set to true, rich-core-dumper will attempt to download missing debug
+     * symbols before generating a stack trace.
+     */
+    const QString ValueDownloadDebuginfo("Privacy/DOWNLOAD_DEBUGINFO");
+}
+
 CReporterPrivacySettingsModel* CReporterPrivacySettingsModel::sm_Instance = 0;
 
 // ======== MEMBER FUNCTIONS ========

@@ -31,48 +31,6 @@
 #include "creportersettingsbase.h"
 
 /*!
-  * @namespace Settings
-  * @brief Settings affecting to application behiour.
-  *
-  */
-namespace Settings
-{
-    //! This setting affects to sp-rich-core. If set to true, rich-core dumps are produced.
-    const QString ValueCoreDumping("Settings/coredumping");
-    //! This setting affects to crash-reporter. If set to true, user notifications are displayed.
-    const QString ValueNotifications("Settings/notifications");
-    //! This setting affects to crash-reporter. If set to true, duplicate rich-core are deleted automatically.
-    const QString ValueAutoDeleteDuplicates("Settings/avoid-dups");
-    //! Number of how many similar core dumps are kept when AutoDeleteDuplicates is enabled
-    const QString ValueAutoDeleteMaxSimilarCores("Settings/maxsimilarcores");
-    //! This setting affects to crash-reporter. If set to true, crash-reporter tries to upload rich-core dumps automatically.
-    const QString ValueAutomaticSending("Settings/automaticsending");
-    //! If set to true, user has accepted crash reporter's privacy notice.
-    const QString ValueNoticeAccepted("Settings/privacy-notice-accepted");
-}
-
-/*!
-  * @namespace Privacy
-  * @brief Settings affecting, what information is included in the crash reports.
-  *
-  */
-namespace Privacy {
-    //! If set to true, core dump is included in the crash report.
-    const QString ValueIncludeCore("Privacy/INCLUDE_CORE");
-     //! If set to true, syslog is included in the crash reporter.
-    const QString ValueIncludeSysLog("Privacy/INCLUDE_SYSLOG");
-     //! If set to true, package list is included in the crash reporter.
-    const QString ValueIncludePkgList("Privacy/INCLUDE_PKGLIST");
-    //! If set to true, stack trace is included in the crash report.
-    const QString ValueIncludeStackTrace("Privacy/INCLUDE_STACK_TRACE");
-     //! If set to true, core dump size is reduced before included in the crash reporter.
-    const QString ValueReduceCore("Privacy/REDUCE_CORE");
-    /*! If set to true, rich-core-dumper will attempt to download missing debug
-     * symbols before generating a stack trace. */
-    const QString ValueDownloadDebuginfo("Privacy/DOWNLOAD_DEBUGINFO");
-}
-
-/*!
   * @class CReporterPrivacySettingsModel
   * @brief This a singleton class which reads and writes crash-reporter privacy settings.
   *
