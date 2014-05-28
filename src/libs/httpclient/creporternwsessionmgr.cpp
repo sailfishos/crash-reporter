@@ -114,8 +114,15 @@ bool CReporterNwSessionMgr::opened() const
     }
 }
 
-bool CReporterNwSessionMgr::unpaidConnectionAvailable()
+bool CReporterNwSessionMgr::canUseNetworkConnection()
 {
+    if (CReporterPrivacySettingsModel::instance()->allowMobileData()) {
+        // We're allowed to use any network connection; go on.
+        return true;
+    }
+
+    // Check that we're not using mobile data.
+
     QNetworkConfigurationManager &manager =
             CReporterNwSessionMgrPrivate::networkManager();
 

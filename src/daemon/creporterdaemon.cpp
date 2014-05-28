@@ -116,7 +116,7 @@ bool CReporterDaemon::initiateDaemon()
         QStringList files = collectAllCoreFiles();
 
         if (!files.isEmpty() &&
-            CReporterNwSessionMgr::unpaidConnectionAvailable() &&
+            CReporterNwSessionMgr::canUseNetworkConnection() &&
             !CReporterUtils::notifyAutoUploader(files))
         {
             qDebug() << __PRETTY_FUNCTION__ << "Failed to add files to the queue.";

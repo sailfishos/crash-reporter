@@ -263,7 +263,7 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
             crashNotification->update(summary.arg(details.at(0)), body,
                     crashCount);
         }
-        if (!CReporterNwSessionMgr::unpaidConnectionAvailable()) {
+        if (!CReporterNwSessionMgr::canUseNetworkConnection()) {
             qDebug() << __PRETTY_FUNCTION__
                      << "WiFi not available, not uploading now.";
         } else {

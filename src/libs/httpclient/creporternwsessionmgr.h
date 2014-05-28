@@ -72,11 +72,12 @@ class CREPORTER_EXPORT CReporterNwSessionMgr : public QObject
         bool opened() const;
 
         /*!
-         * @return True if using the available network connection doesn't carry
-         * any additional charges for data transfers. Generally this is true for
-         * Ethernet or WiFi and false for GPRS, 3G, and the like.
+         * @return True if crash reporter is allowed to use the current network
+         * connection for its data transmissions. For example uploads through
+         * mobile network, which may carry additional charges from the provider,
+         * can be disabled in the settings.
          */
-        static bool unpaidConnectionAvailable();
+        static bool canUseNetworkConnection();
 
 	Q_SIGNALS:
 		/*!

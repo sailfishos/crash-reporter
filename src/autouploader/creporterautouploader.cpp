@@ -128,7 +128,7 @@ bool CReporterAutoUploader::uploadFiles(const QStringList &fileList,
     }
 
     if (obeyNetworkRestrictions &&
-        !CReporterNwSessionMgr::unpaidConnectionAvailable()) {
+        !CReporterNwSessionMgr::canUseNetworkConnection()) {
         qDebug() << __PRETTY_FUNCTION__
                  << "No unpaid network connection available, aborting crash report upload.";
         QTimer::singleShot(0, this, SLOT(quit()));
