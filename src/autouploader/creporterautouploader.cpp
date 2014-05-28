@@ -29,12 +29,10 @@
 
 #include <QDebug>
 #include <QDBusConnection>
-
-// User includes.
+#include <QNetworkConfigurationManager>
 
 #include "creporterautouploader.h"
 #include "creporternamespace.h"
-#include "creporternwsessionmgr.h"
 #include "creportersavedstate.h"
 #include "creporteruploadqueue.h"
 #include "creporteruploaditem.h"
@@ -68,7 +66,37 @@ class CReporterAutoUploaderPrivate
         /*! Notification object giving user a notice of failed uploads.*/
         CReporterNotification *failedNotification;
 
+        bool canUseNetworkConnection();
 };
+
+bool CReporterAutoUploaderPrivate::canUseNetworkConnection()
+{
+    if (CReporterPrivacySettingsModel::instance()->allowMobileData()) {
+        // We're allowed to use any network connection; go on.
+        return true;
+    }
+
+    // Check that we're not using mobile data.
+
+    static QNetworkConfigurationManager manager;
+    manager.updateConfigurations();
+
+    QNetworkConfiguration config(manager.defaultConfiguration());
+
+    qDebug() << "Network configurations available:";
+    foreach(const QNetworkConfiguration& cfg, manager.allConfigurations()) {
+        qDebug() << ' ' << cfg.name() << cfg.bearerTypeName() << cfg.state()
+                 << cfg.identifier();
+    }
+    qDebug() << "Default configuration:" << config.name();
+
+    bool connectionIsActive =
+            (config.state() & QNetworkConfiguration::Active) == QNetworkConfiguration::Active;
+
+    return (config.bearerType() == QNetworkConfiguration::BearerWLAN) ||
+           (config.bearerType() == QNetworkConfiguration::BearerEthernet) ||
+           !connectionIsActive;
+}
 
 CReporterAutoUploader::CReporterAutoUploader() : d_ptr(new CReporterAutoUploaderPrivate)
 {
@@ -115,6 +143,8 @@ CReporterAutoUploader::~CReporterAutoUploader()
 bool CReporterAutoUploader::uploadFiles(const QStringList &fileList,
         bool obeyNetworkRestrictions)
 {
+    Q_D(CReporterAutoUploader);
+
     qDebug() << __PRETTY_FUNCTION__ << "Received a list of files to upload.";
 
     if (fileList.isEmpty())
@@ -127,8 +157,7 @@ bool CReporterAutoUploader::uploadFiles(const QStringList &fileList,
         connect(d_ptr->engine, SIGNAL(finished(int, int, int)), SLOT(engineFinished(int, int, int)));
     }
 
-    if (obeyNetworkRestrictions &&
-        !CReporterNwSessionMgr::canUseNetworkConnection()) {
+    if (obeyNetworkRestrictions && !d->canUseNetworkConnection()) {
         qDebug() << __PRETTY_FUNCTION__
                  << "No unpaid network connection available, aborting crash report upload.";
         QTimer::singleShot(0, this, SLOT(quit()));
