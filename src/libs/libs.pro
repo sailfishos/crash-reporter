@@ -71,7 +71,6 @@ SOURCES += coredir/creportercoredir.cpp \
             settings/creporterprivacysettingsmodel.cpp \
            settings/creportersavedstate.cpp \
             settings/creportersettingsbase.cpp \
-            settings/creportersettingsobserver.cpp \
             settings/creporterapplicationsettings.cpp \
             settings/creportersettingsinit.cpp \
             notification/creporternotification.cpp \
@@ -93,7 +92,6 @@ PUBLIC_HEADERS += creporternamespace.h \
                   settings/creporterprivacysettingsmodel.h \
                   settings/creportersavedstate.h \
                   settings/creportersettingsbase.h \
-                  settings/creportersettingsobserver.h \
                   settings/creporterapplicationsettings.h \
                   notification/creporternotification.h \
                   creporterexport.h \
@@ -105,7 +103,6 @@ HEADERS += $$PUBLIC_HEADERS \
             httpclient/creporterhttpclient_p.h \
             httpclient/creporteruploadengine_p.h \
             settings/creportersettingsbase_p.h \
-            settings/creportersettingsobserver_p.h \
             settings/creportersettingsinit_p.h \
             notification/creporternotification_p.h \
 

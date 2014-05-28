@@ -35,7 +35,6 @@
 #include "creportersavedstate.h"
 #include "creportercoreregistry.h"
 #include "creporterutils.h"
-#include "creportersettingsobserver.h"
 #include "creporternamespace.h"
 #include "creporterprivacysettingsmodel.h"
 #include "creporternotification.h"
@@ -104,15 +103,6 @@ bool CReporterDaemon::initiateDaemon()
         // Read from settings file, if monitor should be started.
         startCoreMonitoring();
     }
-
-    // Create observer to monitor changes in settings.
-    CReporterSettingsObserver *settingsObserver =
-            new CReporterSettingsObserver(filename, this);
-
-    settingsObserver->addWatcher(Settings::ValueNotifications);
-
-    connect(settingsObserver, SIGNAL(valueChanged(QString,QVariant)),
-            this, SLOT(settingValueChanged(QString,QVariant)));
 
 #ifndef CREPORTER_UNIT_TEST
     // Each time daemon is started, we count successful core uploads from zero.
@@ -206,19 +196,6 @@ QStringList CReporterDaemon::collectAllCoreFiles()
     return CReporterCoreRegistry::instance()->collectAllCoreFiles();
 }
 
-// ======== LOCAL FUNCTIONS ========
-
-// ----------------------------------------------------------------------------
-// CReporterDaemon::settingValueChanged
-// ----------------------------------------------------------------------------
-void CReporterDaemon::settingValueChanged(const QString &key, const QVariant &value)
-{
-    qDebug() << __PRETTY_FUNCTION__ << "Setting:" << key << "has changed; value:" << value;
-}
-
-// ----------------------------------------------------------------------------
-//  CReporterDaemon::timerEvent
-// ----------------------------------------------------------------------------
 void CReporterDaemon::timerEvent(QTimerEvent *event)
 {
     Q_D(CReporterDaemon);

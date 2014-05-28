@@ -97,15 +97,7 @@ public Q_SLOTS:
      */
    QStringList collectAllCoreFiles();
 
-private Q_SLOTS:
-    /*!
-      * @brief Called, when setting value has changed.
-      *
-      * @param key Changed setting.
-      * @param value New value.
-      */
-    void settingValueChanged(const QString &key, const QVariant &value);
-
+private slots:
     /*!
       * @brief Called, when timer elapses.
       *
