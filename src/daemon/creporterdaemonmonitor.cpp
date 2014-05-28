@@ -39,7 +39,6 @@
 #include "creporterdaemonmonitor.h"
 #include "creporterdaemonmonitor_p.h"
 #include "creportercoreregistry.h"
-#include "creporternwsessionmgr.h"
 #include "creportersavedstate.h"
 #include "creporterutils.h"
 #include "creporternamespace.h"
@@ -263,16 +262,12 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
             crashNotification->update(summary.arg(details.at(0)), body,
                     crashCount);
         }
-        if (!CReporterNwSessionMgr::canUseNetworkConnection()) {
-            qDebug() << __PRETTY_FUNCTION__
-                     << "WiFi not available, not uploading now.";
-        } else {
-            /* In auto-upload mode try to upload all crash reports each
-             * time a new one appears. */
-            if (!CReporterUtils::notifyAutoUploader(registry->collectAllCoreFiles())) {
-                qWarning() << __PRETTY_FUNCTION__
-                           << "Failed to start Auto Uploader.";
-            }
+
+        /* In auto-upload mode try to upload all crash reports each time a new
+         * one appears. */
+        if (!CReporterUtils::notifyAutoUploader(registry->collectAllCoreFiles())) {
+            qWarning() << __PRETTY_FUNCTION__
+                       << "Failed to start Auto Uploader.";
         }
     }
 }

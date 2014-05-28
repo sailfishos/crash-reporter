@@ -31,7 +31,6 @@
 #include "creporterdaemon_p.h"
 #include "creporterdaemonadaptor.h"
 #include "creporterdaemonmonitor.h"
-#include "creporternwsessionmgr.h"
 #include "creportersavedstate.h"
 #include "creportercoreregistry.h"
 #include "creporterutils.h"
@@ -116,7 +115,6 @@ bool CReporterDaemon::initiateDaemon()
         QStringList files = collectAllCoreFiles();
 
         if (!files.isEmpty() &&
-            CReporterNwSessionMgr::canUseNetworkConnection() &&
             !CReporterUtils::notifyAutoUploader(files))
         {
             qDebug() << __PRETTY_FUNCTION__ << "Failed to add files to the queue.";

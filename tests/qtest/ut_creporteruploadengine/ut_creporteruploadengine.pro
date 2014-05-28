@@ -11,8 +11,6 @@ INCLUDEPATH += . \
 
 DEPENDPATH += $$INCLUDEPATH \
 
-DEFINES += CREPORTER_LIBBEARER_ENABLED
-
 TEST_SOURCES += $${HTTPCLIENT_SRC_DIR}/creporteruploadengine.cpp \
 
 HEADERS += $${HTTPCLIENT_SRC_DIR}/creporteruploadengine.h \

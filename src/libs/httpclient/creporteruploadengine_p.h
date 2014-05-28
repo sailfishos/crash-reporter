@@ -37,9 +37,6 @@
 
 class CReporterUploadItem;
 class CReporterUploadQueue;
-#ifdef CREPORTER_LIBBEARER_ENABLED
-class CReporterNwSessionMgr;
-#endif // CREPORTER_LIBBEARER_ENABLED
 
 /*!
   * @class CReporterUploadEnginePrivate
@@ -109,27 +106,6 @@ class CReporterUploadEnginePrivate : public QObject
          * @sa CReporterUploadQueue::done()
          */
         void uploadFinished();
-#ifdef CREPORTER_LIBBEARER_ENABLED
-    public Q_SLOTS:
-        /*!
-         * @brief Called, when network session opens.
-         *
-         */
-        void sessionOpened();
-
-        /*!
-         * @brief Called, when network session disconnects.
-         *
-         */
-        void sessionDisconnected();
-
-        /*!
-         * @brief Called, when network error occurs.
-         *
-         * @param errorString Human-readable error string.
-         */
-        void connectionError(const QString &errorString);
-#endif // CREPORTER_LIBBEARER_ENABLED
 
     public:
         /*!
@@ -160,10 +136,6 @@ class CReporterUploadEnginePrivate : public QObject
         void emitFinished(CReporterUploadEngine::ErrorType, int sent, int total);
 
     public:
-#ifdef CREPORTER_LIBBEARER_ENABLED
-        //! @arg Network session manager reference.
-        CReporterNwSessionMgr *networkSession;
-#endif // CREPORTER_LIBBEARER_ENABLED
         //! @arg Upload queue reference<s.
         CReporterUploadQueue *queue;
         //! @arg Crash report currently handeled.

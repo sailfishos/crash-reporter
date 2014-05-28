@@ -34,14 +34,6 @@ DEFINES += CREPORTER_EXPORTS
 
 message(Building architecture: $$system(uname -m))
 
-# Enable Qt Bearer Management API.
-!contains(DEFINES, CREPORTER_SDK_HOST) {
-    message("Building with Qt Bearer Management API support.")
-    DEFINES += CREPORTER_LIBBEARER_ENABLED
-    SOURCES += httpclient/creporternwsessionmgr.cpp
-    HEADERS += httpclient/creporternwsessionmgr.h
-}
-
 DESTDIR = ../../lib
 
 !exists(../../lib):system(mkdir -p $$DESTDIR)
