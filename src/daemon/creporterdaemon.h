@@ -130,8 +130,7 @@ private:
 private: // data
 
 	Q_DECLARE_PRIVATE( CReporterDaemon )
-    //! @arg Pointer to private data.
-    CReporterDaemonPrivate *d_ptr;
+    QScopedPointer<CReporterDaemonPrivate> d_ptr;
 
     Q_PRIVATE_SLOT(d_func(), void onNotificationsSettingChanged());
 

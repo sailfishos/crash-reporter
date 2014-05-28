@@ -62,9 +62,6 @@ CReporterDaemon::~CReporterDaemon()
 
     CReporterPrivacySettingsModel::instance()->freeSingleton();
     CReporterSavedState::freeSingleton();
-
-	delete d_ptr;
-    d_ptr = 0;
 }
 
 // ----------------------------------------------------------------------------
