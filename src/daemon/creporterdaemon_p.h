@@ -36,10 +36,17 @@ class CReporterDaemonMonitor;
 class CReporterDaemonPrivate
 {
 public:
+    CReporterDaemonPrivate(CReporterDaemon *parent);
+
     //! @arg Pointer to monitor object.
     CReporterDaemonMonitor *monitor;
     //! @arg Startup delay timer Id.
     int timerId;
+private:
+    void onNotificationsSettingChanged();
+
+    Q_DECLARE_PUBLIC(CReporterDaemon);
+    CReporterDaemon *q_ptr;
 };
 
 #endif // CREPORTERDAEMON_P_H

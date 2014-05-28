@@ -133,6 +133,8 @@ private: // data
     //! @arg Pointer to private data.
     CReporterDaemonPrivate *d_ptr;
 
+    Q_PRIVATE_SLOT(d_func(), void onNotificationsSettingChanged());
+
 #ifdef CREPORTER_UNIT_TEST
 	friend class Ut_CReporterDaemon;
     friend class Ut_CReporterDaemonProxy;

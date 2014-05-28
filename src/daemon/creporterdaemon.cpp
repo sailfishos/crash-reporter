@@ -42,13 +42,8 @@
 #include "powerexcesshandler.h"
 
 CReporterDaemon::CReporterDaemon() :
-    d_ptr(new CReporterDaemonPrivate())
+  d_ptr(new CReporterDaemonPrivate(this))
 {
-    Q_D(CReporterDaemon);
-
-    d->monitor = 0;
-    d->timerId = 0;
-
     // Adaptor class is deleted automatically, when the class, it is
     // attached to is deleted.
     new CReporterDaemonAdaptor(this);
@@ -222,17 +217,6 @@ QStringList CReporterDaemon::collectAllCoreFiles()
 void CReporterDaemon::settingValueChanged(const QString &key, const QVariant &value)
 {
     qDebug() << __PRETTY_FUNCTION__ << "Setting:" << key << "has changed; value:" << value;
-    if (key == Settings::ValueNotifications)
-    {
-        if (value.toBool())
-        {
-            startCoreMonitoring();
-        }
-        else if (!CReporterPrivacySettingsModel::instance()->automaticSendingEnabled())
-        {
-            stopCoreMonitoring();
-        }
-    }
 }
 
 // ----------------------------------------------------------------------------
@@ -297,4 +281,28 @@ void CReporterDaemon::stopService()
     QDBusConnection::sessionBus().unregisterService(CReporter::DaemonServiceName);
 }
 
-// End of file
+CReporterDaemonPrivate::CReporterDaemonPrivate(CReporterDaemon *parent):
+  monitor(0), timerId(0), q_ptr(parent)
+{
+    Q_Q(CReporterDaemon);
+
+    QObject::connect(CReporterPrivacySettingsModel::instance(),
+                     SIGNAL(notificationsEnabledChanged()),
+                     q, SLOT(onNotificationsSettingChanged()));
+}
+
+void CReporterDaemonPrivate::onNotificationsSettingChanged()
+{
+    Q_Q(CReporterDaemon);
+
+    CReporterPrivacySettingsModel &settings =
+            *CReporterPrivacySettingsModel::instance();
+
+    if (settings.notificationsEnabled()) {
+        q->startCoreMonitoring();
+    } else if (!settings.automaticSendingEnabled()) {
+        q->stopCoreMonitoring();
+    }
+}
+
+#include "moc_creporterdaemon.cpp"
