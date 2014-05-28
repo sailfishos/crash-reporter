@@ -63,7 +63,7 @@ Page {
 
                 //% "Upload reports automatically"
                 text: qsTrId("settings_crash-reporter_upload_automatically")
-                //% "Uploads created crash reports to a server when WiFi or USB network is available."
+                //% "Uploads created crash reports to a telemetry server."
                 description: qsTrId("settings_crash-reporter_report_crashes_description")
 
                 onAfterStateChange: {
@@ -127,6 +127,21 @@ Page {
                 onBeforeStateChange: {
                     PrivacySettings.endurance = newState
                 }
+            }
+
+            SectionHeader {
+                //% "Data transmissions"
+                text: qsTrId("settings_crash-reporter_data_transmissions")
+            }
+
+            TextSwitch {
+                automaticCheck: false
+                checked: PrivacySettings.allowMobileData
+                //% "Allow using mobile data"
+                text: qsTrId("settings_crash-reporter_use_mobile_data")
+                //% "Enables crash report transmissions through mobile network; additional charges from the network carrier may apply. When this option is off, WLAN connection must be available in order to send crash reports."
+                description: qsTrId("settings_crash-reporter_use_mobile_data_description")
+                onClicked: PrivacySettings.allowMobileData = !PrivacySettings.allowMobileData
             }
 
             SectionHeader {
