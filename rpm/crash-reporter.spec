@@ -126,6 +126,11 @@ systemctl daemon-reload
 #	add-oneshot --user --now crash-reporter-service-default
 #fi
 
+%postun
+if [ "$1" = 0 ]; then
+  rm -rf /var/cache/core-dumps/{uploadlog,endurance-enabled-mark,endurance}
+fi
+
 %post -n libcrash-reporter0
 ldconfig
 
