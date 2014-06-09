@@ -127,9 +127,14 @@ Page {
             Label {
                 id: appLabel
 
+                width: parent.width - dateLabel.width
+
                 text: model.application
+                truncationMode: TruncationMode.Fade
             }
             Label {
+                id: dateLabel
+
                 anchors.right: parent.right
 
                 text: Qt.formatDateTime(model.dateCreated)
