@@ -3,8 +3,6 @@
 %define release         1
 %define buildroot       %{_topdir}/%{name}-%{version}-%{release}-root
 
-%define _unpackaged_files_terminate_build 0
-
 BuildRoot:              %{buildroot}
 Summary:                Crash Reporting Tool for Mer
 License:                LGPL
