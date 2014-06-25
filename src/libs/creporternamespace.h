@@ -34,32 +34,6 @@
   */
 namespace CReporter {
 
-    // Dialog button Id's.
-    /*!
-      * @enum DialogButton
-      * @brief Identifiers for the dialog buttons.
-      */
-      enum DialogButton{
-        //! "Delete" button.
-        DeleteButton = 0,
-        //! "Send" button.
-        SendButton,
-        //! "Save" button.
-        SaveButton,
-        //! "Options" button.
-        OptionsButton,
-        //! "Delete All" button.
-        DeleteAllButton,
-        //! "Cancel" button.
-        CancelButton,
-        //! "Send All" button.
-        SendAllButton,
-        //! "Delete selected" button.
-        DeleteSelectedButton,
-        //! "Send selected" button.
-        SendSelectedButton,
-        };
-
         //! User location for application settings. WRITABLE by user. First part of the path is composed in code.
         const QString UserSettingsLocation = "/.config/crash-reporter-settings";
 
@@ -117,30 +91,12 @@ namespace CReporter {
         //! Auto uploader object path.
         const QString AutoUploaderObjectPath =  "/com/nokia/crashreporter/autouploader/ut";
 #endif // CREPORTER_UNIT_TEST
-        
-        //! Crash Reporter UI binary name.
-        const QString UIBinaryName = "crash-reporter-ui";
 
         //! Crash Reporter daemon binary name.
         const QString DaemonBinaryName = "crash-reporter-daemon";
         
         //! Crash Reporter Auto Uploader binary name.
         const QString AutoUploaderBinaryName = "crash-reporter-autouploader";
-
-        //! Dialog name for sending all crash reports.
-        const QString SendAllDialogType = "send-all-dialog";
-
-        //! Dialog name for sending selected crash reports.
-        const QString SendSelectedDialogType = "send-selected-dialog";
-
-        //! Dialog name for notifying new crash reports.
-        const QString NotifyNewDialogType = "notify-new-dialog";
-
-        //! Dialog name for uploading crash reports.
-        const QString UploadDialogType = "upload-dialog";
-
-        //! Dialog name for showing message box.
-        const QString MessageBoxDialogType = "msgbox-dialog";
 
         /*!
           * @enum LogType
