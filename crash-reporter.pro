@@ -51,8 +51,10 @@ notifications.files = data/x-nokia.crash-reporter.autouploader.conf \
                       data/x-nokia.crash-reporter.notification.conf
 
 settings.path = $$CREPORTER_SETTINGS_PATH
-settings.files += data/crash-reporter-privacy.conf \
-	data/crash-reporter.conf
+settings.files += \
+	data/crash-reporter-privacy.conf \
+	data/crash-reporter.conf \
+	data/journalspy-expressions.conf \
 
 dbus_config.path = /etc/dbus-1/system.d
 dbus_config.files = data/crash-reporter-endurance.conf

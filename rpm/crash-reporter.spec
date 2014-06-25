@@ -80,6 +80,7 @@ make %{?jobs:-j%jobs}
 /usr/bin/crash*
 /usr/lib/oneshot.d/*
 /usr/lib/systemd/user/*
+%attr(0755,root,root) /usr/libexec/crash-reporter-journalspy
 %attr(0755,root,root) /usr/libexec/endurance-collect*
 %attr(4755,root,root) /usr/libexec/rich-core-helper
 /usr/share/crash-reporter/*
