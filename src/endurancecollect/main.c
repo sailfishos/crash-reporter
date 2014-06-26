@@ -1,7 +1,7 @@
 /*
  * This file is part of crash-reporter
  *
- * Copyright (C) 2013 Jolla Ltd.
+ * Copyright (C) 2013-2014 Jolla Ltd.
  * Contact: Jakub Adam <jakub.adam@jollamobile.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -22,6 +22,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <stdlib.h>
+#include <string.h>
 #include <syslog.h>
 #include <unistd.h>
 #include <dbus/dbus.h>
@@ -33,6 +34,7 @@
 
 static const time_t SNAPSHOT_INTERVAL = IPHB_GS_WAIT_1_HOUR; // seconds
 static const time_t KEEPALIVE_TIMER = 30; // seconds
+static const time_t AFTER_BOOT_DELAY = 5 * 60; // seconds
 
 DBusConnection *system_bus;
 pid_t child_pid = 0;
@@ -129,6 +131,40 @@ static void discard_input(int fd) {
     } while (bytes_read > 0);
 }
 
+static void after_boot_delay(iphb_t iphb)
+{
+    int fd = open("/proc/uptime", O_RDONLY);
+    char buf[64];
+    ssize_t bytes_read;
+    char *uptime_str;
+    time_t delay;
+
+    if (fd < 0) {
+        syslog(LOG_CRIT, "Couldn't open /proc/uptime.");
+        return;
+    }
+
+    bytes_read = read(fd, buf, sizeof buf);
+    if (bytes_read <= 0) {
+        syslog(LOG_CRIT, "Couldn't read from /proc/uptime.");
+        return;
+    }
+    close(fd);
+
+    uptime_str = strtok(buf, ".");
+    delay = AFTER_BOOT_DELAY - atoi(uptime_str);
+    if (delay <= 0) {
+        return;
+    }
+
+    syslog(LOG_DEBUG, "Too early after boot; waiting another %ld seconds.",
+            delay);
+
+    if (iphb_wait(iphb, delay - 10, delay + 10, 1) < 0) {
+        syslog(LOG_CRIT, "Couldn't wait for heartbeat timer.");
+    }
+}
+
 int main() {
     int result = EXIT_SUCCESS;
 
@@ -146,6 +182,8 @@ int main() {
         return EXIT_FAILURE;
     }
     fcntl(iphbfd, F_SETFL, O_NONBLOCK | O_CLOEXEC);
+
+    after_boot_delay(iphb);
 
     sigset_t sigset;
     sigemptyset(&sigset);
