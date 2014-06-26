@@ -1,13 +1,13 @@
 # spec file for crash-reporter
 
-%define release         1
+%define release         0
 %define buildroot       %{_topdir}/%{name}-%{version}-%{release}-root
 
 BuildRoot:              %{buildroot}
 Summary:                Crash Reporting Tool for Mer
 License:                LGPL
 Name:                   crash-reporter
-Version:                1.10.57
+Version:                1.10.58
 Release:                %{release}
 Prefix:                 /usr
 Group:                  Development/Tools
