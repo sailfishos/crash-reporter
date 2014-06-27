@@ -1,0 +1,12 @@
+[Unit]
+Description=Crash reporter journal spy
+
+ConditionPathExists=/var/cache/core-dumps/journalspy-enabled-mark
+
+[Service]
+Type=simple
+ExecStart=/usr/libexec/crash-reporter-journalspy
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

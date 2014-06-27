@@ -57,19 +57,24 @@ settings.files += \
 	data/journalspy-expressions.conf \
 
 dbus_config.path = /etc/dbus-1/system.d
-dbus_config.files = data/crash-reporter-endurance.conf
+dbus_config.files = data/crash-reporter-dbus.conf
 
 systemd_service.path = $${CREPORTER_SYSTEM_SYSTEMD_USER_SERVICES}
 systemd_service.files = data/crash-reporter.service
 
 MULTI_USER_TARGET_WANTS = \
 	$(INSTALL_ROOT)/$$CREPORTER_SYSTEM_SYSTEMD_SYSTEM_SERVICES/multi-user.target.wants
-systemd_endurance.path = $${CREPORTER_SYSTEM_SYSTEMD_SYSTEM_SERVICES}
-systemd_endurance.files = data/crash-reporter-endurance.service
-systemd_endurance.commands = \
+
+systemd_services.path = $${CREPORTER_SYSTEM_SYSTEMD_SYSTEM_SERVICES}
+systemd_services.files = \
+	data/crash-reporter-endurance.service \
+	data/crash-reporter-journalspy.service
+systemd_services.commands = \
 	mkdir $$MULTI_USER_TARGET_WANTS; \
 	ln -s ../crash-reporter-endurance.service \
-		$$MULTI_USER_TARGET_WANTS/crash-reporter-endurance.service
+		$$MULTI_USER_TARGET_WANTS/crash-reporter-endurance.service; \
+	ln -s ../crash-reporter-journalspy.service \
+		$$MULTI_USER_TARGET_WANTS/crash-reporter-journalspy.service;
 
 endurance_script.path = $${CREPORTER_SYSTEM_LIBEXEC}
 endurance_script.files = scripts/endurance-collect
@@ -78,4 +83,4 @@ oneshot.path = $${CREPORTER_SYSTEM_ONESHOT}
 oneshot.files = scripts/crash-reporter-service-default
 
 INSTALLS += scripts notifications settings dbus_config systemd_service \
-	systemd_endurance endurance_script oneshot
+	systemd_services endurance_script oneshot
