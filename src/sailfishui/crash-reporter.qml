@@ -129,6 +129,21 @@ Page {
                 }
             }
 
+            SystemdServiceSwitch {
+                serviceName: "crash-reporter-journalspy.service"
+                managerType: SystemdService.SystemManager
+
+                //% "Journal spy"
+                text: qsTrId("settings_crash-reporter_enable_journalspy")
+                //% "Watches system logs for predefined regular expressions "
+                //% "and creates a telemetry submission upon a found match."
+                description: qsTrId("settings_crash-reporter_enable_journalspy_description")
+
+                onBeforeStateChange: {
+                    PrivacySettings.journalSpy = newState
+                }
+            }
+
             SectionHeader {
                 //% "Data transmissions"
                 text: qsTrId("settings_crash-reporter_data_transmissions")

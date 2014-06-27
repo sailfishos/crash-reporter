@@ -128,6 +128,9 @@ namespace CReporter {
        /// is detected.
        const QString OverheatShutdownPrefix = "OverheatShutdown";
 
+       /// Prefix for system log packages created by journal spy.
+       const QString JournalSpyPrefix = QStringLiteral("JournalSpy");
+
        // Prefixes for HW reboot logs.
        const QString HWrebootPrefix = "HWreboot";
        const QString HWSMPLPrefix = "HWSMPL";
