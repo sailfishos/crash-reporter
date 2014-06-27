@@ -146,14 +146,22 @@ QString CReporterPrivacySettingsModel::enduranceCollectMark()
            "/endurance-enabled-mark";
 }
 
+QString CReporterPrivacySettingsModel::journalSpyMark()
+{
+    return CReporterCoreRegistry::instance()->getCoreLocationPaths().first() +
+           "/journalspy-enabled-mark";
+}
+
 bool CReporterPrivacySettingsModel::enduranceEnabled() const
 {
     return QFile::exists(enduranceCollectMark());
 }
 
-// ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::notificationsEnabled
-// ----------------------------------------------------------------------------
+bool CReporterPrivacySettingsModel::journalSpyEnabled() const
+{
+    return QFile::exists(journalSpyMark());
+}
+
 bool CReporterPrivacySettingsModel::notificationsEnabled() const
 {
     return value(Settings::Notifications, QVariant(true)).toBool();
@@ -257,6 +265,21 @@ void CReporterPrivacySettingsModel::setEnduranceEnabled(bool value)
     }
 
     emit enduranceEnabledChanged();
+}
+
+void CReporterPrivacySettingsModel::setJournalSpyEnabled(bool value)
+{
+    if (value == journalSpyEnabled()) {
+        return;
+    }
+
+    if (value) {
+        QFile(journalSpyMark()).open(QFile::WriteOnly);
+    } else {
+        QFile::remove(journalSpyMark());
+    }
+
+    emit journalSpyEnabledChanged();
 }
 
 void CReporterPrivacySettingsModel::setNotificationsEnabled(bool value)
