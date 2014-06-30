@@ -39,10 +39,11 @@ int main(int argc, const char **argv) {
     }
 
     /* Label is going to be passed to a SETUID script so make sure its content
-     * is sane. Only alphanumeric chars are allowed, no spaces. */
+     * is sane. Only alphanumeric chars, underscore and hyphen are allowed,
+     * no spaces. */
     size_t i;
     for (i = 0; i != label_len; ++i) {
-        if (!isalnum(label[i])) {
+        if (!isalnum(label[i]) && !label[i] == '_' && !label[i] == '-') {
             goto invalid_label;
         }
     }
