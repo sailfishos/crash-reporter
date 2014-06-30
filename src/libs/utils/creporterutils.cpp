@@ -188,40 +188,6 @@ bool CReporterUtils::appendToLzo(const QString &text, const QString &filePath)
     return true;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUtils::fileSizeToString
-// ----------------------------------------------------------------------------
-QString CReporterUtils::fileSizeToString(const quint64 size)
-{
-    QString text;
-
-    if (size == 0) {
-        text = "0 kB";
-    }
-    else {
-        double fSize = ((double)size) / 1024.0;
-        int temp = 1;
-        // Round smaller than 1 kB to 1 kB
-        if (size != 0 && fSize < 1.0) {
-            fSize = 1.0;
-        }
-
-        while (fSize > 1024.0 && temp < 2) {
-            fSize = fSize / 1024.0;
-            ++temp;
-        }
-        // Show one decimal.
-        QString formattedNumber(QString("Value: %L1").arg(fSize, 0, 'f', 1));
-        if (temp == 1) {
-            text = QString("%1 kB").arg(formattedNumber);
-        }
-        else {
-            text = QString("%1 MB").arg(formattedNumber);
-        }
-    }
-    return text;
-}
-
 QString CReporterUtils::deviceUid()
 {
 #ifndef CREPORTER_UNIT_TEST

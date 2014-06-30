@@ -100,14 +100,6 @@ public:
     static bool appendToLzo(const QString &text, const QString &filePath);
 
     /*!
-     * @brief Returns file size in string format.
-     *
-     * @param size File size to convert.
-     * @return Size in string.
-     */
-    static QString fileSizeToString(const quint64 size);
-
-    /*!
      * @brief Returns the device ID used in SSU requests.
      *
      * @return Device ID.
