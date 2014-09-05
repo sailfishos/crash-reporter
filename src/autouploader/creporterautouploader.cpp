@@ -257,11 +257,10 @@ void CReporterAutoUploader::engineFinished(int error, int sent, int total)
         if (sent > 0) {
             sent += state->uploadSuccessCount();
 
-            QString summary = (sent == 1) ?
-                    //% "Report uploaded"
-                    qtTrId("crash_reporter-notify-report_uploaded") :
-                    //% "Reports uploaded"
-                    qtTrId("crash_reporter-notify-reports_uploaded");
+            //% "Report uploaded"
+            QString summary = (sent == 1) ? qtTrId("crash_reporter-notify-report_uploaded")
+                                          : //% "Reports uploaded"
+                                            qtTrId("crash_reporter-notify-reports_uploaded");
             d_ptr->successNotification->update(summary, QString(), sent);
         }
 
