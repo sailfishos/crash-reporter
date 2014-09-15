@@ -83,6 +83,7 @@ make %{?jobs:-j%jobs}
 %attr(0755,root,root) /usr/libexec/crash-reporter-journalspy
 %attr(0755,root,root) /usr/libexec/endurance-collect*
 %attr(4755,root,root) /usr/libexec/rich-core-helper
+%dir /usr/share/crash-reporter
 /usr/share/crash-reporter/*
 /usr/share/dbus-1/services/*.service
 /usr/share/man/man1/*
@@ -96,11 +97,13 @@ make %{?jobs:-j%jobs}
 
 %files -n crash-reporter-config-nemo
 %defattr(-,root,root,-)
+%dir /usr/share/crash-reporter-settings
 /usr/share/crash-reporter-settings/*
 
 %files -n jolla-settings-crash-reporter
 %defattr(-,root,root,-)
 /usr/lib/qt5/qml/*
+%dir /usr/share/jolla-settings/pages/crash-reporter
 /usr/share/jolla-settings/pages/crash-reporter/*
 /usr/share/jolla-settings/entries/*
 
