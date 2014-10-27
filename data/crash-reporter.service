@@ -5,7 +5,7 @@ After=user-session.target
 ConditionPathExists=!/tmp/os-update-running
 
 [Service]
-ExecStart=/usr/bin/crash-reporter-daemon
+ExecStart=/usr/bin/invoker -o --type=qt5 /usr/bin/crash-reporter-daemon
 Type=simple
 Restart=always
 

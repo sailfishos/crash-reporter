@@ -31,6 +31,13 @@ CONFIG += link_pkgconfig
 PKGCONFIG += \
     libudev
 
+packagesExist(qt5-boostable) {
+    DEFINES += HAS_BOOSTER
+    PKGCONFIG += qt5-boostable
+} else {
+    warning("qt5-boostable not available; startup times will be slower")
+}
+
 INCLUDEPATH += . \
                ../libs/coredir \
                ../libs/httpclient \

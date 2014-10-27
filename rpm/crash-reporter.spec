@@ -23,6 +23,7 @@ BuildRequires:          pkgconfig(dbus-1)
 BuildRequires:          pkgconfig(libiphb)
 BuildRequires:          pkgconfig(libudev)
 BuildRequires:          pkgconfig(mce)
+BuildRequires:          pkgconfig(qt5-boostable)
 Requires:               sp-rich-core >= 1.71.2
 Requires:               sp-endurance
 Requires:               oneshot

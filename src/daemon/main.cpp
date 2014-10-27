@@ -100,7 +100,7 @@ void signalHandler(int signal) {
   * @param argc Argument count.
   * @param argv Arguments.
   */
-int main(int argc, char **argv)
+Q_DECL_EXPORT int main(int argc, char **argv)
 {
     signal(SIGINT, &signalHandler);
     signal(SIGTERM, &signalHandler);
