@@ -27,6 +27,7 @@ BuildRequires:          pkgconfig(qt5-boostable)
 Requires:               sp-rich-core >= 1.71.2
 Requires:               sp-endurance
 Requires:               oneshot
+Requires:               qt5-qttools-qdbus
 Conflicts:              quick-feedback < 0.0.18
 %{_oneshot_requires_post}
 Source0:                %{name}-%{version}.tar.gz

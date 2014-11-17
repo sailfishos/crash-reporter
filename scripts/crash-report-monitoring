@@ -26,10 +26,6 @@
 NAME=com.nokia.CrashReporter.Daemon 
 OBJECT_PATH=/com/nokia/crashreporter/daemon 
 
-# Get and export the address of user's D-Bus session bus
-export DISPLAY=:0
-source /tmp/session_bus_address.user
-
 usage() {    
 	echo "Script for requesting Crash Reporter to start or stop monitoring rich cores."
     echo "usage: $0 start | stop"
@@ -44,11 +40,11 @@ fi
 case "$1" in
   start)
         echo "Starting monitoring..."
-        qdbus $NAME $OBJECT_PATH com.nokia.CrashReporter.Daemon.startCoreMonitoring
+        /usr/lib/qt5/bin/qdbus $NAME $OBJECT_PATH com.nokia.CrashReporter.Daemon.startCoreMonitoring
 	;;
   stop)
 	echo "Stopping monitoring..."
-        qdbus $NAME $OBJECT_PATH com.nokia.CrashReporter.Daemon.stopCoreMonitoring
+        /usr/lib/qt5/bin/qdbus $NAME $OBJECT_PATH com.nokia.CrashReporter.Daemon.stopCoreMonitoring
 	;;
   
   *)
