@@ -93,8 +93,8 @@ Page {
         VerticalScrollDecorator {}
 
         delegate: ListItem {
-            x: Theme.paddingLarge
-            width: parent.width - (2 * Theme.paddingLarge)
+            x: Theme.horizontalPageMargin
+            width: parent.width - (2 * x)
 
             function remove() {
                  //% "Deleting "
