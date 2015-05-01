@@ -250,7 +250,7 @@ Page {
                 text: qsTrId("settings_crash-reporter_after_restart")
                 font.pixelSize: Theme.fontSizeExtraSmall
                 wrapMode: Text.WordWrap
-                color: Theme.secondaryColor
+                color: Theme.highlightColor
             }
         }
     }
