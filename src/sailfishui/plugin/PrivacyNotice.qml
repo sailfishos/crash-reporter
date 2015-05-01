@@ -60,12 +60,14 @@ Item {
                 declined = true
             }
 
+            DialogHeader { id: header }
+
             Column {
-                anchors.fill: parent
+                anchors.top: header.bottom
+                x: Theme.horizontalPageMargin
+                width: parent.width - x*2
 
                 spacing: Theme.paddingLarge
-
-                DialogHeader {}
 
                 Label {
                     anchors.horizontalCenter: parent.horizontalCenter
