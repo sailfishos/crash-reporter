@@ -132,7 +132,7 @@ Page {
             }
 
             Item {
-                x: Theme.paddingLarge
+                x: Theme.horizontalPageMargin
                 width: parent.width - (2 * Theme.paddingLarge)
                 height: parent.height
 
