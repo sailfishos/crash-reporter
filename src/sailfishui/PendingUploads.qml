@@ -25,6 +25,10 @@ import Sailfish.Silica.theme 1.0
 import com.jolla.settings.crashreporter 1.0
 
 Page {
+    id: root
+
+    property bool _modifyingReportList
+
     SilicaListView {
         id: uploadsView
 
@@ -42,6 +46,7 @@ Page {
                 //% "Upload crash reports now"
                 text: qsTrId("quick-feedback_upload_now")
                 onClicked: {
+                    root._modifyingReportList = true
                     Adapter.uploadAllCrashReports();
                 }
             }
@@ -83,6 +88,7 @@ Page {
                 //% "Deleting %n crash report(s)"
                 remorse.execute(remorseArea, qsTrId("quick-feedback_deleting", Adapter.reportsToUpload),
                     function() {
+                        root._modifyingReportList = true
                         Adapter.deleteAllCrashReports()
                     })
             }
@@ -179,9 +185,10 @@ Page {
         }
 
         onCountChanged: {
-            if (count == 0) {
+            if (count == 0 && root._modifyingReportList) {
                 pageStack.pop()
             }
+            root._modifyingReportList = false
         }
     }
 }
