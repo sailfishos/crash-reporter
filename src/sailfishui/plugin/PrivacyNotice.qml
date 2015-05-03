@@ -75,6 +75,7 @@ Item {
                     //% "Privacy notice"
                     text: qsTrId("quick-feedback_privacy_notice")
                     wrapMode: Text.WordWrap
+                    color: Theme.highlightColor
                 }
                 Label {
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -91,6 +92,7 @@ Item {
                     //% "etc."
                     text: qsTrId("quick-feedback_privacy_notice_text_1")
                     wrapMode: Text.WordWrap
+                    color: Theme.highlightColor
                 }
                 Label {
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -104,6 +106,7 @@ Item {
                     //% "operating system."
                     text: qsTrId("quick-feedback_privacy_notice_text_2")
                     wrapMode: Text.WordWrap
+                    color: Theme.highlightColor
                 }
             }
         }
