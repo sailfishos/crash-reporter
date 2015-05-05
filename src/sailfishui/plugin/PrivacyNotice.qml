@@ -60,12 +60,14 @@ Item {
                 declined = true
             }
 
+            DialogHeader { id: header }
+
             Column {
-                anchors.fill: parent
+                anchors.top: header.bottom
+                x: Theme.horizontalPageMargin
+                width: parent.width - x*2
 
                 spacing: Theme.paddingLarge
-
-                DialogHeader {}
 
                 Label {
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -75,6 +77,7 @@ Item {
                     //% "Privacy notice"
                     text: qsTrId("quick-feedback_privacy_notice")
                     wrapMode: Text.WordWrap
+                    color: Theme.highlightColor
                 }
                 Label {
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -91,6 +94,7 @@ Item {
                     //% "etc."
                     text: qsTrId("quick-feedback_privacy_notice_text_1")
                     wrapMode: Text.WordWrap
+                    color: Theme.highlightColor
                 }
                 Label {
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -104,6 +108,7 @@ Item {
                     //% "operating system."
                     text: qsTrId("quick-feedback_privacy_notice_text_2")
                     wrapMode: Text.WordWrap
+                    color: Theme.highlightColor
                 }
             }
         }

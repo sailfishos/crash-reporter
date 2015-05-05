@@ -244,13 +244,14 @@ Page {
                 }
             }
             Label {
-                x: Theme.paddingLarge
-                width: parent.width - (2 * Theme.paddingLarge)
+                x: Theme.horizontalPageMargin
+                width: parent.width - (2 * x)
+                height: implicitHeight + Theme.paddingLarge     // add space below the text
                 //% "Debug logging of crash reporter activities to the device doesn't affect the data sent to a server. Change of this setting takes effect after crash reporter restart."
                 text: qsTrId("settings_crash-reporter_after_restart")
                 font.pixelSize: Theme.fontSizeExtraSmall
                 wrapMode: Text.WordWrap
-                color: Theme.secondaryColor
+                color: Theme.highlightColor
             }
         }
     }

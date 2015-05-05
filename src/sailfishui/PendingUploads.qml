@@ -25,6 +25,10 @@ import Sailfish.Silica.theme 1.0
 import com.jolla.settings.crashreporter 1.0
 
 Page {
+    id: root
+
+    property bool _modifyingReportList
+
     SilicaListView {
         id: uploadsView
 
@@ -42,6 +46,7 @@ Page {
                 //% "Upload crash reports now"
                 text: qsTrId("quick-feedback_upload_now")
                 onClicked: {
+                    root._modifyingReportList = true
                     Adapter.uploadAllCrashReports();
                 }
             }
@@ -83,6 +88,7 @@ Page {
                 //% "Deleting %n crash report(s)"
                 remorse.execute(remorseArea, qsTrId("quick-feedback_deleting", Adapter.reportsToUpload),
                     function() {
+                        root._modifyingReportList = true
                         Adapter.deleteAllCrashReports()
                     })
             }
@@ -93,8 +99,7 @@ Page {
         VerticalScrollDecorator {}
 
         delegate: ListItem {
-            x: Theme.paddingLarge
-            width: parent.width - (2 * Theme.paddingLarge)
+            id: listDelegate
 
             function remove() {
                  //% "Deleting "
@@ -104,6 +109,8 @@ Page {
                      Adapter.deleteCrashReport(model.filePath)
                  })
             }
+
+            contentHeight: crashDetails.visible ? Theme.itemSizeMedium : Theme.itemSizeSmall
 
             menu: Component {
                 ContextMenu {
@@ -124,51 +131,64 @@ Page {
                 }
             }
 
-            Label {
-                id: appLabel
-
-                width: parent.width - dateLabel.width
-
-                text: model.application
-                truncationMode: TruncationMode.Fade
-            }
-            Label {
-                id: dateLabel
-
-                anchors.right: parent.right
-
-                text: Qt.formatDateTime(model.dateCreated)
-                font.pixelSize: Theme.fontSizeExtraSmall
-                color: Theme.primaryColor
-            }
-            Row {
-                visible: Utils.reportIncludesCrash(model.application)
-
-                anchors.top: appLabel.bottom
-                anchors.left: parent.left
+            Item {
+                x: Theme.horizontalPageMargin
+                width: parent.width - (2 * Theme.paddingLarge)
+                height: parent.height
 
                 Label {
-                    text: model.signal
-                    font.pixelSize: Theme.fontSizeExtraSmall
-                    color: Theme.primaryColor
+                    id: appLabel
+                    anchors {
+                        verticalCenter: parent.verticalCenter
+                        verticalCenterOffset: crashDetails.visible ? -implicitHeight/2 : 0
+                    }
+                    width: parent.width - dateLabel.width
+
+                    text: model.application
+                    truncationMode: TruncationMode.Fade
+                    color: listDelegate.highlighted ? Theme.highlightColor : Theme.primaryColor
                 }
                 Label {
-                    text: " PID "
+                    id: dateLabel
+                    anchors {
+                        right: parent.right
+                        verticalCenter: appLabel.verticalCenter
+                    }
+                    text: Qt.formatDateTime(model.dateCreated)
                     font.pixelSize: Theme.fontSizeExtraSmall
-                    color: Theme.secondaryColor
+                    color: appLabel.color
                 }
-                Label {
-                    text: model.pid
-                    font.pixelSize: Theme.fontSizeExtraSmall
-                    color: Theme.primaryColor
+                Row {
+                    id: crashDetails
+                    visible: Utils.reportIncludesCrash(model.application)
+
+                    anchors.top: appLabel.bottom
+                    anchors.left: parent.left
+
+                    Label {
+                        text: model.signal
+                        font.pixelSize: Theme.fontSizeExtraSmall
+                        color: appLabel.color
+                    }
+                    Label {
+                        text: " PID "
+                        font.pixelSize: Theme.fontSizeExtraSmall
+                        color: listDelegate.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+                    }
+                    Label {
+                        text: model.pid
+                        font.pixelSize: Theme.fontSizeExtraSmall
+                        color: appLabel.color
+                    }
                 }
             }
         }
 
         onCountChanged: {
-            if (count == 0) {
+            if (count == 0 && root._modifyingReportList) {
                 pageStack.pop()
             }
+            root._modifyingReportList = false
         }
     }
 }
