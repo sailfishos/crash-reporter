@@ -47,8 +47,8 @@ scripts.path = $${CREPORTER_SYSTEM_SHARE}/crash-reporter
 scripts.files = scripts/crash-report-monitoring
 
 notifications.path = $${CREPORTER_SYSTEM_SHARE}/lipstick/notificationcategories/
-notifications.files = data/x-nokia.crash-reporter.autouploader.conf \
-                      data/x-nokia.crash-reporter.notification.conf
+notifications.files = data/x-nemo.crash-reporter.autouploader.conf \
+                      data/x-nemo.crash-reporter.notification.conf
 
 settings.path = $$CREPORTER_SETTINGS_PATH
 settings.files += \

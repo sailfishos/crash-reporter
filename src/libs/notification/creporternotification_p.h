@@ -87,7 +87,7 @@ private slots:
         int timeout;
         //! Pending reply on the notification creation from the notification manager.
         QDBusPendingCallWatcher *callWatcher;
-        //! Category of the notification, e.g. "x-nokia.crash-reporter.autouploader".
+        //! Category of the notification, e.g. "x-nemo.crash-reporter.autouploader".
         QString category;
         //! Notification's summary string.
         QString summary;
