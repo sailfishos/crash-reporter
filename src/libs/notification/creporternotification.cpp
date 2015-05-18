@@ -63,7 +63,9 @@ void CReporterNotificationPrivate::sendDBusNotify()
     hints.insert("x-nemo-item-count", count);
 
     QDBusPendingReply<quint32> reply =
-            proxy->Notify(QString(), id, QString(), summary, body,
+            //: Group name for crash reporter notifications
+            //% "Crash reporter"
+            proxy->Notify(qtTrId("crash_reporter-notify-app_name"), id, QString(), summary, body,
                     QStringList(), hints, -1);
 
     qDebug() << __PRETTY_FUNCTION__

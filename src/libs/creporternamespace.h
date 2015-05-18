@@ -136,10 +136,10 @@ namespace CReporter {
        const QString HWSMPLPrefix = "HWSMPL";
 
        //! Event type for crash reporter notifications
-       const QString ApplicationNotificationEventType = "x-nokia.crash-reporter.notification";
+       const QString ApplicationNotificationEventType = "x-nemo.crash-reporter.notification";
 
        //! Event type for autouploader notifications
-       const QString AutoUploaderNotificationEventType = "x-nokia.crash-reporter.autouploader";
+       const QString AutoUploaderNotificationEventType = "x-nemo.crash-reporter.autouploader";
 }
 
 #endif // CREPORTERNAMESPACE_H
