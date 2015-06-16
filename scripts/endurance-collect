@@ -46,7 +46,7 @@ _section_endurance_snapshot_pack()
     fi
   done
 
-  tar c $SNAPSHOTS | xz --stdout
+  tar c $SNAPSHOTS | xz -0 --stdout
 }
 
 _create_endurance_package()
