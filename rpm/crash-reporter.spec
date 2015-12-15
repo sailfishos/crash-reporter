@@ -5,7 +5,7 @@
 
 BuildRoot:              %{buildroot}
 Summary:                Crash Reporting Tool for Mer
-License:                LGPL
+License:                LGPLv2.1
 Name:                   crash-reporter
 Version:                1.10.64
 Release:                %{release}
@@ -38,14 +38,12 @@ Crash Reporting Tool allows users to easily upload crash reports provided by sp-
 
 %package -n             libcrash-reporter0
 Summary:                Crash Reporter library
-Group:                  System/Libraries
 Requires:               crash-reporter-config
 %description -n         libcrash-reporter0
 This package contains various widgets and helper classes for Crash Reporter.
 
 %package -n             crash-reporter-config-nemo
 Summary:                Crash Reporter default configuration
-Group:                  Development/Tools
 BuildArch:              noarch
 Provides:               crash-reporter-config
 %description -n         crash-reporter-config-nemo
@@ -53,14 +51,12 @@ Crash Reporter default setting files.
 
 %package -n             jolla-settings-crash-reporter
 Summary:                Crash Reporter Settings UI for Jolla Sailfish OS
-Group:                  System/GUI/Other
 Requires:               %{name} = %{version}-%{release}
 %description -n         jolla-settings-crash-reporter
 Crash Reporter settings plugin for the Sailfish OS Settings application.
 
 %package -n             libcrash-reporter0-devel
 Summary:                Development files for crash-reporter
-Group:                  Development/Libraries
 Requires:               libcrash-reporter0 = %{version}-%{release}
 %description -n         libcrash-reporter0-devel
 Development headers and libraries for crash-reporter.
