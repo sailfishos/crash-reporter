@@ -57,7 +57,8 @@ private:
     void changeState(const QString &state);
 };
 
-void SystemdServicePrivate::initializeDBusInterface() {
+void SystemdServicePrivate::initializeDBusInterface()
+{
     Q_Q(SystemdService);
 
     QDBusConnection connection = (managerType == SystemdService::UserManager) ?
@@ -91,7 +92,8 @@ void SystemdServicePrivate::initializeDBusInterface() {
                      q, SLOT(gotUnitPath(QDBusPendingCallWatcher *)));
 }
 
-void SystemdServicePrivate::gotUnitPath(QDBusPendingCallWatcher *call) {
+void SystemdServicePrivate::gotUnitPath(QDBusPendingCallWatcher *call)
+{
     Q_Q(SystemdService);
 
     QDBusPendingReply<QDBusObjectPath> reply = *call;
@@ -128,7 +130,8 @@ void SystemdServicePrivate::gotUnitPath(QDBusPendingCallWatcher *call) {
 
 void SystemdServicePrivate::propertiesChanged(const QString &interface,
                                               const QVariantMap &changedProperties,
-                                              const QStringList &invalidatedProperties) {
+                                              const QStringList &invalidatedProperties)
+{
     Q_Q(SystemdService);
 
     if (interface != OrgFreedesktopSystemd1UnitInterface::staticInterfaceName())
@@ -154,7 +157,8 @@ void SystemdServicePrivate::propertiesChanged(const QString &interface,
     }
 }
 
-void SystemdServicePrivate::stateChanged(QDBusPendingCallWatcher *call) {
+void SystemdServicePrivate::stateChanged(QDBusPendingCallWatcher *call)
+{
     QDBusPendingReply<QDBusObjectPath> reply = *call;
     if (reply.isError()) {
         qDebug() << "Couldn't change systemd service state"
@@ -164,7 +168,8 @@ void SystemdServicePrivate::stateChanged(QDBusPendingCallWatcher *call) {
     call->deleteLater();
 }
 
-void SystemdServicePrivate::unitFileStateChanged(QDBusPendingCallWatcher *call) {
+void SystemdServicePrivate::unitFileStateChanged(QDBusPendingCallWatcher *call)
+{
     QDBusPendingCall reply = *call;
     if (reply.isError()) {
         qDebug() << "Couldn't enable or disable a unit file"
@@ -174,7 +179,8 @@ void SystemdServicePrivate::unitFileStateChanged(QDBusPendingCallWatcher *call) 
     call->deleteLater();
 }
 
-void SystemdServicePrivate::maskingChanged(QDBusPendingCallWatcher *call) {
+void SystemdServicePrivate::maskingChanged(QDBusPendingCallWatcher *call)
+{
     QDBusPendingCall reply = *call;
     if (reply.isError()) {
         qDebug() << "Couldn't mask or unmask a unit file"
@@ -186,7 +192,8 @@ void SystemdServicePrivate::maskingChanged(QDBusPendingCallWatcher *call) {
     call->deleteLater();
 }
 
-void SystemdServicePrivate::reload() {
+void SystemdServicePrivate::reload()
+{
     Q_Q(SystemdService);
 
     QDBusPendingCallWatcher *watcher =
@@ -196,7 +203,8 @@ void SystemdServicePrivate::reload() {
                      q, SLOT(reloaded(QDBusPendingCallWatcher *)));
 }
 
-void SystemdServicePrivate::reloaded(QDBusPendingCallWatcher *call) {
+void SystemdServicePrivate::reloaded(QDBusPendingCallWatcher *call)
+{
     Q_Q(SystemdService);
 
     QDBusPendingCall reply = *call;
@@ -212,7 +220,8 @@ void SystemdServicePrivate::reloaded(QDBusPendingCallWatcher *call) {
     call->deleteLater();
 }
 
-void SystemdServicePrivate::changeState(const QString &state) {
+void SystemdServicePrivate::changeState(const QString &state)
+{
     Q_Q(SystemdService);
 
     SystemdService::State newState;
@@ -233,7 +242,8 @@ void SystemdServicePrivate::changeState(const QString &state) {
 }
 
 SystemdService::SystemdService(QObject *parent):
-  QObject(parent), d_ptr(new SystemdServicePrivate) {
+  QObject(parent), d_ptr(new SystemdServicePrivate)
+{
     Q_D(SystemdService);
     d->q_ptr = this;
     d->managerType = UserManager;
@@ -243,13 +253,15 @@ SystemdService::SystemdService(QObject *parent):
     d->unit = 0;
 }
 
-QString SystemdService::serviceName() const {
+QString SystemdService::serviceName() const
+{
     Q_D(const SystemdService);
 
     return d->serviceName;
 }
 
-void SystemdService::setServiceName(const QString& serviceName) {
+void SystemdService::setServiceName(const QString& serviceName)
+{
     Q_D(SystemdService);
 
     if (!d->serviceName.isEmpty()) {
@@ -263,13 +275,15 @@ void SystemdService::setServiceName(const QString& serviceName) {
     }
 }
 
-SystemdService::ManagerType SystemdService::managerType() const {
+SystemdService::ManagerType SystemdService::managerType() const
+{
     Q_D(const SystemdService);
 
     return d->managerType;
 }
 
-void SystemdService::setManagerType(SystemdService::ManagerType managerType) {
+void SystemdService::setManagerType(SystemdService::ManagerType managerType)
+{
     Q_D(SystemdService);
 
     if (d->managerType != managerType) {
@@ -278,13 +292,15 @@ void SystemdService::setManagerType(SystemdService::ManagerType managerType) {
     }
 }
 
-SystemdService::State SystemdService::state() const {
+SystemdService::State SystemdService::state() const
+{
     Q_D(const SystemdService);
 
     return d->state;
 }
 
-void SystemdService::start() {
+void SystemdService::start()
+{
     Q_D(SystemdService);
 
     if (!d->unit) {
@@ -302,7 +318,8 @@ void SystemdService::start() {
             this, SLOT(stateChanged(QDBusPendingCallWatcher *)));
 }
 
-void SystemdService::stop() {
+void SystemdService::stop()
+{
     Q_D(SystemdService);
 
     if (!d->unit) {
@@ -320,13 +337,15 @@ void SystemdService::stop() {
             this, SLOT(stateChanged(QDBusPendingCallWatcher *)));
 }
 
-bool SystemdService::enabled() const {
+bool SystemdService::enabled() const
+{
     Q_D(const SystemdService);
 
     return (d->unit && d->unit->unitFileState() == "enabled");
 }
 
-void SystemdService::setEnabled(bool state) {
+void SystemdService::setEnabled(bool state)
+{
     Q_D(SystemdService);
 
     QDBusPendingCallWatcher *watcher;
@@ -351,7 +370,8 @@ void SystemdService::setEnabled(bool state) {
             this, SLOT(unitFileStateChanged(QDBusPendingCallWatcher *)));
 }
 
-void SystemdService::setMasked(bool state) {
+void SystemdService::setMasked(bool state)
+{
     Q_D(SystemdService);
 
     if (masked() == state)
@@ -379,7 +399,8 @@ void SystemdService::setMasked(bool state) {
             this, SLOT(maskingChanged(QDBusPendingCallWatcher *)));
 }
 
-bool SystemdService::masked() const {
+bool SystemdService::masked() const
+{
     Q_D(const SystemdService);
 
     return (d->unit && d->unit->loadState() == "masked");
@@ -387,7 +408,8 @@ bool SystemdService::masked() const {
 
 void SystemdService::classBegin() {}
 
-void SystemdService::componentComplete() {
+void SystemdService::componentComplete()
+{
     Q_D(SystemdService);
 
     if (d->serviceName.isEmpty()) {
@@ -398,7 +420,8 @@ void SystemdService::componentComplete() {
     d->initializeDBusInterface();
 }
 
-SystemdService::~SystemdService() {
+SystemdService::~SystemdService()
+{
     Q_D(SystemdService);
 
     /* Properly unsubscribe from receiving DBus signals in order to stop systemd
