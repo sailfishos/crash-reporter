@@ -24,7 +24,7 @@ import Sailfish.Silica 1.0
 import com.jolla.settings.crashreporter 1.0
 
 Item {
-    property bool declined: false
+    property bool declined
 
     Component.onCompleted: {
         parent.statusChanged.connect(pageStatusChanged)
