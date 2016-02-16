@@ -98,7 +98,7 @@ void SystemdServicePrivate::gotUnitPath(QDBusPendingCallWatcher *call)
 
     QDBusPendingReply<QDBusObjectPath> reply = *call;
     if (reply.isError()) {
-        qDebug() << "Failed to get crash-reporter.service DBus path"
+        qDebug() << "Failed to get DBus path for unit" << serviceName << ":"
                  << reply.error().name() << reply.error().message();
     } else {
         QString path = reply.argumentAt<0>().path();
@@ -106,11 +106,11 @@ void SystemdServicePrivate::gotUnitPath(QDBusPendingCallWatcher *call)
         unit = new OrgFreedesktopSystemd1UnitInterface("org.freedesktop.systemd1",
                 path, manager->connection(), q);
 
-        OrgFreedesktopDBusPropertiesInterface *crashReporterProperties =
+        OrgFreedesktopDBusPropertiesInterface *unitProperties =
                 new OrgFreedesktopDBusPropertiesInterface("org.freedesktop.systemd1",
                         path, manager->connection(), q);
 
-        QObject::connect(crashReporterProperties,SIGNAL(PropertiesChanged(const QString &, const QVariantMap &, const QStringList &)),
+        QObject::connect(unitProperties,SIGNAL(PropertiesChanged(const QString &, const QVariantMap &, const QStringList &)),
                          q, SLOT(propertiesChanged(const QString &, const QVariantMap &, const QStringList &)));
 
         /* Before we create a unit proxy, we 'guess' service is not running. Now
