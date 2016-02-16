@@ -67,12 +67,14 @@ void SystemdServicePrivate::initializeDBusInterface()
     manager = new OrgFreedesktopSystemd1ManagerInterface("org.freedesktop.systemd1",
             "/org/freedesktop/systemd1", connection, q);
 
+    // FIXME: this shouldn't really be here, instead e.g. reload on package update scripts.
+    // Now it's done for every instance of different services
     /* Ensure systemd configuration is up to date with unit files, for example
      * after change by package update. */
     QDBusPendingCall reply = manager->Reload();
     reply.waitForFinished();
     if (reply.isError()) {
-        qDebug() << "Couldn't reload systemd unit files";
+        qDebug() << "Couldn't reload systemd unit files" << reply.error().type() << reply.error().message();
     }
 
     qDBusRegisterMetaType<UnitFileChange>();
@@ -82,7 +84,7 @@ void SystemdServicePrivate::initializeDBusInterface()
     reply = manager->Subscribe();
     reply.waitForFinished();
     if (reply.isError()) {
-        qDebug() << "Couldn't subscribe to systemd manager";
+        qDebug() << "Couldn't subscribe to systemd manager" << reply.error().type() << reply.error().message();
     }
 
     reply = manager->LoadUnit(serviceName);
