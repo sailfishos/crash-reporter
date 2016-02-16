@@ -41,6 +41,9 @@ public:
     void propertiesChanged(const QString &interface,
                            const QVariantMap &changedProperties,
                            const QStringList &invalidatedProperties);
+    void handleUnitNew(const QString &name, const QDBusObjectPath &path);
+    void handleUnitRemoved(const QString &name, const QDBusObjectPath &path);
+    void checkUnitState();
     void unitFileStateChanged(QDBusPendingCallWatcher *call);
     void maskingChanged(QDBusPendingCallWatcher *call);
     void stateChanged(QDBusPendingCallWatcher *call);
@@ -55,6 +58,7 @@ private:
     void reloaded(QDBusPendingCallWatcher *call);
 
     void changeState(const QString &state);
+    QTimer unitStateTimer;
 };
 
 void SystemdServicePrivate::initializeDBusInterface()
@@ -92,6 +96,13 @@ void SystemdServicePrivate::initializeDBusInterface()
 
     QObject::connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher *)),
                      q, SLOT(gotUnitPath(QDBusPendingCallWatcher *)));
+
+    // service started may appear as a new unit without property changes, check state expclitly
+    QObject::connect(manager, SIGNAL(UnitNew(const QString &, const QDBusObjectPath &)),
+                     q, SLOT(handleUnitNew(const QString &, const QDBusObjectPath &)));
+
+    QObject::connect(manager, SIGNAL(UnitRemoved(const QString &, const QDBusObjectPath &)),
+                     q, SLOT(handleUnitRemoved(const QString &, const QDBusObjectPath &)));
 }
 
 void SystemdServicePrivate::gotUnitPath(QDBusPendingCallWatcher *call)
@@ -156,6 +167,27 @@ void SystemdServicePrivate::propertiesChanged(const QString &interface,
         invalidatedProperties.contains("LoadState")) {
         qDebug() << "LoadState changed to:" << unit->loadState();
         emit q->maskedChanged();
+    }
+}
+
+void SystemdServicePrivate::handleUnitNew(const QString &name, const QDBusObjectPath &)
+{
+    if (name == serviceName) {
+        unitStateTimer.start();
+    }
+}
+
+void SystemdServicePrivate::handleUnitRemoved(const QString &name, const QDBusObjectPath &)
+{
+    if (name == serviceName) {
+        unitStateTimer.stop();
+    }
+}
+
+void SystemdServicePrivate::checkUnitState()
+{
+    if (unit) {
+        changeState(unit->activeState());
     }
 }
 
@@ -253,6 +285,10 @@ SystemdService::SystemdService(QObject *parent):
 
     d->manager = 0;
     d->unit = 0;
+    d->unitStateTimer.setSingleShot(true);
+    d->unitStateTimer.setInterval(100);
+    connect(&d->unitStateTimer, SIGNAL(timeout()),
+            this, SLOT(checkUnitState()));
 }
 
 QString SystemdService::serviceName() const
