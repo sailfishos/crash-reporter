@@ -39,3 +39,5 @@ SOURCES += \
 	unitfilechange.cpp
 
 INSTALLS += target qml
+
+OTHER_FILES = *.qml

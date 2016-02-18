@@ -40,5 +40,13 @@
    <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList&lt;UnitFileChange&gt;"/>
    <arg name="changes" type="a(sss)" direction="out"/>
   </method>
+  <signal name="UnitNew">
+   <arg name="id" type="s"/>
+   <arg name="path" type="o"/>
+  </signal>
+  <signal name="UnitRemoved">
+   <arg name="id" type="s"/>
+   <arg name="path" type="o"/>
+  </signal>
  </interface>
 </node>
