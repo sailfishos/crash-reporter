@@ -27,7 +27,7 @@ Page {
 
     SilicaFlickable {
         anchors.fill: parent
-        contentHeight: content.height
+        contentHeight: content.height + Theme.paddingLarge
 
         Column {
             id: content

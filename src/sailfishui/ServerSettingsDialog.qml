@@ -63,6 +63,7 @@ Dialog {
                 validator: RegExpValidator { regExp: /^http[s]?:\/\/\w([\w-\.]*\w)*$/ }
                 label: qsTrId("settings_crash-reporter_server_url")
                 EnterKey.enabled: acceptableInput
+                EnterKey.iconSource: "image://theme/icon-m-enter-next"
                 EnterKey.onClicked: serverPortText.focus = true
             }
 
@@ -78,6 +79,7 @@ Dialog {
                 //% "Server port"
                 label: qsTrId("settings_crash-reporter_server_port")
                 EnterKey.enabled: acceptableInput
+                EnterKey.iconSource: "image://theme/icon-m-enter-next"
                 EnterKey.onClicked: serverPathText.focus = true
             }
 
@@ -93,6 +95,7 @@ Dialog {
                 //% "Server path"
                 label: qsTrId("settings_crash-reporter_server_path")
                 EnterKey.enabled: acceptableInput
+                EnterKey.iconSource: "image://theme/icon-m-enter-next"
                 EnterKey.onClicked: usernameText.focus = true
             }
 
@@ -111,6 +114,7 @@ Dialog {
                 text: ApplicationSettings.username
                 //% "Username"
                 label: qsTrId("settings_crash-reporter_username")
+                EnterKey.iconSource: "image://theme/icon-m-enter-next"
                 EnterKey.onClicked: passwordText.focus = true
             }
 
@@ -125,6 +129,7 @@ Dialog {
                 //% "Password"
                 label: qsTrId("settings_crash-reporter_password")
                 echoMode: TextInput.Password
+                EnterKey.iconSource: "image://theme/icon-m-enter-next"
                 EnterKey.onClicked: serverUrlText.focus = true
             }
         }
