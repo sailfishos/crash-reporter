@@ -27,6 +27,7 @@
 
 // System includes.
 
+#include <QObject>
 #include <QStringList>
 
 // Forward declarations.

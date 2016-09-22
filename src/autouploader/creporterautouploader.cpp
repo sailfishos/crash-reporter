@@ -89,8 +89,8 @@ CReporterAutoUploader::CReporterAutoUploader() : d_ptr(new CReporterAutoUploader
     // Create adaptor class. Needs to be taken from the stack.
     new AutoUploaderAdaptor(this);
     // Register service name and object.
-    QDBusConnection::sessionBus().registerService(CReporter::AutoUploaderServiceName);
     QDBusConnection::sessionBus().registerObject(CReporter::AutoUploaderObjectPath, this);
+    QDBusConnection::sessionBus().registerService(CReporter::AutoUploaderServiceName);
     qDebug() << __PRETTY_FUNCTION__ << "Started Auto Uploader service.";
 }
 

@@ -105,8 +105,8 @@ TestDialogServer::TestDialogServer()
     quitCalled = false;
 
     new CReporterDialogServerDBusAdaptor(this);
-    QDBusConnection::sessionBus().registerService(CReporter::DialogServerServiceName);
     QDBusConnection::sessionBus().registerObject(CReporter::DialogServerObjectPath, this);
+    QDBusConnection::sessionBus().registerService(CReporter::DialogServerServiceName);
 }
 
 TestDialogServer::~TestDialogServer()

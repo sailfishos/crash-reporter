@@ -225,6 +225,15 @@ bool CReporterDaemon::startService()
 	  return false;
 	  }
 
+    if (!QDBusConnection::sessionBus().registerObject(CReporter::DaemonObjectPath, this)) {
+      qWarning() << __PRETTY_FUNCTION__
+              << "Failed to register object, daemon already running?";
+      return false;
+	  }
+
+    qDebug() << __PRETTY_FUNCTION__ << "Object:"
+            << CReporter::DaemonObjectPath << "registered.";
+
     if (!QDBusConnection::sessionBus().registerService(CReporter::DaemonServiceName)) {
       qWarning() << __PRETTY_FUNCTION__
               << "Failed to register service, daemon already running?";
@@ -233,11 +242,6 @@ bool CReporterDaemon::startService()
 
     qDebug() << __PRETTY_FUNCTION__ << "Service:"
             << CReporter::DaemonServiceName << "registered.";
-
-    QDBusConnection::sessionBus().registerObject(CReporter::DaemonObjectPath, this);
-
-    qDebug() << __PRETTY_FUNCTION__ << "Object:"
-            << CReporter::DaemonObjectPath << "registered.";
 
     // Good to go.
 	qDebug() << __PRETTY_FUNCTION__ << "D-Bus service started.";
@@ -251,8 +255,8 @@ void CReporterDaemon::stopService()
 {
 	qDebug() << __PRETTY_FUNCTION__ << "Stopping D-Bus service...";
 
-    QDBusConnection::sessionBus().unregisterObject(CReporter::DaemonObjectPath);
     QDBusConnection::sessionBus().unregisterService(CReporter::DaemonServiceName);
+    QDBusConnection::sessionBus().unregisterObject(CReporter::DaemonObjectPath);
 }
 
 CReporterDaemonPrivate::CReporterDaemonPrivate(CReporterDaemon *parent):
