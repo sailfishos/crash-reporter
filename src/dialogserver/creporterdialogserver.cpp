@@ -319,8 +319,8 @@ CReporterDialogServer::CReporterDialogServer(const QString &pluginPath, MApplica
     // Create adaptor class. Needs to be taken from the stack.
     new CReporterDialogServerDBusAdaptor(this);
     // Register service name and object.
-    QDBusConnection::sessionBus().registerService(CReporter::DialogServerServiceName);
     QDBusConnection::sessionBus().registerObject(CReporter::DialogServerObjectPath, this);
+    QDBusConnection::sessionBus().registerService(CReporter::DialogServerServiceName);
 }
 
 // ----------------------------------------------------------------------------
