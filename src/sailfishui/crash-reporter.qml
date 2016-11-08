@@ -194,6 +194,9 @@ Page {
             ComboBox {
                 //% "Log reporter activity"
                 label: qsTrId("settings_crash-reporter_logger_type")
+                //% "Debug logging of crash reporter activities to the device doesn't affect the data sent to a server. Change of this setting takes effect after crash reporter restart."
+                description: qsTrId("settings_crash-reporter_after_restart")
+
                 currentItem: {
                     switch (ApplicationSettings.loggerType) {
                         case "none":
@@ -227,30 +230,20 @@ Page {
                 menu: ContextMenu {
                     MenuItem {
                         id: noneItem
-                        //% "no logging"
+                        //% "No logging"
                         text: qsTrId("settings_crash-reporter_logging_type_none")
                     }
                     MenuItem {
                         id: fileItem
-                        //% "into a file in /tmp"
+                        //% "Into a file in /tmp"
                         text: qsTrId("settings_crash-reporter_logging_type_file")
                     }
                     MenuItem {
                         id: syslogItem
-                        //% "into systemd journal"
+                        //% "Into systemd journal"
                         text: qsTrId("settings_crash-reporter_logging_type_syslog")
                     }
                 }
-            }
-            Label {
-                x: Theme.horizontalPageMargin
-                width: parent.width - (2 * x)
-                height: implicitHeight + Theme.paddingLarge     // add space below the text
-                //% "Debug logging of crash reporter activities to the device doesn't affect the data sent to a server. Change of this setting takes effect after crash reporter restart."
-                text: qsTrId("settings_crash-reporter_after_restart")
-                font.pixelSize: Theme.fontSizeExtraSmall
-                wrapMode: Text.WordWrap
-                color: Theme.highlightColor
             }
         }
     }
