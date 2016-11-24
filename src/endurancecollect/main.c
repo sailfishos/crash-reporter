@@ -46,6 +46,8 @@ static void invoke_endurance_collect() {
         return;
     }
 
+    syslog(LOG_DEBUG, "Collecting endurance snapshot...");
+
     child_pid = fork();
     if (child_pid == -1) {
         syslog(LOG_ERR, "Error on fork().");
@@ -208,7 +210,6 @@ int main() {
 
     while (1) {
         if (FD_ISSET(iphbfd, &fdset)) {
-            syslog(LOG_DEBUG, "Collecting endurance snapshot...");
             send_keepalive();
             invoke_endurance_collect();
             set_timer(keepalivefd, KEEPALIVE_TIMER);
@@ -246,6 +247,9 @@ int main() {
             result = EXIT_FAILURE;
             break;
         }
+
+        // If we ending up while true loop, sleep a bit to avoid busy loop
+        sleep(1);
     }
 
     iphb_close(iphb);
