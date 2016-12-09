@@ -29,6 +29,8 @@ Requires:               sp-endurance
 Requires:               oneshot
 Requires:               qt5-qttools-qdbus
 Requires:               sailfishsilica-qt5 >= 0.13.40
+Requires:               ssu
+Requires:               ssu-sysinfo
 Conflicts:              quick-feedback < 0.0.18
 %{_oneshot_requires_post}
 Source0:                %{name}-%{version}.tar.gz

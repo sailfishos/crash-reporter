@@ -55,7 +55,7 @@ _create_endurance_package()
   mkdir "$work_dir"
   mv $ENDURANCE_DIR/??? "$work_dir"
 
-  hwid=$(ssu model -s)
+  hwid=$(ssu-sysinfo -m)
   reportbasename=Endurance-${hwid}-$(date +%s)-${boot_time}
 
   (
