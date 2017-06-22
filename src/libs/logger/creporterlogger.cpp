@@ -133,6 +133,9 @@ void CReporterLogger::messageHandler(QtMsgType type,
             case QtDebugMsg:
                 msgLevel = LOG_DEBUG;
                 break;
+            case QtInfoMsg:
+                msgLevel = LOG_INFO;
+                break;
             case QtWarningMsg:
                 msgLevel = LOG_WARNING;
                 break;
@@ -153,6 +156,9 @@ void CReporterLogger::messageHandler(QtMsgType type,
         switch (type) {
             case QtDebugMsg:
                 msgType = ": [DEBUG]: ";
+                break;
+            case QtInfoMsg:
+                msgType = ": [INFO]: ";
                 break;
             case QtWarningMsg:
                 msgType = ": [WARNING]: ";
