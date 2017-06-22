@@ -67,7 +67,7 @@ Development headers and libraries for crash-reporter.
 %setup -q -n %{name}-%{version}
 
 %build
-%qmake5
+%qmake5 %{!?qa_stage_devel:DEFINES+=QT_NO_DEBUG_OUTPUT}
 make %{?jobs:-j%jobs}
 
 %install
