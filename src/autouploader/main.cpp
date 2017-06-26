@@ -44,8 +44,6 @@
 #include "creporterlogger.h"
 #endif // QT_NO_DEBUG_OUTPUT
 
-extern char *g_progname;
-
 /*!
   * @brief Crash Reporter Auto Uploader main function.
   *
@@ -55,7 +53,6 @@ extern char *g_progname;
 int main(int argc, char **argv)
 {
 #ifndef QT_NO_DEBUG_OUTPUT
-        g_progname = (char *) "crash-reporter-autouploader";
         Logger logger(CReporterApplicationSettings::instance()->loggerType());
 #endif // QT_NO_DEBUG_OUTPUT
 

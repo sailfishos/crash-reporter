@@ -51,8 +51,6 @@
 #define PLUGINS_DIR     "/usr/lib/crash-reporter/dialogplugins"
 #define LOG_FILE        "/tmp/crash-reporter-ui.log"
 
-extern char *g_progname;
-
 /*!
   * @brief Overridden signal handler.
   *
@@ -107,7 +105,6 @@ class CReporterMApplicationService : public MApplicationService
 int main(int argc, char **argv)
 {
 #ifndef QT_NO_DEBUG_OUTPUT
-    g_progname = (char *) "crash-reporter-ui";
     // Determine logging method.
     QString type = CReporterApplicationSettings::instance()->value(Logging::ValueLoggerType,
                                                     DefaultApplicationSettings::ValueLoggerTypeDefault).toString();

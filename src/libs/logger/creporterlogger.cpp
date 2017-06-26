@@ -48,10 +48,6 @@ CReporterLogger *CReporterLogger::sm_Instance = 0;
 bool CReporterLogger::sm_Syslog = false;
 CReporter::LogType CReporterLogger::sm_LogType = CReporter::LogNone;
 
-// External global variables.
-
-char *g_progname;
-
 // ******** Class CReporterLoggerPrivate ********
 
 // ******** Class CReporterLogger ********
@@ -75,7 +71,7 @@ CReporterLogger::CReporterLogger(const QString type)
         // Initialize logging.
         case CReporter::LogSyslog:
             // Init syslog.
-            openlog(g_progname, LOG_PID, LOG_USER);
+            openlog(NULL, LOG_PID, LOG_USER);
             break;
         case CReporter::LogFile:
             m_file.setFileName(CReporter::DefaultLogFile);
@@ -169,7 +165,7 @@ void CReporterLogger::messageHandler(QtMsgType type,
         };
         // Write to stream.
         CReporterLogger::sm_Instance->m_stream << timeStamp << msgType <<
-                g_progname << ": " << msg << endl;
+                QCoreApplication::applicationName() << ": " << msg << endl;
     }
 
     if (type == QtFatalMsg) {

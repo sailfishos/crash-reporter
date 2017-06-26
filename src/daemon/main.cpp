@@ -53,8 +53,6 @@
 #define LOG_FILE    "/tmp/crash-reporter-daemon.log"
 #endif // QT_NO_DEBUG_OUTPUT
 
-extern char *g_progname;
-
 /*!
  * @brief Gets crash-reporter-daemon pid and saves it to file.
  *
@@ -106,7 +104,6 @@ Q_DECL_EXPORT int main(int argc, char **argv)
     signal(SIGTERM, &signalHandler);
 
 #ifndef QT_NO_DEBUG_OUTPUT
-    g_progname = (char *) "crash-reporter-daemon";
     Logger logger(CReporterApplicationSettings::instance()->loggerType());
 #endif // QT_NO_DEBUG_OUTPUT
 
