@@ -85,13 +85,13 @@ CReporterLogger::CReporterLogger(const QString type)
             // Set stream.
             m_stream.setDevice(&m_file);
             // Set default message pattern
-            qSetMessagePattern(QStringLiteral("%{time}: ["
-                                              "%{if-debug}DEBUG%{endif}"
-                                              "%{if-info}INFO%{endif}"
-                                              "%{if-warning}WARNING%{endif}"
-                                              "%{if-critical}CRITICAL%{endif}"
-                                              "%{if-fatal}FATAL%{endif}"
-                                              "]: %{appname}: %{message}"));
+            qSetMessagePattern(QStringLiteral("%{time} %{appname}: ["
+                                              "%{if-debug}D%{endif}"
+                                              "%{if-info}I%{endif}"
+                                              "%{if-warning}W%{endif}"
+                                              "%{if-critical}C%{endif}"
+                                              "%{if-fatal}F%{endif}"
+                                              "] %{function}:%{line} - %{message}"));
             break;
         case CReporter::LogNone: // TODO Means rather LogDefault than LogNone
             return;
