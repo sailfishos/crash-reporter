@@ -89,9 +89,8 @@ CReporterLogger::CReporterLogger(const QString type)
             // Set stream.
             m_stream.setDevice(&m_file);
             break;
-        case CReporter::LogNone:
-        default:
-            break;
+        case CReporter::LogNone: // TODO Means rather LogDefault than LogNone
+            return;
     };
     // Register ourselves as a debug message handler
     m_old_msg_handler = qInstallMessageHandler(CReporterLogger::messageHandler);
@@ -122,11 +121,9 @@ void CReporterLogger::messageHandler(QtMsgType type,
                                      const QString &msg)
 {
     Q_UNUSED(context);
+    Q_ASSERT(CReporterLogger::sm_LogType != CReporter::LogNone);
 
-    if (CReporterLogger::sm_LogType == CReporter::LogNone) {
-        return;
-    }
-    else if (CReporterLogger::sm_LogType == CReporter::LogSyslog) {
+    if (CReporterLogger::sm_LogType == CReporter::LogSyslog) {
         int msgLevel = LOG_DEBUG;
 
         switch (type) {
