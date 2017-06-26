@@ -100,7 +100,7 @@ CReporterDialogServerPrivate::~CReporterDialogServerPrivate()
 // ----------------------------------------------------------------------------
 void CReporterDialogServerPrivate::processRequests()
 {
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Prosessing request queue...";
+    qCDebug(cr) << "Prosessing request queue...";
 
     m_requestQueueMutex.lock();
     // If a plugin is active, simply show the previously opened dialog
@@ -114,7 +114,7 @@ void CReporterDialogServerPrivate::processRequests()
         }
         else if (m_appService && win != 0 && isDialogVisible())
         {
-            qCDebug(cr) << __PRETTY_FUNCTION__ << "UI was already open. Previously opened dialog is shown.";
+            qCDebug(cr) << "UI was already open. Previously opened dialog is shown.";
             CReporterInfoBanner::show(qtTrId("Crash dialog queued"));
             m_appService->launch();
             m_requestQueueMutex.unlock();
@@ -130,7 +130,7 @@ void CReporterDialogServerPrivate::processRequests()
     }
     else if (m_requestQueue.isEmpty()) {
         // Return, if no requests to process.
-        qCDebug(cr) << __PRETTY_FUNCTION__ << "No requests to process.";
+        qCDebug(cr) << "No requests to process.";
         m_appService = 0;
         // Exit from main loop.
         MApplication::instance()->quit();
@@ -145,7 +145,7 @@ void CReporterDialogServerPrivate::processRequests()
     if (!request->plugin ||
         !request->plugin->iface)
     {
-        qCDebug(cr) << __PRETTY_FUNCTION__ << "Requested plugin has already been destroyed.";
+        qCDebug(cr) << "Requested plugin has already been destroyed.";
         m_requestQueueMutex.unlock();
         delete request;
         return;
@@ -153,8 +153,7 @@ void CReporterDialogServerPrivate::processRequests()
 
     // Request dialog from the plugin.
     if (!request->plugin->iface->requestDialog(request->arguments)) {
-        qCDebug(cr) << __PRETTY_FUNCTION__ << "Plugin:"
-                << request->plugin->iface->name() << "rejected the request.";
+        qCDebug(cr) << "Plugin:" << request->plugin->iface->name() << "rejected the request.";
         if (request->reply.isDelayedReply()) {
             // If message reply was delayed reply to sender.
             QDBusConnection::sessionBus().send(
@@ -181,8 +180,7 @@ void CReporterDialogServerPrivate::requestCompleted()
     CReporterDialogPluginInterface *plugin =
             qobject_cast<CReporterDialogPluginInterface *>(sender());
 
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Plugin:" << plugin->name()
-            << "completed request.";
+    qCDebug(cr) << "Plugin:" << plugin->name() << "completed request.";
 
     // Process request queue.
     QTimer::singleShot(0, this, SLOT(processRequests()));
@@ -193,12 +191,12 @@ void CReporterDialogServerPrivate::requestCompleted()
 // ----------------------------------------------------------------------------
 void CReporterDialogServerPrivate::dialogDestroyed(QObject *dialog)
 {
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Dialog destroyed.";
+    qCDebug(cr) << "Dialog destroyed.";
 
     m_dialogs.removeAll(dialog);
 
     if (m_dialogs.isEmpty()) {
-        qCDebug(cr) << __PRETTY_FUNCTION__ << "No more dialogs -> hide window.";
+        qCDebug(cr) << "No more dialogs -> hide window.";
         MWindow *appWindow = MApplication::activeWindow();
         if (appWindow != 0) {
             appWindow->hide();
@@ -211,7 +209,7 @@ void CReporterDialogServerPrivate::dialogDestroyed(QObject *dialog)
 void CReporterDialogServerPrivate::loadPlugins()
 {
     QDir pluginsDir(m_pluginPath);
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Load plugins from:" <<  pluginsDir.absolutePath();
+    qCDebug(cr) << "Load plugins from:" <<  pluginsDir.absolutePath();
 
     // Go through all plugins in the directory.
     foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
@@ -219,11 +217,10 @@ void CReporterDialogServerPrivate::loadPlugins()
         QObject *pluginObject = pluginLoader.instance();
 
         if (pluginObject != 0) {
-            qCDebug(cr) << __PRETTY_FUNCTION__ << "Initialize plugin:" << fileName;
+            qCDebug(cr) << "Initialize plugin:" << fileName;
             loadPlugin(pluginObject);
         } else {
-            qCWarning(cr) << __PRETTY_FUNCTION__ << "Plugin loading failed:"
-                    << pluginLoader.errorString();
+            qCWarning(cr) << "Plugin loading failed:" << pluginLoader.errorString();
         }
     }
 }
@@ -241,7 +238,7 @@ void CReporterDialogServerPrivate::loadPlugin(QObject *pluginObject)
         // Try to Initialize plugin.
         dialogPlugin->initialize(q_ptr);
         if (dialogPlugin->isInitialized()) {
-            qCDebug(cr) << __PRETTY_FUNCTION__ << "Plugin:" << dialogPlugin->name() << "loaded.";
+            qCDebug(cr) << "Plugin:" << dialogPlugin->name() << "loaded.";
 
             // Append to list, if initialization was successfull.
             CReporterLoadedPlugin *loadedPlugin = new CReporterLoadedPlugin();
@@ -251,7 +248,7 @@ void CReporterDialogServerPrivate::loadPlugin(QObject *pluginObject)
             connect(loadedPlugin->iface, SIGNAL(requestCompleted()), SLOT(requestCompleted()));
         }
         else {
-            qCWarning(cr) << __PRETTY_FUNCTION__ << "Initialization failed.";
+            qCWarning(cr) << "Initialization failed.";
         }
     }
 }
@@ -261,7 +258,7 @@ void CReporterDialogServerPrivate::loadPlugin(QObject *pluginObject)
 // ----------------------------------------------------------------------------
 void CReporterDialogServerPrivate::destroyPlugins()
 {
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Destroy all plugins.";
+    qCDebug(cr) << "Destroy all plugins.";
 
     // Go through all plugins in the list and call destroy.
     foreach (CReporterLoadedPlugin *plugin, m_plugins) {
@@ -278,8 +275,7 @@ bool CReporterDialogServerPrivate::isPluginActive()
     // Loop through plugins and check, if there active one.
     foreach(CReporterLoadedPlugin *loadedPlugin, m_plugins) {
         if (loadedPlugin->iface->isActive()) {
-            qCDebug(cr) << __PRETTY_FUNCTION__ << "Plugin:" << loadedPlugin->iface->name()
-                    << "is active.";
+            qCDebug(cr) << "Plugin:" << loadedPlugin->iface->name() << "is active.";
             return true;
         }
     }
@@ -294,8 +290,7 @@ bool CReporterDialogServerPrivate::isDialogVisible()
     // Loop through plugins and check, if there active one.
     foreach(CReporterLoadedPlugin *loadedPlugin, m_plugins) {
         if (loadedPlugin->iface->isVisible()) {
-            qCDebug(cr) << __PRETTY_FUNCTION__ << "Plugin:" << loadedPlugin->iface->name()
-                    << "is visible.";
+            qCDebug(cr) << "Plugin:" << loadedPlugin->iface->name() << "is visible.";
             return true;
         }
     }
@@ -331,7 +326,7 @@ CReporterDialogServer::CReporterDialogServer(const QString &pluginPath, MApplica
 // ----------------------------------------------------------------------------
 CReporterDialogServer::~CReporterDialogServer()
 {
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Entered destructor.";
+    qCDebug(cr) << "Entered destructor.";
 
     d_ptr->m_requestQueueMutex.lock();
     // Delete requests.
@@ -353,7 +348,7 @@ CReporterDialogServer::~CReporterDialogServer()
     delete d_ptr;
     d_ptr = 0;
 
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Server destroyed.";
+    qCDebug(cr) << "Server destroyed.";
 }
 
 // ----------------------------------------------------------------------------
@@ -367,8 +362,7 @@ bool CReporterDialogServer::createRequest(const QString &dialogName,
     // Find handler plugin for the request.
     foreach(CReporterLoadedPlugin *plugin, d_ptr->m_plugins) {
         if (plugin->iface->name() == dialogName) {
-                qCDebug(cr) << __PRETTY_FUNCTION__ << "Request handler found:"
-                        << plugin->iface->name();
+                qCDebug(cr) << "Request handler found:" << plugin->iface->name();
                 handlerPlugin = plugin;
                 break;
         }
@@ -382,7 +376,7 @@ bool CReporterDialogServer::createRequest(const QString &dialogName,
     request->arguments = arguments;
     request->reply = QDBusMessage();
 
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Queue new request...";
+    qCDebug(cr) << "Queue new request...";
     d_ptr->m_requestQueueMutex.lock();
 
     // Setting request priority based on it's type.
@@ -407,7 +401,7 @@ bool CReporterDialogServer::createRequest(const QString &dialogName,
 // ----------------------------------------------------------------------------
 void CReporterDialogServer::showDialog(MDialog *dialog)
 {
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Dialog visibility requested.";
+    qCDebug(cr) << "Dialog visibility requested.";
 
     if (dialog == 0) return;
 
@@ -435,7 +429,7 @@ void CReporterDialogServer::showDialog(MDialog *dialog)
 void CReporterDialogServer::hideDialog(MDialog *dialog)
 {
     if (dialog->isVisible()) {
-        qCDebug(cr) << __PRETTY_FUNCTION__ << "Hide Dialog.";
+        qCDebug(cr) << "Hide Dialog.";
         // Hide dialog without animation.
         MWindow *appWindow = MApplication::activeWindow();
         MSceneManager *sceneMgr = appWindow->sceneManager();
@@ -449,7 +443,7 @@ void CReporterDialogServer::hideDialog(MDialog *dialog)
 QDBusError::ErrorType CReporterDialogServer::callReceived(const QString &dialogName,
                                                  const QVariantList &arguments, const QDBusMessage &message)
 {
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Dialog:" << dialogName <<  "requested.";
+    qCDebug(cr) << "Dialog:" << dialogName <<  "requested.";
 
     CReporterLoadedPlugin *handlerPlugin = 0;
 
@@ -458,8 +452,7 @@ QDBusError::ErrorType CReporterDialogServer::callReceived(const QString &dialogN
     // Find handler plugin for the request.
     foreach(CReporterLoadedPlugin *plugin, d_ptr->m_plugins) {
         if (plugin->iface->name() == dialogName) {
-                qCDebug(cr) << __PRETTY_FUNCTION__ << "Request handler found:"
-                        << plugin->iface->name();
+                qCDebug(cr) << "Request handler found:" << plugin->iface->name();
                 handlerPlugin = plugin;
                 break;
         }
@@ -467,7 +460,7 @@ QDBusError::ErrorType CReporterDialogServer::callReceived(const QString &dialogN
 
     // Handler plugin not found.
     if (handlerPlugin == 0) {
-        qCWarning(cr) << __PRETTY_FUNCTION__ << "Handler plugin not found.";
+        qCWarning(cr) << "Handler plugin not found.";
         return QDBusError::NotSupported;
     }
 
@@ -475,7 +468,7 @@ QDBusError::ErrorType CReporterDialogServer::callReceived(const QString &dialogN
     // and there's a new dbus call
     // If plugin is active, reject request.
     /*if (handlerPlugin->iface->isActive()) {
-        qCWarning(cr) << __PRETTY_FUNCTION__ << "Handler plugin active. Request ignored.";
+        qCWarning(cr) << "Handler plugin active. Request ignored.";
         return QDBusError::Failed;
     }*/
 
@@ -520,7 +513,7 @@ QDBusError::ErrorType CReporterDialogServer::callReceived(const QString &dialogN
 // ----------------------------------------------------------------------------
 void CReporterDialogServer::quit()
 {
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Quit dialog server.";
+    qCDebug(cr) << "Quit dialog server.";
     d_ptr->m_appService = 0;
     MApplication::instance()->quit();
 }

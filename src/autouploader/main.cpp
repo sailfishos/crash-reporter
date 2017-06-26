@@ -64,10 +64,9 @@ int main(int argc, char **argv)
     translator->load("crash-reporter_eng_en", "/usr/share/translations");
     app.installTranslator(translator);
 
-    qCDebug(cr) << __PRETTY_FUNCTION__  << CReporter::AutoUploaderBinaryName << "[" << app.applicationPid()
-        << "]" << "started.";
+    qCDebug(cr) << CReporter::AutoUploaderBinaryName << "[" << app.applicationPid() << "]" << "started.";
 
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Crash Reporter version is " << QString(CREPORTERVERSION);
+    qCDebug(cr) << "Crash Reporter version is " << QString(CREPORTERVERSION);
 
     CReporterAutoUploader uploader;
 
@@ -75,7 +74,7 @@ int main(int argc, char **argv)
     int retVal = app.exec();
 
     CReporterApplicationSettings::instance()->freeSingleton();
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Shutting down Auto Uploader process.";
+    qCDebug(cr) << "Shutting down Auto Uploader process.";
     return retVal;
 }
 

@@ -69,12 +69,11 @@ bool getPid(QCoreApplication &app)
 
 	// Get new PID.
 	pid = app.applicationPid();
-    qCDebug(cr) << __PRETTY_FUNCTION__  <<  CReporter::DaemonBinaryName
-            << "[" << pid << "] starting...";
+    qCDebug(cr) << CReporter::DaemonBinaryName << "[" << pid << "] starting...";
 
     if (pidFile.exists()) {
         firstStartup = false;
-		qCDebug(cr) << __PRETTY_FUNCTION__ << "Removing stale PID file.";
+		qCDebug(cr) << "Removing stale PID file.";
 		pidFile.remove();
 	}
 	
@@ -84,7 +83,7 @@ bool getPid(QCoreApplication &app)
 		pidFile.close();
 	}
 
-    qCDebug(cr) <<  __PRETTY_FUNCTION__ << "Startup delayed =" << firstStartup;
+    qCDebug(cr) << "Startup delayed =" << firstStartup;
     return firstStartup;
 }
 
@@ -132,7 +131,7 @@ Q_DECL_EXPORT int main(int argc, char **argv)
         }
     }
 
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Crash Reporter version is " << QString(CREPORTERVERSION);
+    qCDebug(cr) << "Crash Reporter version is " << QString(CREPORTERVERSION);
 
     // Enter Qt main loop.
     int retVal = app.exec();

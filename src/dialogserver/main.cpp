@@ -62,7 +62,7 @@ using CReporter::LoggingCategory::cr;
   */
 void signal_handler(int sig)
 {
-    qCDebug(cr) << __PRETTY_FUNCTION__  << "Terminated with signal:" << sig;
+    qCDebug(cr) << "Terminated with signal:" << sig;
 
     // Cleans up notifications, which have not been dismissed yet by the user.
     CReporterNotification::removeAll();
@@ -111,7 +111,7 @@ int main(int argc, char **argv)
     QString type = CReporterApplicationSettings::instance()->value(Logging::ValueLoggerType,
                                                     DefaultApplicationSettings::ValueLoggerTypeDefault).toString();
     Logger logger(type);
-    qCDebug(cr) << __PRETTY_FUNCTION__  << "Debug logging started.";
+    qCDebug(cr) << "Debug logging started.";
 #endif // QT_NO_DEBUG_OUTPUT
 
     // Setup handlers for signals.
@@ -124,10 +124,9 @@ int main(int argc, char **argv)
     MApplicationService *applicationService = new CReporterMApplicationService;
     MApplication app(argc, argv, CReporter::UIBinaryName, applicationService);
 
-    qCDebug(cr) << __PRETTY_FUNCTION__  << CReporter::UIBinaryName << "[" << app.applicationPid()
-        << "]" << "started.";
+    qCDebug(cr) << CReporter::UIBinaryName << "[" << app.applicationPid() << "]" << "started.";
 
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Crash Reporter version is " << QString(CREPORTERVERSION);
+    qCDebug(cr) << "Crash Reporter version is " << QString(CREPORTERVERSION);
 
     // Set-up translation system.
     MLocale locale;
@@ -143,7 +142,7 @@ int main(int argc, char **argv)
     // Enter Qt main loop.
     int retVal = app.exec();
 
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Returned from dialog server main loop";
+    qCDebug(cr) << "Returned from dialog server main loop";
 
     CReporterNotification::removeAll();
 

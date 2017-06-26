@@ -126,7 +126,7 @@ bool CReporterNotifyDialogPlugin::requestDialog(const QVariantList &arguments)
     // arguments[0] = Path to rich-core (argument received from daemon).
     if (arguments.count() != 1 || arguments.at(0).type() != QVariant::String)
     {
-        qCDebug(cr) << __PRETTY_FUNCTION__ << "Invalid number of arguments or type:"
+        qCDebug(cr) << "Invalid number of arguments or type:"
                 << "Count:" << arguments.count() << "Type:" << arguments.at(0).type();
         return false;
     }
@@ -137,7 +137,7 @@ bool CReporterNotifyDialogPlugin::requestDialog(const QVariantList &arguments)
 
     if (d_ptr->filePath.isEmpty())
     {
-        qCDebug(cr) << __PRETTY_FUNCTION__ << "Invalid file path.";
+        qCDebug(cr) << "Invalid file path.";
         return false;
     }
 
@@ -167,12 +167,12 @@ bool CReporterNotifyDialogPlugin::requestDialog(const QVariantList &arguments)
 
         if (d_ptr->notification != 0)
         {
-            qCDebug(cr) << __PRETTY_FUNCTION__ << "Removing old notification.";
+            qCDebug(cr) << "Removing old notification.";
             d_ptr->notification->remove();
             d_ptr->notification->deleteLater();
         }
 
-        qCDebug(cr) << __PRETTY_FUNCTION__ << "Creating new notification.";
+        qCDebug(cr) << "Creating new notification.";
         // Create new notification.
         //% "Tap to send report."
         d_ptr->notification = new CReporterNotification(CReporter::ApplicationNotificationEventType,
@@ -207,7 +207,7 @@ bool CReporterNotifyDialogPlugin::isVisible() const
 // -----------------------------------------------------------------------------
 void CReporterNotifyDialogPlugin::actionPerformed(int buttonId)
 {
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Button id:" << buttonId;
+    qCDebug(cr) << "Button id:" << buttonId;
 
     QVariantList arguments;
     QString comments;
@@ -220,8 +220,7 @@ void CReporterNotifyDialogPlugin::actionPerformed(int buttonId)
             if (!comments.isEmpty()) {
                 // Append comments to *.lzo.
                 if (!CReporterUtils::appendToLzo(comments, d_ptr->filePath)) {
-                    qCDebug(cr) << __PRETTY_FUNCTION__ << "Unable to add user comments to:"
-                           << d_ptr->filePath;
+                    qCDebug(cr) << "Unable to add user comments to:" << d_ptr->filePath;
                 }
             }
             if (!d_ptr->dialog->getContactInfo().isNull())
@@ -236,8 +235,7 @@ void CReporterNotifyDialogPlugin::actionPerformed(int buttonId)
             if (!comments.isEmpty()) {
                 // Append comments to *.lzo.
                 if (!CReporterUtils::appendToLzo(comments, d_ptr->filePath)) {
-                    qCDebug(cr) << __PRETTY_FUNCTION__ << "Unable to add user comments to:"
-                           << d_ptr->filePath;
+                    qCDebug(cr) << "Unable to add user comments to:" << d_ptr->filePath;
                 }
             }
             if (!d_ptr->dialog->getContactInfo().isNull())
@@ -246,7 +244,7 @@ void CReporterNotifyDialogPlugin::actionPerformed(int buttonId)
         case CReporter::DeleteButton:
             // "Delete" -button was pressed. Remove rich core from the system.
             if (!CReporterUtils::removeFile(d_ptr->filePath)) {
-                qCDebug(cr) << __PRETTY_FUNCTION__ << "Unable to remove file:"  << d_ptr->filePath;
+                qCDebug(cr) << "Unable to remove file:"  << d_ptr->filePath;
             }
             break;
          case CReporter::OptionsButton:
@@ -277,7 +275,7 @@ void CReporterNotifyDialogPlugin::actionPerformed(int buttonId)
 // -----------------------------------------------------------------------------
 void CReporterNotifyDialogPlugin::dialogFinished()
 {
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Dialog was closed.";
+    qCDebug(cr) << "Dialog was closed.";
 
     d_ptr->active = false;
     d_ptr->dialog->deleteLater();
@@ -292,7 +290,7 @@ void CReporterNotifyDialogPlugin::dialogFinished()
 // -----------------------------------------------------------------------------
 void CReporterNotifyDialogPlugin::notificationTimeout()
 {
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Notification timeouted.";
+    qCDebug(cr) << "Notification timeouted.";
 
     delete d_ptr->notification;
     d_ptr->notification = 0;
@@ -305,7 +303,7 @@ void CReporterNotifyDialogPlugin::notificationTimeout()
 // -----------------------------------------------------------------------------
 void CReporterNotifyDialogPlugin::notificationActivated()
 {
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Notification activated.";
+    qCDebug(cr) << "Notification activated.";
 
     delete d_ptr->notification;
     d_ptr->notification = 0;

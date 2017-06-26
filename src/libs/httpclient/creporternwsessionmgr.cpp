@@ -165,7 +165,7 @@ bool CReporterNwSessionMgr::open()
             return true;
         }
 
-        qCDebug(cr) << __PRETTY_FUNCTION__ << "No existing network session.";
+        qCDebug(cr) << "No existing network session.";
         // If there was no network session, create one.
         d->networkSession =
                 new QNetworkSession(d->networkManager().defaultConfiguration());
@@ -177,14 +177,14 @@ bool CReporterNwSessionMgr::open()
         connect(d->networkSession, SIGNAL(opened()), this, SIGNAL(sessionOpened()));
     }
     else if (d->networkSession->isOpen()) {
-        qCDebug(cr) << __PRETTY_FUNCTION__ << "Using existing network session.";
+        qCDebug(cr) << "Using existing network session.";
         return true;
     }
 
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Opening network session...";
+    qCDebug(cr) << "Opening network session...";
 #ifndef CREPORTER_UNIT_TEST 
     if (CReporterPrivacySettingsModel::instance()->automaticSendingEnabled()) {
-	qCDebug(cr) << __PRETTY_FUNCTION__ << "... with ConnectInBackground set";
+	qCDebug(cr) << "... with ConnectInBackground set";
         d->networkSession->setSessionProperty("ConnectInBackground", true);
     }
 #endif
@@ -200,7 +200,7 @@ void CReporterNwSessionMgr::close()
     Q_D(CReporterNwSessionMgr);
 
     if (d->networkSession != 0) {
-        qCDebug(cr) << __PRETTY_FUNCTION__ << "Close network session.";
+        qCDebug(cr) << "Close network session.";
         d->networkSession->close();
     }
 }
@@ -213,7 +213,7 @@ void CReporterNwSessionMgr::stop()
     Q_D(CReporterNwSessionMgr);
 
     if (d->networkSession != 0) {
-        qCDebug(cr) << __PRETTY_FUNCTION__ << "Stop network session.";
+        qCDebug(cr) << "Stop network session.";
         d->networkSession->stop();
     }
 }
@@ -231,7 +231,7 @@ void CReporterNwSessionMgr::networkError(QNetworkSession::SessionError error)
     }
 
     QString errorString = d->networkSession->errorString();
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Network error occured:" << errorString;
+    qCDebug(cr) << "Network error occured:" << errorString;
 
     emit networkError(errorString);
 }
@@ -247,29 +247,29 @@ void CReporterNwSessionMgr::networkStateChanged(QNetworkSession::State state)
 
     switch (state) {
     case QNetworkSession::Invalid:
-        qCDebug(cr) << __PRETTY_FUNCTION__ << text << "Invalid";
+        qCDebug(cr) << text << "Invalid";
         break;
     case QNetworkSession::NotAvailable:
-        qCDebug(cr) << __PRETTY_FUNCTION__ << text << "Not available";
+        qCDebug(cr) << text << "Not available";
         break;
     case QNetworkSession::Connecting:
-        qCDebug(cr) << __PRETTY_FUNCTION__ << text << "Connecting";
+        qCDebug(cr) << text << "Connecting";
         break;
     case QNetworkSession::Connected:
-        qCDebug(cr) << __PRETTY_FUNCTION__ << text << "Connected";
+        qCDebug(cr) << text << "Connected";
         break;
     case QNetworkSession::Closing:
-        qCDebug(cr) << __PRETTY_FUNCTION__ << text << "Closing";
+        qCDebug(cr) << text << "Closing";
         break;
     case QNetworkSession::Disconnected:
         // Existing session disconnected, delete the session
-        qCDebug(cr) << __PRETTY_FUNCTION__ << text << "Disconnected";
+        qCDebug(cr) << text << "Disconnected";
         emit sessionDisconnected();
         d->networkSession->deleteLater();
         d->networkSession = 0;
         break;
     case QNetworkSession::Roaming:
-        qCDebug(cr) << __PRETTY_FUNCTION__ << text << "Roaming";
+        qCDebug(cr) << text << "Roaming";
         break;
     default:
         break;

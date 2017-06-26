@@ -60,7 +60,7 @@ CReporterUploadQueue::CReporterUploadQueue(QObject *parent) :
         QObject(parent),
         d_ptr(new CReporterUploadQueuePrivate())
 {
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Upload queue initialized.";
+    qCDebug(cr) << "Upload queue initialized.";
     d_ptr->uploadQueue.clear();
     d_ptr->notified = false;
     d_ptr->nbrOfItems = 0;
@@ -71,7 +71,7 @@ CReporterUploadQueue::CReporterUploadQueue(QObject *parent) :
 // ----------------------------------------------------------------------------
 CReporterUploadQueue::~CReporterUploadQueue()
 {
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Upload queue destroyed.";
+    qCDebug(cr) << "Upload queue destroyed.";
     // Empty queue.
     clear();
 
@@ -85,7 +85,7 @@ CReporterUploadQueue::~CReporterUploadQueue()
 void CReporterUploadQueue::enqueue(CReporterUploadItem *item)
 {
     Q_ASSERT(item != 0);
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Append new item to queue...";
+    qCDebug(cr) << "Append new item to queue...";
 
     item->setParent(this);
     d_ptr->uploadQueue.append(item);
@@ -96,7 +96,7 @@ void CReporterUploadQueue::enqueue(CReporterUploadItem *item)
 
     if (!d_ptr->notified) {
         d_ptr->nbrOfItems = 0;
-        qCDebug(cr) << __PRETTY_FUNCTION__ << "Added to empty queue => notify engine.";
+        qCDebug(cr) << "Added to empty queue => notify engine.";
         d_ptr->notified = true;
         // If list was empty, notify engine to start uploading.
         emit emitNextItem();
@@ -110,18 +110,18 @@ void CReporterUploadQueue::enqueue(CReporterUploadItem *item)
 // ----------------------------------------------------------------------------
 void CReporterUploadQueue::itemFinished()
 {
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Item finished.";
+    qCDebug(cr) << "Item finished.";
 
     CReporterUploadItem *item = qobject_cast<CReporterUploadItem *>(sender());
     item->deleteLater();
 
     if (d_ptr->uploadQueue.isEmpty()) {
-        qCDebug(cr) << __PRETTY_FUNCTION__ << "Queue is empty => emit done()";
+        qCDebug(cr) << "Queue is empty => emit done()";
         d_ptr->notified = false;
         emit done();
     }
     else {
-        qCDebug(cr) << __PRETTY_FUNCTION__ << "Queue size:" << d_ptr->uploadQueue.size();
+        qCDebug(cr) << "Queue size:" << d_ptr->uploadQueue.size();
         emit emitNextItem();
     }
 }
@@ -153,7 +153,7 @@ void CReporterUploadQueue::clear()
 // ----------------------------------------------------------------------------
 void CReporterUploadQueue::emitNextItem()
 {
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Emit nextItem().";
+    qCDebug(cr) << "Emit nextItem().";
     CReporterUploadItem* item = d_ptr->uploadQueue.dequeue();
 
     emit nextItem(item);

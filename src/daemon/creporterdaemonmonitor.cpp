@@ -69,7 +69,7 @@ CReporterHandledRichCore::CReporterHandledRichCore(const QString &filePath):
 
     count = 0;
 
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Name:" << binaryName << ", Signal:" << signalNumber;
+    qCDebug(cr) << "Name:" << binaryName << ", Signal:" << signalNumber;
 }
 
 // ----------------------------------------------------------------------------
@@ -126,7 +126,7 @@ CReporterDaemonMonitorPrivate::~CReporterDaemonMonitorPrivate()
 // ----------------------------------------------------------------------------
 void CReporterDaemonMonitorPrivate::addDirectoryWatcher()
 {
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Adding core directory watcher...";
+    qCDebug(cr) << "Adding core directory watcher...";
 
     // Subscribe to receive signals for changed directories.
     connect(&watcher, SIGNAL(directoryChanged(const QString&)),
@@ -153,7 +153,7 @@ void CReporterDaemonMonitorPrivate::addDirectoryWatcher()
 // ----------------------------------------------------------------------------
 void CReporterDaemonMonitorPrivate::removeDirectoryWatcher()
 {
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Removing core directory watcher...";
+    qCDebug(cr) << "Removing core directory watcher...";
 
     // Remove watcher from directories.
     watcher.removePaths(watcher.directories());
@@ -164,7 +164,7 @@ void CReporterDaemonMonitorPrivate::removeDirectoryWatcher()
 // ----------------------------------------------------------------------------
 void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
 {
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Directory:" << path << "has changed.";
+    qCDebug(cr) << "Directory:" << path << "has changed.";
 
     QDir changedDir(path);
     // QFileSystemWatcher will send signal if monitored directory was removed.
@@ -175,17 +175,15 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
             connect(&parentDirWatcher, SIGNAL(directoryChanged(QString)),
                     SLOT(handleParentDirectoryChanged()));
             parentDirWatcher.addPath(changedDir.absolutePath());
-            qCDebug(cr) << __PRETTY_FUNCTION__
-                     << "Directory was deleted. Started parent dir monitoring.";
+            qCDebug(cr) << "Directory was deleted. Started parent dir monitoring.";
         } else {
-            qCDebug(cr) << __PRETTY_FUNCTION__
-                     << "Directory was deleted. Parent dir does not exist.";
+            qCDebug(cr) << "Directory was deleted. Parent dir does not exist.";
         }
 
         return;
     }
 
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Changed directory exists.";
+    qCDebug(cr) << "Changed directory exists.";
 
     CReporterCoreRegistry *registry = CReporterCoreRegistry::instance();
 
@@ -197,7 +195,7 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
     }
 
     // New core found.
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "New rich-core file found: " << filePath;
+    qCDebug(cr) << "New rich-core file found: " << filePath;
 
     QStringList details = CReporterUtils::parseCrashInfoFromFilename(filePath);
     bool isUserTerminated = (details[2].toInt() == SIGQUIT);
@@ -266,14 +264,12 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
                     crashCount);
         }
         if (!CReporterNwSessionMgr::canUseNetworkConnection()) {
-            qCDebug(cr) << __PRETTY_FUNCTION__
-                     << "WiFi not available, not uploading now.";
+            qCDebug(cr) << "WiFi not available, not uploading now.";
         } else {
             /* In auto-upload mode try to upload all crash reports each
              * time a new one appears. */
             if (!CReporterUtils::notifyAutoUploader(registry->collectAllCoreFiles())) {
-                qCWarning(cr) << __PRETTY_FUNCTION__
-                           << "Failed to start Auto Uploader.";
+                qCWarning(cr) << "Failed to start Auto Uploader.";
             }
         }
     }
@@ -284,7 +280,7 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
 // ----------------------------------------------------------------------------
 void CReporterDaemonMonitorPrivate::handleParentDirectoryChanged()
 {
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Parent dir has changed. Trying to re-add directory watchers.";
+    qCDebug(cr) << "Parent dir has changed. Trying to re-add directory watchers.";
 
     CReporterCoreRegistry *registry = CReporterCoreRegistry::instance();
 
@@ -300,7 +296,7 @@ void CReporterDaemonMonitorPrivate::handleParentDirectoryChanged()
 
     if (watcher.directories().count() > numWatchPaths)
     {
-        qCDebug(cr) << __PRETTY_FUNCTION__ << "Successfully started watching core-dump dir";
+        qCDebug(cr) << "Successfully started watching core-dump dir";
         disconnect(this, SLOT(handleParentDirectoryChanged()));
         parentDirWatcher.removePaths(parentDirWatcher.directories());
     }
@@ -316,7 +312,7 @@ bool CReporterDaemonMonitorPrivate::checkForDuplicates(const QString &path)
         return false;
     }
 
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Checking, if" << path << "has been handled for"
+    qCDebug(cr) << "Checking, if" << path << "has been handled for"
             << autoDeleteMaxSimilarCores << "times.";
 
     // Create new entry.
@@ -324,7 +320,7 @@ bool CReporterDaemonMonitorPrivate::checkForDuplicates(const QString &path)
 
     foreach (CReporterHandledRichCore *handled, handledRichCores) {
         // Loop through list to find duplicates.
-        qCDebug(cr) << __PRETTY_FUNCTION__  << "Compare to:"
+        qCDebug(cr) << "Compare to:"
                << "Name:" << handled->binaryName << ", Signal:" << handled->signalNumber;
 
         if (*handled == *rCore) {
@@ -332,19 +328,18 @@ bool CReporterDaemonMonitorPrivate::checkForDuplicates(const QString &path)
              * reset. */
             QDateTime now(QDateTime::currentDateTimeUtc());
             if (handled->lastCountReset.addDays(1) < now) {
-                qCDebug(cr) << __PRETTY_FUNCTION__ << "More than a day has passed,"
-                            " resetting duplicate counter";
+                qCDebug(cr) << "More than a day has passed, resetting duplicate counter";
                 handled->count = 0;
                 handled->lastCountReset = now;
             }
 
             handled->count++;
             // Duplicate found. Increment counter.
-            qCDebug(cr) << __PRETTY_FUNCTION__  << "Matches. Count is now:" << handled->count;
+            qCDebug(cr) << "Matches. Count is now:" << handled->count;
 
             if (handled->count > autoDeleteMaxSimilarCores) {
                 // Maximum exeeded.
-                qCDebug(cr) << __PRETTY_FUNCTION__  << "Maximum number of duplicates exceeded.";
+                qCDebug(cr) << "Maximum number of duplicates exceeded.";
                 delete rCore;
                 return true;
             }
@@ -377,7 +372,7 @@ void CReporterDaemonMonitorPrivate::handleNotificationEvent()
 void CReporterDaemonMonitorPrivate::resetCrashCount()
 {
     crashCount = 0;
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Crash counter was reset.";
+    qCDebug(cr) << "Crash counter was reset.";
 }
 
 void CReporterDaemonMonitorPrivate::onSetAutoUploadChanged()
@@ -386,8 +381,7 @@ void CReporterDaemonMonitorPrivate::onSetAutoUploadChanged()
         return;
     }
 
-    qCDebug(cr) << __PRETTY_FUNCTION__
-             << "Calling quit() on crash-reporter-autouploader.";
+    qCDebug(cr) << "Calling quit() on crash-reporter-autouploader.";
 
     ComNokiaCrashReporterAutoUploaderInterface proxy(CReporter::AutoUploaderServiceName,
             CReporter::AutoUploaderObjectPath, QDBusConnection::sessionBus());

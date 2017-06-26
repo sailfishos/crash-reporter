@@ -102,7 +102,7 @@ bool CReporterMessageBoxDialogPlugin::requestDialog(const QVariantList &argument
 
     // Resolve arguments.
     if (arguments.count() != 1 || arguments.at(0).type() != QVariant::String) {
-        qCDebug(cr) << __PRETTY_FUNCTION__ << "Invalid number of arguments or type:"
+        qCDebug(cr) << "Invalid number of arguments or type:"
                 << "Count:" << arguments.count() << "Type:" << arguments.at(0).type();
         return false;
     }
@@ -140,7 +140,7 @@ bool CReporterMessageBoxDialogPlugin::isVisible() const
 // -----------------------------------------------------------------------------
 void CReporterMessageBoxDialogPlugin::dialogFinished()
 {
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Dialog disappeared; close window";
+    qCDebug(cr) << "Dialog disappeared; close window";
 
     d_ptr->active = false;
     d_ptr->dialog = 0;

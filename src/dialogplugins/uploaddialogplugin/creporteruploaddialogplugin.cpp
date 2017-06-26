@@ -117,7 +117,7 @@ bool CReporterUploadDialogPlugin::requestDialog(const QVariantList &arguments)
     if (d_ptr == 0) return false;
 
     if (arguments.count() != 1) {
-        qCDebug(cr) << __PRETTY_FUNCTION__ << "Invalid number of arguments.";
+        qCDebug(cr) << "Invalid number of arguments.";
         return false;
     }
 
@@ -130,12 +130,12 @@ bool CReporterUploadDialogPlugin::requestDialog(const QVariantList &arguments)
         files = arguments.at(0).toStringList();
     }
     else {
-        qCDebug(cr) << __PRETTY_FUNCTION__ << "Invalid argument type";
+        qCDebug(cr) << "Invalid argument type";
         return false;
     }
 
     if (files.isEmpty()) {
-        qCDebug(cr) << __PRETTY_FUNCTION__ << "Request contained no files.";
+        qCDebug(cr) << "Request contained no files.";
         return false;
     }
 
@@ -186,11 +186,11 @@ bool CReporterUploadDialogPlugin::isVisible() const
 // -----------------------------------------------------------------------------
 void CReporterUploadDialogPlugin::actionPerformed(int buttonId)
 {
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Button id:" << buttonId;
+    qCDebug(cr) << "Button id:" << buttonId;
 
     switch (buttonId) {
         case CReporter::CancelButton:
-            qCDebug(cr) << __PRETTY_FUNCTION__ << "User requested to cancel upload.";
+            qCDebug(cr) << "User requested to cancel upload.";
             if (d_ptr->engine) d_ptr->engine->cancelAll();
             break;
         default:
@@ -204,7 +204,7 @@ void CReporterUploadDialogPlugin::actionPerformed(int buttonId)
 // -----------------------------------------------------------------------------
 void CReporterUploadDialogPlugin::dialogRejected()
 {
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "User has rejected the dialog.";
+    qCDebug(cr) << "User has rejected the dialog.";
     if (d_ptr->engine) d_ptr->engine->cancelAll();
 }
 
@@ -271,7 +271,7 @@ void CReporterUploadDialogPlugin::engineFinished(int error, int sent, int total)
 // -----------------------------------------------------------------------------
 void CReporterUploadDialogPlugin::dialogFinished()
 {
-    qCDebug(cr) << __PRETTY_FUNCTION__ << "Dialog disappeared.";
+    qCDebug(cr) << "Dialog disappeared.";
 
     d_ptr->dialog = 0;
     d_ptr->active = false;
