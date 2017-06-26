@@ -59,17 +59,37 @@ CReporterNotificationPrivate::~CReporterNotificationPrivate() {}
 
 void CReporterNotificationPrivate::sendDBusNotify()
 {
+    QStringList actions;
+    if (!body.isEmpty()) {
+        //: Action name for crash reporter notifications
+        //% "Show settings"
+        actions << QStringLiteral("default") << qtTrId("crash_reporter-show-settings");
+    };
+
+    auto encodeArgument = [](const QString &argument) {
+        QByteArray a;
+        QDataStream ds(&a, QIODevice::WriteOnly);
+        ds << QVariant(argument);
+        return QString::fromLatin1(a.toBase64());
+    };
+    QString defaultAction = QStringLiteral("com.jolla.settings "
+                                           "/com/jolla/settings/ui "
+                                           "com.jolla.settings.ui "
+                                           "showPage ") +
+        encodeArgument(QStringLiteral("system_settings/system/crash_reporter"));
+
     QVariantMap hints;
     hints.insert("category", category);
     hints.insert("x-nemo-preview-summary", summary);
     hints.insert("x-nemo-preview-body", body);
     hints.insert("x-nemo-item-count", count);
+    hints.insert("x-nemo-remote-action-default", defaultAction);
 
     QDBusPendingReply<quint32> reply =
             //: Group name for crash reporter notifications
             //% "Crash reporter"
             proxy->Notify(qtTrId("crash_reporter-notify-app_name"), id, QString(), summary, body,
-                    QStringList(), hints, -1);
+                    actions, hints, -1);
 
     qCDebug(cr)
              << "Sending Notify for notification" << id
