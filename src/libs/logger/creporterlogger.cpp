@@ -84,6 +84,14 @@ CReporterLogger::CReporterLogger(const QString type)
             }
             // Set stream.
             m_stream.setDevice(&m_file);
+            // Set default message pattern
+            qSetMessagePattern(QStringLiteral("%{time}: ["
+                                              "%{if-debug}DEBUG%{endif}"
+                                              "%{if-info}INFO%{endif}"
+                                              "%{if-warning}WARNING%{endif}"
+                                              "%{if-critical}CRITICAL%{endif}"
+                                              "%{if-fatal}FATAL%{endif}"
+                                              "]: %{appname}: %{message}"));
             break;
         case CReporter::LogNone: // TODO Means rather LogDefault than LogNone
             return;
@@ -116,8 +124,14 @@ void CReporterLogger::messageHandler(QtMsgType type,
                                      const QMessageLogContext &context,
                                      const QString &msg)
 {
-    Q_UNUSED(context);
     Q_ASSERT(CReporterLogger::sm_LogType != CReporter::LogNone);
+
+    QString logMessage = qFormatLogMessage(type, context, msg);
+
+    // print nothing if message pattern didn't apply / was empty.
+    // (still print empty lines, e.g. because message itself was empty)
+    if (logMessage.isNull())
+        return;
 
     if (CReporterLogger::sm_LogType == CReporter::LogSyslog) {
         int msgLevel = LOG_DEBUG;
@@ -140,32 +154,10 @@ void CReporterLogger::messageHandler(QtMsgType type,
                 break;
             };
 
-            syslog(msgLevel, "%s", msg.toStdString().c_str());
+        syslog(msgLevel, "%s", logMessage.toLocal8Bit().constData());
     }
     else if (CReporterLogger::sm_LogType == CReporter::LogFile) {
-        QString timeStamp = QTime::currentTime().toString(Qt::ISODate);
-        QString msgType;
-
-        switch (type) {
-            case QtDebugMsg:
-                msgType = ": [DEBUG]: ";
-                break;
-            case QtInfoMsg:
-                msgType = ": [INFO]: ";
-                break;
-            case QtWarningMsg:
-                msgType = ": [WARNING]: ";
-                break;
-            case QtCriticalMsg:
-                msgType = ": [CRITICAL]: ";
-                break;
-            case QtFatalMsg:
-                msgType = ": [FATAL]: ";
-                break;
-        };
-        // Write to stream.
-        CReporterLogger::sm_Instance->m_stream << timeStamp << msgType <<
-                QCoreApplication::applicationName() << ": " << msg << endl;
+        CReporterLogger::sm_Instance->m_stream << logMessage << endl;
     }
 
     if (type == QtFatalMsg) {
