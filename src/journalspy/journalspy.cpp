@@ -30,6 +30,8 @@
 #include "creporterutils.h"
 #include "journalspy.h"
 
+using CReporter::LoggingCategory::cr;
+
 class JournalSpyPrivate {
 public:
     JournalSpyPrivate(JournalSpy *parent);
@@ -66,23 +68,23 @@ JournalSpyPrivate::JournalSpyPrivate(JournalSpy *parent):
 
     loadExpressions();
     if (expressions.isEmpty()) {
-        qDebug() << "No defined expressions to watch.";
+        qCDebug(cr) << "No defined expressions to watch.";
         return;
     }
 
     if (sd_journal_open(&journal, SD_JOURNAL_LOCAL_ONLY | SD_JOURNAL_SYSTEM)) {
-        qDebug() << "Failed to open systemd journal.";
+        qCDebug(cr) << "Failed to open systemd journal.";
         return;
     }
 
     fd = sd_journal_get_fd(journal);
     if (fd < 0) {
-        qDebug() << "sd_journal_get_fd() failed.";
+        qCDebug(cr) << "sd_journal_get_fd() failed.";
         return;
     }
 
     if (sd_journal_seek_tail(journal)) {
-        qDebug() << "sd_journal_seek_tail() failed.";
+        qCDebug(cr) << "sd_journal_seek_tail() failed.";
         return;
     }
     // Workaround for https://bugzilla.redhat.com/show_bug.cgi?id=979487.
@@ -106,7 +108,7 @@ void JournalSpyPrivate::handleJournalEntries()
                 qint64 previousHit = e.lastHit;
                 e.lastHit = QDateTime::currentMSecsSinceEpoch();
                 if (e.lastHit - previousHit > JournalSpy::SILENT_PERIOD_MS) {
-                    qDebug() << "Triggering log collection upon found match in "
+                    qCDebug(cr) << "Triggering log collection upon found match in "
                                 "the journal:" << e.name;
                     CReporterUtils::invokeLogCollection("JournalSpy-" + e.name);
                 }
@@ -186,11 +188,11 @@ void JournalSpyPrivate::parsePattern(const QString &name, QIODevice &io)
 
         QRegularExpression pattern(QRegularExpression(line.mid(separator + 1)));
         if (!pattern.isValid()) {
-            qDebug() << "Invalid regular expression" << pattern.pattern();
+            qCDebug(cr) << "Invalid regular expression" << pattern.pattern();
             continue;
         }
 
-        qDebug() << "Watching journal for expression"
+        qCDebug(cr) << "Watching journal for expression"
                  << qPrintable(journalField) << '='
                  << qPrintable(pattern.pattern());
         expression.rexp.insert(journalField, pattern);

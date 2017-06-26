@@ -37,6 +37,8 @@
 #include "creportercoredir_p.h"
 #include "creporterutils.h"
 
+using CReporter::LoggingCategory::cr;
+
 // Local macros and definitions.
 
 #define FILE_PERMISSION 	0777
@@ -52,7 +54,7 @@ CReporterCoreDir::CReporterCoreDir(QString& mpoint, QObject* parent)
     : QObject(parent), d_ptr(new CReporterCoreDirPrivate())
 {
 	d_ptr->mountpoint = mpoint;
-	qDebug() << __PRETTY_FUNCTION__ << "Mountpoint set to:" << d_ptr->mountpoint;
+	qCDebug(cr) << __PRETTY_FUNCTION__ << "Mountpoint set to:" << d_ptr->mountpoint;
 }
 
 CReporterCoreDir::~CReporterCoreDir()
@@ -75,7 +77,7 @@ void CReporterCoreDir::setDirectory(const QString& dir)
     Q_D(CReporterCoreDir);
 
 	d->directory = dir;
-	qDebug() << __PRETTY_FUNCTION__ << "Directory set to:" << d->directory;
+	qCDebug(cr) << __PRETTY_FUNCTION__ << "Directory set to:" << d->directory;
 }
 	
 void CReporterCoreDir::setMountpoint(const QString& mpoint)
@@ -83,14 +85,14 @@ void CReporterCoreDir::setMountpoint(const QString& mpoint)
     Q_D(CReporterCoreDir);
 
 	d->mountpoint = mpoint;
-	qDebug() << __PRETTY_FUNCTION__ << "Mountpoint set to:" << d->mountpoint;
+	qCDebug(cr) << __PRETTY_FUNCTION__ << "Mountpoint set to:" << d->mountpoint;
 }
 
 void CReporterCoreDir::collectAllCoreFilesAtLocation(QStringList& coreList)
 {
     Q_D(CReporterCoreDir);
 
-	qDebug() << __PRETTY_FUNCTION__ << "Collecting cores from:" << d->directory;
+	qCDebug(cr) << __PRETTY_FUNCTION__ << "Collecting cores from:" << d->directory;
 	
 	QStringList filters;
     filters << QString(rcore_file_name_filter) << QString(rcore_lzo_file_name_filter);
@@ -131,7 +133,7 @@ QString CReporterCoreDir::checkDirectoryForCores()
 				// This is valid rich core file, which hasn't been processed before.
 				d->coresAtDirectory << fi.fileName();
 				coreFilePath = fi.absoluteFilePath();
-				qDebug() << __PRETTY_FUNCTION__ << "New core file:" << fi.fileName();
+				qCDebug(cr) << __PRETTY_FUNCTION__ << "New core file:" << fi.fileName();
 				break;
 		}
 	}
@@ -161,12 +163,12 @@ void CReporterCoreDir::createCoreDirectory()
             if (coreRoot.exists(d->directory.left(d->directory.lastIndexOf('/')))
                 && coreRoot.mkdir(d->directory))
             {
-                qDebug() << __PRETTY_FUNCTION__ << "Created directory:" << d->directory;
+                qCDebug(cr) << __PRETTY_FUNCTION__ << "Created directory:" << d->directory;
                 chmod(CReporterUtils::qstringToChar(d->directory), FILE_PERMISSION);
             }
             else
             {
-                qWarning() << __PRETTY_FUNCTION__ << "Error while creating directory:" << d->directory;
+                qCWarning(cr) << __PRETTY_FUNCTION__ << "Error while creating directory:" << d->directory;
             }
             // Remove old entries from the list.
             d->coresAtDirectory.clear();
@@ -183,7 +185,7 @@ void CReporterCoreDir::updateCoreList()
 {
     Q_D(CReporterCoreDir);
 
-	qDebug() << __PRETTY_FUNCTION__ << "Refreshing core directory list.";
+	qCDebug(cr) << __PRETTY_FUNCTION__ << "Refreshing core directory list.";
 
     QDir dir(d->directory);
     dir.setFilter(QDir::Files | QDir::NoDotAndDotDot);

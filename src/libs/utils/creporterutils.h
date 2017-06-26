@@ -28,12 +28,19 @@
 // System includes
 
 #include <QFileInfo>
+#include <QLoggingCategory>
 
 // User includes.
 
 #include "creporterexport.h"
 
 class QProcess;
+
+namespace CReporter {
+namespace LoggingCategory {
+Q_DECLARE_LOGGING_CATEGORY(cr)
+} // namespace LoggingCategory
+} // namespace CReporter
 
 /*! @class CReporterUtils
  *  @brief This class implements utility functions.

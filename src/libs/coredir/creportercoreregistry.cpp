@@ -40,6 +40,9 @@
 #include "creportercoreregistry.h"
 #include "creportercoreregistry_p.h"
 #include "creportercoredir.h"
+#include "creporterutils.h"
+
+using CReporter::LoggingCategory::cr;
 
 // Local macros and definitions.
 
@@ -136,15 +139,15 @@ QStringList CReporterCoreRegistry::getCoreLocationPaths()
 		CReporterCoreDir* pCoreDir =  (CReporterCoreDir*) iter.next();
 		QDir dir( pCoreDir->getDirectory() );
 
-		qDebug() << __PRETTY_FUNCTION__ << "Got directory:" << pCoreDir->getDirectory();
+		qCDebug(cr) << __PRETTY_FUNCTION__ << "Got directory:" << pCoreDir->getDirectory();
 
 		if ( dir.exists() ) {
-			qDebug() << __PRETTY_FUNCTION__ << "Exists. Add to list";
+			qCDebug(cr) << __PRETTY_FUNCTION__ << "Exists. Add to list";
 			paths.append(dir.absolutePath());
 		}
 	}
 
-    qDebug() << __PRETTY_FUNCTION__
+    qCDebug(cr) << __PRETTY_FUNCTION__
              << "Number of mounted locations:" << paths.count();
 	return paths;
 }
@@ -168,7 +171,7 @@ QString CReporterCoreRegistry::checkDirectoryForCores(const QString& path)
 
 void CReporterCoreRegistry::refreshRegistry()
 {
-	qDebug() << __PRETTY_FUNCTION__ << "Emit registryRefreshNeeded().";
+	qCDebug(cr) << __PRETTY_FUNCTION__ << "Emit registryRefreshNeeded().";
 	emit registryRefreshNeeded();
 }
 
@@ -176,7 +179,7 @@ void CReporterCoreRegistry::refreshRegistry()
 
 void CReporterCoreRegistry::mmcStateChanged(const QString &key)
 {
-    qDebug() << __PRETTY_FUNCTION__ << "Key:" << key << "has changed.";
+    qCDebug(cr) << __PRETTY_FUNCTION__ << "Key:" << key << "has changed.";
 	QTimer::singleShot( MMC_EVENT_TIMEOUT, this, SIGNAL(coreLocationsUpdated()) );
 }
 
@@ -186,7 +189,7 @@ void CReporterCoreRegistry::createCoreLocationRegistry()
     const char *name;
 
 #if defined(__arm__) && (!defined(CREPORTER_SDK_HOST) || !defined(CREPORTER_UNIT_TEST))
-	qDebug() << __PRETTY_FUNCTION__ << "Get mountpoints from the environment.";
+	qCDebug(cr) << __PRETTY_FUNCTION__ << "Get mountpoints from the environment.";
 	// Get mount points from environment.
     for (int i = 0; i < NUM_ENV_MOUNTPOINTS; i++) {
 		
@@ -201,7 +204,7 @@ void CReporterCoreRegistry::createCoreLocationRegistry()
 #endif // defined(__arm__) && (!defined(CREPORTER_SDK_HOST) || !defined(CREPORTER_UNIT_TEST))
     
     if (d->coreDirs.empty()) {
-		qDebug() << __PRETTY_FUNCTION__ << "Nothing in the environment. Using static mountpoints.";
+		qCDebug(cr) << __PRETTY_FUNCTION__ << "Nothing in the environment. Using static mountpoints.";
 		// Nothing in environment, use static values as fallback.
         for (int i = 0; i < NUM_STATIC_MOUNTPOINTS; i++) {
 			
@@ -217,7 +220,7 @@ void CReporterCoreRegistry::createCoreLocationRegistry()
 		}
     }
 
-	qDebug() << __PRETTY_FUNCTION__ << "Set core location directories.";
+	qCDebug(cr) << __PRETTY_FUNCTION__ << "Set core location directories.";
 
     for (int i = 0; i < d->coreDirs.count(); i++) {
 		// Set directory for core locations.

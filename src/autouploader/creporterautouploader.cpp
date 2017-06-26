@@ -39,10 +39,13 @@
 #include "creporteruploadqueue.h"
 #include "creporteruploaditem.h"
 #include "creporteruploadengine.h"
+#include "creporterutils.h"
 #include "creporternotification.h"
 #include "creporterprivacysettingsmodel.h"
 
 #include "autouploader_adaptor.h" // generated
+
+using CReporter::LoggingCategory::cr;
 
 /*! @class CReporterAutoUploaderPrivate
   * @brief Private CReporterAutoUploaderPrivate class.
@@ -91,7 +94,7 @@ CReporterAutoUploader::CReporterAutoUploader() : d_ptr(new CReporterAutoUploader
     // Register service name and object.
     QDBusConnection::sessionBus().registerObject(CReporter::AutoUploaderObjectPath, this);
     QDBusConnection::sessionBus().registerService(CReporter::AutoUploaderServiceName);
-    qDebug() << __PRETTY_FUNCTION__ << "Started Auto Uploader service.";
+    qCDebug(cr) << __PRETTY_FUNCTION__ << "Started Auto Uploader service.";
 }
 
 // ----------------------------------------------------------------------------
@@ -108,14 +111,14 @@ CReporterAutoUploader::~CReporterAutoUploader()
 
     CReporterSavedState::freeSingleton();
 
-    qDebug() << __PRETTY_FUNCTION__ << "Service closed.";
+    qCDebug(cr) << __PRETTY_FUNCTION__ << "Service closed.";
 
 }
 
 bool CReporterAutoUploader::uploadFiles(const QStringList &fileList,
         bool obeyNetworkRestrictions)
 {
-    qDebug() << __PRETTY_FUNCTION__ << "Received a list of files to upload.";
+    qCDebug(cr) << __PRETTY_FUNCTION__ << "Received a list of files to upload.";
 
     if (fileList.isEmpty())
         return false;
@@ -129,7 +132,7 @@ bool CReporterAutoUploader::uploadFiles(const QStringList &fileList,
 
     if (obeyNetworkRestrictions &&
         !CReporterNwSessionMgr::canUseNetworkConnection()) {
-        qDebug() << __PRETTY_FUNCTION__
+        qCDebug(cr) << __PRETTY_FUNCTION__
                  << "No unpaid network connection available, aborting crash report upload.";
         QTimer::singleShot(0, this, SLOT(quit()));
         return false;
@@ -139,14 +142,14 @@ bool CReporterAutoUploader::uploadFiles(const QStringList &fileList,
     {
         if (!d_ptr->addedFiles.contains(filename))
         {
-            qDebug() << __PRETTY_FUNCTION__ << "Adding to upload queue: " << filename;
+            qCDebug(cr) << __PRETTY_FUNCTION__ << "Adding to upload queue: " << filename;
             // CReporterUploadQueue class will own the CReporterUploadItem instance.
             d_ptr->queue.enqueue(new CReporterUploadItem(filename));
             d_ptr->addedFiles << filename;
         }
         else
         {
-            qDebug() << __PRETTY_FUNCTION__ << filename << "was not added to queue because it had already been added before";
+            qCDebug(cr) << __PRETTY_FUNCTION__ << filename << "was not added to queue because it had already been added before";
         }
     }
 
@@ -167,16 +170,16 @@ bool CReporterAutoUploader::uploadFiles(const QStringList &fileList,
 // ----------------------------------------------------------------------------
 void CReporterAutoUploader::quit()
 {
-    qDebug() << __PRETTY_FUNCTION__ << "Quit auto uploader.";
+    qCDebug(cr) << __PRETTY_FUNCTION__ << "Quit auto uploader.";
     if (d_ptr->engine)
     {
         if (d_ptr->activated)
         {
-            qDebug() << __PRETTY_FUNCTION__ << "Engine active -> cancelling";
+            qCDebug(cr) << __PRETTY_FUNCTION__ << "Engine active -> cancelling";
             d_ptr->activated = false;
             d_ptr->engine->cancelAll();
         }
-        qDebug() << __PRETTY_FUNCTION__ << "Deleting engine.";
+        qCDebug(cr) << __PRETTY_FUNCTION__ << "Deleting engine.";
         disconnect(d_ptr->engine, SIGNAL(finished(int, int, int)), this, SLOT(engineFinished(int, int, int)));
         d_ptr->engine->deleteLater();
         d_ptr->engine = 0;
@@ -269,7 +272,7 @@ void CReporterAutoUploader::engineFinished(int error, int sent, int total)
         state->setUploadSuccessCount(sent);
     }
 
-    qDebug() << __PRETTY_FUNCTION__ << "Message: " << message;
+    qCDebug(cr) << __PRETTY_FUNCTION__ << "Message: " << message;
 
     d_ptr->activated = false;
     quit();

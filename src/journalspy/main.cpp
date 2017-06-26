@@ -28,6 +28,9 @@
 #include "journalspy.h"
 #include "creporterapplicationsettings.h"
 #include "creporterlogger.h"
+#include "creporterutils.h"
+
+using CReporter::LoggingCategory::cr;
 
 void signalHandler(int signal)
 {
@@ -43,14 +46,14 @@ int main(int argc, char **argv)
 
     QCoreApplication app(argc, argv);
 
-    qDebug() << qPrintable(QFileInfo(argv[0]).fileName()) << CREPORTERVERSION
+    qCDebug(cr) << qPrintable(QFileInfo(argv[0]).fileName()) << CREPORTERVERSION
              << "[" << app.applicationPid() << "] started.";
 
     JournalSpy journalSpy;
 
     int result = app.exec();
 
-    qDebug() << "Shutting down the journal spy process.";
+    qCDebug(cr) << "Shutting down the journal spy process.";
 
     return result;
 }

@@ -38,6 +38,8 @@
 #include "creporternamespace.h"
 #include "creporternotification.h"
 
+using CReporter::LoggingCategory::cr;
+
 /*!
   * @class CReporterSendSelectedDialogPluginPrivate
   * @brief Private CReporterSendSelectedDialogPlugin class.
@@ -110,7 +112,7 @@ bool CReporterSendSelectedDialogPlugin::requestDialog(const QVariantList &argume
     if (d_ptr == 0 || d_ptr->active == true) return false;
 
     if (arguments.count() !=  2) {
-        qDebug() << __PRETTY_FUNCTION__ << "Invalid number of arguments. ";
+        qCDebug(cr) << __PRETTY_FUNCTION__ << "Invalid number of arguments. ";
         return false;
     }
     
@@ -119,7 +121,7 @@ bool CReporterSendSelectedDialogPlugin::requestDialog(const QVariantList &argume
     d_ptr->files = arguments.at(0).toStringList();
 
     if (d_ptr->files.isEmpty()) {
-        qDebug() << __PRETTY_FUNCTION__ << "Request contained no files.";
+        qCDebug(cr) << __PRETTY_FUNCTION__ << "Request contained no files.";
         return false;
     }
 
@@ -173,7 +175,7 @@ bool CReporterSendSelectedDialogPlugin::isVisible() const
 // -----------------------------------------------------------------------------
 void CReporterSendSelectedDialogPlugin::actionPerformed(int buttonId)
 {
-    qDebug() << __PRETTY_FUNCTION__ << "Button id:" << buttonId;
+    qCDebug(cr) << __PRETTY_FUNCTION__ << "Button id:" << buttonId;
     QVariantList arguments;
     QString errorMessage;
     int deletedFiles = 0;
@@ -182,29 +184,29 @@ void CReporterSendSelectedDialogPlugin::actionPerformed(int buttonId)
 
     switch (buttonId) {
     case CReporter::SendSelectedButton:
-        qDebug() << __PRETTY_FUNCTION__ << "User requested to send selected. Create new upload request.";
+        qCDebug(cr) << __PRETTY_FUNCTION__ << "User requested to send selected. Create new upload request.";
         d_ptr->files = d_ptr->dialog->getSelectedFiles();
-        qDebug() << __PRETTY_FUNCTION__ << "# of files selected: " << d_ptr->files.size();
+        qCDebug(cr) << __PRETTY_FUNCTION__ << "# of files selected: " << d_ptr->files.size();
         arguments << QVariant(d_ptr->files);
         // Create event to upload files.
         d_ptr->server->createRequest(CReporter::UploadDialogType, arguments);
         break;
 
     case CReporter::SendAllButton:
-        qDebug() << __PRETTY_FUNCTION__ << "User requested to send all. Create new upload request.";
+        qCDebug(cr) << __PRETTY_FUNCTION__ << "User requested to send all. Create new upload request.";
         arguments << QVariant(d_ptr->files);
         // Create event to upload files.
         d_ptr->server->createRequest(CReporter::UploadDialogType, arguments);
         break;
 
     case CReporter::DeleteSelectedButton:
-        qDebug() << __PRETTY_FUNCTION__ << "User requested to delete selected files.";
+        qCDebug(cr) << __PRETTY_FUNCTION__ << "User requested to delete selected files.";
         d_ptr->files = d_ptr->dialog->getSelectedFiles();
-        qDebug() << __PRETTY_FUNCTION__ << "# of files selected: " << d_ptr->files.size();
+        qCDebug(cr) << __PRETTY_FUNCTION__ << "# of files selected: " << d_ptr->files.size();
         // "Delete" -button was pressed. Remove selected rich cores from the system.
         foreach(QString file, d_ptr->files) {
             if (!CReporterUtils::removeFile(file)) {
-                qDebug() << __PRETTY_FUNCTION__ << "Unable to remove file:"  << file;
+                qCDebug(cr) << __PRETTY_FUNCTION__ << "Unable to remove file:"  << file;
                 failedFiles++;
             }
             deletedFiles++;
@@ -244,7 +246,7 @@ void CReporterSendSelectedDialogPlugin::actionPerformed(int buttonId)
 // -----------------------------------------------------------------------------
 void CReporterSendSelectedDialogPlugin::dialogFinished()
 {
-    qDebug() << __PRETTY_FUNCTION__ << "Dialog was closed.";
+    qCDebug(cr) << __PRETTY_FUNCTION__ << "Dialog was closed.";
 
     d_ptr->active = false;
     d_ptr->dialog->deleteLater();
@@ -259,7 +261,7 @@ void CReporterSendSelectedDialogPlugin::dialogFinished()
 // -----------------------------------------------------------------------------
 void CReporterSendSelectedDialogPlugin::notificationTimeout()
 {
-    qDebug() << __PRETTY_FUNCTION__ << "Notification timeouted.";
+    qCDebug(cr) << __PRETTY_FUNCTION__ << "Notification timeouted.";
     
     delete d_ptr->notification;
     d_ptr->notification = 0;
@@ -273,7 +275,7 @@ void CReporterSendSelectedDialogPlugin::notificationTimeout()
 // -----------------------------------------------------------------------------
 void CReporterSendSelectedDialogPlugin::notificationActivated()
 {
-    qDebug() << __PRETTY_FUNCTION__ << "Notification activated.";
+    qCDebug(cr) << __PRETTY_FUNCTION__ << "Notification activated.";
 
     if (d_ptr->notification)
     {

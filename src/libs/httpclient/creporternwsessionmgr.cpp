@@ -34,9 +34,13 @@
 // User includes.
 
 #include "creporternwsessionmgr.h"
+#include "creporterutils.h"
+
 #ifndef CREPORTER_UNIT_TEST
 #include "creporterprivacysettingsmodel.h"
 #endif
+
+using CReporter::LoggingCategory::cr;
 
 /*!
   * \class CReporterNwSessionMgrPrivate
@@ -130,12 +134,12 @@ bool CReporterNwSessionMgr::canUseNetworkConnection()
     QNetworkConfiguration config(manager.defaultConfiguration());
 
 #ifndef CREPORTER_UNIT_TEST
-        qDebug() << "Network configurations available:";
+        qCDebug(cr) << "Network configurations available:";
         foreach(const QNetworkConfiguration& cfg, manager.allConfigurations()) {
-            qDebug() << ' ' << cfg.name() << cfg.bearerTypeName() << cfg.state()
+            qCDebug(cr) << ' ' << cfg.name() << cfg.bearerTypeName() << cfg.state()
                      << cfg.identifier();
         }
-        qDebug() << "Default configuration:" << config.name();
+        qCDebug(cr) << "Default configuration:" << config.name();
 #endif
 
     return (config.bearerType() == QNetworkConfiguration::BearerWLAN) ||
@@ -156,12 +160,12 @@ bool CReporterNwSessionMgr::open()
          * the manager and go on without QNetworkSession. If the  cable is
          * plugged in, connection has still a chance to succeed. */
         if (!CReporterNwSessionMgrPrivate::connectionIsActive()) {
-            qDebug() << "No active connection is available. "
+            qCDebug(cr) << "No active connection is available. "
                     "Going on, there still might be USB cable connected...";
             return true;
         }
 
-        qDebug() << __PRETTY_FUNCTION__ << "No existing network session.";
+        qCDebug(cr) << __PRETTY_FUNCTION__ << "No existing network session.";
         // If there was no network session, create one.
         d->networkSession =
                 new QNetworkSession(d->networkManager().defaultConfiguration());
@@ -173,14 +177,14 @@ bool CReporterNwSessionMgr::open()
         connect(d->networkSession, SIGNAL(opened()), this, SIGNAL(sessionOpened()));
     }
     else if (d->networkSession->isOpen()) {
-        qDebug() << __PRETTY_FUNCTION__ << "Using existing network session.";
+        qCDebug(cr) << __PRETTY_FUNCTION__ << "Using existing network session.";
         return true;
     }
 
-    qDebug() << __PRETTY_FUNCTION__ << "Opening network session...";
+    qCDebug(cr) << __PRETTY_FUNCTION__ << "Opening network session...";
 #ifndef CREPORTER_UNIT_TEST 
     if (CReporterPrivacySettingsModel::instance()->automaticSendingEnabled()) {
-	qDebug() << __PRETTY_FUNCTION__ << "... with ConnectInBackground set";
+	qCDebug(cr) << __PRETTY_FUNCTION__ << "... with ConnectInBackground set";
         d->networkSession->setSessionProperty("ConnectInBackground", true);
     }
 #endif
@@ -196,7 +200,7 @@ void CReporterNwSessionMgr::close()
     Q_D(CReporterNwSessionMgr);
 
     if (d->networkSession != 0) {
-        qDebug() << __PRETTY_FUNCTION__ << "Close network session.";
+        qCDebug(cr) << __PRETTY_FUNCTION__ << "Close network session.";
         d->networkSession->close();
     }
 }
@@ -209,7 +213,7 @@ void CReporterNwSessionMgr::stop()
     Q_D(CReporterNwSessionMgr);
 
     if (d->networkSession != 0) {
-        qDebug() << __PRETTY_FUNCTION__ << "Stop network session.";
+        qCDebug(cr) << __PRETTY_FUNCTION__ << "Stop network session.";
         d->networkSession->stop();
     }
 }
@@ -227,7 +231,7 @@ void CReporterNwSessionMgr::networkError(QNetworkSession::SessionError error)
     }
 
     QString errorString = d->networkSession->errorString();
-    qDebug() << __PRETTY_FUNCTION__ << "Network error occured:" << errorString;
+    qCDebug(cr) << __PRETTY_FUNCTION__ << "Network error occured:" << errorString;
 
     emit networkError(errorString);
 }
@@ -243,29 +247,29 @@ void CReporterNwSessionMgr::networkStateChanged(QNetworkSession::State state)
 
     switch (state) {
     case QNetworkSession::Invalid:
-        qDebug() << __PRETTY_FUNCTION__ << text << "Invalid";
+        qCDebug(cr) << __PRETTY_FUNCTION__ << text << "Invalid";
         break;
     case QNetworkSession::NotAvailable:
-        qDebug() << __PRETTY_FUNCTION__ << text << "Not available";
+        qCDebug(cr) << __PRETTY_FUNCTION__ << text << "Not available";
         break;
     case QNetworkSession::Connecting:
-        qDebug() << __PRETTY_FUNCTION__ << text << "Connecting";
+        qCDebug(cr) << __PRETTY_FUNCTION__ << text << "Connecting";
         break;
     case QNetworkSession::Connected:
-        qDebug() << __PRETTY_FUNCTION__ << text << "Connected";
+        qCDebug(cr) << __PRETTY_FUNCTION__ << text << "Connected";
         break;
     case QNetworkSession::Closing:
-        qDebug() << __PRETTY_FUNCTION__ << text << "Closing";
+        qCDebug(cr) << __PRETTY_FUNCTION__ << text << "Closing";
         break;
     case QNetworkSession::Disconnected:
         // Existing session disconnected, delete the session
-        qDebug() << __PRETTY_FUNCTION__ << text << "Disconnected";
+        qCDebug(cr) << __PRETTY_FUNCTION__ << text << "Disconnected";
         emit sessionDisconnected();
         d->networkSession->deleteLater();
         d->networkSession = 0;
         break;
     case QNetworkSession::Roaming:
-        qDebug() << __PRETTY_FUNCTION__ << text << "Roaming";
+        qCDebug(cr) << __PRETTY_FUNCTION__ << text << "Roaming";
         break;
     default:
         break;

@@ -30,6 +30,9 @@
 #include "../notification_interface.h" // generated
 #include "creporternotification.h"
 #include "creporternotification_p.h"
+#include "creporterutils.h"
+
+using CReporter::LoggingCategory::cr;
 
 // ======== Class CReporterNotificationPrivate ========
 
@@ -68,7 +71,7 @@ void CReporterNotificationPrivate::sendDBusNotify()
             proxy->Notify(qtTrId("crash_reporter-notify-app_name"), id, QString(), summary, body,
                     QStringList(), hints, -1);
 
-    qDebug() << __PRETTY_FUNCTION__
+    qCDebug(cr) << __PRETTY_FUNCTION__
              << "Sending Notify for notification" << id
              << "of category" << category
              << "with summary" << summary << "and body" << body;
@@ -95,11 +98,11 @@ void CReporterNotificationPrivate::retrieveNotificationId()
             retrieveNotificationId();
             return;
         }
-        qDebug() << __PRETTY_FUNCTION__
+        qCDebug(cr) << __PRETTY_FUNCTION__
                  << "Create notification with id: " << id;
     } else if (reply.isError()) {
         QDBusError error = reply.error();
-        qDebug() << __PRETTY_FUNCTION__ << "Failed to create notification: "
+        qCDebug(cr) << __PRETTY_FUNCTION__ << "Failed to create notification: "
                  << error.name() << " - " << error.message();
     }
 }

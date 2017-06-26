@@ -33,6 +33,9 @@
 
 #include "creportermessageboxdialogplugin.h"
 #include "creporternamespace.h"
+#include "creporterutils.h"
+
+using CReporter::LoggingCategory::cr;
 
 /*!
   * @class CReporterMessageBoxDialogPluginPrivate
@@ -99,7 +102,7 @@ bool CReporterMessageBoxDialogPlugin::requestDialog(const QVariantList &argument
 
     // Resolve arguments.
     if (arguments.count() != 1 || arguments.at(0).type() != QVariant::String) {
-        qDebug() << __PRETTY_FUNCTION__ << "Invalid number of arguments or type:"
+        qCDebug(cr) << __PRETTY_FUNCTION__ << "Invalid number of arguments or type:"
                 << "Count:" << arguments.count() << "Type:" << arguments.at(0).type();
         return false;
     }
@@ -137,7 +140,7 @@ bool CReporterMessageBoxDialogPlugin::isVisible() const
 // -----------------------------------------------------------------------------
 void CReporterMessageBoxDialogPlugin::dialogFinished()
 {
-    qDebug() << __PRETTY_FUNCTION__ << "Dialog disappeared; close window";
+    qCDebug(cr) << __PRETTY_FUNCTION__ << "Dialog disappeared; close window";
 
     d_ptr->active = false;
     d_ptr->dialog = 0;
