@@ -49,7 +49,7 @@
 
 namespace CReporter {
 namespace LoggingCategory {
-Q_LOGGING_CATEGORY(cr, "creporter")
+Q_LOGGING_CATEGORY(cr, "creporter", QtInfoMsg)
 } // namespace LoggingCategory
 } // namespace CReporter
 
