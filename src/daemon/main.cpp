@@ -44,6 +44,8 @@
 #include "creporterlogger.h"
 #endif // QT_NO_DEBUG_OUTPUT
 
+using CReporter::LoggingCategory::cr;
+
 // Local macros and definitions.
 
 #define CREPORTER_PID_FILE      "/tmp/crash-reporter-daemon.pid"
@@ -52,8 +54,6 @@
 #ifndef QT_NO_DEBUG_OUTPUT
 #define LOG_FILE    "/tmp/crash-reporter-daemon.log"
 #endif // QT_NO_DEBUG_OUTPUT
-
-extern char *g_progname;
 
 /*!
  * @brief Gets crash-reporter-daemon pid and saves it to file.
@@ -69,12 +69,11 @@ bool getPid(QCoreApplication &app)
 
 	// Get new PID.
 	pid = app.applicationPid();
-    qDebug() << __PRETTY_FUNCTION__  <<  CReporter::DaemonBinaryName
-            << "[" << pid << "] starting...";
+    qCDebug(cr) << CReporter::DaemonBinaryName << "[" << pid << "] starting...";
 
     if (pidFile.exists()) {
         firstStartup = false;
-		qDebug() << __PRETTY_FUNCTION__ << "Removing stale PID file.";
+		qCDebug(cr) << "Removing stale PID file.";
 		pidFile.remove();
 	}
 	
@@ -84,7 +83,7 @@ bool getPid(QCoreApplication &app)
 		pidFile.close();
 	}
 
-    qDebug() <<  __PRETTY_FUNCTION__ << "Startup delayed =" << firstStartup;
+    qCDebug(cr) << "Startup delayed =" << firstStartup;
     return firstStartup;
 }
 
@@ -106,7 +105,6 @@ Q_DECL_EXPORT int main(int argc, char **argv)
     signal(SIGTERM, &signalHandler);
 
 #ifndef QT_NO_DEBUG_OUTPUT
-    g_progname = (char *) "crash-reporter-daemon";
     Logger logger(CReporterApplicationSettings::instance()->loggerType());
 #endif // QT_NO_DEBUG_OUTPUT
 
@@ -133,7 +131,7 @@ Q_DECL_EXPORT int main(int argc, char **argv)
         }
     }
 
-    qDebug() << __PRETTY_FUNCTION__ << "Crash Reporter version is " << QString(CREPORTERVERSION);
+    qCDebug(cr) << "Crash Reporter version is " << QString(CREPORTERVERSION);
 
     // Enter Qt main loop.
     int retVal = app.exec();

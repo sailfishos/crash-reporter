@@ -29,6 +29,8 @@
 
 #include <libudev.h>
 
+using CReporter::LoggingCategory::cr;
+
 class PowerExcessHandlerPrivate {
 public:
     udev *udevHandle;
@@ -57,7 +59,7 @@ PowerExcessHandler::PowerExcessHandler(QObject *parent):
 void PowerExcessHandlerPrivate::handleUdevNotification() {
     udev_device *dev = udev_monitor_receive_device(udevMonitor);
     if (!dev) {
-        qDebug() << "udev_monitor_receive_device() failed";
+        qCDebug(cr) << "udev_monitor_receive_device() failed";
         return;
     }
 
@@ -68,10 +70,10 @@ void PowerExcessHandlerPrivate::handleUdevNotification() {
         static const QString EVENT_WAKELOCK_DUMP("WakelockDump");
         static const QString EVENT_SUBSYSTEM("Subsystem");
         if (event == EVENT_WAKELOCK_DUMP || event == EVENT_SUBSYSTEM) {
-            qDebug() << "Power excess detected, requesting dump of "
+            qCDebug(cr) << "Power excess detected, requesting dump of "
                     "system logs.";
             if (!CReporterUtils::invokeLogCollection(CReporter::PowerExcessPrefix)) {
-                qDebug() << "Problem invoking rich-core-dumper.";
+                qCDebug(cr) << "Problem invoking rich-core-dumper.";
             }
         }
     }

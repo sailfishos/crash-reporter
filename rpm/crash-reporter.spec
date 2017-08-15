@@ -68,7 +68,7 @@ Development headers and libraries for crash-reporter.
 
 %build
 %qmake5
-make %{?jobs:-j%jobs}
+make %{_smp_mflags}
 
 %install
 %qmake5_install

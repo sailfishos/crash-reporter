@@ -38,6 +38,8 @@
 #include "creporternamespace.h"
 #include "creporternotification.h"
 
+using CReporter::LoggingCategory::cr;
+
 /*!
   * @class CReporterSendAllDialogPluginPrivate
   * @brief Private CReporterSendAllDialogPlugin class.
@@ -110,7 +112,7 @@ bool CReporterSendAllDialogPlugin::requestDialog(const QVariantList &arguments)
     if (d_ptr == 0 || d_ptr->files.isEmpty() == false || d_ptr->active == true) return false;
 
     if (arguments.count() !=  1) {
-        qDebug() << __PRETTY_FUNCTION__ << "Invalid number of arguments.";
+        qCDebug(cr) << "Invalid number of arguments.";
         return false;
     }
     
@@ -119,7 +121,7 @@ bool CReporterSendAllDialogPlugin::requestDialog(const QVariantList &arguments)
     d_ptr->files = arguments.at(0).toStringList();
 
     if (d_ptr->files.isEmpty()) {
-        qDebug() << __PRETTY_FUNCTION__ << "Request contained no files.";
+        qCDebug(cr) << "Request contained no files.";
         return false;
     }
 
@@ -163,23 +165,23 @@ bool CReporterSendAllDialogPlugin::isVisible() const
 // -----------------------------------------------------------------------------
 void CReporterSendAllDialogPlugin::actionPerformed(int buttonId)
 {
-    qDebug() << __PRETTY_FUNCTION__ << "Button id:" << buttonId;
+    qCDebug(cr) << "Button id:" << buttonId;
     QVariantList arguments;
 
     switch (buttonId) {
         case CReporter::SendAllButton:
-            qDebug() << __PRETTY_FUNCTION__ << "User requested to send all. Create new upload request.";
+            qCDebug(cr) << "User requested to send all. Create new upload request.";
             // "Send" -button was pressed.        
             arguments << QVariant(d_ptr->files);
             // Create event to upload file.
             d_ptr->server->createRequest(CReporter::UploadDialogType, arguments);
             break;
         case CReporter::DeleteAllButton:
-            qDebug() << __PRETTY_FUNCTION__ << "User requested to delete all files.";
+            qCDebug(cr) << "User requested to delete all files.";
             // "Delete" -button was pressed. Remove all rich cores from the system.
             foreach(QString file, d_ptr->files) {
                 if (!CReporterUtils::removeFile(file)) {
-                    qDebug() << __PRETTY_FUNCTION__ << "Unable to remove file:"  << file;
+                    qCDebug(cr) << "Unable to remove file:"  << file;
                 }
             }
             break;
@@ -201,7 +203,7 @@ void CReporterSendAllDialogPlugin::actionPerformed(int buttonId)
 // -----------------------------------------------------------------------------
 void CReporterSendAllDialogPlugin::dialogFinished()
 {
-    qDebug() << __PRETTY_FUNCTION__ << "Dialog was rejected.";
+    qCDebug(cr) << "Dialog was rejected.";
 
     d_ptr->active = false;
     d_ptr->dialog = 0;
@@ -215,7 +217,7 @@ void CReporterSendAllDialogPlugin::dialogFinished()
 // -----------------------------------------------------------------------------
 void CReporterSendAllDialogPlugin::notificationTimeout()
 {
-    qDebug() << __PRETTY_FUNCTION__ << "Notification timeouted.";
+    qCDebug(cr) << "Notification timeouted.";
     
     delete d_ptr->notification;
     d_ptr->notification = 0;
@@ -228,7 +230,7 @@ void CReporterSendAllDialogPlugin::notificationTimeout()
 // -----------------------------------------------------------------------------
 void CReporterSendAllDialogPlugin::notificationActivated()
 {
-    qDebug() << __PRETTY_FUNCTION__ << "Notification activated.";
+    qCDebug(cr) << "Notification activated.";
 
     delete d_ptr->notification;
     d_ptr->notification = 0;

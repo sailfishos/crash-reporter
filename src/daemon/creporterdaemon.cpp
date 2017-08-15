@@ -40,6 +40,8 @@
 #include "creporternotification.h"
 #include "powerexcesshandler.h"
 
+using CReporter::LoggingCategory::cr;
+
 CReporterDaemon::CReporterDaemon() :
   d_ptr(new CReporterDaemonPrivate(this))
 {
@@ -57,7 +59,7 @@ CReporterDaemon::CReporterDaemon() :
 // ----------------------------------------------------------------------------
 CReporterDaemon::~CReporterDaemon()
 {	
-    qDebug() << __PRETTY_FUNCTION__ << "Daemon destroyed.";
+    qCDebug(cr) << "Daemon destroyed.";
 
     CReporterPrivacySettingsModel::instance()->freeSingleton();
     CReporterSavedState::freeSingleton();
@@ -70,7 +72,7 @@ void CReporterDaemon::setDelayedStartup(int timeout)
 {
     Q_D(CReporterDaemon);
 
-    qDebug() << __PRETTY_FUNCTION__ << "Delaying startup for" << timeout / 1000 << "seconds.";
+    qCDebug(cr) << "Delaying startup for" << timeout / 1000 << "seconds.";
     if (timeout > 0) {
         d->timerId = startTimer(timeout);
     }
@@ -81,11 +83,11 @@ void CReporterDaemon::setDelayedStartup(int timeout)
 // ----------------------------------------------------------------------------
 bool CReporterDaemon::initiateDaemon()
 {
-    qDebug() << __PRETTY_FUNCTION__ << "Starting daemon...";
+    qCDebug(cr) << "Starting daemon...";
 
     if (!CReporterPrivacySettingsModel::instance()->isValid())
     {
-        qWarning() << __PRETTY_FUNCTION__ << "Invalid settings";
+        qCWarning(cr) << "Invalid settings";
         // Exit, if settings are missing.
         return false;
     }
@@ -119,7 +121,7 @@ bool CReporterDaemon::initiateDaemon()
             CReporterNwSessionMgr::canUseNetworkConnection() &&
             !CReporterUtils::notifyAutoUploader(files))
         {
-            qDebug() << __PRETTY_FUNCTION__ << "Failed to add files to the queue.";
+            qCDebug(cr) << "Failed to add files to the queue.";
         }
     }
     else if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
@@ -148,15 +150,14 @@ void CReporterDaemon::startCoreMonitoring(const bool fromDBus)
 {
     Q_D(CReporterDaemon);
 
-    qDebug() << __PRETTY_FUNCTION__ << "Core monitoring requested. Called from DBus ="
-            << fromDBus;
+    qCDebug(cr) << "Core monitoring requested. Called from DBus =" << fromDBus;
 
     if (!d->monitor) {
 		// Create monitor instance and start monitoring cores.
         d->monitor = new CReporterDaemonMonitor(this);
         Q_CHECK_PTR(d->monitor);
 
-        qDebug() << __PRETTY_FUNCTION__ << "Core monitoring started.";
+        qCDebug(cr) << "Core monitoring started.";
 
         if (fromDBus) {
             CReporterPrivacySettingsModel::instance()->setNotificationsEnabled(true);
@@ -179,7 +180,7 @@ void CReporterDaemon::stopCoreMonitoring(const bool fromDBus)
 		delete d->monitor;
         d->monitor = 0;
         
-		qDebug() << __PRETTY_FUNCTION__ << "Core monitoring stopped.";
+		qCDebug(cr) << "Core monitoring stopped.";
 
           if (fromDBus) {
               CReporterPrivacySettingsModel::instance()->setNotificationsEnabled(false);
@@ -199,7 +200,7 @@ QStringList CReporterDaemon::collectAllCoreFiles()
 void CReporterDaemon::timerEvent(QTimerEvent *event)
 {
     Q_D(CReporterDaemon);
-    qDebug() << __PRETTY_FUNCTION__ << "Startup timer elapsed -> start now.";
+    qCDebug(cr) << "Startup timer elapsed -> start now.";
 
     if (event->timerId() != d->timerId) return;
 
@@ -218,33 +219,29 @@ void CReporterDaemon::timerEvent(QTimerEvent *event)
 // ----------------------------------------------------------------------------
 bool CReporterDaemon::startService()
 {
-	qDebug() << __PRETTY_FUNCTION__ << "Starting D-Bus service...";
+	qCDebug(cr) << "Starting D-Bus service...";
 
     if (!QDBusConnection::sessionBus().isConnected()) {
-	  qWarning() << __PRETTY_FUNCTION__ << "D-Bus not running?";
+	  qCWarning(cr) << "D-Bus not running?";
 	  return false;
 	  }
 
     if (!QDBusConnection::sessionBus().registerObject(CReporter::DaemonObjectPath, this)) {
-      qWarning() << __PRETTY_FUNCTION__
-              << "Failed to register object, daemon already running?";
+      qCWarning(cr) << "Failed to register object, daemon already running?";
       return false;
 	  }
 
-    qDebug() << __PRETTY_FUNCTION__ << "Object:"
-            << CReporter::DaemonObjectPath << "registered.";
+    qCDebug(cr) << "Object:" << CReporter::DaemonObjectPath << "registered.";
 
     if (!QDBusConnection::sessionBus().registerService(CReporter::DaemonServiceName)) {
-      qWarning() << __PRETTY_FUNCTION__
-              << "Failed to register service, daemon already running?";
+      qCWarning(cr) << "Failed to register service, daemon already running?";
       return false;
 	  }
 
-    qDebug() << __PRETTY_FUNCTION__ << "Service:"
-            << CReporter::DaemonServiceName << "registered.";
+    qCDebug(cr) << "Service:" << CReporter::DaemonServiceName << "registered.";
 
     // Good to go.
-	qDebug() << __PRETTY_FUNCTION__ << "D-Bus service started.";
+	qCDebug(cr) << "D-Bus service started.";
 	return true;
 }
 
@@ -253,7 +250,7 @@ bool CReporterDaemon::startService()
 // ----------------------------------------------------------------------------
 void CReporterDaemon::stopService()
 {
-	qDebug() << __PRETTY_FUNCTION__ << "Stopping D-Bus service...";
+	qCDebug(cr) << "Stopping D-Bus service...";
 
     QDBusConnection::sessionBus().unregisterService(CReporter::DaemonServiceName);
     QDBusConnection::sessionBus().unregisterObject(CReporter::DaemonObjectPath);

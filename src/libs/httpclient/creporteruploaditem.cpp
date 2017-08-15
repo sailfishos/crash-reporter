@@ -31,6 +31,9 @@
 
 #include "creporteruploaditem.h"
 #include "creporterhttpclient.h"
+#include "creporterutils.h"
+
+using CReporter::LoggingCategory::cr;
 
 // Local constants and macros.
 
@@ -73,7 +76,7 @@ CReporterUploadItem::CReporterUploadItem(const QString &file) :
     d->filename = fi.fileName();
     d->filesize = fi.size();
 
-    qDebug() << __PRETTY_FUNCTION__ << "New item created:" << d->filename;
+    qCDebug(cr) << "New item created:" << d->filename;
     d->status = Waiting;
 }
 
@@ -107,7 +110,7 @@ QString CReporterUploadItem::filename() const
 // ----------------------------------------------------------------------------
 void CReporterUploadItem::markDone()
 {
-    qDebug() << __PRETTY_FUNCTION__ << "Item done.";
+    qCDebug(cr) << "Item done.";
     emit done();
 }
 
@@ -141,7 +144,7 @@ QString CReporterUploadItem::errorString() const
 bool CReporterUploadItem::startUpload()
 {
     Q_D(CReporterUploadItem);
-    qDebug() << __PRETTY_FUNCTION__ << "Starting upload of:" << d->filename;
+    qCDebug(cr) << "Starting upload of:" << d->filename;
 
     d->http = new CReporterHttpClient(this);
     connect(d->http, SIGNAL(finished()), this, SLOT(emitUploadFinished()));
@@ -165,7 +168,7 @@ bool CReporterUploadItem::startUpload()
 void CReporterUploadItem::cancel()
 {
     Q_D( CReporterUploadItem );
-    qDebug() << __PRETTY_FUNCTION__ << "Cancel upload;" << d->filename;
+    qCDebug(cr) << "Cancel upload;" << d->filename;
 
     ItemStatus previousStatus = d->status;
     setStatus(Cancelled);
@@ -187,9 +190,9 @@ void CReporterUploadItem::cancel()
 void CReporterUploadItem::setStatus(ItemStatus status)
 {
     Q_D(CReporterUploadItem);
-    qDebug() << __PRETTY_FUNCTION__ << "Current status:" << statusString();
+    qCDebug(cr) << "Current status:" << statusString();
     d->status = status;
-    qDebug() << __PRETTY_FUNCTION__ << "New status:" << statusString();
+    qCDebug(cr) << "New status:" << statusString();
 }
 
 // ----------------------------------------------------------------------------
@@ -200,7 +203,7 @@ void CReporterUploadItem::uploadError(const QString &file, const QString &errorS
     Q_D(CReporterUploadItem);
     Q_UNUSED(file);
 
-    qDebug() << __PRETTY_FUNCTION__ << "Upload failed;" << d->filename;
+    qCDebug(cr) << "Upload failed;" << d->filename;
 
     disconnect(d->http, SIGNAL(finished()), this, SLOT(emitUploadFinished()));
     disconnect(d->http, SIGNAL(uploadError(QString,QString)),

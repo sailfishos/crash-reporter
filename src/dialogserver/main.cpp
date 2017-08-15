@@ -46,12 +46,12 @@
 #include "creporterlogger.h"
 #endif // QT_NO_DEBUG_OUTPUT
 
+using CReporter::LoggingCategory::cr;
+
 // Local definitions.
 
 #define PLUGINS_DIR     "/usr/lib/crash-reporter/dialogplugins"
 #define LOG_FILE        "/tmp/crash-reporter-ui.log"
-
-extern char *g_progname;
 
 /*!
   * @brief Overridden signal handler.
@@ -62,7 +62,7 @@ extern char *g_progname;
   */
 void signal_handler(int sig)
 {
-    qDebug() << __PRETTY_FUNCTION__  << "Terminated with signal:" << sig;
+    qCDebug(cr) << "Terminated with signal:" << sig;
 
     // Cleans up notifications, which have not been dismissed yet by the user.
     CReporterNotification::removeAll();
@@ -107,12 +107,11 @@ class CReporterMApplicationService : public MApplicationService
 int main(int argc, char **argv)
 {
 #ifndef QT_NO_DEBUG_OUTPUT
-    g_progname = (char *) "crash-reporter-ui";
     // Determine logging method.
     QString type = CReporterApplicationSettings::instance()->value(Logging::ValueLoggerType,
                                                     DefaultApplicationSettings::ValueLoggerTypeDefault).toString();
     Logger logger(type);
-    qDebug() << __PRETTY_FUNCTION__  << "Debug logging started.";
+    qCDebug(cr) << "Debug logging started.";
 #endif // QT_NO_DEBUG_OUTPUT
 
     // Setup handlers for signals.
@@ -125,10 +124,9 @@ int main(int argc, char **argv)
     MApplicationService *applicationService = new CReporterMApplicationService;
     MApplication app(argc, argv, CReporter::UIBinaryName, applicationService);
 
-    qDebug() << __PRETTY_FUNCTION__  << CReporter::UIBinaryName << "[" << app.applicationPid()
-        << "]" << "started.";
+    qCDebug(cr) << CReporter::UIBinaryName << "[" << app.applicationPid() << "]" << "started.";
 
-    qDebug() << __PRETTY_FUNCTION__ << "Crash Reporter version is " << QString(CREPORTERVERSION);
+    qCDebug(cr) << "Crash Reporter version is " << QString(CREPORTERVERSION);
 
     // Set-up translation system.
     MLocale locale;
@@ -144,7 +142,7 @@ int main(int argc, char **argv)
     // Enter Qt main loop.
     int retVal = app.exec();
 
-    qDebug() << __PRETTY_FUNCTION__ << "Returned from dialog server main loop";
+    qCDebug(cr) << "Returned from dialog server main loop";
 
     CReporterNotification::removeAll();
 

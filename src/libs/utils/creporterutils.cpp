@@ -47,6 +47,14 @@
 #include "../autouploader_interface.h" // generated
 #include "../ssu_interface.h" // generated
 
+namespace CReporter {
+namespace LoggingCategory {
+Q_LOGGING_CATEGORY(cr, "creporter", QtInfoMsg)
+} // namespace LoggingCategory
+} // namespace CReporter
+
+using CReporter::LoggingCategory::cr;
+
 // Local constants.
 
 const QString richCoreTmpNoteFile = "/tmp/rich-core-note.txt";
@@ -80,18 +88,18 @@ bool CReporterUtils::isMounted(const QString &path)
 #if defined(CREPORTER_SDK_HOST) || defined(CREPORTER_UNIT_TEST)
     Q_UNUSED(path);
 	// Skip, if running in scratchbox.
-	qDebug() << __PRETTY_FUNCTION__ << "Scratchbox target -> skip check and return true";
+	qCDebug(cr) << "Scratchbox target -> skip check and return true";
 	return true;	
 #else
 	struct stat st;
     memset(&st, 0, sizeof(st));
     
     if (stat(CReporterUtils::qstringToChar(path), &st) == 0) {
-		qDebug() << __PRETTY_FUNCTION__ << "Path:" << path << "is mounted. Device ID:" << st.st_dev;	
+		qCDebug(cr) << "Path:" << path << "is mounted. Device ID:" << st.st_dev;
 		return true;
     }
 
-	qDebug() << __PRETTY_FUNCTION__ << "Path:" << path << "not mounted.";
+	qCDebug(cr) << "Path:" << path << "not mounted.";
 	return false;
 #endif // defined(CREPORTER_SDK_HOST) || defined(CREPORTER_UNIT_TEST)
 }
@@ -102,7 +110,7 @@ bool CReporterUtils::isMounted(const QString &path)
 bool CReporterUtils::removeFile(const QString &path)
 {
     QFileInfo fi(path);
-    qDebug() << __PRETTY_FUNCTION__ << "Removing file:" << fi.absoluteFilePath();
+    qCDebug(cr) << "Removing file:" << fi.absoluteFilePath();
     return QFile::remove(fi.absoluteFilePath());
 }
 
@@ -111,7 +119,7 @@ bool CReporterUtils::removeFile(const QString &path)
 // ----------------------------------------------------------------------------
 QStringList CReporterUtils::parseCrashInfoFromFilename(const QString &filePath)
 {
-    qDebug() << __PRETTY_FUNCTION__ << "Parse:" << filePath;
+    qCDebug(cr) << "Parse:" << filePath;
 
     QFileInfo fi(filePath);
     // Remove path and file suffix. i.e. /media/mmc1/application-hwid-11-2029.rcore.lzo =>
@@ -129,7 +137,7 @@ QStringList CReporterUtils::parseCrashInfoFromFilename(const QString &filePath)
     int searchIndex = baseName.lastIndexOf("-");
     // Extracts PID substring.
     QString pid = baseName.right(baseName.size() - (searchIndex + 1));
-    qDebug() << __PRETTY_FUNCTION__ << "PID:" << pid;
+    qCDebug(cr) << "PID:" << pid;
 
     // Remove dash and PID from the original basename.
     baseName = baseName.remove(searchIndex, pid.size() + 1);
@@ -140,18 +148,18 @@ QStringList CReporterUtils::parseCrashInfoFromFilename(const QString &filePath)
     // Extract SIGNUM.
     searchIndex = baseName.lastIndexOf("-");
     QString signum = baseName.right(baseName.size() - (searchIndex + 1));
-    qDebug() << __PRETTY_FUNCTION__ << "SIGNUM:" << signum;
+    qCDebug(cr) << "SIGNUM:" << signum;
 
     baseName = baseName.remove(searchIndex, signum.size() + 1);
 
     // Extract HWID.
     searchIndex = baseName.lastIndexOf("-");
     QString hwid = baseName.right(baseName.size() - (searchIndex + 1));
-    qDebug() << __PRETTY_FUNCTION__ << "HWID:" << hwid;
+    qCDebug(cr) << "HWID:" << hwid;
 
     baseName = baseName.remove(searchIndex, hwid.size() + 1);
 
-    qDebug() << __PRETTY_FUNCTION__ << "Application name:" << baseName;
+    qCDebug(cr) << "Application name:" << baseName;
 
     // Append results to list. Index 0 = Application name ....
     QStringList result;
@@ -168,7 +176,7 @@ bool CReporterUtils::appendToLzo(const QString &text, const QString &filePath)
     QFile tmpFile(richCoreTmpNoteFile);
     // Create local temp file, where comments are written.
     if (!tmpFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
-          qDebug() << __PRETTY_FUNCTION__ << "Unable to open file:" << filePath;
+          qCDebug(cr) << "Unable to open file:" << filePath;
           return false;
           }
 
@@ -179,11 +187,11 @@ bool CReporterUtils::appendToLzo(const QString &text, const QString &filePath)
     // Append to *.lzo.
     QString cmd = QString("/usr/bin/lzop -c %1 >> %2").arg(richCoreTmpNoteFile).arg(filePath) ;
     int res = system(qstringToChar(cmd));
-    qDebug() << __PRETTY_FUNCTION__ << "System returned:"  << res;
+    qCDebug(cr) << "System returned:"  << res;
 
     // Remove temp file.
     if (!tmpFile.remove()) {
-        qDebug() << __PRETTY_FUNCTION__ << "Unable to remove file:" << richCoreTmpNoteFile;
+        qCDebug(cr) << "Unable to remove file:" << richCoreTmpNoteFile;
     }
     return true;
 }
@@ -200,8 +208,7 @@ QString CReporterUtils::deviceUid()
     QDBusPendingReply<QString> reply = ssuProxy->deviceUid();
     reply.waitForFinished();
     if (reply.isError()){
-        qDebug() << __PRETTY_FUNCTION__
-                 << "DBus unavailable, UUID might be incorrect.";
+        qCDebug(cr) << "DBus unavailable, UUID might be incorrect.";
         return SsuDeviceInfo().deviceUid();
     } else {
         return reply.value();
@@ -235,8 +242,7 @@ bool CReporterUtils::reportIncludesCrash(const QString &fileName)
 bool CReporterUtils::notifyAutoUploader(const QStringList &filesToUpload,
         bool obeyNetworkRestrictions)
 {
-    qDebug() << __PRETTY_FUNCTION__
-             << "Requesting crash-reporter-autouploader to upload"
+    qCDebug(cr) << "Requesting crash-reporter-autouploader to upload"
              << filesToUpload.size() << "files.";
 
     ComNokiaCrashReporterAutoUploaderInterface proxy(CReporter::AutoUploaderServiceName,
@@ -248,15 +254,14 @@ bool CReporterUtils::notifyAutoUploader(const QStringList &filesToUpload,
     reply.waitForFinished();
 
     if (reply.isError()) {
-        qWarning() << __PRETTY_FUNCTION__ << "D-Bus error occurred.";
+        qCWarning(cr) << "D-Bus error occurred.";
 
         // Trace error.
         QDBusError dBusError(reply.error());
 
-        qDebug() << __PRETTY_FUNCTION__ << "Name:" << dBusError.name();
-        qDebug() << __PRETTY_FUNCTION__ << "Message:" << dBusError.message();
-        qDebug() << __PRETTY_FUNCTION__
-                 << "Error string:" << dBusError.errorString(dBusError.type());
+        qCDebug(cr) << "Name:" << dBusError.name();
+        qCDebug(cr) << "Message:" << dBusError.message();
+        qCDebug(cr) << "Error string:" << dBusError.errorString(dBusError.type());
 
         return false;
     }
@@ -270,7 +275,7 @@ QProcess *CReporterUtils::invokeLogCollection(const QString &label)
     richCoreHelper->start("/usr/libexec/rich-core-helper",
             QStringList() << label);
     if (!richCoreHelper->waitForStarted()) {
-        qDebug() << "Problem invoking rich-core-dumper.";
+        qCDebug(cr) << "Problem invoking rich-core-dumper.";
         return 0;
     }
 

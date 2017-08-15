@@ -47,6 +47,8 @@
 #include "creporterapplicationsettings.h"
 #include "creporterutils.h"
 
+using CReporter::LoggingCategory::cr;
+
 const char *clientstate_string[] = {"None", "Init", "Connecting", "Sending", "Aborting"};
 const int CONNECTION_TIMEOUT_MS = 2 * 60 * 1000;
 
@@ -86,11 +88,11 @@ CReporterHttpClientPrivate::~CReporterHttpClientPrivate()
 // ----------------------------------------------------------------------------
 void CReporterHttpClientPrivate::init(bool deleteAfterSending)
 {
-	qDebug() << __PRETTY_FUNCTION__ << "Initiating HTTP session.";
+	qCDebug(cr) << "Initiating HTTP session.";
 	m_deleteFileFlag = deleteAfterSending;
 
     if (CReporterApplicationSettings::instance()->useProxy()) {
-        qDebug() << __PRETTY_FUNCTION__ << "Network proxy defined.";
+        qCDebug(cr) << "Network proxy defined.";
 
         QNetworkProxy proxy;
         proxy.setType(QNetworkProxy::HttpProxy);
@@ -115,7 +117,7 @@ void CReporterHttpClientPrivate::init(bool deleteAfterSending)
 bool CReporterHttpClientPrivate::createRequest(const QString &file)
 {
     Q_ASSERT(m_manager != NULL);
-    qDebug() << __PRETTY_FUNCTION__ << "Create new request.";
+    qCDebug(cr) << "Create new request.";
 
     if (m_clientState != CReporterHttpClient::Init) {
         return false;
@@ -130,7 +132,7 @@ bool CReporterHttpClientPrivate::createRequest(const QString &file)
     url.setPort(CReporterApplicationSettings::instance()->serverPort());
 
     if (CReporterApplicationSettings::instance()->useSsl()) {
-        qDebug() << __PRETTY_FUNCTION__ << "SSL is enabled.";
+        qCDebug(cr) << "SSL is enabled.";
         QSslConfiguration ssl(QSslConfiguration::defaultConfiguration());
         ssl.setPeerVerifyMode(QSslSocket::VerifyNone);
         request.setSslConfiguration(ssl);
@@ -138,8 +140,8 @@ bool CReporterHttpClientPrivate::createRequest(const QString &file)
 
     // Set file to be the current.
     m_currentFile.setFile(file);
-    qDebug() << __PRETTY_FUNCTION__ << "File to upload:" << m_currentFile.absoluteFilePath();
-    qDebug() << __PRETTY_FUNCTION__ << "File size:" << m_currentFile.size() / 1024 << "kB's";
+    qCDebug(cr) << "File to upload:" << m_currentFile.absoluteFilePath();
+    qCDebug(cr) << "File size:" << m_currentFile.size() / 1024 << "kB's";
 
     // For PUT, we need to append file name to the path.
     QString serverPath = CReporterApplicationSettings::instance()->serverPath() +
@@ -151,10 +153,10 @@ bool CReporterHttpClientPrivate::createRequest(const QString &file)
             "&model=" + CReporterUtils::deviceModel());
 
     request.setUrl(url);
-    qDebug() << __PRETTY_FUNCTION__ << "Upload URL:" << url.toString();
+    qCDebug(cr) << "Upload URL:" << url.toString();
 
     if (!createPutRequest(request, dataToSend)) {
-        qDebug() << __PRETTY_FUNCTION__ << "Failed to create network request.";
+        qCDebug(cr) << "Failed to create network request.";
         return false;
     }
 
@@ -187,7 +189,7 @@ void CReporterHttpClientPrivate::cancel()
 	stateChange( CReporterHttpClient::Aborting );
 
     if (m_reply != 0) {
-        qDebug() << __PRETTY_FUNCTION__ << "Canceling HTTP transaction.";
+        qCDebug(cr) << "Canceling HTTP transaction.";
 		// Abort ongoing transactions.
 		m_reply->abort();
         m_reply = 0;
@@ -206,7 +208,7 @@ void CReporterHttpClientPrivate::handleAuthenticationRequired(QNetworkReply *rep
 {
     Q_UNUSED(reply)
 
-	qDebug() << __PRETTY_FUNCTION__ << "Fill in the credentials.";
+	qCDebug(cr) << "Fill in the credentials.";
 
 	// Fill in the credentials.
     authenticator->setUser(CReporterApplicationSettings::instance()->username());
@@ -225,7 +227,7 @@ void CReporterHttpClientPrivate::handleSslErrors(const QList<QSslError> &errors 
 		 }
 		 errorString += error.errorString();
 	 }
-	qDebug() << "One or more SSL errors occured:" << errorString;
+	qCDebug(cr) << "One or more SSL errors occured:" << errorString;
 
 	// Ignore and continue connection.
 	m_reply->ignoreSslErrors();
@@ -239,12 +241,12 @@ void CReporterHttpClientPrivate::handleError(QNetworkReply::NetworkError error)
     if (m_reply && m_reply->error() != QNetworkReply::NoError) {
 		// Finished is emitted by QNetworkReply after this, inidicating that
 		// the connection is over.
-		qCritical() << __PRETTY_FUNCTION__ << "Upload failed.";
+		qCCritical(cr) << "Upload failed.";
         QString errorString =m_reply->errorString();
 
         m_reply = 0;
 
-        qDebug() << __PRETTY_FUNCTION__ << "Error code:" << error << "," << errorString;
+        qCDebug(cr) << "Error code:" << error << "," << errorString;
         emit uploadError(m_currentFile.fileName(), errorString);
 	}
 }
@@ -252,25 +254,25 @@ void CReporterHttpClientPrivate::handleError(QNetworkReply::NetworkError error)
 void CReporterHttpClientPrivate::parseReply()
 {
     if (!m_reply) {
-        qDebug() << "Server reply is NULL";
+        qCDebug(cr) << "Server reply is NULL";
         return;
     }
 
     if (!m_reply->open(QIODevice::ReadOnly)) {
-        qDebug() << "Couldn't open server reply for reading.";
+        qCDebug(cr) << "Couldn't open server reply for reading.";
         return;
     }
 
     QJsonDocument reply = QJsonDocument::fromJson(m_reply->readAll());
     if (reply.isNull() || !reply.isObject()) {
-        qDebug() << "Error parsing JSON server reply.";
+        qCDebug(cr) << "Error parsing JSON server reply.";
         return;
     }
 
     QJsonObject json = reply.object();
     int submissionId = static_cast<int>(json.value("submission_id").toDouble(0));
     if (submissionId == 0) {
-        qDebug() << "Failed to parse submission id from JSON.";
+        qCDebug(cr) << "Failed to parse submission id from JSON.";
         return;
     }
 
@@ -282,7 +284,7 @@ void CReporterHttpClientPrivate::parseReply()
     QString corePath(CReporterCoreRegistry::instance()->getCoreLocationPaths().first());
     QFile uploadlog(corePath + "/uploadlog");
     if (!uploadlog.open(QIODevice::WriteOnly | QIODevice::Append)) {
-        qDebug() << "Couldn't open uploadlog for writing.";
+        qCDebug(cr) << "Couldn't open uploadlog for writing.";
         return;
     }
 
@@ -297,7 +299,7 @@ void CReporterHttpClientPrivate::parseReply()
 // ----------------------------------------------------------------------------
 void CReporterHttpClientPrivate::handleFinished()
 {
-    qDebug() << __PRETTY_FUNCTION__ << "Uploading file:" << m_currentFile.fileName() << "finished.";
+    qCDebug(cr) << "Uploading file:" << m_currentFile.fileName() << "finished.";
 
     m_connectionTimeout.stop();
 
@@ -323,7 +325,7 @@ void CReporterHttpClientPrivate::handleFinished()
 // ----------------------------------------------------------------------------
 void CReporterHttpClientPrivate::handleUploadProgress(qint64 bytesSent, qint64 bytesTotal)
 {
-    qDebug() << __PRETTY_FUNCTION__ << "Sent:" << bytesSent << "Total:" << bytesTotal;
+    qCDebug(cr) << "Sent:" << bytesSent << "Total:" << bytesTotal;
 
     // Upload has started; stop the connection timeout.
     m_connectionTimeout.stop();
@@ -339,7 +341,7 @@ void CReporterHttpClientPrivate::handleUploadProgress(qint64 bytesSent, qint64 b
 
     if (bytesTotal != 0) {
         int done = (int)((bytesSent * 100) / bytesTotal);
-        qDebug() << __PRETTY_FUNCTION__ << "Done:" << done << "%";
+        qCDebug(cr) << "Done:" << done << "%";
         emit q_ptr->updateProgress(done);
     }
 }
@@ -349,8 +351,8 @@ void CReporterHttpClientPrivate::handleUploadProgress(qint64 bytesSent, qint64 b
 // ----------------------------------------------------------------------------
 void CReporterHttpClientPrivate::stateChange(CReporterHttpClient::State nextState)
 {
-    qDebug() << __PRETTY_FUNCTION__ << "Current state:" << q_ptr->stateToString( m_clientState );
-    qDebug() << __PRETTY_FUNCTION__ << "New state:" << q_ptr->stateToString( nextState );
+    qCDebug(cr) << "Current state:" << q_ptr->stateToString( m_clientState );
+    qCDebug(cr) << "New state:" << q_ptr->stateToString( nextState );
     m_clientState = nextState;
     emit stateChanged( m_clientState );
 }
@@ -396,7 +398,7 @@ CReporterHttpClient::CReporterHttpClient(QObject *parent):
 // ----------------------------------------------------------------------------
 CReporterHttpClient::~CReporterHttpClient()
 {
-    qDebug() << __PRETTY_FUNCTION__ << "Client destroyed.";
+    qCDebug(cr) << "Client destroyed.";
 }
 
 // ----------------------------------------------------------------------------
@@ -430,7 +432,7 @@ QString CReporterHttpClient::stateToString(CReporterHttpClient::State state) con
 bool CReporterHttpClient::upload(const QString &file)
 {
 	Q_D( CReporterHttpClient );
-	qDebug() << __PRETTY_FUNCTION__ << "Upload requested.";
+	qCDebug(cr) << "Upload requested.";
 
     return d->createRequest(file);
 }
@@ -441,7 +443,7 @@ bool CReporterHttpClient::upload(const QString &file)
 void CReporterHttpClient::cancel()
 {
     Q_D(CReporterHttpClient);
-	qDebug() << __PRETTY_FUNCTION__ << "Cancel requested.";
+	qCDebug(cr) << "Cancel requested.";
 
     d->cancel();
 }

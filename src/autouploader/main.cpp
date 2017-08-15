@@ -37,14 +37,14 @@
 
 #include "creporterautouploader.h"
 #include "creporternamespace.h"
-///#include "creporterutils.h"
+#include "creporterutils.h"
 #include "creporterapplicationsettings.h"
 
 #ifndef QT_NO_DEBUG_OUTPUT
 #include "creporterlogger.h"
 #endif // QT_NO_DEBUG_OUTPUT
 
-extern char *g_progname;
+using CReporter::LoggingCategory::cr;
 
 /*!
   * @brief Crash Reporter Auto Uploader main function.
@@ -55,7 +55,6 @@ extern char *g_progname;
 int main(int argc, char **argv)
 {
 #ifndef QT_NO_DEBUG_OUTPUT
-        g_progname = (char *) "crash-reporter-autouploader";
         Logger logger(CReporterApplicationSettings::instance()->loggerType());
 #endif // QT_NO_DEBUG_OUTPUT
 
@@ -65,10 +64,9 @@ int main(int argc, char **argv)
     translator->load("crash-reporter_eng_en", "/usr/share/translations");
     app.installTranslator(translator);
 
-    qDebug() << __PRETTY_FUNCTION__  << CReporter::AutoUploaderBinaryName << "[" << app.applicationPid()
-        << "]" << "started.";
+    qCDebug(cr) << CReporter::AutoUploaderBinaryName << "[" << app.applicationPid() << "]" << "started.";
 
-    qDebug() << __PRETTY_FUNCTION__ << "Crash Reporter version is " << QString(CREPORTERVERSION);
+    qCDebug(cr) << "Crash Reporter version is " << QString(CREPORTERVERSION);
 
     CReporterAutoUploader uploader;
 
@@ -76,7 +74,7 @@ int main(int argc, char **argv)
     int retVal = app.exec();
 
     CReporterApplicationSettings::instance()->freeSingleton();
-    qDebug() << __PRETTY_FUNCTION__ << "Shutting down Auto Uploader process.";
+    qCDebug(cr) << "Shutting down Auto Uploader process.";
     return retVal;
 }
 

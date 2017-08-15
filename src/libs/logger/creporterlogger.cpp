@@ -48,10 +48,6 @@ CReporterLogger *CReporterLogger::sm_Instance = 0;
 bool CReporterLogger::sm_Syslog = false;
 CReporter::LogType CReporterLogger::sm_LogType = CReporter::LogNone;
 
-// External global variables.
-
-char *g_progname;
-
 // ******** Class CReporterLoggerPrivate ********
 
 // ******** Class CReporterLogger ********
@@ -75,7 +71,7 @@ CReporterLogger::CReporterLogger(const QString type)
         // Initialize logging.
         case CReporter::LogSyslog:
             // Init syslog.
-            openlog(g_progname, LOG_PID, LOG_USER);
+            openlog(NULL, LOG_PID, LOG_USER);
             break;
         case CReporter::LogFile:
             m_file.setFileName(CReporter::DefaultLogFile);
@@ -88,10 +84,17 @@ CReporterLogger::CReporterLogger(const QString type)
             }
             // Set stream.
             m_stream.setDevice(&m_file);
+            // Set default message pattern
+            qSetMessagePattern(QStringLiteral("%{time} %{appname}: ["
+                                              "%{if-debug}D%{endif}"
+                                              "%{if-info}I%{endif}"
+                                              "%{if-warning}W%{endif}"
+                                              "%{if-critical}C%{endif}"
+                                              "%{if-fatal}F%{endif}"
+                                              "] %{function}:%{line} - %{message}"));
             break;
-        case CReporter::LogNone:
-        default:
-            break;
+        case CReporter::LogNone: // TODO Means rather LogDefault than LogNone
+            return;
     };
     // Register ourselves as a debug message handler
     m_old_msg_handler = qInstallMessageHandler(CReporterLogger::messageHandler);
@@ -121,17 +124,24 @@ void CReporterLogger::messageHandler(QtMsgType type,
                                      const QMessageLogContext &context,
                                      const QString &msg)
 {
-    Q_UNUSED(context);
+    Q_ASSERT(CReporterLogger::sm_LogType != CReporter::LogNone);
 
-    if (CReporterLogger::sm_LogType == CReporter::LogNone) {
+    QString logMessage = qFormatLogMessage(type, context, msg);
+
+    // print nothing if message pattern didn't apply / was empty.
+    // (still print empty lines, e.g. because message itself was empty)
+    if (logMessage.isNull())
         return;
-    }
-    else if (CReporterLogger::sm_LogType == CReporter::LogSyslog) {
+
+    if (CReporterLogger::sm_LogType == CReporter::LogSyslog) {
         int msgLevel = LOG_DEBUG;
 
         switch (type) {
             case QtDebugMsg:
                 msgLevel = LOG_DEBUG;
+                break;
+            case QtInfoMsg:
+                msgLevel = LOG_INFO;
                 break;
             case QtWarningMsg:
                 msgLevel = LOG_WARNING;
@@ -144,29 +154,10 @@ void CReporterLogger::messageHandler(QtMsgType type,
                 break;
             };
 
-            syslog(msgLevel, "%s", msg.toStdString().c_str());
+        syslog(msgLevel, "%s", logMessage.toLocal8Bit().constData());
     }
     else if (CReporterLogger::sm_LogType == CReporter::LogFile) {
-        QString timeStamp = QTime::currentTime().toString(Qt::ISODate);
-        QString msgType;
-
-        switch (type) {
-            case QtDebugMsg:
-                msgType = ": [DEBUG]: ";
-                break;
-            case QtWarningMsg:
-                msgType = ": [WARNING]: ";
-                break;
-            case QtCriticalMsg:
-                msgType = ": [CRITICAL]: ";
-                break;
-            case QtFatalMsg:
-                msgType = ": [FATAL]: ";
-                break;
-        };
-        // Write to stream.
-        CReporterLogger::sm_Instance->m_stream << timeStamp << msgType <<
-                g_progname << ": " << msg << endl;
+        CReporterLogger::sm_Instance->m_stream << logMessage << endl;
     }
 
     if (type == QtFatalMsg) {
