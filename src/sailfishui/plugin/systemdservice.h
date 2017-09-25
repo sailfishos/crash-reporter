@@ -88,17 +88,17 @@ private:
     Q_DECLARE_PRIVATE(SystemdService)
     QScopedPointer<SystemdServicePrivate> d_ptr;
 
-    Q_PRIVATE_SLOT(d_func(), void gotUnitPath(QDBusPendingCallWatcher *));
-    Q_PRIVATE_SLOT(d_func(), void unitFileStateChanged(QDBusPendingCallWatcher *));
-    Q_PRIVATE_SLOT(d_func(), void maskingChanged(QDBusPendingCallWatcher *));
-    Q_PRIVATE_SLOT(d_func(), void reloaded(QDBusPendingCallWatcher *));
-    Q_PRIVATE_SLOT(d_func(), void stateChanged(QDBusPendingCallWatcher *));
+    Q_PRIVATE_SLOT(d_func(), void gotUnitPath(QDBusPendingCallWatcher *))
+    Q_PRIVATE_SLOT(d_func(), void unitFileStateChanged(QDBusPendingCallWatcher *))
+    Q_PRIVATE_SLOT(d_func(), void maskingChanged(QDBusPendingCallWatcher *))
+    Q_PRIVATE_SLOT(d_func(), void reloaded(QDBusPendingCallWatcher *))
+    Q_PRIVATE_SLOT(d_func(), void stateChanged(QDBusPendingCallWatcher *))
     Q_PRIVATE_SLOT(d_func(), void propertiesChanged(const QString &,
                                                     const QVariantMap &,
-                                                    const QStringList &));
-    Q_PRIVATE_SLOT(d_func(), void handleUnitNew(const QString &, const QDBusObjectPath &));
-    Q_PRIVATE_SLOT(d_func(), void handleUnitRemoved(const QString &, const QDBusObjectPath &));
-    Q_PRIVATE_SLOT(d_func(), void checkUnitState());
+                                                    const QStringList &))
+    Q_PRIVATE_SLOT(d_func(), void handleUnitNew(const QString &, const QDBusObjectPath &))
+    Q_PRIVATE_SLOT(d_func(), void handleUnitRemoved(const QString &, const QDBusObjectPath &))
+    Q_PRIVATE_SLOT(d_func(), void checkUnitState())
 };
 
 #endif // SYSTEMDSERVICE_H

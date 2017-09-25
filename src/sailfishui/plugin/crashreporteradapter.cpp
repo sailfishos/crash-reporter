@@ -39,7 +39,7 @@ private:
 
     QFileSystemWatcher watcher;
 
-    Q_DECLARE_PUBLIC(CrashReporterAdapter);
+    Q_DECLARE_PUBLIC(CrashReporterAdapter)
     CrashReporterAdapter *q_ptr;
 };
 

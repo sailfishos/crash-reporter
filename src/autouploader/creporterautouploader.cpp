@@ -208,7 +208,7 @@ void CReporterAutoUploader::engineFinished(int error, int sent, int total)
         default:
         // We should never enter here.
         break;
-    };
+    }
 
     if (error != CReporterUploadEngine::NoError)
     {

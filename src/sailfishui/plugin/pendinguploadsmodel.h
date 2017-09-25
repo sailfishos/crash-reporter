@@ -48,7 +48,7 @@ public:
 
     ~PendingUploadsModel();
 private:
-    Q_DECLARE_PRIVATE(PendingUploadsModel);
+    Q_DECLARE_PRIVATE(PendingUploadsModel)
     QScopedPointer<PendingUploadsModelPrivate> d_ptr;
 };
 

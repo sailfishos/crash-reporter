@@ -42,7 +42,7 @@ private:
     // No more than 4 matches per expression each day.
     static const qint64 SILENT_PERIOD_MS = 6 * 60 * 60 * 1000;
 
-    Q_PRIVATE_SLOT(d_func(), void handleJournalEntries());
+    Q_PRIVATE_SLOT(d_func(), void handleJournalEntries())
 };
 
 #endif // JOURNALSPY_H
