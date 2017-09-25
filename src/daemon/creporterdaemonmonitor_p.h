@@ -43,36 +43,36 @@ class CReporterNotification;
   */
 class CReporterHandledRichCore
 {
-    public:
-        /*!
-          * @brief Class constructor.
-          *
-          * @param filePath Rich-core file path.
-          */
-        CReporterHandledRichCore(const QString &filePath);
+public:
+    /*!
+      * @brief Class constructor.
+      *
+      * @param filePath Rich-core file path.
+      */
+    CReporterHandledRichCore(const QString &filePath);
 
-        /*!
-          * @brief Class destructor.
-          *
-          */
-        ~CReporterHandledRichCore();
+    /*!
+      * @brief Class destructor.
+      *
+      */
+    ~CReporterHandledRichCore();
 
-        /*!
-          * @brief Returns true, if @a other has similar information than this object.
-          *
-          * @param other CReporterHandledRichCore object.
-          */
-        bool operator==(const CReporterHandledRichCore &other) const;
+    /*!
+      * @brief Returns true, if @a other has similar information than this object.
+      *
+      * @param other CReporterHandledRichCore object.
+      */
+    bool operator==(const CReporterHandledRichCore &other) const;
 
-    public:
-        //! @arg Binary file name of the application.
-        QString binaryName;
-        //! @arg Signal number (SIGNUM).
-        int signalNumber;
-        //! @arg Upper file size limit.
-        int count;
-        //! @arg When duplicate counter was last set to zero.
-        QDateTime lastCountReset;
+public:
+    //! @arg Binary file name of the application.
+    QString binaryName;
+    //! @arg Signal number (SIGNUM).
+    int signalNumber;
+    //! @arg Upper file size limit.
+    int count;
+    //! @arg When duplicate counter was last set to zero.
+    QDateTime lastCountReset;
 };
 
 /*!
@@ -85,91 +85,91 @@ class CReporterDaemonMonitorPrivate : public QObject
 {
     Q_OBJECT
 
-    public:
-        /*!
-         * @brief Class constructor.
-         *
-         */
-        CReporterDaemonMonitorPrivate();
+public:
+    /*!
+     * @brief Class constructor.
+     *
+     */
+    CReporterDaemonMonitorPrivate();
 
-        /*!
-         * @brief Class destructor.
-         *
-         */
-        ~CReporterDaemonMonitorPrivate();
+    /*!
+     * @brief Class destructor.
+     *
+     */
+    ~CReporterDaemonMonitorPrivate();
 
-    public Q_SLOTS:
-        /*!
-         * @brief Adds the "\core-dumps" -directory paths currently present in the file system.
-         *     to the QFileSystemWatcher.
-         *
-         * @sa http://doc.trolltech.com/4.6/qfilesystemwatcher.html.
-         */
-        void addDirectoryWatcher();
+public Q_SLOTS:
+    /*!
+     * @brief Adds the "\core-dumps" -directory paths currently present in the file system.
+     *     to the QFileSystemWatcher.
+     *
+     * @sa http://doc.trolltech.com/4.6/qfilesystemwatcher.html.
+     */
+    void addDirectoryWatcher();
 
-        /*!
-         * @brief Removes monitored directories from the QFileSystemWatcher.
-         *
-         * @sa http://doc.trolltech.com/4.6/qfilesystemwatcher.html.
-         */
-        void removeDirectoryWatcher();
+    /*!
+     * @brief Removes monitored directories from the QFileSystemWatcher.
+     *
+     * @sa http://doc.trolltech.com/4.6/qfilesystemwatcher.html.
+     */
+    void removeDirectoryWatcher();
 
-        /*!
-         * @brief Called when directoryChanged signal is received.
-         *
-         * @param Reference to changed directory.
-         */
-        void handleDirectoryChanged(const QString &path);
+    /*!
+     * @brief Called when directoryChanged signal is received.
+     *
+     * @param Reference to changed directory.
+     */
+    void handleDirectoryChanged(const QString &path);
 
-        /*!
-         * @brief Re-enables monitoring of core-dump dir when USB mass storage has been disabled and MyDocs is back in use
-         *
-         */
-        void handleParentDirectoryChanged();
+    /*!
+     * @brief Re-enables monitoring of core-dump dir when USB mass storage has been disabled and MyDocs is back in use
+     *
+     */
+    void handleParentDirectoryChanged();
 
-        /*!
-          * @brief Called, when signal is received from CReporterNotification class.
-          *
-          * @sa CReporterNotification::activated()
-          * @sa CReporterNotification::timeouted()
-          */
-        void handleNotificationEvent();
+    /*!
+      * @brief Called, when signal is received from CReporterNotification class.
+      *
+      * @sa CReporterNotification::activated()
+      * @sa CReporterNotification::timeouted()
+      */
+    void handleNotificationEvent();
 
-        /**
-         * Resets the crash counter counter.
-         */
-        void resetCrashCount();
+    /**
+     * Resets the crash counter counter.
+     */
+    void resetCrashCount();
 
-    public:
-        //! @arg For monitoring directories.
-        QFileSystemWatcher watcher;
-        //! @arg Watcher for monitoring the return of an unmounted directory for when core-dumps dir has disappeared because of USB mass storage mode
-        QFileSystemWatcher parentDirWatcher;
-        //! @arg List of handled rich-cores.
-        QList <CReporterHandledRichCore *> handledRichCores;
-        //! @arg Number of similar cores to keep when auto-delete is enabled
-        int autoDeleteMaxSimilarCores;
+public:
+    //! @arg For monitoring directories.
+    QFileSystemWatcher watcher;
+    //! @arg Watcher for monitoring the return of an unmounted directory for when core-dumps dir has disappeared because of USB mass storage mode
+    QFileSystemWatcher parentDirWatcher;
+    //! @arg List of handled rich-cores.
+    QList <CReporterHandledRichCore *> handledRichCores;
+    //! @arg Number of similar cores to keep when auto-delete is enabled
+    int autoDeleteMaxSimilarCores;
 
-        Q_DECLARE_PUBLIC(CReporterDaemonMonitor)
-        //! @arg Pointer to public class.
-        CReporterDaemonMonitor *q_ptr;
+    Q_DECLARE_PUBLIC(CReporterDaemonMonitor)
+    //! @arg Pointer to public class.
+    CReporterDaemonMonitor *q_ptr;
 
-    private:
-        /*!
-         * A notification object informing user that some process has crashed
-         * and about the count of crashes since the daemon launched.
-         */
-        CReporterNotification *crashNotification;
-        //! Counts processed crash reports.
-        int crashCount;
+private:
+    /*!
+     * A notification object informing user that some process has crashed
+     * and about the count of crashes since the daemon launched.
+     */
+    CReporterNotification *crashNotification;
+    //! Counts processed crash reports.
+    int crashCount;
 
-        /**
-         * Checks whether 'similar' rich core was already handled.
-         *
-         * @param path File path of rich core to check.
-         * @return @c true if duplicate was found, otherwise @c false.
-         */
-        bool checkForDuplicates(const QString &path);
+    /**
+     * Checks whether 'similar' rich core was already handled.
+     *
+     * @param path File path of rich core to check.
+     * @return @c true if duplicate was found, otherwise @c false.
+     */
+    bool checkForDuplicates(const QString &path);
 
 private slots:
     void onSetAutoUploadChanged();

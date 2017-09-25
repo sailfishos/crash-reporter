@@ -26,17 +26,17 @@ class CReporterTestUtils
 {
 public:
 
-	static void createTestDataFiles( const QStringList& testFiles, QStringList& compareFiles, const char* testData[] );
-	static void cleanupDirectories( const QStringList& paths );
-	static void removeDirectories( const QStringList& paths );
-	static void removeDirectory( const QString& path );
+    static void createTestDataFiles( const QStringList &testFiles, QStringList &compareFiles, const char *testData[] );
+    static void cleanupDirectories( const QStringList &paths );
+    static void removeDirectories( const QStringList &paths );
+    static void removeDirectory( const QString &path );
 
 #ifdef CREPORTER_UNIT_TEST
-	static void createTestMountpoints();
+    static void createTestMountpoints();
     static void removeTestMountpoints();
 #endif // CREPORTER_UNIT_TEST
 
-	static QStringList* getCoreDumpPaths();
+    static QStringList *getCoreDumpPaths();
 };
 
 #define UNUSED_RESULT(x) if(x){}

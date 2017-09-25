@@ -27,7 +27,8 @@
 #include "creporterutils.h"
 #include "pendinguploadsmodel.h"
 
-class CrashReporterAdapterPrivate {
+class CrashReporterAdapterPrivate
+{
 public:
     CrashReporterAdapterPrivate(CrashReporterAdapter *qq);
 
@@ -44,13 +45,13 @@ private:
 };
 
 CrashReporterAdapterPrivate::CrashReporterAdapterPrivate(CrashReporterAdapter *qq):
-  reportsToUpload(0), q_ptr(qq)
+    reportsToUpload(0), q_ptr(qq)
 {
     Q_Q(CrashReporterAdapter);
 
     updateCoreDirectoryModels();
     // Recalculate the models when directory contents change.
-    QObject::connect(&watcher, SIGNAL(directoryChanged(const QString&)),
+    QObject::connect(&watcher, SIGNAL(directoryChanged(const QString &)),
                      q, SLOT(updateCoreDirectoryModels()));
 
     watcher.addPaths(CReporterCoreRegistry::instance()->getCoreLocationPaths());
@@ -72,7 +73,7 @@ void CrashReporterAdapterPrivate::updateCoreDirectoryModels()
 }
 
 CrashReporterAdapter::CrashReporterAdapter(QObject *parent):
-  QObject(parent), d_ptr(new CrashReporterAdapterPrivate(this)) {}
+    QObject(parent), d_ptr(new CrashReporterAdapterPrivate(this)) {}
 
 int CrashReporterAdapter::reportsToUpload() const
 {
@@ -81,7 +82,7 @@ int CrashReporterAdapter::reportsToUpload() const
     return d->reportsToUpload;
 }
 
-QAbstractListModel * CrashReporterAdapter::pendingUploads()
+QAbstractListModel *CrashReporterAdapter::pendingUploads()
 {
     Q_D(CrashReporterAdapter);
 

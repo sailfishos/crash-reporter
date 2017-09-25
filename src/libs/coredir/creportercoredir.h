@@ -38,90 +38,90 @@ class CReporterCoreDirPrivate;
  * @class CReporterCoreDir
  * @brief This class implements properties and methods for handling
  * core-dumps directory.
- * 
+ *
  * This class is instantiated by the CReporterCoreRegistry,
  * when daemon process starts. Class provides methods for iterating directory for cores
  * and preserves a list of core files in the directory.
  */
 class CReporterCoreDir : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
 
-	/*!
+    /*!
      * @brief Class constructor.
-	 *
+     *
      * @param mpoint Core location mount point.
      * @param parent Owner of this object (default= 0).
-	 */
-	CReporterCoreDir( QString& mpoint, QObject *parent = 0 );
+     */
+    CReporterCoreDir( QString &mpoint, QObject *parent = 0 );
 
-	/*! 
+    /*!
      * @brief Class destructor.
-	 *
-	 */
-	~CReporterCoreDir();
+     *
+     */
+    ~CReporterCoreDir();
 
-	/*!
+    /*!
      * @brief Return core dumps directory path.
-	 *
+     *
      * @return Path in QString format.
-	 */
+     */
     QString getDirectory() const;
-	
-	/*!
-     * @brief Return mount point of this core location.
-	 *
-     * @return Path in QString format.
-	 */
-    QString getMountpoint() const;
-	
-	/*!
-     * @brief Set directory path for rich core dumps.
-	 *
-     * @param dir Core dumps directory path.
-	 */
-	void setDirectory( const QString& dir );
-	
-	/*!
-     * @brief Set mount point for this core location.
-	 *
-     * @param mpoint Mountpoint path.
-	 */
-	void setMountpoint( const QString& mpoint );
 
-	/*!
+    /*!
+     * @brief Return mount point of this core location.
+     *
+     * @return Path in QString format.
+     */
+    QString getMountpoint() const;
+
+    /*!
+     * @brief Set directory path for rich core dumps.
+     *
+     * @param dir Core dumps directory path.
+     */
+    void setDirectory( const QString &dir );
+
+    /*!
+     * @brief Set mount point for this core location.
+     *
+     * @param mpoint Mountpoint path.
+     */
+    void setMountpoint( const QString &mpoint );
+
+    /*!
      * @brief Collects all valid core files from this directory and appends into lists.
      *
      * @param coreList Reference to list populated with absolute core file paths.
-     */     
-	void collectAllCoreFilesAtLocation( QStringList& coreList );
+     */
+    void collectAllCoreFilesAtLocation( QStringList &coreList );
 
-	/*! 
+    /*!
      * @brief Checks directory for new core files.
-     *	
+     *
      * @return Absolute path to core file. String is NULL, if new valid
-	 *	core file was not found.
-     */	
-	QString checkDirectoryForCores();
-	
+     *  core file was not found.
+     */
+    QString checkDirectoryForCores();
+
 public Q_SLOTS:
     /*!
       * @brief This function (re-)creates the directory for the rich core dumps.
       *
       */
-	void createCoreDirectory();
+    void createCoreDirectory();
 
     /*!
       * @brief This function iterates core-dumps directory for cores and refreshes internal list.
       *
       */
-	void updateCoreList();
-	
+    void updateCoreList();
+
 private: // data
 
-	Q_DECLARE_PRIVATE(CReporterCoreDir)
+    Q_DECLARE_PRIVATE(CReporterCoreDir)
     //! Pointer to the private class data.
     CReporterCoreDirPrivate *d_ptr;
 #ifdef CREPORTER_UNIT_TEST

@@ -33,33 +33,33 @@ class CReporterUploadItem : public QObject
 {
     Q_OBJECT
 
-    public:
-        CReporterUploadItem(const QString &file);
+public:
+    CReporterUploadItem(const QString &file);
 
-        ~CReporterUploadItem();
+    ~CReporterUploadItem();
 
-        void emitDone();
+    void emitDone();
 
-    Q_SIGNALS:
-        void done();
+Q_SIGNALS:
+    void done();
 };
 
 class Ut_CReporterUploadQueue : public QObject
 {
     Q_OBJECT
 
-    private Q_SLOTS:
+private Q_SLOTS:
 
-        void initTestCase();
-        void init();
+    void initTestCase();
+    void init();
 
-        void testEnqueueItems();
+    void testEnqueueItems();
 
-        void cleanupTestCase();
-        void cleanup();
+    void cleanupTestCase();
+    void cleanup();
 
-    private:
-        CReporterUploadQueue *m_Subject;
+private:
+    CReporterUploadQueue *m_Subject;
 };
 
 #endif // UT_CREPORTERUPLOADQUEUE_H

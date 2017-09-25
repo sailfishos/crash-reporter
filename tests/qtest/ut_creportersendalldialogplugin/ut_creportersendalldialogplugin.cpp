@@ -47,8 +47,8 @@ static bool notificationTimeoutSet;
 
 // CReporterNotification mock object.
 CReporterNotification::CReporterNotification(const QString &eventType,
-                                             const QString &summary, const QString &body,
-                                             const QString &imageName, QObject *parent)
+        const QString &summary, const QString &body,
+        const QString &imageName, QObject *parent)
 {
     ntfEventType = eventType;
     ntfSummary = summary;
@@ -88,7 +88,7 @@ class CReporterUtils
     static QString fileSizeToString(const quint64 size);
     static bool appendToLzo(const QString &text, const QString &filePath);
     static bool removeFile(const QString &path);
-    static QStringList parseCrashInfoFromFilename( const QString& filePath );
+    static QStringList parseCrashInfoFromFilename( const QString &filePath );
 };
 
 QString CReporterUtils::fileSizeToString(const quint64 size)
@@ -107,7 +107,7 @@ bool CReporterUtils::removeFile(const QString &path)
 
 // CReporterSendAllDialog mock object.
 CReporterSendAllDialog::CReporterSendAllDialog(const QStringList &files,
-                                                          const QString &server, const QString &filesize)
+        const QString &server, const QString &filesize)
 {
     Q_UNUSED(files);
     Q_UNUSED(server);
@@ -140,10 +140,10 @@ void Ut_CReporterSendAllDialogPlugin::init()
     static MApplication *app = 0;
 
     if (app == 0) {
-            int argc = 2;
-            const char *argv[] = {"./ut_creportersendalldialogplugin", "-software", 0};
-            app = new MApplication(argc, (char **)argv);
-        }
+        int argc = 2;
+        const char *argv[] = {"./ut_creportersendalldialogplugin", "-software", 0};
+        app = new MApplication(argc, (char **)argv);
+    }
 
     m_Server = new TestDialogServer();
     m_Subject = new CReporterSendAllDialogPlugin();
@@ -162,7 +162,7 @@ void Ut_CReporterSendAllDialogPlugin::cleanup()
 
     if (m_Subject != 0) {
         if (m_Subject->isInitialized()) {
-           m_Subject->destroy();
+            m_Subject->destroy();
         }
         delete m_Subject;
         m_Subject = 0;
@@ -175,10 +175,10 @@ void Ut_CReporterSendAllDialogPlugin::cleanupTestCase()
 
 void Ut_CReporterSendAllDialogPlugin::testInitializePlugin()
 {
-   // Test plugin initialized successfully.
-   m_Subject->initialize(m_Server);
-   QVERIFY(m_Subject->name() == CReporter::SendAllDialogType );
-   QVERIFY(m_Subject->isInitialized() == true);
+    // Test plugin initialized successfully.
+    m_Subject->initialize(m_Server);
+    QVERIFY(m_Subject->name() == CReporter::SendAllDialogType );
+    QVERIFY(m_Subject->isInitialized() == true);
 }
 
 void Ut_CReporterSendAllDialogPlugin::testRequestPluginNotInitialized()
@@ -221,7 +221,7 @@ void Ut_CReporterSendAllDialogPlugin::testRequestHandledFilesSent()
     QVariantList args;
     QStringList files;
     files << QString("/media/mmc1/core-dumps/test-1234-11-4321.rcore.lzo") <<
-            QString("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo");
+          QString("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo");
     args << files;
 
     // Request plugin and show notification.
@@ -253,7 +253,7 @@ void Ut_CReporterSendAllDialogPlugin::testRequestHandledFilesDeleted()
     QVariantList args;
     QStringList files;
     files << QString("/media/mmc1/core-dumps/test-1234-11-4321.rcore.lzo") <<
-            QString("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo");
+          QString("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo");
     args << files;
 
     // Request plugin and show notification.
@@ -284,7 +284,7 @@ void Ut_CReporterSendAllDialogPlugin::testRejectDialog()
     QVariantList args;
     QStringList files;
     files << QString("/media/mmc1/core-dumps/test-1234-11-4321.rcore.lzo") <<
-            QString("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo");
+          QString("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo");
     args << files;
 
     // Request plugin and show notification.
@@ -297,7 +297,7 @@ void Ut_CReporterSendAllDialogPlugin::testRejectDialog()
     m_Subject->notificationActivated();
     QVERIFY(m_Server->showDialogCalled == true);
     QVERIFY(m_Subject->isActive() == true);
-    
+
     m_Server->dialog->reject();
     QVERIFY(requestCompletedSpy.count() == 1);
 }

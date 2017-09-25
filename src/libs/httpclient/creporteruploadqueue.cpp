@@ -43,10 +43,10 @@ using CReporter::LoggingCategory::cr;
    */
 class CReporterUploadQueuePrivate
 {
-    public:
-        QQueue<CReporterUploadItem *> uploadQueue;
-        bool notified;
-        int nbrOfItems;
+public:
+    QQueue<CReporterUploadItem *> uploadQueue;
+    bool notified;
+    int nbrOfItems;
 };
 
 // *** Class CReporterUploadQueue ****
@@ -57,8 +57,8 @@ class CReporterUploadQueuePrivate
 // CReporterUploadQueue::CReporterUploadQueue
 // ----------------------------------------------------------------------------
 CReporterUploadQueue::CReporterUploadQueue(QObject *parent) :
-        QObject(parent),
-        d_ptr(new CReporterUploadQueuePrivate())
+    QObject(parent),
+    d_ptr(new CReporterUploadQueuePrivate())
 {
     qCDebug(cr) << "Upload queue initialized.";
     d_ptr->uploadQueue.clear();
@@ -119,8 +119,7 @@ void CReporterUploadQueue::itemFinished()
         qCDebug(cr) << "Queue is empty => emit done()";
         d_ptr->notified = false;
         emit done();
-    }
-    else {
+    } else {
         qCDebug(cr) << "Queue size:" << d_ptr->uploadQueue.size();
         emit emitNextItem();
     }
@@ -140,7 +139,7 @@ int CReporterUploadQueue::totalNumberOfItems() const
 void CReporterUploadQueue::clear()
 {
     if (d_ptr->uploadQueue.size() != 0) {
-         QQueue<CReporterUploadItem *> items = d_ptr->uploadQueue;
+        QQueue<CReporterUploadItem *> items = d_ptr->uploadQueue;
         // Clear list.
         d_ptr->uploadQueue.clear();
         // Delete entries.
@@ -154,7 +153,7 @@ void CReporterUploadQueue::clear()
 void CReporterUploadQueue::emitNextItem()
 {
     qCDebug(cr) << "Emit nextItem().";
-    CReporterUploadItem* item = d_ptr->uploadQueue.dequeue();
+    CReporterUploadItem *item = d_ptr->uploadQueue.dequeue();
 
     emit nextItem(item);
 }

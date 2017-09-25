@@ -46,7 +46,7 @@ private slots:
     void cleanup();
 
 private:
-    CReporterSendFileListModel* testModel;
+    CReporterSendFileListModel *testModel;
 
 };
 

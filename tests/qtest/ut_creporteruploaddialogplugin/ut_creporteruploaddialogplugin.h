@@ -46,10 +46,10 @@ class CReporterUploadQueue : public QObject
 {
     Q_OBJECT
 
-    public:
-        CReporterUploadQueue(QObject *parent=0);
-        ~CReporterUploadQueue();
-        void enqueue(CReporterUploadItem *item);
+public:
+    CReporterUploadQueue(QObject *parent = 0);
+    ~CReporterUploadQueue();
+    void enqueue(CReporterUploadItem *item);
 };
 
 // CReporterUploadEngine mock class.
@@ -57,30 +57,30 @@ class CReporterUploadEngine : public QObject
 {
     Q_OBJECT
 
-    public:
+public:
 
-        typedef enum{
-            //! No error.
-            NoError = 0,
-            //! Indicates errors occured on HTTP/ SSL protocol levels.
-            ProtocolError,
-            //! Error occured, when trying to establish internet connection.
-            ConnectionNotAvailable,
-            //! Internet connection was closed due to network disconnected.
-            ConnectionClosed,
-        } ErrorType;
+    typedef enum {
+        //! No error.
+        NoError = 0,
+        //! Indicates errors occured on HTTP/ SSL protocol levels.
+        ProtocolError,
+        //! Error occured, when trying to establish internet connection.
+        ConnectionNotAvailable,
+        //! Internet connection was closed due to network disconnected.
+        ConnectionClosed,
+    } ErrorType;
 
-        CReporterUploadEngine(CReporterUploadQueue *queue, QObject *parent=0);
-        
-        ~CReporterUploadEngine();
-        
-      QString lastError() const;
-        
-    Q_SIGNALS:
-        void finished(int error, int sent, int total);
+    CReporterUploadEngine(CReporterUploadQueue *queue, QObject *parent = 0);
 
-    public Q_SLOTS:
-        void cancelAll();
+    ~CReporterUploadEngine();
+
+    QString lastError() const;
+
+Q_SIGNALS:
+    void finished(int error, int sent, int total);
+
+public Q_SLOTS:
+    void cancelAll();
 };
 
 // Unit test class.
@@ -88,27 +88,27 @@ class Ut_CReporterUploadDialogPlugin : public QObject
 {
     Q_OBJECT
 
-    private Q_SLOTS:
+private Q_SLOTS:
 
-        void initTestCase();
-        void init();
+    void initTestCase();
+    void init();
 
-        void testInitializePlugin();
-        void testRequestPluginNotInitialized();
-        void testDestroyPlugin();
-        void testInvalidRequestArguments1();
-        void testInvalidRequestArguments2();
-        void testInvalidRequestArguments3();
-        void testUploadFilesSuccessfully();
-        void testUploadFilesFailed();
-        void testUploadCancelled();
-        void testDialogRejected();
-        void cleanupTestCase();
-        void cleanup();
+    void testInitializePlugin();
+    void testRequestPluginNotInitialized();
+    void testDestroyPlugin();
+    void testInvalidRequestArguments1();
+    void testInvalidRequestArguments2();
+    void testInvalidRequestArguments3();
+    void testUploadFilesSuccessfully();
+    void testUploadFilesFailed();
+    void testUploadCancelled();
+    void testDialogRejected();
+    void cleanupTestCase();
+    void cleanup();
 
-    private:
-        CReporterUploadDialogPlugin *m_Subject;
-        TestDialogServer *m_Server;
+private:
+    CReporterUploadDialogPlugin *m_Subject;
+    TestDialogServer *m_Server;
 };
 
 #endif // UT_CREPORTERUPLOADDIALOGPLUGIN_H

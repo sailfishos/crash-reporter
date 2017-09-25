@@ -49,48 +49,49 @@ class CReporterLoggerPrivate;
   * over the Qt debugging functions and forwards the messages to a file, syslog or
   * suppresses output totally (default).
   */
-class CREPORTER_EXPORT CReporterLogger {
+class CREPORTER_EXPORT CReporterLogger
+{
 
-    public:
-        /*!
-         * @brief Class constructor.
-         *
-         * @param logging Logging type.
-         *
-         * @sa CReporter::LogType
-         */
-        CReporterLogger(const QString type = "none");
-        
-        /*!
-         * @brief Class destructor.
-         *
-         */
-        ~CReporterLogger();
+public:
+    /*!
+     * @brief Class constructor.
+     *
+     * @param logging Logging type.
+     *
+     * @sa CReporter::LogType
+     */
+    CReporterLogger(const QString type = "none");
 
-    protected:
-        /*!
-         * @brief Overrides default message handler.
-         * 
-         * @param type Message type.
-         * @param context Additional information about a log message.
-         * @param msg Log message.
-         */
-        static void messageHandler(QtMsgType type,
-                                   const QMessageLogContext &context,
-                                   const QString &msg);
+    /*!
+     * @brief Class destructor.
+     *
+     */
+    ~CReporterLogger();
 
-    private:
-        //! @arg Instance pointer to the this class.
-        static CReporterLogger *sm_Instance;
-        //! @arg The stream write to.
-        QTextStream m_stream;
-         //! @arg File to write.
-        QFile m_file;
-        //! @arg Old msg handler.
-        QtMessageHandler m_old_msg_handler;
-        //! @arg Use syslog for logging.
-        static bool sm_Syslog;
-        static CReporter::LogType sm_LogType;
+protected:
+    /*!
+     * @brief Overrides default message handler.
+     *
+     * @param type Message type.
+     * @param context Additional information about a log message.
+     * @param msg Log message.
+     */
+    static void messageHandler(QtMsgType type,
+                               const QMessageLogContext &context,
+                               const QString &msg);
+
+private:
+    //! @arg Instance pointer to the this class.
+    static CReporterLogger *sm_Instance;
+    //! @arg The stream write to.
+    QTextStream m_stream;
+    //! @arg File to write.
+    QFile m_file;
+    //! @arg Old msg handler.
+    QtMessageHandler m_old_msg_handler;
+    //! @arg Use syslog for logging.
+    static bool sm_Syslog;
+    static CReporter::LogType sm_LogType;
 };
 
 typedef CReporterLogger Logger;

@@ -54,13 +54,13 @@ public:
     QNetworkSession *networkSession;
 
     //! @return Manager of the network configurations provided by the system.
-    static QNetworkConfigurationManager& networkManager();
+    static QNetworkConfigurationManager &networkManager();
 
     //! @return True if default connection is in disconnected state.
     static bool connectionIsActive();
 };
 
-QNetworkConfigurationManager& CReporterNwSessionMgrPrivate::networkManager()
+QNetworkConfigurationManager &CReporterNwSessionMgrPrivate::networkManager()
 {
     static QNetworkConfigurationManager manager;
     return manager;
@@ -69,7 +69,7 @@ QNetworkConfigurationManager& CReporterNwSessionMgrPrivate::networkManager()
 bool CReporterNwSessionMgrPrivate::connectionIsActive()
 {
     QNetworkConfiguration config =
-            CReporterNwSessionMgrPrivate::networkManager().defaultConfiguration();
+        CReporterNwSessionMgrPrivate::networkManager().defaultConfiguration();
 
     return ((config.state() & QNetworkConfiguration::Active) == QNetworkConfiguration::Active);
 }
@@ -82,8 +82,8 @@ bool CReporterNwSessionMgrPrivate::connectionIsActive()
 // CReporterNwSessionMgr::CReporterNwSessionMgr
 // ----------------------------------------------------------------------------
 CReporterNwSessionMgr::CReporterNwSessionMgr(QObject *parent) :
-        QObject(parent),
-        d_ptr(new CReporterNwSessionMgrPrivate())
+    QObject(parent),
+    d_ptr(new CReporterNwSessionMgrPrivate())
 {
     Q_D(CReporterNwSessionMgr);
     d->networkSession = 0;
@@ -95,7 +95,8 @@ CReporterNwSessionMgr::CReporterNwSessionMgr(QObject *parent) :
 CReporterNwSessionMgr::~CReporterNwSessionMgr()
 {
     Q_D(CReporterNwSessionMgr);
-    if (d->networkSession) delete d->networkSession; d->networkSession = 0;
+    if (d->networkSession) delete d->networkSession;
+    d->networkSession = 0;
     delete d_ptr;
     d_ptr = 0;
 }
@@ -109,11 +110,9 @@ bool CReporterNwSessionMgr::opened() const
 
     if (d->networkSession == 0) {
         return false;
-    }
-    else if (d->networkSession->isOpen()) {
+    } else if (d->networkSession->isOpen()) {
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 }
@@ -128,18 +127,18 @@ bool CReporterNwSessionMgr::canUseNetworkConnection()
     // Check that we're not using mobile data.
 
     QNetworkConfigurationManager &manager =
-            CReporterNwSessionMgrPrivate::networkManager();
+        CReporterNwSessionMgrPrivate::networkManager();
 
     manager.updateConfigurations();
     QNetworkConfiguration config(manager.defaultConfiguration());
 
 #ifndef CREPORTER_UNIT_TEST
-        qCDebug(cr) << "Network configurations available:";
-        foreach(const QNetworkConfiguration& cfg, manager.allConfigurations()) {
-            qCDebug(cr) << ' ' << cfg.name() << cfg.bearerTypeName() << cfg.state()
-                     << cfg.identifier();
-        }
-        qCDebug(cr) << "Default configuration:" << config.name();
+    qCDebug(cr) << "Network configurations available:";
+    foreach (const QNetworkConfiguration &cfg, manager.allConfigurations()) {
+        qCDebug(cr) << ' ' << cfg.name() << cfg.bearerTypeName() << cfg.state()
+                    << cfg.identifier();
+    }
+    qCDebug(cr) << "Default configuration:" << config.name();
 #endif
 
     return (config.bearerType() == QNetworkConfiguration::BearerWLAN) ||
@@ -161,30 +160,29 @@ bool CReporterNwSessionMgr::open()
          * plugged in, connection has still a chance to succeed. */
         if (!CReporterNwSessionMgrPrivate::connectionIsActive()) {
             qCDebug(cr) << "No active connection is available. "
-                    "Going on, there still might be USB cable connected...";
+                        "Going on, there still might be USB cable connected...";
             return true;
         }
 
         qCDebug(cr) << "No existing network session.";
         // If there was no network session, create one.
         d->networkSession =
-                new QNetworkSession(d->networkManager().defaultConfiguration());
+            new QNetworkSession(d->networkManager().defaultConfiguration());
 
         connect(d->networkSession, SIGNAL(stateChanged(QNetworkSession::State)),
                 this, SLOT(networkStateChanged(QNetworkSession::State)));
         connect(d->networkSession, SIGNAL(error(QNetworkSession::SessionError)),
                 this, SLOT(networkError(QNetworkSession::SessionError)));
         connect(d->networkSession, SIGNAL(opened()), this, SIGNAL(sessionOpened()));
-    }
-    else if (d->networkSession->isOpen()) {
+    } else if (d->networkSession->isOpen()) {
         qCDebug(cr) << "Using existing network session.";
         return true;
     }
 
     qCDebug(cr) << "Opening network session...";
-#ifndef CREPORTER_UNIT_TEST 
+#ifndef CREPORTER_UNIT_TEST
     if (CReporterPrivacySettingsModel::instance()->automaticSendingEnabled()) {
-	qCDebug(cr) << "... with ConnectInBackground set";
+        qCDebug(cr) << "... with ConnectInBackground set";
         d->networkSession->setSessionProperty("ConnectInBackground", true);
     }
 #endif

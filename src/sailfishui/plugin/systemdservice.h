@@ -26,7 +26,8 @@
 
 class SystemdServicePrivate;
 
-class SystemdService: public QObject, public QQmlParserStatus {
+class SystemdService: public QObject, public QQmlParserStatus
+{
     Q_OBJECT
 
     Q_ENUMS(State)
@@ -57,7 +58,7 @@ public:
     ~SystemdService();
 
     QString serviceName() const;
-    void setServiceName(const QString& serviceName);
+    void setServiceName(const QString &serviceName);
 
     ManagerType managerType() const;
     void setManagerType(ManagerType managerType);
@@ -94,8 +95,8 @@ private:
     Q_PRIVATE_SLOT(d_func(), void reloaded(QDBusPendingCallWatcher *))
     Q_PRIVATE_SLOT(d_func(), void stateChanged(QDBusPendingCallWatcher *))
     Q_PRIVATE_SLOT(d_func(), void propertiesChanged(const QString &,
-                                                    const QVariantMap &,
-                                                    const QStringList &))
+                   const QVariantMap &,
+                   const QStringList &))
     Q_PRIVATE_SLOT(d_func(), void handleUnitNew(const QString &, const QDBusObjectPath &))
     Q_PRIVATE_SLOT(d_func(), void handleUnitRemoved(const QString &, const QDBusObjectPath &))
     Q_PRIVATE_SLOT(d_func(), void checkUnitState())

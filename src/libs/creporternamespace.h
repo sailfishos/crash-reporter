@@ -34,112 +34,112 @@
   */
 namespace CReporter {
 
-        //! User location for application settings. WRITABLE by user. First part of the path is composed in code.
-        const QString UserSettingsLocation = "/.config/crash-reporter-settings";
+//! User location for application settings. WRITABLE by user. First part of the path is composed in code.
+const QString UserSettingsLocation = "/.config/crash-reporter-settings";
 
-        //! System (default) location for application settings. NOT writable by user.
-        const QString SystemSettingsLocation = "/usr/share";
+//! System (default) location for application settings. NOT writable by user.
+const QString SystemSettingsLocation = "/usr/share";
 
-        //! User privacy settings file. First part of the path is composed in code.
-        const QString PrivacySettingsFileUser =
-                "/.config/crash-reporter-settings/crash-reporter-privacy.conf";
+//! User privacy settings file. First part of the path is composed in code.
+const QString PrivacySettingsFileUser =
+    "/.config/crash-reporter-settings/crash-reporter-privacy.conf";
 
-        //! System privacy settings file.
-        const QString PrivacySettingsFileSystem =
-                "/usr/share/crash-reporter-settings/crash-reporter-privacy.conf";
+//! System privacy settings file.
+const QString PrivacySettingsFileSystem =
+    "/usr/share/crash-reporter-settings/crash-reporter-privacy.conf";
 
-        //! Privacy disclaimer file.
-        const QString PrivacyDisclaimerFile =  "/usr/share/crash-reporter-settings/privacy.txt";
+//! Privacy disclaimer file.
+const QString PrivacyDisclaimerFile =  "/usr/share/crash-reporter-settings/privacy.txt";
 
-        //! Default log file.
-        const QString DefaultLogFile = "/tmp/crash-reporter.log";
+//! Default log file.
+const QString DefaultLogFile = "/tmp/crash-reporter.log";
 
 #ifndef CREPORTER_UNIT_TEST
-        //! Dialog server service name
-        const QString DialogServerServiceName = "com.nokia.CrashReporter.DialogServer";
+//! Dialog server service name
+const QString DialogServerServiceName = "com.nokia.CrashReporter.DialogServer";
 
-        //! Dialog server object path.
-        const QString DialogServerObjectPath =  "/com/nokia/crashreporter/dialogserver";
+//! Dialog server object path.
+const QString DialogServerObjectPath =  "/com/nokia/crashreporter/dialogserver";
 
-        //! Daemon service name
-        const QString DaemonServiceName = "com.nokia.CrashReporter.Daemon";
+//! Daemon service name
+const QString DaemonServiceName = "com.nokia.CrashReporter.Daemon";
 
-        //! Daemon object path.
-        const QString DaemonObjectPath =  "/com/nokia/crashreporter/daemon";
+//! Daemon object path.
+const QString DaemonObjectPath =  "/com/nokia/crashreporter/daemon";
 
-        //! Auto uploader service name
-        const QString AutoUploaderServiceName = "com.nokia.CrashReporter.AutoUploader";
+//! Auto uploader service name
+const QString AutoUploaderServiceName = "com.nokia.CrashReporter.AutoUploader";
 
-        //! Auto uploader object path.
-        const QString AutoUploaderObjectPath =  "/com/nokia/crashreporter/autouploader";
+//! Auto uploader object path.
+const QString AutoUploaderObjectPath =  "/com/nokia/crashreporter/autouploader";
 #else
-        //! Dialog server service name
-        const QString DialogServerServiceName = "com.nokia.CrashReporter.DialogServer.Ut";
+//! Dialog server service name
+const QString DialogServerServiceName = "com.nokia.CrashReporter.DialogServer.Ut";
 
-        //! Dialog server object path.
-        const QString DialogServerObjectPath =  "/com/nokia/crashreporter/dialogserver/ut";
+//! Dialog server object path.
+const QString DialogServerObjectPath =  "/com/nokia/crashreporter/dialogserver/ut";
 
-        //! Daemon service name
-        const QString DaemonServiceName = "com.nokia.CrashReporter.Daemon.Ut";
+//! Daemon service name
+const QString DaemonServiceName = "com.nokia.CrashReporter.Daemon.Ut";
 
-        //! Daemon object path.
-        const QString DaemonObjectPath =  "/com/nokia/crashreporter/daemon/ut";
+//! Daemon object path.
+const QString DaemonObjectPath =  "/com/nokia/crashreporter/daemon/ut";
 
-        //! Auto uploader service name
-        const QString AutoUploaderServiceName = "com.nokia.CrashReporter.AutoUploader.Ut";
+//! Auto uploader service name
+const QString AutoUploaderServiceName = "com.nokia.CrashReporter.AutoUploader.Ut";
 
-        //! Auto uploader object path.
-        const QString AutoUploaderObjectPath =  "/com/nokia/crashreporter/autouploader/ut";
+//! Auto uploader object path.
+const QString AutoUploaderObjectPath =  "/com/nokia/crashreporter/autouploader/ut";
 #endif // CREPORTER_UNIT_TEST
 
-        //! Crash Reporter daemon binary name.
-        const QString DaemonBinaryName = "crash-reporter-daemon";
-        
-        //! Crash Reporter Auto Uploader binary name.
-        const QString AutoUploaderBinaryName = "crash-reporter-autouploader";
+//! Crash Reporter daemon binary name.
+const QString DaemonBinaryName = "crash-reporter-daemon";
 
-        /*!
-          * @enum LogType
-          * @brief Logging method.
-          */
-       typedef enum {
-            //! No logging.
-            LogNone = 0,
-            //! Use syslog for logging.
-            LogSyslog,
-            //! Log to a file.
-            LogFile,
-        } LogType;
+//! Crash Reporter Auto Uploader binary name.
+const QString AutoUploaderBinaryName = "crash-reporter-autouploader";
 
-       //! Prefix for message and core packages created by Quick Feedback
-       const QString QuickFeedbackPrefix = "Quickie";
+/*!
+  * @enum LogType
+  * @brief Logging method.
+  */
+typedef enum {
+    //! No logging.
+    LogNone = 0,
+    //! Use syslog for logging.
+    LogSyslog,
+    //! Log to a file.
+    LogFile,
+} LogType;
 
-       //! Prefix for pack of endurance snapshots
-       const QString EndurancePackagePrefix = "Endurance";
+//! Prefix for message and core packages created by Quick Feedback
+const QString QuickFeedbackPrefix = "Quickie";
 
-       //! Prefix for system log packages created on power excess uevent.
-       const QString PowerExcessPrefix = "PowerExcess";
+//! Prefix for pack of endurance snapshots
+const QString EndurancePackagePrefix = "Endurance";
 
-       /// Prefix for system log packages created when oneshot script failure is
-       /// detected.
-       const QString OneshotFailurePrefix = "OneshotFailure";
+//! Prefix for system log packages created on power excess uevent.
+const QString PowerExcessPrefix = "PowerExcess";
 
-       /// Prefix for system log packages created when shutdown from overheating
-       /// is detected.
-       const QString OverheatShutdownPrefix = "OverheatShutdown";
+/// Prefix for system log packages created when oneshot script failure is
+/// detected.
+const QString OneshotFailurePrefix = "OneshotFailure";
 
-       /// Prefix for system log packages created by journal spy.
-       const QString JournalSpyPrefix = QStringLiteral("JournalSpy");
+/// Prefix for system log packages created when shutdown from overheating
+/// is detected.
+const QString OverheatShutdownPrefix = "OverheatShutdown";
 
-       // Prefixes for HW reboot logs.
-       const QString HWrebootPrefix = "HWreboot";
-       const QString HWSMPLPrefix = "HWSMPL";
+/// Prefix for system log packages created by journal spy.
+const QString JournalSpyPrefix = QStringLiteral("JournalSpy");
 
-       //! Event type for crash reporter notifications
-       const QString ApplicationNotificationEventType = "x-nemo.crash-reporter.notification";
+// Prefixes for HW reboot logs.
+const QString HWrebootPrefix = "HWreboot";
+const QString HWSMPLPrefix = "HWSMPL";
 
-       //! Event type for autouploader notifications
-       const QString AutoUploaderNotificationEventType = "x-nemo.crash-reporter.autouploader";
+//! Event type for crash reporter notifications
+const QString ApplicationNotificationEventType = "x-nemo.crash-reporter.notification";
+
+//! Event type for autouploader notifications
+const QString AutoUploaderNotificationEventType = "x-nemo.crash-reporter.autouploader";
 }
 
 #endif // CREPORTERNAMESPACE_H

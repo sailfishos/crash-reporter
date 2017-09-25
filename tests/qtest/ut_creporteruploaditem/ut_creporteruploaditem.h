@@ -33,48 +33,48 @@ class CReporterHttpClient : public QObject
 {
     Q_OBJECT
 
-    public:
-        CReporterHttpClient(QObject* parent=0);
+public:
+    CReporterHttpClient(QObject *parent = 0);
 
-        ~CReporterHttpClient();
+    ~CReporterHttpClient();
 
-        void initSession(bool deleteAfterSending=true);
+    void initSession(bool deleteAfterSending = true);
 
-    Q_SIGNALS:
-        void finished();
-        void uploadError(const QString &file, const QString &errorString);
-        void updateProgress(int done);
+Q_SIGNALS:
+    void finished();
+    void uploadError(const QString &file, const QString &errorString);
+    void updateProgress(int done);
 
-    public Q_SLOTS:
-        bool upload(const QString &file);
-        void cancel();
+public Q_SLOTS:
+    bool upload(const QString &file);
+    void cancel();
 
-    public:
-        void emitFinished();
-        void emitUploadError(const QString &file, const QString &errorString);
-        void emitUpdateProgress(int done);
+public:
+    void emitFinished();
+    void emitUploadError(const QString &file, const QString &errorString);
+    void emitUpdateProgress(int done);
 };
 
 class Ut_CReporterUploadItem : public QObject
 {
     Q_OBJECT
 
-    private Q_SLOTS:
+private Q_SLOTS:
 
-        void initTestCase();
-        void init();
+    void initTestCase();
+    void init();
 
-        void testSendingItem();
-        void testSendingItemFailed();
-        void testSendingItemCancelled();
-        void testFailingUploadStarting();
-        void testCancellingWaitingItem();
+    void testSendingItem();
+    void testSendingItemFailed();
+    void testSendingItemCancelled();
+    void testFailingUploadStarting();
+    void testCancellingWaitingItem();
 
-        void cleanupTestCase();
-        void cleanup();
+    void cleanupTestCase();
+    void cleanup();
 
-    private:
-        CReporterUploadItem *m_Subject;
+private:
+    CReporterUploadItem *m_Subject;
 };
 
 #endif // UT_CREPORTERUPLOADITEM_H

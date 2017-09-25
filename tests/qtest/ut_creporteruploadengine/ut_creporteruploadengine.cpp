@@ -34,7 +34,7 @@
 static CReporterHttpClient *httpInstance = 0;
 
 // CReporterHttpClient mock object.
-CReporterHttpClient::CReporterHttpClient(QObject* parent)
+CReporterHttpClient::CReporterHttpClient(QObject *parent)
 {
     Q_UNUSED(parent);
     httpInstance = this;
@@ -149,15 +149,15 @@ void Ut_CReporterUploadEngine::init()
 void Ut_CReporterUploadEngine::testUploadItems()
 {
     // Test uploading files.
-    QSignalSpy finishedSpy(m_Subject, SIGNAL(finished(int,int,int)));
-    QSignalSpy nextItemSpy(m_Queue, SIGNAL(nextItem(CReporterUploadItem*)));
+    QSignalSpy finishedSpy(m_Subject, SIGNAL(finished(int, int, int)));
+    QSignalSpy nextItemSpy(m_Queue, SIGNAL(nextItem(CReporterUploadItem *)));
 
     // Queue 2 files.
     m_Queue->enqueue(
-            new CReporterUploadItem("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo"));
+        new CReporterUploadItem("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo"));
 
     m_Queue->enqueue(
-            new CReporterUploadItem("/media/mmc2/core-dumps/application-1234-11-4321.rcore.lzo"));
+        new CReporterUploadItem("/media/mmc2/core-dumps/application-1234-11-4321.rcore.lzo"));
 
     // Network session is requested to open.
     QVERIFY(openCalled == true);
@@ -189,10 +189,10 @@ void Ut_CReporterUploadEngine::testUploadItems()
 void Ut_CReporterUploadEngine::testOpeningNetworkSessionFails()
 {
     // Test situation when network session doesn't open.
-    QSignalSpy finishedSpy(m_Subject, SIGNAL(finished(int,int,int)));
+    QSignalSpy finishedSpy(m_Subject, SIGNAL(finished(int, int, int)));
 
     m_Queue->enqueue(
-            new CReporterUploadItem("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo"));
+        new CReporterUploadItem("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo"));
 
     // Network session is requested to open.
     QVERIFY(openCalled == true);
@@ -216,12 +216,12 @@ void Ut_CReporterUploadEngine::testOpeningNetworkSessionFails()
 void Ut_CReporterUploadEngine::testNetworkSessionDisconnectsDuringUpload()
 {
     // Test situation when network session disconnects during upload.
-    QSignalSpy finishedSpy(m_Subject, SIGNAL(finished(int,int,int)));
+    QSignalSpy finishedSpy(m_Subject, SIGNAL(finished(int, int, int)));
 
     m_Queue->enqueue(
-            new CReporterUploadItem("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo"));
+        new CReporterUploadItem("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo"));
     m_Queue->enqueue(
-            new CReporterUploadItem("/media/mmc2/core-dumps/application-1234-11-4321.rcore.lzo"));
+        new CReporterUploadItem("/media/mmc2/core-dumps/application-1234-11-4321.rcore.lzo"));
 
     // Network session is requested to open.
     QVERIFY(openCalled == true);
@@ -251,12 +251,12 @@ void Ut_CReporterUploadEngine::testNetworkSessionDisconnectsDuringUpload()
 void Ut_CReporterUploadEngine::testUploadCancelledByTheUser()
 {
     // Test upload cancelled by the user.
-    QSignalSpy finishedSpy(m_Subject, SIGNAL(finished(int,int,int)));
+    QSignalSpy finishedSpy(m_Subject, SIGNAL(finished(int, int, int)));
 
     m_Queue->enqueue(
-            new CReporterUploadItem("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo"));
+        new CReporterUploadItem("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo"));
     m_Queue->enqueue(
-            new CReporterUploadItem("/media/mmc2/core-dumps/application-1234-11-4321.rcore.lzo"));
+        new CReporterUploadItem("/media/mmc2/core-dumps/application-1234-11-4321.rcore.lzo"));
 
     // Network session is requested to open.
     QVERIFY(openCalled == true);
@@ -285,10 +285,10 @@ void Ut_CReporterUploadEngine::testUploadCancelledByTheUser()
 void Ut_CReporterUploadEngine::testUploadFailedProtocolError()
 {
     // Test situation when uploading fails due to HTTP error.
-    QSignalSpy finishedSpy(m_Subject, SIGNAL(finished(int,int,int)));
+    QSignalSpy finishedSpy(m_Subject, SIGNAL(finished(int, int, int)));
 
     m_Queue->enqueue(
-            new CReporterUploadItem("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo"));
+        new CReporterUploadItem("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo"));
 
     // Network session is requested to open.
     QVERIFY(openCalled == true);

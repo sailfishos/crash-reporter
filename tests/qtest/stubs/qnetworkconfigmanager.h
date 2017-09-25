@@ -8,19 +8,20 @@
 // Stub for QNetworkConfigurationManager
 class QNetworkConfigurationManager : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	QNetworkConfigurationManager() {}
-	~QNetworkConfigurationManager() {}
+    QNetworkConfigurationManager() {}
+    ~QNetworkConfigurationManager() {}
 
-	QNetworkConfiguration defaultConfiguration() const { 
-		return m_defaultConfiguration;
-	}
+    QNetworkConfiguration defaultConfiguration() const
+    {
+        return m_defaultConfiguration;
+    }
 
-	void updateConfigurations() {}
+    void updateConfigurations() {}
 
 private:
-	QNetworkConfiguration m_defaultConfiguration;
+    QNetworkConfiguration m_defaultConfiguration;
 };
 
-#endif	// QNETWORKCONFIGMANAGER_H
+#endif  // QNETWORKCONFIGMANAGER_H

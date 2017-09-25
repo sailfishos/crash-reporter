@@ -67,27 +67,28 @@ bool getPid(QCoreApplication &app)
     qint64 pid = 0;
     bool firstStartup = true;
 
-	// Get new PID.
-	pid = app.applicationPid();
+    // Get new PID.
+    pid = app.applicationPid();
     qCDebug(cr) << CReporter::DaemonBinaryName << "[" << pid << "] starting...";
 
     if (pidFile.exists()) {
         firstStartup = false;
-		qCDebug(cr) << "Removing stale PID file.";
-		pidFile.remove();
-	}
-	
+        qCDebug(cr) << "Removing stale PID file.";
+        pidFile.remove();
+    }
+
     if (pidFile.open(QIODevice::WriteOnly)) {
         QTextStream out(&pidFile);
-		out << pid;
-		pidFile.close();
-	}
+        out << pid;
+        pidFile.close();
+    }
 
     qCDebug(cr) << "Startup delayed =" << firstStartup;
     return firstStartup;
 }
 
-void signalHandler(int signal) {
+void signalHandler(int signal)
+{
     Q_UNUSED(signal)
 
     QCoreApplication::exit(0);
@@ -115,14 +116,13 @@ Q_DECL_EXPORT int main(int argc, char **argv)
     app.installTranslator(translator);
 
     bool firstStartup = getPid(app);
-	
+
     CReporterDaemon daemon;
 
     if (firstStartup) {
         // If no PID file was found, delay startup.
         daemon.setDelayedStartup(CREPORTER_STARTUP_DELAY);
-    }
-    else {
+    } else {
         if (!daemon.initiateDaemon()) {
             // Connecting to D-BUS user session most propably failed.
             // Remove PID file (to delay next startup) and quit application.

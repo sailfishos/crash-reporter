@@ -30,22 +30,22 @@
 
 class Ut_CReporterNwSessionMgr : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 private slots:
 
-	void initTestCase() {}
-	void cleanupTestCase() {}
-	void init() {}
-	void cleanup() {}
+    void initTestCase() {}
+    void cleanupTestCase() {}
+    void init() {}
+    void cleanup() {}
 
-	void test_opened();
-	void test_open();
-	void test_openTwice();
-	void test_close();
+    void test_opened();
+    void test_open();
+    void test_openTwice();
+    void test_close();
 
 private:
-	CReporterNwSessionMgr* mgr;
+    CReporterNwSessionMgr *mgr;
 };
 
-#endif	/* UT_CREPORTERNWSESSIONMGR_H */
+#endif  /* UT_CREPORTERNWSESSIONMGR_H */

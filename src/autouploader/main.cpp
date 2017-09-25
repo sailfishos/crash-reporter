@@ -55,7 +55,7 @@ using CReporter::LoggingCategory::cr;
 int main(int argc, char **argv)
 {
 #ifndef QT_NO_DEBUG_OUTPUT
-        Logger logger(CReporterApplicationSettings::instance()->loggerType());
+    Logger logger(CReporterApplicationSettings::instance()->loggerType());
 #endif // QT_NO_DEBUG_OUTPUT
 
     QCoreApplication app(argc, argv);

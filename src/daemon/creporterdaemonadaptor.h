@@ -40,7 +40,7 @@ class CReporterDaemonAdaptorPrivate;
  *
  * CReporterDaemonAdaptor class is a light-weight wrapper relaying calls into
  * the daemon object and signals from it. This class needs to be allocated from the stack
- * and will be destroyed automatically, when the parent class is destroyed. 
+ * and will be destroyed automatically, when the parent class is destroyed.
  */
 class CReporterDaemonAdaptor : public QDBusAbstractAdaptor
 {
@@ -50,47 +50,47 @@ class CReporterDaemonAdaptor : public QDBusAbstractAdaptor
 public:
     /*!
      * @brief Constructor for the CReporterDaemonAdaptor class
-	 *
+     *
      * @param parent pointer to the parent class instance.
-	 */
+     */
     CReporterDaemonAdaptor(QObject *parent);
-	
-	/*!
+
+    /*!
      * @brief Class destructor.
-	 *
-	 */
-	~CReporterDaemonAdaptor();
+     *
+     */
+    ~CReporterDaemonAdaptor();
 
 public Q_SLOTS:
 
-	/*!
+    /*!
      * @brief By calling this method, client can request daemon process to start
      * monitoring rich core dumps.
      *
      * @note This method call is asyncronous.
-	 */
-	Q_NOREPLY void startCoreMonitoring();
+     */
+    Q_NOREPLY void startCoreMonitoring();
 
-	/*!
+    /*!
      * @brief By calling this method, client can request daemon process to stop
      * monitoring rich core dumps.
      *
      * @note This method call is asyncronous.
-	 */
-	Q_NOREPLY void stopCoreMonitoring();
+     */
+    Q_NOREPLY void stopCoreMonitoring();
 
-	/*!
+    /*!
      * @brief By calling this method, client This function returns list of
-	 * core files in the file system.
-	 *
+     * core files in the file system.
+     *
      * @return List of absolute core file paths.
-	 */
-	QStringList getAllCoreFiles();
+     */
+    QStringList getAllCoreFiles();
 
 private: // data
-	
+
     Q_DECLARE_PRIVATE(CReporterDaemonAdaptor)
-     //! Pointer to private data class.
+    //! Pointer to private data class.
     CReporterDaemonAdaptorPrivate *d_ptr;
 };
 

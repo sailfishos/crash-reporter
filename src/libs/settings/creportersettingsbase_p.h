@@ -47,27 +47,27 @@ class CReporterSettingsBasePrivate : public QObject
 {
     Q_OBJECT
 
-    public:
-        /*!
-         * @brief Class constructor.
-         *
-         */
-        CReporterSettingsBasePrivate();
+public:
+    /*!
+     * @brief Class constructor.
+     *
+     */
+    CReporterSettingsBasePrivate();
 
-        /*!
-         * @brief Class destructor.
-         *
-         */
-        virtual ~CReporterSettingsBasePrivate();
+    /*!
+     * @brief Class destructor.
+     *
+     */
+    virtual ~CReporterSettingsBasePrivate();
 
-    public:
-        //! @arg Settings read from file.
-        QSettings *m_settings;
+public:
+    //! @arg Settings read from file.
+    QSettings *m_settings;
 
-    private:
-        Q_DECLARE_PUBLIC(CReporterSettingsBase)
-        //! @arg Pointer to public class.
-        CReporterSettingsBase *q_ptr;
+private:
+    Q_DECLARE_PUBLIC(CReporterSettingsBase)
+    //! @arg Pointer to public class.
+    CReporterSettingsBase *q_ptr;
 };
 
 #endif // CREPORTERSETTINGSBASE_P_H

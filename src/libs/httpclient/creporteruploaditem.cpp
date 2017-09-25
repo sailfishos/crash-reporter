@@ -48,13 +48,13 @@ const char *status_string[] = {"Waiting", "Sending", "Error", "Finished", "Cance
   */
 class CReporterUploadItemPrivate
 {
-    public:
-        QString filepath;
-        QString filename;
-        QString errorString;
-        qint64 filesize;
-        CReporterHttpClient *http;
-        CReporterUploadItem::ItemStatus status;
+public:
+    QString filepath;
+    QString filename;
+    QString errorString;
+    qint64 filesize;
+    CReporterHttpClient *http;
+    CReporterUploadItem::ItemStatus status;
 };
 
 // *** Class CReporterUploadItem ****
@@ -65,7 +65,7 @@ class CReporterUploadItemPrivate
 // CReporterUploadItem::CReporterUploadItem
 // ----------------------------------------------------------------------------
 CReporterUploadItem::CReporterUploadItem(const QString &file) :
-        d_ptr(new CReporterUploadItemPrivate())
+    d_ptr(new CReporterUploadItemPrivate())
 {
     Q_D(CReporterUploadItem);
 
@@ -148,8 +148,8 @@ bool CReporterUploadItem::startUpload()
 
     d->http = new CReporterHttpClient(this);
     connect(d->http, SIGNAL(finished()), this, SLOT(emitUploadFinished()));
-    connect(d->http, SIGNAL(uploadError(QString,QString)),
-            this, SLOT(uploadError(QString,QString)));
+    connect(d->http, SIGNAL(uploadError(QString, QString)),
+            this, SLOT(uploadError(QString, QString)));
     connect(d->http, SIGNAL(updateProgress(int)), this, SIGNAL(updateProgress(int)));
 
     d->http->initSession();
@@ -206,8 +206,8 @@ void CReporterUploadItem::uploadError(const QString &file, const QString &errorS
     qCDebug(cr) << "Upload failed;" << d->filename;
 
     disconnect(d->http, SIGNAL(finished()), this, SLOT(emitUploadFinished()));
-    disconnect(d->http, SIGNAL(uploadError(QString,QString)),
-            this, SLOT(uploadError(QString,QString)));
+    disconnect(d->http, SIGNAL(uploadError(QString, QString)),
+               this, SLOT(uploadError(QString, QString)));
     disconnect(d->http, SIGNAL(updateProgress(int)), this, SIGNAL(updateProgress(int)));
 
     setErrorString(errorString);

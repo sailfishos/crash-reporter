@@ -54,10 +54,10 @@ void Ut_CReporterApplicationSettings::init()
     systemSettings.sync();
 
     QSettings userSettings(QSettings::NativeFormat, QSettings::UserScope, "crash-reporter-settings",
-                             "crash-reporter");
+                           "crash-reporter");
     userSettings.setValue(Proxy::ValueProxyAddress, "127.0.0.2");
     userSettings.setValue(Proxy::ValueProxyPort, 1234);
-    userSettings.sync(); 
+    userSettings.sync();
 }
 
 void Ut_CReporterApplicationSettings::testReadSettings()

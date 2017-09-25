@@ -54,22 +54,22 @@ using CReporter::LoggingCategory::cr;
   */
 class CReporterAutoUploaderPrivate
 {
-    public:
+public:
 
-        //! @arg Upload engine.
-        CReporterUploadEngine *engine;
-        //! @arg Upload queue.
-        CReporterUploadQueue queue;
-        //! @arg Is the service active.
-        bool activated;
-        //! @arg files that have been added to upload queue during this auto uploader session
-        QStringList addedFiles;
-        /*! Notification object giving user a notice that upload is in progress.*/
-        CReporterNotification *progressNotification;
-        /*! Notification object giving user a notice of successful uploads.*/
-        CReporterNotification *successNotification;
-        /*! Notification object giving user a notice of failed uploads.*/
-        CReporterNotification *failedNotification;
+    //! @arg Upload engine.
+    CReporterUploadEngine *engine;
+    //! @arg Upload queue.
+    CReporterUploadQueue queue;
+    //! @arg Is the service active.
+    bool activated;
+    //! @arg files that have been added to upload queue during this auto uploader session
+    QStringList addedFiles;
+    /*! Notification object giving user a notice that upload is in progress.*/
+    CReporterNotification *progressNotification;
+    /*! Notification object giving user a notice of successful uploads.*/
+    CReporterNotification *successNotification;
+    /*! Notification object giving user a notice of failed uploads.*/
+    CReporterNotification *failedNotification;
 
 };
 
@@ -78,16 +78,16 @@ CReporterAutoUploader::CReporterAutoUploader() : d_ptr(new CReporterAutoUploader
     d_ptr->engine = 0;
     d_ptr->activated = false;
     d_ptr->progressNotification =
-            new CReporterNotification(CReporter::AutoUploaderNotificationEventType,
-            0, this);
+        new CReporterNotification(CReporter::AutoUploaderNotificationEventType,
+                                  0, this);
     d_ptr->successNotification =
-            new CReporterNotification(CReporter::AutoUploaderNotificationEventType,
-                    CReporterSavedState::instance()->uploadSuccessNotificationId(),
-                    this);
+        new CReporterNotification(CReporter::AutoUploaderNotificationEventType,
+                                  CReporterSavedState::instance()->uploadSuccessNotificationId(),
+                                  this);
     d_ptr->failedNotification =
-            new CReporterNotification(CReporter::AutoUploaderNotificationEventType,
-                    CReporterSavedState::instance()->uploadFailedNotificationId(),
-                    this);
+        new CReporterNotification(CReporter::AutoUploaderNotificationEventType,
+                                  CReporterSavedState::instance()->uploadFailedNotificationId(),
+                                  this);
 
     // Create adaptor class. Needs to be taken from the stack.
     new AutoUploaderAdaptor(this);
@@ -113,49 +113,43 @@ CReporterAutoUploader::~CReporterAutoUploader()
 }
 
 bool CReporterAutoUploader::uploadFiles(const QStringList &fileList,
-        bool obeyNetworkRestrictions)
+                                        bool obeyNetworkRestrictions)
 {
     qCDebug(cr) << "Received a list of files to upload.";
 
     if (fileList.isEmpty())
         return false;
 
-    if (!d_ptr->activated)
-    {
+    if (!d_ptr->activated) {
         d_ptr->engine = new CReporterUploadEngine(&d_ptr->queue);
         d_ptr->activated = true;
         connect(d_ptr->engine, SIGNAL(finished(int, int, int)), SLOT(engineFinished(int, int, int)));
     }
 
     if (obeyNetworkRestrictions &&
-        !CReporterNwSessionMgr::canUseNetworkConnection()) {
+            !CReporterNwSessionMgr::canUseNetworkConnection()) {
         qCDebug(cr) << "No unpaid network connection available, aborting crash report upload.";
         QTimer::singleShot(0, this, SLOT(quit()));
         return false;
     }
 
-    foreach (QString filename, fileList)
-    {
-        if (!d_ptr->addedFiles.contains(filename))
-        {
+    foreach (QString filename, fileList) {
+        if (!d_ptr->addedFiles.contains(filename)) {
             qCDebug(cr) << "Adding to upload queue: " << filename;
             // CReporterUploadQueue class will own the CReporterUploadItem instance.
             d_ptr->queue.enqueue(new CReporterUploadItem(filename));
             d_ptr->addedFiles << filename;
-        }
-        else
-        {
+        } else {
             qCDebug(cr) << filename << "was not added to queue because it had already been added before";
         }
     }
 
-    if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
-    {
+    if (CReporterPrivacySettingsModel::instance()->notificationsEnabled()) {
         d_ptr->progressNotification->update(
-                //% "Uploading reports"
-                qtTrId("crash_reporter-notify-uploading_reports"),
-                //% "%n report(s) to upload"
-                qtTrId("crash_reporter-notify-num_to_upload", fileList.count()));
+            //% "Uploading reports"
+            qtTrId("crash_reporter-notify-uploading_reports"),
+            //% "%n report(s) to upload"
+            qtTrId("crash_reporter-notify-num_to_upload", fileList.count()));
     }
 
     return true;
@@ -167,10 +161,8 @@ bool CReporterAutoUploader::uploadFiles(const QStringList &fileList,
 void CReporterAutoUploader::quit()
 {
     qCDebug(cr) << "Quit auto uploader.";
-    if (d_ptr->engine)
-    {
-        if (d_ptr->activated)
-        {
+    if (d_ptr->engine) {
+        if (d_ptr->activated) {
             qCDebug(cr) << "Engine active -> cancelling";
             d_ptr->activated = false;
             d_ptr->engine->cancelAll();
@@ -191,16 +183,14 @@ void CReporterAutoUploader::engineFinished(int error, int sent, int total)
     QString message;
 
     // Construct message.
-    switch (error)
-    {
+    switch (error) {
     case CReporterUploadEngine::NoError:
         //% "%n report(s) uploaded successfully."
         message = qtTrId("qtn_crash_reports_uploaded_successfully_text", total);
         break;
     case CReporterUploadEngine::ProtocolError:
     case CReporterUploadEngine::ConnectionNotAvailable:
-    case CReporterUploadEngine::ConnectionClosed:
-    {
+    case CReporterUploadEngine::ConnectionClosed: {
         //% "Failed to upload report(s)."
         message = qtTrId("qtn_failed_to_send_crash_reports_text");
         //% "%n files attempted"
@@ -218,25 +208,18 @@ void CReporterAutoUploader::engineFinished(int error, int sent, int total)
         break;
     }
 
-    if (error != CReporterUploadEngine::NoError)
-    {
+    if (error != CReporterUploadEngine::NoError) {
         // Add error reason.
-        if (error == CReporterUploadEngine::ConnectionNotAvailable)
-        {
+        if (error == CReporterUploadEngine::ConnectionNotAvailable) {
             //% "<br>Reason: Failed to create internet connection."
             message += qtTrId("qtn_reason_failed_to_create_internet_connection_text");
-        }
-        else
-        {
+        } else {
             QString reason = d_ptr->engine->lastError();
-            if (!reason.isEmpty())
-            {
+            if (!reason.isEmpty()) {
                 // If reason is available, append it.
                 //% "<br>Reason: %1."
                 message += qtTrId("qtn_reason_%1_text").arg(reason);
-            }
-            else
-            {
+            } else {
                 // Use default error.
                 //% "<br>Reason: Unknown."
                 message += qtTrId("qtn_reason_unknown_text");
@@ -250,11 +233,11 @@ void CReporterAutoUploader::engineFinished(int error, int sent, int total)
         if (total > sent) {
             int failures = total - sent;
             d_ptr->failedNotification->update(
-                    //% "Failed to send all reports"
-                    qtTrId("crash_reporter-notify-send_failed"),
-                    //% "%n uploads failed"
-                    qtTrId("crash_reporter-notify-num_failed", failures),
-                    failures);
+                //% "Failed to send all reports"
+                qtTrId("crash_reporter-notify-send_failed"),
+                //% "%n uploads failed"
+                qtTrId("crash_reporter-notify-num_failed", failures),
+                failures);
         } else {
             d_ptr->failedNotification->remove();
         }

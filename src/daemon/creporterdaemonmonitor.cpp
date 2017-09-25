@@ -24,7 +24,7 @@
  * 02110-1301 USA
  *
  */
- 
+
 #include <csignal>
 
 #include <QListIterator>
@@ -57,7 +57,7 @@ using CReporter::LoggingCategory::cr;
 // CReporterHandledRichCore::CReporterHandledRichCore
 // ----------------------------------------------------------------------------
 CReporterHandledRichCore::CReporterHandledRichCore(const QString &filePath):
-  lastCountReset(QDateTime::currentDateTimeUtc())
+    lastCountReset(QDateTime::currentDateTimeUtc())
 {
     // Parse needed info for file path.
     QStringList rCoreInfo = CReporterUtils::parseCrashInfoFromFilename(filePath);
@@ -96,11 +96,11 @@ bool CReporterHandledRichCore::operator==(const CReporterHandledRichCore &other)
 // CReporterDaemonMonitorPrivate::CReporterDaemonMonitorPrivate
 // ----------------------------------------------------------------------------
 CReporterDaemonMonitorPrivate::CReporterDaemonMonitorPrivate() :
-  autoDeleteMaxSimilarCores(0),
-  crashNotification(new CReporterNotification(
-          CReporter::AutoUploaderNotificationEventType,
-          CReporterSavedState::instance()->crashNotificationId(), this)),
-  crashCount(0)
+    autoDeleteMaxSimilarCores(0),
+    crashNotification(new CReporterNotification(
+                          CReporter::AutoUploaderNotificationEventType,
+                          CReporterSavedState::instance()->crashNotificationId(), this)),
+    crashCount(0)
 {
     connect(crashNotification, &CReporterNotification::timeouted,
             this, &CReporterDaemonMonitorPrivate::resetCrashCount);
@@ -129,14 +129,14 @@ void CReporterDaemonMonitorPrivate::addDirectoryWatcher()
     qCDebug(cr) << "Adding core directory watcher...";
 
     // Subscribe to receive signals for changed directories.
-    connect(&watcher, SIGNAL(directoryChanged(const QString&)),
-            this, SLOT(handleDirectoryChanged(const QString&)));
+    connect(&watcher, SIGNAL(directoryChanged(const QString &)),
+            this, SLOT(handleDirectoryChanged(const QString &)));
 
     CReporterCoreRegistry *registry = CReporterCoreRegistry::instance();
 
     // Subscribe to receive signals for changes in core registry.
     connect(registry, SIGNAL(coreLocationsUpdated()),
-                this, SLOT(addDirectoryWatcher()));
+            this, SLOT(addDirectoryWatcher()));
 
     QStringList corePaths(registry->getCoreLocationPaths());
 
@@ -203,25 +203,25 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
     emit q_ptr->richCoreNotify(filePath);
 
     CReporterPrivacySettingsModel &settings =
-            *CReporterPrivacySettingsModel::instance();
+        *CReporterPrivacySettingsModel::instance();
 
     /* Check for duplicates if auto-deleting is enabled. If Maximum number
      * of duplicates is exceeded, delete the file. */
     if (!isUserTerminated && settings.autoDeleteDuplicates() &&
-        checkForDuplicates(filePath)) {
+            checkForDuplicates(filePath)) {
         if (settings.notificationsEnabled()) {
             CReporterNotification *notification =
-                    new CReporterNotification(
-                            CReporter::ApplicationNotificationEventType,
-                            0, this);
+                new CReporterNotification(
+                CReporter::ApplicationNotificationEventType,
+                0, this);
             notification->setTimeout(5000);
             connect(notification, &CReporterNotification::timeouted,
                     notification, &QObject::deleteLater);
             //% "%1 has crashed again."
             notification->update(
-                    qtTrId("crash_reporter-notify-crashed_again").arg(details[0]),
-                    //% "Duplicate crash report was deleted."
-                    qtTrId("crash_reporter-notify-duplicate_deleted"));
+                qtTrId("crash_reporter-notify-crashed_again").arg(details[0]),
+                //% "Duplicate crash report was deleted."
+                qtTrId("crash_reporter-notify-duplicate_deleted"));
         }
         CReporterUtils::removeFile(filePath);
         return;
@@ -261,7 +261,7 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
             }
 
             crashNotification->update(summary.arg(details.at(0)), body,
-                    crashCount);
+                                      crashCount);
         }
         if (!CReporterNwSessionMgr::canUseNetworkConnection()) {
             qCDebug(cr) << "WiFi not available, not uploading now.";
@@ -294,8 +294,7 @@ void CReporterDaemonMonitorPrivate::handleParentDirectoryChanged()
         watcher.addPaths(corePaths);
     }
 
-    if (watcher.directories().count() > numWatchPaths)
-    {
+    if (watcher.directories().count() > numWatchPaths) {
         qCDebug(cr) << "Successfully started watching core-dump dir";
         disconnect(this, SLOT(handleParentDirectoryChanged()));
         parentDirWatcher.removePaths(parentDirWatcher.directories());
@@ -313,7 +312,7 @@ bool CReporterDaemonMonitorPrivate::checkForDuplicates(const QString &path)
     }
 
     qCDebug(cr) << "Checking, if" << path << "has been handled for"
-            << autoDeleteMaxSimilarCores << "times.";
+                << autoDeleteMaxSimilarCores << "times.";
 
     // Create new entry.
     CReporterHandledRichCore *rCore = new CReporterHandledRichCore(path);
@@ -321,7 +320,7 @@ bool CReporterDaemonMonitorPrivate::checkForDuplicates(const QString &path)
     foreach (CReporterHandledRichCore *handled, handledRichCores) {
         // Loop through list to find duplicates.
         qCDebug(cr) << "Compare to:"
-               << "Name:" << handled->binaryName << ", Signal:" << handled->signalNumber;
+                    << "Name:" << handled->binaryName << ", Signal:" << handled->signalNumber;
 
         if (*handled == *rCore) {
             /* Check if more than a day has passed from last duplicate counter
@@ -390,11 +389,11 @@ void CReporterDaemonMonitorPrivate::onSetAutoUploadChanged()
 }
 
 CReporterDaemonMonitor::CReporterDaemonMonitor(QObject *parent):
-  QObject(parent), d_ptr(new CReporterDaemonMonitorPrivate())
+    QObject(parent), d_ptr(new CReporterDaemonMonitorPrivate())
 {
     d_ptr->q_ptr = this;
 
-	// Add watcher to core directories.
+    // Add watcher to core directories.
     d_ptr->addDirectoryWatcher();
 }
 
@@ -405,7 +404,7 @@ CReporterDaemonMonitor::~CReporterDaemonMonitor()
 {
     d_ptr->removeDirectoryWatcher();
 
-	delete d_ptr;
+    delete d_ptr;
     d_ptr = 0;
 }
 

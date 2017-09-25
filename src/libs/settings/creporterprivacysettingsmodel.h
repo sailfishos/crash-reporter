@@ -53,290 +53,290 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
     Q_PROPERTY(bool privacyNoticeAccepted READ privacyNoticeAccepted WRITE setPrivacyNoticeAccepted NOTIFY privacyNoticeAcceptedChanged)
     Q_PROPERTY(bool allowMobileData READ allowMobileData WRITE setAllowMobileData NOTIFY allowMobileDataChanged)
 
-    public:
-       /*!
-          * @brief Creates a new instance of this class if it doesn't exist and returns it.
-          *
-          * @return Class reference.
-          */
-        static CReporterPrivacySettingsModel *instance();
+public:
+    /*!
+       * @brief Creates a new instance of this class if it doesn't exist and returns it.
+       *
+       * @return Class reference.
+       */
+    static CReporterPrivacySettingsModel *instance();
 
-        /*!
-          * @brief Frees the class instance.
-          *
-          */
-        static void freeSingleton();
+    /*!
+      * @brief Frees the class instance.
+      *
+      */
+    static void freeSingleton();
 
-        /*!
-          * @brief Class destructor.
-          *
-          */
-        ~CReporterPrivacySettingsModel();
+    /*!
+      * @brief Class destructor.
+      *
+      */
+    ~CReporterPrivacySettingsModel();
 
-        /*!
-          * @brief Reads setting value for core dumping and returns it.
-          *
-          * @note This setting used by the rich-core.
-          * @return Returns true, if dumping is enabled; otherwise false. If value doesn't
-          *     exist, default value is returned.
-          */
-        bool coreDumpingEnabled() const;
+    /*!
+      * @brief Reads setting value for core dumping and returns it.
+      *
+      * @note This setting used by the rich-core.
+      * @return Returns true, if dumping is enabled; otherwise false. If value doesn't
+      *     exist, default value is returned.
+      */
+    bool coreDumpingEnabled() const;
 
-        /**
-         * Checks whether endurance snapshot collection is enabled.
-         *
-         * @return @c true if endurance is enabled, otherwise @c false.
-         */
-        bool enduranceEnabled() const;
+    /**
+     * Checks whether endurance snapshot collection is enabled.
+     *
+     * @return @c true if endurance is enabled, otherwise @c false.
+     */
+    bool enduranceEnabled() const;
 
-        /**
-         * Checks whether the journal spy daemon is enabled.
-         *
-         * @return @c true if journal spy is enabled, otherwise @c false.
-         */
-        bool journalSpyEnabled() const;
+    /**
+     * Checks whether the journal spy daemon is enabled.
+     *
+     * @return @c true if journal spy is enabled, otherwise @c false.
+     */
+    bool journalSpyEnabled() const;
 
-        /*!
-          * @brief Reads setting value for notifications and returns it.
-          *
-          * @note This setting used by the crash-reporter.
-          * @return Returns true, if notifications are enabled; otherwise false. If value doesn't
-          *     exist, default value is returned.
-          */
-        bool notificationsEnabled() const;
+    /*!
+      * @brief Reads setting value for notifications and returns it.
+      *
+      * @note This setting used by the crash-reporter.
+      * @return Returns true, if notifications are enabled; otherwise false. If value doesn't
+      *     exist, default value is returned.
+      */
+    bool notificationsEnabled() const;
 
-        /*!
-          * @brief Reads setting value for auto deleting dublicates and returns it.
-          *
-          * @note This setting used by the crash-reporter.
-          * @return Returns true, if deleting is enabled; otherwise false. If value doesn't
-          *     exist, default value is returned.
-          */
-        bool autoDeleteDuplicates() const;
+    /*!
+      * @brief Reads setting value for auto deleting dublicates and returns it.
+      *
+      * @note This setting used by the crash-reporter.
+      * @return Returns true, if deleting is enabled; otherwise false. If value doesn't
+      *     exist, default value is returned.
+      */
+    bool autoDeleteDuplicates() const;
 
-        /*!
-          * @brief Reads setting value for how many similar core dumps are kept when auto delete is enabled
-          *
-          * @note This setting used by the crash-reporter.
-          * @return The amount of similar cores kept
-          */
-        int autoDeleteMaxSimilarCores() const;
+    /*!
+      * @brief Reads setting value for how many similar core dumps are kept when auto delete is enabled
+      *
+      * @note This setting used by the crash-reporter.
+      * @return The amount of similar cores kept
+      */
+    int autoDeleteMaxSimilarCores() const;
 
-        /*!
-          * @brief Reads setting value for automatic sending and returns it.
-          *
-          * @note This setting used by the crash-reporter.
-          * @return Returns true, if automatic sending is enabled; otherwise false. If value doesn't
-          *     exist, default value is returned.
-          */
-        bool automaticSendingEnabled() const;
+    /*!
+      * @brief Reads setting value for automatic sending and returns it.
+      *
+      * @note This setting used by the crash-reporter.
+      * @return Returns true, if automatic sending is enabled; otherwise false. If value doesn't
+      *     exist, default value is returned.
+      */
+    bool automaticSendingEnabled() const;
 
-        /*!
-          * @brief Reads setting value for including core and returns it.
-          *
-          * @note This setting used by the rich-core.
-          * @return Returns true, if core should be included to the crash report; otherwise false.
-          *    If value doesn't exist, default value is returned.
-          */
-        bool includeCore() const;
-        
-        /*!
-          * @brief Reads setting value for including syslog and returns it.
-          *
-          * @note This setting used by the rich-core.
-          * @return Returns true, if syslog should be included to the crash report; otherwise false.
-          *    If value doesn't exist, default value is returned.
-          */
-        bool includeSystemLog() const;
-        
-        /*!
-          * @brief Reads setting value for reducing core size.
-          *
-          * @note This setting used by the rich-core.
-          * @return Returns true, if core-dump size should be shrinked.
-          *    If value doesn't exist, default value is returned.
-          */
-        bool reduceCore() const;
+    /*!
+      * @brief Reads setting value for including core and returns it.
+      *
+      * @note This setting used by the rich-core.
+      * @return Returns true, if core should be included to the crash report; otherwise false.
+      *    If value doesn't exist, default value is returned.
+      */
+    bool includeCore() const;
 
-        /*!
-          * @brief Reads setting value for including list of installed packages and returns it.
-          *
-          * @note This setting used by the rich-core.
-          * @return Returns true, if package list should be included to the crash report; otherwise false.
-          *    If value doesn't exist, default value is returned.
-          */
-        bool includePackageList() const;
+    /*!
+      * @brief Reads setting value for including syslog and returns it.
+      *
+      * @note This setting used by the rich-core.
+      * @return Returns true, if syslog should be included to the crash report; otherwise false.
+      *    If value doesn't exist, default value is returned.
+      */
+    bool includeSystemLog() const;
 
-        /*!
-         * @brief Reads setting for including stack trace into crash report.
-         *
-         * @note This setting is used by rich-core-dumper.
-         * @return true if stack trace should be included; otherwise false.
-         */
-        bool includeStackTrace() const;
+    /*!
+      * @brief Reads setting value for reducing core size.
+      *
+      * @note This setting used by the rich-core.
+      * @return Returns true, if core-dump size should be shrinked.
+      *    If value doesn't exist, default value is returned.
+      */
+    bool reduceCore() const;
 
-        /*!
-         * @brief Reads setting for automatic download of debug symbols.
-         *
-         * @note This setting is used by rich-core-dumper.
-         * @return true if debug symbols should be downloaded; otherwise false.
-         */
-        bool downloadDebuginfo() const;
+    /*!
+      * @brief Reads setting value for including list of installed packages and returns it.
+      *
+      * @note This setting used by the rich-core.
+      * @return Returns true, if package list should be included to the crash report; otherwise false.
+      *    If value doesn't exist, default value is returned.
+      */
+    bool includePackageList() const;
 
-        /*!
-         * Checks whether user accepted a notice about possible privacy breach
-         * from using crash reporter application.
-         *
-         * @return @c true if notice was accepted; otherwise false.
-         */
-        bool privacyNoticeAccepted() const;
+    /*!
+     * @brief Reads setting for including stack trace into crash report.
+     *
+     * @note This setting is used by rich-core-dumper.
+     * @return true if stack trace should be included; otherwise false.
+     */
+    bool includeStackTrace() const;
 
-        /*!
-         * Checks whether data transfers through a mobile network are allowed.
-         *
-         * @return @c true if mobile data usage is allowed; otherwise false.
-         */
-        bool allowMobileData() const;
+    /*!
+     * @brief Reads setting for automatic download of debug symbols.
+     *
+     * @note This setting is used by rich-core-dumper.
+     * @return true if debug symbols should be downloaded; otherwise false.
+     */
+    bool downloadDebuginfo() const;
 
-          /*!
-          * @brief Enables or disables core dumping.
-          *
-          * @note This setting used by the rich-core.
-          * @param True to enable feature; false to disable.
-          */
-       void setCoreDumpingEnabled(bool value);
+    /*!
+     * Checks whether user accepted a notice about possible privacy breach
+     * from using crash reporter application.
+     *
+     * @return @c true if notice was accepted; otherwise false.
+     */
+    bool privacyNoticeAccepted() const;
 
-       /**
-        * Enables or disables endurance snapshot collection.
-        *
-        * @param value @c true to enable, @c false to disable.
-        */
-       void setEnduranceEnabled(bool value);
+    /*!
+     * Checks whether data transfers through a mobile network are allowed.
+     *
+     * @return @c true if mobile data usage is allowed; otherwise false.
+     */
+    bool allowMobileData() const;
 
-       /**
-        * Enables or disables journal spy daemon.
-        *
-        * @param value @c true to enable, @c false to disable.
-        */
-       void setJournalSpyEnabled(bool value);
+    /*!
+    * @brief Enables or disables core dumping.
+    *
+    * @note This setting used by the rich-core.
+    * @param True to enable feature; false to disable.
+    */
+    void setCoreDumpingEnabled(bool value);
 
-       /*!
-          * @brief Enables or disables notifications.
-          *
-          * @note This setting used by the crash-reporter.
-          * @param True to enable feature; false to disable.
-          */
-        void setNotificationsEnabled(bool value);
+    /**
+     * Enables or disables endurance snapshot collection.
+     *
+     * @param value @c true to enable, @c false to disable.
+     */
+    void setEnduranceEnabled(bool value);
 
-        /*!
-          * @brief Enables or disables auto deleting crash reports.
-          *
-          * @note This setting used by the crash-reporter.
-          * @param True to enable feature; false to disable.
-          */
-        void setAutoDeleteDuplicates(bool value);
+    /**
+     * Enables or disables journal spy daemon.
+     *
+     * @param value @c true to enable, @c false to disable.
+     */
+    void setJournalSpyEnabled(bool value);
 
-        /*!
-          * @brief Set the amount of cores kept when auto delete is enabled
-          *
-          * @note This setting used by the crash-reporter.
-          * @param value New value
-          */
-        void setAutoDeleteMaxSimilarCores(int value);
+    /*!
+       * @brief Enables or disables notifications.
+       *
+       * @note This setting used by the crash-reporter.
+       * @param True to enable feature; false to disable.
+       */
+    void setNotificationsEnabled(bool value);
 
-        /*!
-           * @brief Enables or disables automatic sending.
-           *
-           * @note This setting used by the crash-reporter.
-           * @param True to enable feature; false to disable.
-           */
-         void setAutomaticSendingEnabled(bool value);
+    /*!
+      * @brief Enables or disables auto deleting crash reports.
+      *
+      * @note This setting used by the crash-reporter.
+      * @param True to enable feature; false to disable.
+      */
+    void setAutoDeleteDuplicates(bool value);
 
-        /*!
-          * @brief Enables or disables for including core in the crash report.
-          *
-          * @note This setting used by the rich-core.
-          * @param True to enable feature; false to disable.
-          */
-        void setIncludeCore(bool value);
+    /*!
+      * @brief Set the amount of cores kept when auto delete is enabled
+      *
+      * @note This setting used by the crash-reporter.
+      * @param value New value
+      */
+    void setAutoDeleteMaxSimilarCores(int value);
 
-        /*!
-          * @brief Enables or disables for including syslog in the crash report.
-          *
-          * @note This setting used by the rich-core.
-          * @param True to enable feature; false to disable.
-          */
-        void setIncludeSystemLog(bool value);
+    /*!
+       * @brief Enables or disables automatic sending.
+       *
+       * @note This setting used by the crash-reporter.
+       * @param True to enable feature; false to disable.
+       */
+    void setAutomaticSendingEnabled(bool value);
 
-        /*!
-          * @brief Enables or disables for including list of installed packages in the crash reports.
-          *
-          * @note This setting used by the rich-core.
-          * @param True to enable feature; false to disable.
-          */
-        void setIncludePackageList(bool value);
+    /*!
+      * @brief Enables or disables for including core in the crash report.
+      *
+      * @note This setting used by the rich-core.
+      * @param True to enable feature; false to disable.
+      */
+    void setIncludeCore(bool value);
 
-        /*!
-         * @brief Enables or disables stack trace inclusion into crash reports.
-         *
-         * @note This setting is used by rich-core-dumper.
-         * @param value true to enable feature; false to disable.
-         */
-        void setIncludeStackTrace(bool value);
+    /*!
+      * @brief Enables or disables for including syslog in the crash report.
+      *
+      * @note This setting used by the rich-core.
+      * @param True to enable feature; false to disable.
+      */
+    void setIncludeSystemLog(bool value);
 
-        /*!
-         * @brief Enables or disables automatic download of debug symbols.
-         *
-         * @note This setting is used by rich-core-dumper.
-         * @param value true to enable feature; false to disable.
-         */
-        void setDownloadDebuginfo(bool value);
+    /*!
+      * @brief Enables or disables for including list of installed packages in the crash reports.
+      *
+      * @note This setting used by the rich-core.
+      * @param True to enable feature; false to disable.
+      */
+    void setIncludePackageList(bool value);
 
-        /*!
-         * Accepts or declines crash reporter's privacy notice.
-         *
-         * @param value true to accept the notice; false to decline.
-         */
-        void setPrivacyNoticeAccepted(bool value);
+    /*!
+     * @brief Enables or disables stack trace inclusion into crash reports.
+     *
+     * @note This setting is used by rich-core-dumper.
+     * @param value true to enable feature; false to disable.
+     */
+    void setIncludeStackTrace(bool value);
 
-        /*!
-         * Allows or disables data transfers through a mobile network.
-         *
-         * @param value @c true to allow mobile data; @c false to block.
-         */
-        void setAllowMobileData(bool value);
+    /*!
+     * @brief Enables or disables automatic download of debug symbols.
+     *
+     * @note This setting is used by rich-core-dumper.
+     * @param value true to enable feature; false to disable.
+     */
+    void setDownloadDebuginfo(bool value);
 
-        /*!
-          * @brief Enables or disables core-dump size shrinking.
-          *
-          * @note This setting used by the rich-core.
-          * @param True to enable feature; false to disable.
-          */
-        void setReduceCore(bool value);
+    /*!
+     * Accepts or declines crash reporter's privacy notice.
+     *
+     * @param value true to accept the notice; false to decline.
+     */
+    void setPrivacyNoticeAccepted(bool value);
 
-    signals:
-        void coreDumpingEnabledChanged();
-        void enduranceEnabledChanged();
-        void journalSpyEnabledChanged();
-        void notificationsEnabledChanged();
-        void autoDeleteDuplicatesChanged();
-        void automaticSendingEnabledChanged();
-        void includeStackTraceChanged();
-        void downloadDebuginfoChanged();
-        void privacyNoticeAcceptedChanged();
-        void allowMobileDataChanged();
+    /*!
+     * Allows or disables data transfers through a mobile network.
+     *
+     * @param value @c true to allow mobile data; @c false to block.
+     */
+    void setAllowMobileData(bool value);
 
-    protected:
-        CReporterPrivacySettingsModel();
+    /*!
+      * @brief Enables or disables core-dump size shrinking.
+      *
+      * @note This setting used by the rich-core.
+      * @param True to enable feature; false to disable.
+      */
+    void setReduceCore(bool value);
 
-    private:
-        Q_DISABLE_COPY(CReporterPrivacySettingsModel)
+signals:
+    void coreDumpingEnabledChanged();
+    void enduranceEnabledChanged();
+    void journalSpyEnabledChanged();
+    void notificationsEnabledChanged();
+    void autoDeleteDuplicatesChanged();
+    void automaticSendingEnabledChanged();
+    void includeStackTraceChanged();
+    void downloadDebuginfoChanged();
+    void privacyNoticeAcceptedChanged();
+    void allowMobileDataChanged();
 
-        static QString enduranceCollectMark();
-        static QString journalSpyMark();
+protected:
+    CReporterPrivacySettingsModel();
 
-        //! @arg Static class reference.
-        static CReporterPrivacySettingsModel *sm_Instance;
+private:
+    Q_DISABLE_COPY(CReporterPrivacySettingsModel)
+
+    static QString enduranceCollectMark();
+    static QString journalSpyMark();
+
+    //! @arg Static class reference.
+    static CReporterPrivacySettingsModel *sm_Instance;
 };
 
 #endif // CREPORTERPRIVACYSETTINGSMODEL_H

@@ -38,10 +38,10 @@ void Ut_CReporterMessageBoxDialogPlugin::init()
     static MApplication *app = 0;
 
     if (app == 0) {
-            int argc = 2;
-            const char *argv[] = {"./ut_creportermessageboxdialogplugin", "-software", 0};
-            app = new MApplication(argc, (char **)argv);
-        }
+        int argc = 2;
+        const char *argv[] = {"./ut_creportermessageboxdialogplugin", "-software", 0};
+        app = new MApplication(argc, (char **)argv);
+    }
 
     m_Server = new TestDialogServer();
     m_Subject = new CReporterMessageBoxDialogPlugin();
@@ -60,7 +60,7 @@ void Ut_CReporterMessageBoxDialogPlugin::cleanup()
 
     if (m_Subject != 0) {
         if (m_Subject->isInitialized()) {
-           m_Subject->destroy();
+            m_Subject->destroy();
         }
         delete m_Subject;
         m_Subject = 0;
@@ -73,10 +73,10 @@ void Ut_CReporterMessageBoxDialogPlugin::cleanupTestCase()
 
 void Ut_CReporterMessageBoxDialogPlugin::testInitializePlugin()
 {
-   // Test plugin initialized successfully.
-   m_Subject->initialize(m_Server);
-   QVERIFY(m_Subject->name() == CReporter::MessageBoxDialogType);
-   QVERIFY(m_Subject->isInitialized() == true);
+    // Test plugin initialized successfully.
+    m_Subject->initialize(m_Server);
+    QVERIFY(m_Subject->name() == CReporter::MessageBoxDialogType);
+    QVERIFY(m_Subject->isInitialized() == true);
 }
 
 void Ut_CReporterMessageBoxDialogPlugin::testRequestPluginNotInitialized()
@@ -104,7 +104,7 @@ void Ut_CReporterMessageBoxDialogPlugin::testRequestPluginInvalidArgumentCount()
     m_Subject->initialize(m_Server);
     QVariantList args;
     args << QString("Message1")
-            << QString("Message2");
+         << QString("Message2");
 
     bool retVal = m_Subject->requestDialog(args);
     QVERIFY(retVal == false);

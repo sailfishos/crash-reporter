@@ -54,8 +54,8 @@ QDBusReply<bool> QDBusConnectionInterface::isServiceRegistered(const QString &se
 
 // CReporterNotification mock object.
 CReporterNotification::CReporterNotification(const QString &eventType,
-                                             const QString &summary, const QString &body,
-                                             QObject *parent)
+        const QString &summary, const QString &body,
+        QObject *parent)
 {
     Q_UNUSED(eventType);
     Q_UNUSED(summary);
@@ -65,7 +65,7 @@ CReporterNotification::CReporterNotification(const QString &eventType,
 }
 
 CReporterNotification::CReporterNotification(const QString &eventType, int id,
-                                             QObject *parent)
+        QObject *parent)
 {
     Q_UNUSED(eventType);
     Q_UNUSED(id);
@@ -114,7 +114,8 @@ TestDialogServer::~TestDialogServer()
 }
 
 QDBusError::ErrorType TestDialogServer::callReceived(const QString &dialogName,
-                                const QVariantList &arguments, const QDBusMessage &message) {
+        const QVariantList &arguments, const QDBusMessage &message)
+{
 
     requestedDialog = dialogName;
     callArguments = arguments;
@@ -149,15 +150,15 @@ void Ut_CReporterDaemonMonitor::testNewCoreFileFoundNotified()
 {
     // Check that rich-core file is sent to the UI.
     monitor = new CReporterDaemonMonitor(this);
-	
+
     QSignalSpy richCoreNotifySpy(monitor, SIGNAL(richCoreNotify(QString)));
 
     QString filePath(paths.at(0));
     filePath.append("/test-1234-11-4321.rcore.lzo");
 
     QDir::setCurrent(paths.at(0));
-	
-	QFile file;
+
+    QFile file;
     file.setFileName("test-1234-11-4321.rcore.lzo");
     file.open(QIODevice::ReadWrite);
     file.close();
@@ -176,13 +177,13 @@ void Ut_CReporterDaemonMonitor::testNewCoreFileFoundNotified()
 void Ut_CReporterDaemonMonitor::testNewCoreFileFoundInvalidFile()
 {
     monitor = new CReporterDaemonMonitor(this);
-		
+
     QString filePath(paths.at(0));
     filePath.append("/application-4321-10-1111.txt");
 
     QDir::setCurrent(paths.at(0));
-	
-	QFile file;
+
+    QFile file;
     file.setFileName("application-4321-10-1111.txt");
     file.open(QIODevice::ReadWrite);
     file.close();
@@ -200,8 +201,8 @@ void Ut_CReporterDaemonMonitor::testNewCoreFileFoundByTheSameName()
     filePath.append("/mytest-1234-11-4321.rcore.lzo");
 
     QDir::setCurrent(paths.at(0));
-	
-	QFile file;
+
+    QFile file;
     file.setFileName("mytest-1234-11-4321.rcore.lzo");
     file.open(QIODevice::ReadWrite);
     file.close();
@@ -224,12 +225,12 @@ void Ut_CReporterDaemonMonitor::testNewCoreFileFoundByTheSameName()
     dubFilePath.append("/mytest-1234-11-4321.rcore.lzo");
 
     QDir::setCurrent(paths.at(0));
-	
-	QFile dubFile;
+
+    QFile dubFile;
     dubFile.setFileName("mytest-1234-11-4321.rcore.lzo");
     dubFile.open(QIODevice::ReadWrite);
     dubFile.close();
-	
+
     QTest::qWait(50);
 
     QVERIFY(testDialogServer->callReceivedCalled == true);
@@ -251,7 +252,7 @@ void Ut_CReporterDaemonMonitor::testDirectoryDeletedNotNotified()
 
 void Ut_CReporterDaemonMonitor::testAutoDeleteDublicateCores()
 {
-    // Check, that file is deleted automatically after it has handled maximum number of times (10).   
+    // Check, that file is deleted automatically after it has handled maximum number of times (10).
     monitor = new CReporterDaemonMonitor(this);
     monitor->setAutoDelete(true);
 
@@ -268,7 +269,7 @@ void Ut_CReporterDaemonMonitor::testAutoDeleteDublicateCores()
 
         QVERIFY(QFile::exists(filePath) == true);
         counter++;
-         QTest::qWait(500);
+        QTest::qWait(500);
     }
 
     QVERIFY(QFile::exists(filePath) == false);

@@ -34,7 +34,7 @@ static bool cancelCalled;
 static bool uploadStarted;
 
 // CReporterHttpClient mock object.
-CReporterHttpClient::CReporterHttpClient(QObject* parent)
+CReporterHttpClient::CReporterHttpClient(QObject *parent)
 {
     Q_UNUSED(parent);
     httpInstance = this;
@@ -85,7 +85,7 @@ void Ut_CReporterUploadItem::init()
     uploadStarted = false;
 
     m_Subject =
-                new CReporterUploadItem("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo");
+        new CReporterUploadItem("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo");
 }
 
 void Ut_CReporterUploadItem::initTestCase()
@@ -138,7 +138,7 @@ void Ut_CReporterUploadItem::testSendingItemFailed()
     }
 
     httpInstance->emitUploadError("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo",
-                              "Socket timeout.");
+                                  "Socket timeout.");
     QVERIFY(updateProgressSpy.count() == 6);
     QVERIFY(uploadFinishedSpy.count() == 1);
     QVERIFY(m_Subject->status() == CReporterUploadItem::Error);
@@ -166,7 +166,7 @@ void Ut_CReporterUploadItem::testSendingItemCancelled()
     QVERIFY(cancelCalled == true);
 
     httpInstance->emitUploadError("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo",
-                              "User aborted.");
+                                  "User aborted.");
 
     QVERIFY(updateProgressSpy.count() == 6);
     QVERIFY(uploadFinishedSpy.count() == 1);
@@ -187,10 +187,10 @@ void Ut_CReporterUploadItem::testFailingUploadStarting()
 void Ut_CReporterUploadItem::testCancellingWaitingItem()
 {
     QSignalSpy uploadFinishedSpy(m_Subject, SIGNAL(uploadFinished()));
-     m_Subject->cancel();
-     QVERIFY(cancelCalled == false);
-     QVERIFY(uploadFinishedSpy.count() == 1);
-     QVERIFY(m_Subject->status() == CReporterUploadItem::Cancelled);
+    m_Subject->cancel();
+    QVERIFY(cancelCalled == false);
+    QVERIFY(uploadFinishedSpy.count() == 1);
+    QVERIFY(m_Subject->status() == CReporterUploadItem::Cancelled);
 }
 
 void Ut_CReporterUploadItem::cleanup()

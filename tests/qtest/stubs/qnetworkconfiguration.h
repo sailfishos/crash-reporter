@@ -29,4 +29,4 @@ public:
     StateFlags state() const;
 };
 
-#endif	// QNETWORKCONFIGURATION_H
+#endif  // QNETWORKCONFIGURATION_H

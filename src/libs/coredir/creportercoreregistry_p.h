@@ -42,24 +42,24 @@ class QSignalMapper;
  */
 class CReporterCoreRegistryPrivate
 {
-    public:
-        /*!
-          * @brief Class constructor.
-          *
-          */
-        CReporterCoreRegistryPrivate();
+public:
+    /*!
+      * @brief Class constructor.
+      *
+      */
+    CReporterCoreRegistryPrivate();
 
-        /*!
-          * @brief Class destructor.
-          *
-          */
-        virtual ~CReporterCoreRegistryPrivate();
+    /*!
+      * @brief Class destructor.
+      *
+      */
+    virtual ~CReporterCoreRegistryPrivate();
 
-    public:
-        //! @arg Signal mapper to map gconf value changes.
-        QSignalMapper *mapper;
-        //! @arg List of CReporterCoreDir instances.
-        QList<CReporterCoreDir*> coreDirs;
+public:
+    //! @arg Signal mapper to map gconf value changes.
+    QSignalMapper *mapper;
+    //! @arg List of CReporterCoreDir instances.
+    QList<CReporterCoreDir *> coreDirs;
 };
 
 #endif // CREPORTERCOREREGISTRY_P_H

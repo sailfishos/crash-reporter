@@ -26,13 +26,14 @@
  * @namespace SavedState
  */
 namespace SavedState {
-    const QString CrashNotificationId = "SavedState/crash_notification_id";
-    const QString UploadSuccessNotificationId = "SavedState/upload_success_notification_id";
-    const QString UploadFailedNotificationId = "SavedState/upload_failed_notification_id";
-    const QString UploadSuccessCount = "SavedState/upload_success_count";
+const QString CrashNotificationId = "SavedState/crash_notification_id";
+const QString UploadSuccessNotificationId = "SavedState/upload_success_notification_id";
+const QString UploadFailedNotificationId = "SavedState/upload_failed_notification_id";
+const QString UploadSuccessCount = "SavedState/upload_success_count";
 }
 
-class CReporterSavedStatePrivate {
+class CReporterSavedStatePrivate
+{
 public:
     CReporterSavedStatePrivate(CReporterSavedState *q);
 
@@ -44,10 +45,11 @@ private:
 };
 
 CReporterSavedStatePrivate::CReporterSavedStatePrivate(CReporterSavedState *q):
-  q_ptr(q) {}
+    q_ptr(q) {}
 
 int CReporterSavedStatePrivate::intValue(const QString &key,
-                                         const QVariant &defaultValue) const {
+        const QVariant &defaultValue) const
+{
     const Q_Q(CReporterSavedState);
 
     bool ok;
@@ -59,10 +61,11 @@ int CReporterSavedStatePrivate::intValue(const QString &key,
 CReporterSavedState *CReporterSavedState::_instance = 0;
 
 CReporterSavedState::CReporterSavedState():
-  CReporterSettingsBase("crash-reporter-settings", "saved-state"),
-  d_ptr(new CReporterSavedStatePrivate(this)) {}
+    CReporterSettingsBase("crash-reporter-settings", "saved-state"),
+    d_ptr(new CReporterSavedStatePrivate(this)) {}
 
-CReporterSavedState* CReporterSavedState::instance() {
+CReporterSavedState *CReporterSavedState::instance()
+{
     if (!_instance) {
         _instance = new CReporterSavedState();
     }
@@ -70,7 +73,8 @@ CReporterSavedState* CReporterSavedState::instance() {
     return _instance;
 }
 
-void CReporterSavedState::freeSingleton() {
+void CReporterSavedState::freeSingleton()
+{
     if (_instance) {
         delete _instance;
         _instance = 0;
@@ -79,49 +83,57 @@ void CReporterSavedState::freeSingleton() {
 
 CReporterSavedState::~CReporterSavedState() {}
 
-quint32 CReporterSavedState::crashNotificationId() const {
+quint32 CReporterSavedState::crashNotificationId() const
+{
     const Q_D(CReporterSavedState);
 
     return d->intValue(SavedState::CrashNotificationId, 0);
 }
 
-void CReporterSavedState::setCrashNotificationId(quint32 id) {
+void CReporterSavedState::setCrashNotificationId(quint32 id)
+{
     if (setValue(SavedState::CrashNotificationId, id)) {
         emit crashNotificationIdChanged();
     }
 }
 
-quint32 CReporterSavedState::uploadSuccessNotificationId() const {
+quint32 CReporterSavedState::uploadSuccessNotificationId() const
+{
     const Q_D(CReporterSavedState);
 
     return d->intValue(SavedState::UploadSuccessNotificationId, 0);
 }
 
-void CReporterSavedState::setUploadSuccessNotificationId(quint32 id) {
+void CReporterSavedState::setUploadSuccessNotificationId(quint32 id)
+{
     if (setValue(SavedState::UploadSuccessNotificationId, id)) {
         emit uploadSuccessNotificationIdChanged();
     }
 }
 
-quint32 CReporterSavedState::uploadFailedNotificationId() const {
+quint32 CReporterSavedState::uploadFailedNotificationId() const
+{
     const Q_D(CReporterSavedState);
 
     return d->intValue(SavedState::UploadFailedNotificationId, 0);
 }
 
-void CReporterSavedState::setUploadFailedNotificationId(quint32 id) {
+void CReporterSavedState::setUploadFailedNotificationId(quint32 id)
+{
     if (setValue(SavedState::UploadFailedNotificationId, id)) {
         emit uploadFailedNotificationIdChanged();
     }
 }
 
-int CReporterSavedState::uploadSuccessCount() const {
+int CReporterSavedState::uploadSuccessCount() const
+{
     const Q_D(CReporterSavedState);
 
     return d->intValue(SavedState::UploadSuccessCount, 0);
 }
 
-void CReporterSavedState::setUploadSuccessCount(int count) {
+void CReporterSavedState::setUploadSuccessCount(int count)
+{
     if (setValue(SavedState::UploadSuccessCount, count)) {
         emit uploadSuccessCountChanged();
     }

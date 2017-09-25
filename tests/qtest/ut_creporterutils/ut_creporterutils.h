@@ -31,18 +31,18 @@ class Ut_CReporterUtils : public QObject
 {
     Q_OBJECT
 
-    private Q_SLOTS:
+private Q_SLOTS:
 
-        void initTestCase();
-        void init();
+    void initTestCase();
+    void init();
 
-        void testValidateCore();
-        void testRemoveFile();
-        void testParseCrashInfoFromFilename();
-        void testFileSizeToString();
+    void testValidateCore();
+    void testRemoveFile();
+    void testParseCrashInfoFromFilename();
+    void testFileSizeToString();
 
-        void cleanupTestCase();
-        void cleanup();
+    void cleanupTestCase();
+    void cleanup();
 
 };
 

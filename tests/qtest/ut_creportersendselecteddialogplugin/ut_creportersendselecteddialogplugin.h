@@ -34,25 +34,25 @@ class Ut_CReporterSendSelectedDialogPlugin : public QObject
 {
     Q_OBJECT
 
-    private Q_SLOTS:
+private Q_SLOTS:
 
-        void init();
-        void initTestCase();
+    void init();
+    void initTestCase();
 
-        void testInitializePlugin();
-        void testRequestPluginNotInitialized();
-        void testDestroyPlugin();
-        void testRequestPluginInvalidArguments();
-        void testRequestHandledFilesSent();
-        void testRequestHandledFilesDeleted();
-        void testRejectDialog();
+    void testInitializePlugin();
+    void testRequestPluginNotInitialized();
+    void testDestroyPlugin();
+    void testRequestPluginInvalidArguments();
+    void testRequestHandledFilesSent();
+    void testRequestHandledFilesDeleted();
+    void testRejectDialog();
 
-        void cleanupTestCase();
-        void cleanup();
+    void cleanupTestCase();
+    void cleanup();
 
-    private:
-        CReporterSendSelectedDialogPlugin *m_Subject;
-        TestDialogServer *m_Server;
+private:
+    CReporterSendSelectedDialogPlugin *m_Subject;
+    TestDialogServer *m_Server;
 };
 
 #endif // UT_CREPORTERSENDSELECTEDDIALOGPLUGIN_H

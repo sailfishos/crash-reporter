@@ -49,38 +49,38 @@ class CReporterDialogPluginInterface : public QObject
     Q_OBJECT
 
 public:
-	/*!
-     *	@brief Initialize dialog plugin for use.
-	 *
-	 */
-    virtual void initialize(CReporterDialogServerInterface* server) = 0;
-	
-	/*!
-     *	@brief Destroy the plugin.
-	 *
-	 */
-	virtual void destroy() = 0;
-	
-	/*!
-     *	@brief Checks if the plugin has been initialized successfully.
-	 *
-     *	@return True, if the plugin has been initialized successfully.
-	 */
-	virtual bool isInitialized() const = 0;
-
-     /*!
-     *	@brief Returns the name of the plugin.
+    /*!
+     *  @brief Initialize dialog plugin for use.
      *
-     *	@return Plugin name.
      */
+    virtual void initialize(CReporterDialogServerInterface *server) = 0;
+
+    /*!
+     *  @brief Destroy the plugin.
+     *
+     */
+    virtual void destroy() = 0;
+
+    /*!
+     *  @brief Checks if the plugin has been initialized successfully.
+     *
+     *  @return True, if the plugin has been initialized successfully.
+     */
+    virtual bool isInitialized() const = 0;
+
+    /*!
+    *  @brief Returns the name of the plugin.
+    *
+    *  @return Plugin name.
+    */
     virtual QString name() const = 0;
 
-	/*!
+    /*!
       * @brief Request dialog from the dialog plugin.
-	  *
+      *
       * @param arguments Request arguments.
       * @return True, if the plugin was able to start handling the request
-	  */
+      */
     virtual bool requestDialog(const QVariantList &arguments) = 0;
 
     /*!
@@ -100,13 +100,13 @@ public:
      */
     virtual bool isVisible() const = 0;
 
-	Q_SIGNALS:
+Q_SIGNALS:
 
-        /*!
-          * @brief This signal is emitted, when request has been completed.
-          *
-          */
-        void requestCompleted();
+    /*!
+      * @brief This signal is emitted, when request has been completed.
+      *
+      */
+    void requestCompleted();
 };
 
 Q_DECLARE_INTERFACE(CReporterDialogPluginInterface,

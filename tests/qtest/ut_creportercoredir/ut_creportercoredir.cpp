@@ -95,7 +95,7 @@ void Ut_CReporterCoreDir::testCollectingCrashReportsFromDirectory()
 
 void Ut_CReporterCoreDir::testCheckDirectoryForNewCrashReport()
 {
-     dir = new CReporterCoreDir(testMountPoint2);
+    dir = new CReporterCoreDir(testMountPoint2);
 
     QString coreDirectory = QString(testMountPoint2);
     coreDirectory.append("/core-dumps");

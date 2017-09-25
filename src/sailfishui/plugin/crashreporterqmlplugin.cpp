@@ -98,23 +98,23 @@ void CrashReporterQmlPlugin::registerTypes(const char *uri)
     Q_UNUSED(uri)
 
     qmlRegisterSingletonType<CrashReporterAdapter>(
-            "com.jolla.settings.crashreporter", 1, 0,
-            "Adapter", adapterSingletontypeProvider);
+        "com.jolla.settings.crashreporter", 1, 0,
+        "Adapter", adapterSingletontypeProvider);
 
     qmlRegisterSingletonType<CReporterApplicationSettings>(
-            "com.jolla.settings.crashreporter", 1, 0,
-            "ApplicationSettings", applicationsettingsSingletontypeProvider);
+        "com.jolla.settings.crashreporter", 1, 0,
+        "ApplicationSettings", applicationsettingsSingletontypeProvider);
 
     qmlRegisterSingletonType<CReporterPrivacySettingsModel>(
-            "com.jolla.settings.crashreporter", 1, 0,
-            "PrivacySettings", privacysettingsSingletontypeProvider);
+        "com.jolla.settings.crashreporter", 1, 0,
+        "PrivacySettings", privacysettingsSingletontypeProvider);
 
     qmlRegisterSingletonType<CReporterUtils>(
-            "com.jolla.settings.crashreporter", 1, 0,
-            "Utils", utilsSingletonProvider);
+        "com.jolla.settings.crashreporter", 1, 0,
+        "Utils", utilsSingletonProvider);
 
     qmlRegisterType<SystemdService>(
-            "com.jolla.settings.crashreporter", 1, 0, "SystemdService");
+        "com.jolla.settings.crashreporter", 1, 0, "SystemdService");
 
     qmlRegisterType<QAbstractListModel>();
 }

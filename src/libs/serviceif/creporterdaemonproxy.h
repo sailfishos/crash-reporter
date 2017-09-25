@@ -55,7 +55,9 @@ class CREPORTER_EXPORT CReporterDaemonProxy: public QDBusAbstractInterface
     Q_OBJECT
 public:
     static inline const char *staticInterfaceName()
-    { return "com.nokia.CrashReporter.Daemon"; }
+    {
+        return "com.nokia.CrashReporter.Daemon";
+    }
 
 public:
     CReporterDaemonProxy(const QString &service, const QString &path, const QDBusConnection &connection, QObject *parent = 0);

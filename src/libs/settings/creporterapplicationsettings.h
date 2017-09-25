@@ -42,13 +42,13 @@ class CReporterApplicationSettingsPrivate;
   *
   */
 namespace Server {
-    const QString ValueUsername = "Server/user_name";
-    const QString ValuePassword = "Server/password";
-    const QString ValueServerAddress = "Server/server_addr";
-    const QString ValueServerPort = "Server/server_port";
-    const QString ValueServerPath = "Server/server_path";
-    const QString ValueUseSsl = "Server/use_ssl";
-    const QString ValueUseProxy = "Server/use_proxy";
+const QString ValueUsername = "Server/user_name";
+const QString ValuePassword = "Server/password";
+const QString ValueServerAddress = "Server/server_addr";
+const QString ValueServerPort = "Server/server_port";
+const QString ValueServerPath = "Server/server_path";
+const QString ValueUseSsl = "Server/use_ssl";
+const QString ValueUseProxy = "Server/use_proxy";
 }
 
 /*!
@@ -57,8 +57,8 @@ namespace Server {
   *
   */
 namespace Proxy {
-    const QString ValueProxyAddress = "Proxy/proxy_addr";
-    const QString ValueProxyPort = "Proxy/proxy_port";
+const QString ValueProxyAddress = "Proxy/proxy_addr";
+const QString ValueProxyPort = "Proxy/proxy_port";
 }
 
 /*!
@@ -67,7 +67,7 @@ namespace Proxy {
   *
   */
 namespace Logging {
-    const QString ValueLoggerType = "Logging/logger_type";
+const QString ValueLoggerType = "Logging/logger_type";
 }
 
 /*!
@@ -90,81 +90,81 @@ class CReporterApplicationSettings : public CReporterSettingsBase
     Q_PROPERTY(int proxyPort READ proxyPort WRITE setProxyPort NOTIFY proxyPortChanged)
     Q_PROPERTY(QString loggerType READ loggerType WRITE setLoggerType NOTIFY loggerTypeChanged)
 
-    public:
-        /*!
-         * @brief Creates new a new instance of this class, if not exist and returns it.
-         *
-         * @return Class reference.
-         */
-        static CReporterApplicationSettings *instance();
+public:
+    /*!
+     * @brief Creates new a new instance of this class, if not exist and returns it.
+     *
+     * @return Class reference.
+     */
+    static CReporterApplicationSettings *instance();
 
-        /*!
-         * @brief Frees the class instance.
-         *
-         */
-        static void freeSingleton();
+    /*!
+     * @brief Frees the class instance.
+     *
+     */
+    static void freeSingleton();
 
-        /*!
-         * @brief Class destructor.
-         *
-         */
-        ~CReporterApplicationSettings();
+    /*!
+     * @brief Class destructor.
+     *
+     */
+    ~CReporterApplicationSettings();
 
-        QString serverUrl() const;
-        void setServerUrl(const QString &url);
+    QString serverUrl() const;
+    void setServerUrl(const QString &url);
 
-        int serverPort() const;
-        void setServerPort(int port);
+    int serverPort() const;
+    void setServerPort(int port);
 
-        QString serverPath() const;
-        void setServerPath(const QString &path);
+    QString serverPath() const;
+    void setServerPath(const QString &path);
 
-        bool useSsl() const;
-        void setUseSsl(bool state);
+    bool useSsl() const;
+    void setUseSsl(bool state);
 
-        QString username() const;
-        void setUsername(const QString &username);
+    QString username() const;
+    void setUsername(const QString &username);
 
-        QString password() const;
-        void setPassword(const QString &password);
+    QString password() const;
+    void setPassword(const QString &password);
 
-        bool useProxy() const;
-        void setUseProxy(bool state);
+    bool useProxy() const;
+    void setUseProxy(bool state);
 
-        QString proxyUrl() const;
-        void setProxyUrl(const QString &url);
+    QString proxyUrl() const;
+    void setProxyUrl(const QString &url);
 
-        int proxyPort() const;
-        void setProxyPort(int port);
+    int proxyPort() const;
+    void setProxyPort(int port);
 
-        QString loggerType() const;
-        void setLoggerType(const QString &type);
+    QString loggerType() const;
+    void setLoggerType(const QString &type);
 
-    signals:
-        void serverUrlChanged();
-        void serverPortChanged();
-        void serverPathChanged();
-        void useSslChanged();
-        void usernameChanged();
-        void passwordChanged();
-        void useProxyChanged();
-        void proxyUrlChanged();
-        void proxyPortChanged();
-        void loggerTypeChanged();
+signals:
+    void serverUrlChanged();
+    void serverPortChanged();
+    void serverPathChanged();
+    void useSslChanged();
+    void usernameChanged();
+    void passwordChanged();
+    void useProxyChanged();
+    void proxyUrlChanged();
+    void proxyPortChanged();
+    void loggerTypeChanged();
 
-    protected:
-        /*!
-          * @brief Class constructor.
-          *
-          */
-        CReporterApplicationSettings();
+protected:
+    /*!
+      * @brief Class constructor.
+      *
+      */
+    CReporterApplicationSettings();
 
-    private:
-        Q_DECLARE_PRIVATE(CReporterApplicationSettings)
-        //! @arg Private class reference
-        CReporterApplicationSettingsPrivate *d_ptr;
-        //! @arg Static class reference.
-        static CReporterApplicationSettings *sm_Instance;
+private:
+    Q_DECLARE_PRIVATE(CReporterApplicationSettings)
+    //! @arg Private class reference
+    CReporterApplicationSettingsPrivate *d_ptr;
+    //! @arg Static class reference.
+    static CReporterApplicationSettings *sm_Instance;
 };
 
 #endif // CREPORTERAPPLICATIONSETTINGS_H

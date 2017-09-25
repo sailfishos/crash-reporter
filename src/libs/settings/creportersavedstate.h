@@ -29,7 +29,8 @@ class CReporterSavedStatePrivate;
  * @class CReporterApplicationSettings
  * @brief This a singleton class for reading and writing crash-reporter application settings.
  */
-class CReporterSavedState: public CReporterSettingsBase {
+class CReporterSavedState: public CReporterSettingsBase
+{
     Q_OBJECT
 
     Q_PROPERTY(quint32 crashNotificationId READ crashNotificationId WRITE setCrashNotificationId NOTIFY crashNotificationIdChanged)

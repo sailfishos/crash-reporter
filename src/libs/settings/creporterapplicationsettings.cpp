@@ -36,7 +36,7 @@
 #include "creporternamespace.h"
 
 // Pointer to this class.
-CReporterApplicationSettings* CReporterApplicationSettings::sm_Instance = 0;
+CReporterApplicationSettings *CReporterApplicationSettings::sm_Instance = 0;
 
 /*!
   * @class CReporterApplicationSettingsPrivate
@@ -45,14 +45,14 @@ CReporterApplicationSettings* CReporterApplicationSettings::sm_Instance = 0;
   */
 class CReporterApplicationSettingsPrivate
 {
-    public:
-        CReporterApplicationSettingsPrivate(CReporterApplicationSettings *q);
+public:
+    CReporterApplicationSettingsPrivate(CReporterApplicationSettings *q);
 
-        int intValue(const QString &key, const QVariant &defaultValue) const;
+    int intValue(const QString &key, const QVariant &defaultValue) const;
 
-    private:
-        Q_DECLARE_PUBLIC(CReporterApplicationSettings)
-        CReporterApplicationSettings *q_ptr;
+private:
+    Q_DECLARE_PUBLIC(CReporterApplicationSettings)
+    CReporterApplicationSettings *q_ptr;
 };
 
 CReporterApplicationSettingsPrivate::CReporterApplicationSettingsPrivate(CReporterApplicationSettings *q):
@@ -61,7 +61,7 @@ CReporterApplicationSettingsPrivate::CReporterApplicationSettingsPrivate(CReport
 }
 
 int CReporterApplicationSettingsPrivate::intValue(const QString &key,
-                                                  const QVariant &defaultValue) const
+        const QVariant &defaultValue) const
 {
     const Q_Q(CReporterApplicationSettings);
 
@@ -76,7 +76,7 @@ int CReporterApplicationSettingsPrivate::intValue(const QString &key,
 // ----------------------------------------------------------------------------
 // CReporterApplicationSettings::instance
 // ----------------------------------------------------------------------------
-CReporterApplicationSettings* CReporterApplicationSettings::instance()
+CReporterApplicationSettings *CReporterApplicationSettings::instance()
 {
     if (sm_Instance == 0) {
         sm_Instance = new CReporterApplicationSettings();
@@ -107,7 +107,7 @@ CReporterApplicationSettings::~CReporterApplicationSettings()
 QString CReporterApplicationSettings::serverUrl() const
 {
     return value(Server::ValueServerAddress,
-            QStringLiteral("https://crashes.projects.maemo.org")).toString();
+                 QStringLiteral("https://crashes.projects.maemo.org")).toString();
 }
 
 void CReporterApplicationSettings::setServerUrl(const QString &url)

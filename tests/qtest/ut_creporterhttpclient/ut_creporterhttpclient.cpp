@@ -67,23 +67,23 @@ void Ut_CReporterHttpClient::testUpload()
     m_Subject->initSession(false);
     // start upload
     QVERIFY (m_Subject->upload("/usr/lib/crash-reporter-tests/testdata/"
-			    "crashapplication-0287-11-2260.rcore.lzo"));
+                               "crashapplication-0287-11-2260.rcore.lzo"));
 
-    QSignalSpy uploadErrorSpy (m_Subject, SIGNAL(uploadError(const QString&,
-							  const QString&)));
+    QSignalSpy uploadErrorSpy (m_Subject, SIGNAL(uploadError(const QString &,
+                               const QString &)));
     QSignalSpy updateProgressSpy (m_Subject, SIGNAL(updateProgress(int)));
     QSignalSpy finnishedSpy (m_Subject, SIGNAL(finished()));
 
     m_Subject->d_ptr->m_manager->emitAuthenticationRequired(m_Subject->d_ptr->m_reply);
 
     // emit signals to simulate upload
-    m_Subject->d_ptr->m_reply->emitUploadProgress (0,1000);
+    m_Subject->d_ptr->m_reply->emitUploadProgress (0, 1000);
     QTest::qWait(100);
-    m_Subject->d_ptr->m_reply->emitUploadProgress (500,1000);
+    m_Subject->d_ptr->m_reply->emitUploadProgress (500, 1000);
     QTest::qWait(100);
-    m_Subject->d_ptr->m_reply->emitUploadProgress (1000,1000);
+    m_Subject->d_ptr->m_reply->emitUploadProgress (1000, 1000);
     m_Subject->d_ptr->m_reply->emitFinished ();
-    
+
     // check the signal spies
     QCOMPARE(uploadErrorSpy.count(), 0);
     QCOMPARE(updateProgressSpy.count(), 3);
@@ -96,15 +96,15 @@ void Ut_CReporterHttpClient::testUploadCancel()
     m_Subject->initSession(false);
     // start upload
     QVERIFY (m_Subject->upload("/usr/lib/crash-reporter-tests/testdata/"
-			    "crashapplication-0287-11-2260.rcore.lzo"));
+                               "crashapplication-0287-11-2260.rcore.lzo"));
 
-    QSignalSpy uploadErrorSpy (m_Subject, SIGNAL(uploadError(const QString&,
-							  const QString&)));
+    QSignalSpy uploadErrorSpy (m_Subject, SIGNAL(uploadError(const QString &,
+                               const QString &)));
     QSignalSpy updateProgressSpy (m_Subject, SIGNAL(updateProgress(int)));
     QSignalSpy finnishedSpy (m_Subject, SIGNAL(finished()));
 
     m_Subject->d_ptr->m_manager->emitAuthenticationRequired(m_Subject->d_ptr->m_reply);
-    m_Subject->d_ptr->m_reply->emitUploadProgress (0,1000);
+    m_Subject->d_ptr->m_reply->emitUploadProgress (0, 1000);
     QTest::qWait(100);
     // cancel it
     m_Subject->cancel();
@@ -120,15 +120,15 @@ void Ut_CReporterHttpClient::testNwError()
     m_Subject->initSession(false);
     // start upload
     QVERIFY (m_Subject->upload("/usr/lib/crash-reporter-tests/testdata/"
-			    "crashapplication-0287-11-2260.rcore.lzo"));
+                               "crashapplication-0287-11-2260.rcore.lzo"));
 
-    QSignalSpy uploadErrorSpy (m_Subject, SIGNAL(uploadError(const QString&,
-							  const QString&)));
+    QSignalSpy uploadErrorSpy (m_Subject, SIGNAL(uploadError(const QString &,
+                               const QString &)));
     QSignalSpy updateProgressSpy (m_Subject, SIGNAL(updateProgress(int)));
     QSignalSpy finnishedSpy (m_Subject, SIGNAL(finished()));
 
     m_Subject->d_ptr->m_manager->emitAuthenticationRequired(m_Subject->d_ptr->m_reply);
-    m_Subject->d_ptr->m_reply->emitUploadProgress (100,1000);
+    m_Subject->d_ptr->m_reply->emitUploadProgress (100, 1000);
     QTest::qWait(100);
     // emit network error
     m_Subject->d_ptr->m_reply->emitError (QNetworkReply::TimeoutError);
@@ -148,15 +148,15 @@ void Ut_CReporterHttpClient::testSslError()
     m_Subject->initSession(false);
     // start upload
     QVERIFY (m_Subject->upload("/usr/lib/crash-reporter-tests/testdata/"
-			    "crashapplication-0287-11-2260.rcore.lzo"));
+                               "crashapplication-0287-11-2260.rcore.lzo"));
 
-    QSignalSpy uploadErrorSpy (m_Subject, SIGNAL(uploadError(const QString&,
-							  const QString&)));
+    QSignalSpy uploadErrorSpy (m_Subject, SIGNAL(uploadError(const QString &,
+                               const QString &)));
     QSignalSpy updateProgressSpy (m_Subject, SIGNAL(updateProgress(int)));
     QSignalSpy finnishedSpy (m_Subject, SIGNAL(finished()));
 
     m_Subject->d_ptr->m_manager->emitAuthenticationRequired(m_Subject->d_ptr->m_reply);
-    m_Subject->d_ptr->m_reply->emitUploadProgress (100,1000);
+    m_Subject->d_ptr->m_reply->emitUploadProgress (100, 1000);
     QTest::qWait(100);
     // generate some bogus errors
     QList<QSslError> err_list;
@@ -165,7 +165,7 @@ void Ut_CReporterHttpClient::testSslError()
 
     err_list.append(err);
     err_list.append(err2);
-    // emit the sslerrors signal 
+    // emit the sslerrors signal
     m_Subject->d_ptr->m_reply->emitSslErrors (err_list);
     m_Subject->d_ptr->m_reply->emitFinished ();
 

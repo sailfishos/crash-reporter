@@ -34,7 +34,7 @@
   *
   */
 void creporterSettingsInit(const QString &systemPath = QString(),
-                                      const QString &userPath = QString());
+                           const QString &userPath = QString());
 
 #endif // CREPORTERSETTINGSINIT_P_H
 

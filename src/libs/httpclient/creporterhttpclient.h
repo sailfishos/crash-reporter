@@ -45,122 +45,122 @@ class CReporterHttpCntx;
   */
 class CREPORTER_EXPORT CReporterHttpClient : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
     Q_PROPERTY(State state READ state)
     Q_ENUMS(State)
 
-    public:
+public:
 
-        /*!
-        * @enum Represent client's internal state.
-        *
-        * Updated by the clientStateChanged() signal.
-        *
-        * @sa clientStateChanged()
-        */
-        enum State{
-            //! Initial state.
-            None = 0,
-            //! Session has been initiated.
-            Init,
-            //! Client is creating network session.
-            Connecting,
-            //! Client is connected.
-            Sending,
-            //! Client is aborting all pending requests.
-            Aborting,
-        };
+    /*!
+    * @enum Represent client's internal state.
+    *
+    * Updated by the clientStateChanged() signal.
+    *
+    * @sa clientStateChanged()
+    */
+    enum State {
+        //! Initial state.
+        None = 0,
+        //! Session has been initiated.
+        Init,
+        //! Client is creating network session.
+        Connecting,
+        //! Client is connected.
+        Sending,
+        //! Client is aborting all pending requests.
+        Aborting,
+    };
 
-        /*!
-         * @brief Class constructor.
-         *
-         * @param parent Parent object pointer.
-         */
-         CReporterHttpClient(QObject* parent=0);
+    /*!
+     * @brief Class constructor.
+     *
+     * @param parent Parent object pointer.
+     */
+    CReporterHttpClient(QObject *parent = 0);
 
-        /*!
-         * @brief Class destructor.
-         *
-         */
-        ~CReporterHttpClient();
+    /*!
+     * @brief Class destructor.
+     *
+     */
+    ~CReporterHttpClient();
 
-        /*!
-         * @brief Initiates client session. Call this after instantiating object
-         * from this class.
-         *
-         * @param deleteAfterSending If set to true, file is deleted from the system
-         *  after it has been sent.
-         */
-        void initSession(bool deleteAfterSending=true);
+    /*!
+     * @brief Initiates client session. Call this after instantiating object
+     * from this class.
+     *
+     * @param deleteAfterSending If set to true, file is deleted from the system
+     *  after it has been sent.
+     */
+    void initSession(bool deleteAfterSending = true);
 
-        /*!
-         * @brief Returns Http client state.
-         *
-         * @return State.
-         */
-         State state() const;
+    /*!
+     * @brief Returns Http client state.
+     *
+     * @return State.
+     */
+    State state() const;
 
-        /*! @brief Returns state in string format.
-         *
-         * @return State as string.
-         */
-         QString stateToString(CReporterHttpClient::State state) const;
+    /*! @brief Returns state in string format.
+     *
+     * @return State as string.
+     */
+    QString stateToString(CReporterHttpClient::State state) const;
 
-    Q_SIGNALS:
-        /*!
-         * @brief Sent, when all pending network replies have finished.
-         *
-         * If client wants to use the same instance of this class for the new requests,
-         * it needs to call initSession first.
-         */
-        void finished();
+Q_SIGNALS:
+    /*!
+     * @brief Sent, when all pending network replies have finished.
+     *
+     * If client wants to use the same instance of this class for the new requests,
+     * it needs to call initSession first.
+     */
+    void finished();
 
-        /*!
-         * @brief Sent, when error is detected during upload.
-         *
-         * @param file Path to the file, which upload request returned error.
-         * @param errorString Textual presentation of the error happend.
-         */
-        void uploadError(const QString &file, const QString &errorString);
-    
-        /*!
-         * @brief Sent when upload progresses.
-         *
-         * @param done Sent data in percentage value.
-         */
-         void updateProgress(int done);
+    /*!
+     * @brief Sent, when error is detected during upload.
+     *
+     * @param file Path to the file, which upload request returned error.
+     * @param errorString Textual presentation of the error happend.
+     */
+    void uploadError(const QString &file, const QString &errorString);
 
-        /*!
-         * @brief Emitted, when client's internal state changes.
-         *
-         * @param state New state.
-         */
-        void clientStateChanged(CReporterHttpClient::State state);
+    /*!
+     * @brief Sent when upload progresses.
+     *
+     * @param done Sent data in percentage value.
+     */
+    void updateProgress(int done);
 
-    public Q_SLOTS:
-        /*!
-         * @brief Uploads file(s) to the remote server.
-         *
-         * This function returns immediately,
-         * after upload has been initiated. Upload progess and status can be monitored by
-         * connecting to uploadProgress, uploadDone and uploadError signals.
-         *
-         */
-        bool upload(const QString &file);
+    /*!
+     * @brief Emitted, when client's internal state changes.
+     *
+     * @param state New state.
+     */
+    void clientStateChanged(CReporterHttpClient::State state);
 
-        /*!
-         * @brief Cancels ongoing request.
-         *
-         */
-        void cancel();
+public Q_SLOTS:
+    /*!
+     * @brief Uploads file(s) to the remote server.
+     *
+     * This function returns immediately,
+     * after upload has been initiated. Upload progess and status can be monitored by
+     * connecting to uploadProgress, uploadDone and uploadError signals.
+     *
+     */
+    bool upload(const QString &file);
 
-    private:
-        Q_DECLARE_PRIVATE( CReporterHttpClient )
-        //! @arg Private class data.
-        CReporterHttpClientPrivate *d_ptr;
+    /*!
+     * @brief Cancels ongoing request.
+     *
+     */
+    void cancel();
+
+private:
+    Q_DECLARE_PRIVATE( CReporterHttpClient )
+    //! @arg Private class data.
+    CReporterHttpClientPrivate *d_ptr;
 #ifdef CREPORTER_UNIT_TEST
-        friend class Ut_CReporterHttpClient;
+    friend class Ut_CReporterHttpClient;
 #endif // CREPORTER_UNIT_TEST
 
 };

@@ -41,16 +41,16 @@
 
 const QString testSettingsFile("/tmp/crash-reporter-tests/user_settings/crash-reporter-settings/crash-reporter-privacy.conf");
 
-static const char* test_files1[] = { 
-	"test_core.rcore.lzo",
-	"test_1234.rcore.lzo",
-	"test_5678_core.rcore.lzo",
-	};
+static const char *test_files1[] = {
+    "test_core.rcore.lzo",
+    "test_1234.rcore.lzo",
+    "test_5678_core.rcore.lzo",
+};
 
 // CReporterNotification mock object.
 CReporterNotification::CReporterNotification(const QString &eventType,
-                                             const QString &summary, const QString &body,
-                                             QObject *parent)
+        const QString &summary, const QString &body,
+        QObject *parent)
 {
     Q_UNUSED(eventType);
     Q_UNUSED(summary);
@@ -74,7 +74,7 @@ void CReporterNotification::remove()
 
 void Ut_CReporterDaemonProxy::initTestCase()
 {
-	CReporterTestUtils::createTestMountpoints();
+    CReporterTestUtils::createTestMountpoints();
     proxy = 0;
     daemon = 0;
 
@@ -102,8 +102,8 @@ void Ut_CReporterDaemonProxy::init()
 
 void Ut_CReporterDaemonProxy::testProxyCollectAllCoreFiles()
 {
-	QStringList files;
-	QStringList compareFiles;
+    QStringList files;
+    QStringList compareFiles;
 
     daemon = new CReporterDaemon;
 
@@ -123,20 +123,20 @@ void Ut_CReporterDaemonProxy::testProxyCollectAllCoreFiles()
     QCOMPARE(proxy->isValid(), true);
     QCOMPARE(proxy->path(), CReporter::DaemonObjectPath);
 
-	QDBusPendingReply<QStringList> reply = proxy->getAllCoreFiles();
-	// block
-	reply.waitForFinished();
-	// validate reply
+    QDBusPendingReply<QStringList> reply = proxy->getAllCoreFiles();
+    // block
+    reply.waitForFinished();
+    // validate reply
     QCOMPARE(reply.isValid(), true);
     QCOMPARE(reply.isError(), false);
     QCOMPARE(reply.count(), 1);
 
-	files = reply.argumentAt<0>();
+    files = reply.argumentAt<0>();
 
     QCOMPARE(files.count(), compareFiles.count());
 
     QCOMPARE(files, compareFiles);
-	
+
 }
 
 void Ut_CReporterDaemonProxy::cleanupTestCase()

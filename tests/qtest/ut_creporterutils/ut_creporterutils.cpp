@@ -51,17 +51,17 @@ void Ut_CReporterUtils::testValidateCore()
 {
     // Valid core.
     bool retVal = CReporterUtils::validateCore(
-            "/media/mmc1/core-dumps/test-1234-11-4321.rcore.lzo");
+                      "/media/mmc1/core-dumps/test-1234-11-4321.rcore.lzo");
     QVERIFY(retVal == true);
 
     // Valid core with a '.' in the file name.
     retVal = CReporterUtils::validateCore(
-            "/media/mmc1/core-dumps/test.launch-1234-11-4321.rcore.lzo");
+                 "/media/mmc1/core-dumps/test.launch-1234-11-4321.rcore.lzo");
     QVERIFY(retVal == true);
 
     // Partial core.
     retVal = CReporterUtils::validateCore(
-            "/media/mmc1/core-dumps/.test-1234-11-4321.rcore.lzo");
+                 "/media/mmc1/core-dumps/.test-1234-11-4321.rcore.lzo");
     QVERIFY(retVal == false);
 
     /*// Crash Reporter core.
@@ -81,7 +81,7 @@ void Ut_CReporterUtils::testValidateCore()
 
     // Invalid file.
     retVal = CReporterUtils::validateCore(
-            "/media/mmc1/core-dumps/test-1234-11-4321.tar");
+                 "/media/mmc1/core-dumps/test-1234-11-4321.tar");
     QVERIFY(retVal == false);
 }
 
@@ -93,7 +93,7 @@ void Ut_CReporterUtils::testRemoveFile()
     file.open(QIODevice::ReadWrite);
     file.close();
 
-    QString path = QDir::homePath() +"/" + file.fileName();
+    QString path = QDir::homePath() + "/" + file.fileName();
     bool retVal = CReporterUtils::removeFile(path);
     QVERIFY(retVal == true);
 }

@@ -37,43 +37,43 @@ class CReporterDaemon;
 class TestDialogServer : public QObject
 {
     Q_OBJECT
-    public:
-        TestDialogServer();
+public:
+    TestDialogServer();
 
-        ~TestDialogServer();
-    public Q_SLOTS:
-        QDBusError::ErrorType callReceived(const QString &dialogName,
-                                           const QVariantList &arguments,
-                                           const QDBusMessage &message);
+    ~TestDialogServer();
+public Q_SLOTS:
+    QDBusError::ErrorType callReceived(const QString &dialogName,
+                                       const QVariantList &arguments,
+                                       const QDBusMessage &message);
 
-         void quit();
+    void quit();
 
-    public:
-        bool callReceivedCalled;
-        bool quitCalled;
-        QVariantList callArguments;
-        QDBusMessage requestMessage;
-        QString requestedDialog;
+public:
+    bool callReceivedCalled;
+    bool quitCalled;
+    QVariantList callArguments;
+    QDBusMessage requestMessage;
+    QString requestedDialog;
 };
 
 class Ut_CReporterDaemon : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 private slots:
 
-	void initTestCase();
-	void init();
+    void initTestCase();
+    void init();
     void testInitiateDaemon();
     void testDelayedStartup();
-	void testCollectAllCoreFiles();
+    void testCollectAllCoreFiles();
     void testCollectAllCoreFilesNotValidFiles();
     void testMonitoringEnabledFromSettings();
     void testMonitoringDisabledFromSettings();
     void testLaunchingUIFailed();
 
-	void cleanupTestCase();
-	void cleanup();
+    void cleanupTestCase();
+    void cleanup();
 
 private:
 

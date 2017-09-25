@@ -56,24 +56,21 @@ using CReporter::LoggingCategory::cr;
 // Local constants.
 
 static const char
-mountpoint_env_names[NUM_ENV_MOUNTPOINTS][MAX_MOUNTPOINT_NAMELEN] =
-    {
+mountpoint_env_names[NUM_ENV_MOUNTPOINTS][MAX_MOUNTPOINT_NAMELEN] = {
     "MMC_MOUNTPOINT",
     "INTERNAL_MMC_MOUNTPOINT"
-    };
+};
 
 #ifndef CREPORTER_UNIT_TEST
 static const char
-mountpoint_static[NUM_STATIC_MOUNTPOINTS][MAX_MOUNTPOINT_NAMELEN] =
-    {
+mountpoint_static[NUM_STATIC_MOUNTPOINTS][MAX_MOUNTPOINT_NAMELEN] = {
     "/var/cache"
-    };
+};
 #else
 static const char
-mountpoint_static[NUM_STATIC_MOUNTPOINTS][MAX_MOUNTPOINT_NAMELEN] =
-    {
+mountpoint_static[NUM_STATIC_MOUNTPOINTS][MAX_MOUNTPOINT_NAMELEN] = {
     "/crash-reporter-tests/home/user/MyDocs"
-    };
+};
 #endif // CREPORTER_UNIT_TEST
 
 const char core_dumps_suffix[] = "/core-dumps";
@@ -91,13 +88,13 @@ CReporterCoreRegistryPrivate::~CReporterCoreRegistryPrivate()
 }
 
 CReporterCoreRegistry::CReporterCoreRegistry(QObject *parent):
-  QObject(parent), d_ptr(new CReporterCoreRegistryPrivate())
+    QObject(parent), d_ptr(new CReporterCoreRegistryPrivate())
 {
-	createCoreLocationRegistry();
+    createCoreLocationRegistry();
 
-	/* TODO: status of MMC card used to be monitored here, and mmcStateChanged()
-	 * triggered when card was inserted/removed/mounted via USB. We might need
-	 * to re-implement this functionality also for Sailfish. */
+    /* TODO: status of MMC card used to be monitored here, and mmcStateChanged()
+     * triggered when card was inserted/removed/mounted via USB. We might need
+     * to re-implement this functionality also for Sailfish. */
     // Cache keys under /system/osso/af and map state change signals to single slot.
 }
 
@@ -105,12 +102,12 @@ CReporterCoreRegistry::~CReporterCoreRegistry()
 {
     Q_D(CReporterCoreRegistry);
 
-	QList<CReporterCoreDir*> dirs = d->coreDirs;
-	// Clear list.
-	d->coreDirs.clear();
-	// Delete entries.
+    QList<CReporterCoreDir *> dirs = d->coreDirs;
+    // Clear list.
+    d->coreDirs.clear();
+    // Delete entries.
     qDeleteAll(dirs);
-	delete d_ptr;
+    delete d_ptr;
 }
 
 QStringList CReporterCoreRegistry::collectAllCoreFiles() const
@@ -118,60 +115,60 @@ QStringList CReporterCoreRegistry::collectAllCoreFiles() const
     Q_D(const CReporterCoreRegistry);
 
     QStringList out;
-	QListIterator<CReporterCoreDir*> iter(d->coreDirs); 
+    QListIterator<CReporterCoreDir *> iter(d->coreDirs);
 
     while (iter.hasNext()) {
-		CReporterCoreDir* dir = (CReporterCoreDir*) iter.next();
+        CReporterCoreDir *dir = (CReporterCoreDir *) iter.next();
         dir->collectAllCoreFilesAtLocation(out);
-	}
+    }
     return out;
 }
 
 QStringList CReporterCoreRegistry::getCoreLocationPaths()
 {
-	Q_D( CReporterCoreRegistry );
+    Q_D( CReporterCoreRegistry );
     QStringList paths;
 
-	QListIterator<CReporterCoreDir*> iter(d->coreDirs); 
+    QListIterator<CReporterCoreDir *> iter(d->coreDirs);
 
-	while ( iter.hasNext() ) {
-		// Get paths for core locations.
-		CReporterCoreDir* pCoreDir =  (CReporterCoreDir*) iter.next();
-		QDir dir( pCoreDir->getDirectory() );
+    while ( iter.hasNext() ) {
+        // Get paths for core locations.
+        CReporterCoreDir *pCoreDir =  (CReporterCoreDir *) iter.next();
+        QDir dir( pCoreDir->getDirectory() );
 
-		qCDebug(cr) << "Got directory:" << pCoreDir->getDirectory();
+        qCDebug(cr) << "Got directory:" << pCoreDir->getDirectory();
 
-		if ( dir.exists() ) {
-			qCDebug(cr) << "Exists. Add to list";
-			paths.append(dir.absolutePath());
-		}
-	}
+        if ( dir.exists() ) {
+            qCDebug(cr) << "Exists. Add to list";
+            paths.append(dir.absolutePath());
+        }
+    }
 
-	qCDebug(cr) << "Number of mounted locations:" << paths.count();
-	return paths;
+    qCDebug(cr) << "Number of mounted locations:" << paths.count();
+    return paths;
 }
 
-QString CReporterCoreRegistry::checkDirectoryForCores(const QString& path)
+QString CReporterCoreRegistry::checkDirectoryForCores(const QString &path)
 {
-	Q_D( CReporterCoreRegistry );
+    Q_D( CReporterCoreRegistry );
 
-	QString coreFilePath;
-	QListIterator<CReporterCoreDir*> iter(d->coreDirs); 
-	
-	while ( iter.hasNext() ) {
-		CReporterCoreDir* pCoreDir =  (CReporterCoreDir*) iter.next();
-		// Find the correct location.
-		if ( pCoreDir->getDirectory() == path ) {
-			coreFilePath = pCoreDir->checkDirectoryForCores();
-		}
-	}	
-	return coreFilePath;
+    QString coreFilePath;
+    QListIterator<CReporterCoreDir *> iter(d->coreDirs);
+
+    while ( iter.hasNext() ) {
+        CReporterCoreDir *pCoreDir =  (CReporterCoreDir *) iter.next();
+        // Find the correct location.
+        if ( pCoreDir->getDirectory() == path ) {
+            coreFilePath = pCoreDir->checkDirectoryForCores();
+        }
+    }
+    return coreFilePath;
 }
 
 void CReporterCoreRegistry::refreshRegistry()
 {
-	qCDebug(cr) << "Emit registryRefreshNeeded().";
-	emit registryRefreshNeeded();
+    qCDebug(cr) << "Emit registryRefreshNeeded().";
+    emit registryRefreshNeeded();
 }
 
 // ======== LOCAL FUNCTIONS ========
@@ -179,7 +176,7 @@ void CReporterCoreRegistry::refreshRegistry()
 void CReporterCoreRegistry::mmcStateChanged(const QString &key)
 {
     qCDebug(cr) << "Key:" << key << "has changed.";
-	QTimer::singleShot( MMC_EVENT_TIMEOUT, this, SIGNAL(coreLocationsUpdated()) );
+    QTimer::singleShot( MMC_EVENT_TIMEOUT, this, SIGNAL(coreLocationsUpdated()) );
 }
 
 void CReporterCoreRegistry::createCoreLocationRegistry()
@@ -188,42 +185,42 @@ void CReporterCoreRegistry::createCoreLocationRegistry()
     const char *name;
 
 #if defined(__arm__) && (!defined(CREPORTER_SDK_HOST) || !defined(CREPORTER_UNIT_TEST))
-	qCDebug(cr) << "Get mountpoints from the environment.";
-	// Get mount points from environment.
+    qCDebug(cr) << "Get mountpoints from the environment.";
+    // Get mount points from environment.
     for (int i = 0; i < NUM_ENV_MOUNTPOINTS; i++) {
-		
-		name = mountpoint_env_names[i];
+
+        name = mountpoint_env_names[i];
         QString mpoint(getenv(name));
-	
+
         if (!mpoint.isEmpty()) {
-			CReporterCoreDir* dir = new CReporterCoreDir( mpoint, this );
-			d->coreDirs << dir;
-		}
+            CReporterCoreDir *dir = new CReporterCoreDir( mpoint, this );
+            d->coreDirs << dir;
+        }
     }
 #endif // defined(__arm__) && (!defined(CREPORTER_SDK_HOST) || !defined(CREPORTER_UNIT_TEST))
-    
+
     if (d->coreDirs.empty()) {
-		qCDebug(cr) << "Nothing in the environment. Using static mountpoints.";
-		// Nothing in environment, use static values as fallback.
+        qCDebug(cr) << "Nothing in the environment. Using static mountpoints.";
+        // Nothing in environment, use static values as fallback.
         for (int i = 0; i < NUM_STATIC_MOUNTPOINTS; i++) {
-			
-			name = mountpoint_static[i];
-			QString mpoint( name );
+
+            name = mountpoint_static[i];
+            QString mpoint( name );
 
 #if defined(CREPORTER_SDK_HOST) || defined(CREPORTER_UNIT_TEST)
             mpoint.prepend(QDir::homePath());
 #endif // defined(CREPORTER_SDK_HOST) || defined(CREPORTER_UNIT_TEST)
 
-            CReporterCoreDir* dir = new CReporterCoreDir(mpoint, this);
-			d->coreDirs << dir;
-		}
+            CReporterCoreDir *dir = new CReporterCoreDir(mpoint, this);
+            d->coreDirs << dir;
+        }
     }
 
-	qCDebug(cr) << "Set core location directories.";
+    qCDebug(cr) << "Set core location directories.";
 
     for (int i = 0; i < d->coreDirs.count(); i++) {
-		// Set directory for core locations.
-        CReporterCoreDir* dir = (CReporterCoreDir*) d->coreDirs.at(i);
+        // Set directory for core locations.
+        CReporterCoreDir *dir = (CReporterCoreDir *) d->coreDirs.at(i);
         connect(this, SIGNAL(coreLocationsUpdated()), dir, SLOT(createCoreDirectory()));
         connect(this, SIGNAL(registryRefreshNeeded()), dir, SLOT(updateCoreList()));
 
@@ -231,9 +228,9 @@ void CReporterCoreRegistry::createCoreLocationRegistry()
         tmp.append(core_dumps_suffix);
         dir->setDirectory(tmp);
     }
-	
-	// Emit this signal to create directories for core dumps.
-	emit coreLocationsUpdated();
+
+    // Emit this signal to create directories for core dumps.
+    emit coreLocationsUpdated();
 }
 
 CReporterCoreRegistry *CReporterCoreRegistry::instance()

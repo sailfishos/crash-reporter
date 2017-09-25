@@ -41,7 +41,7 @@ using CReporter::LoggingCategory::cr;
 
 // Local macros and definitions.
 
-#define FILE_PERMISSION 	0777
+#define FILE_PERMISSION     0777
 
 // Local constants.
 
@@ -50,16 +50,16 @@ const char rcore_lzo_file_name_filter[] = "*.rcore.lzo";
 
 // ======== MEMBER FUNCTIONS ========
 
-CReporterCoreDir::CReporterCoreDir(QString& mpoint, QObject* parent)
+CReporterCoreDir::CReporterCoreDir(QString &mpoint, QObject *parent)
     : QObject(parent), d_ptr(new CReporterCoreDirPrivate())
 {
-	d_ptr->mountpoint = mpoint;
-	qCDebug(cr) << "Mountpoint set to:" << d_ptr->mountpoint;
+    d_ptr->mountpoint = mpoint;
+    qCDebug(cr) << "Mountpoint set to:" << d_ptr->mountpoint;
 }
 
 CReporterCoreDir::~CReporterCoreDir()
 {
-	delete d_ptr;
+    delete d_ptr;
 }
 
 QString CReporterCoreDir::getDirectory() const
@@ -72,37 +72,37 @@ QString CReporterCoreDir::getMountpoint() const
     return d_ptr->mountpoint;
 }
 
-void CReporterCoreDir::setDirectory(const QString& dir)
+void CReporterCoreDir::setDirectory(const QString &dir)
 {
     Q_D(CReporterCoreDir);
 
-	d->directory = dir;
-	qCDebug(cr) << "Directory set to:" << d->directory;
-}
-	
-void CReporterCoreDir::setMountpoint(const QString& mpoint)
-{
-    Q_D(CReporterCoreDir);
-
-	d->mountpoint = mpoint;
-	qCDebug(cr) << "Mountpoint set to:" << d->mountpoint;
+    d->directory = dir;
+    qCDebug(cr) << "Directory set to:" << d->directory;
 }
 
-void CReporterCoreDir::collectAllCoreFilesAtLocation(QStringList& coreList)
+void CReporterCoreDir::setMountpoint(const QString &mpoint)
 {
     Q_D(CReporterCoreDir);
 
-	qCDebug(cr) << "Collecting cores from:" << d->directory;
-	
-	QStringList filters;
+    d->mountpoint = mpoint;
+    qCDebug(cr) << "Mountpoint set to:" << d->mountpoint;
+}
+
+void CReporterCoreDir::collectAllCoreFilesAtLocation(QStringList &coreList)
+{
+    Q_D(CReporterCoreDir);
+
+    qCDebug(cr) << "Collecting cores from:" << d->directory;
+
+    QStringList filters;
     filters << QString(rcore_file_name_filter) << QString(rcore_lzo_file_name_filter);
 
-	// Construct iterator for core-dumps directory.
+    // Construct iterator for core-dumps directory.
     QDirIterator iter(d->directory, filters, QDir::Files | QDir::NoDotAndDotDot);
 
     while (iter.hasNext()) {
         QString filePath = iter.next();
-	
+
         if (CReporterUtils::validateCore(filePath)) {
             coreList << filePath;
         }
@@ -113,68 +113,61 @@ QString CReporterCoreDir::checkDirectoryForCores()
 {
     Q_D(CReporterCoreDir);
 
-	QFileInfo fi;
-	QString coreFilePath;
+    QFileInfo fi;
+    QString coreFilePath;
 
-	QStringList filters;
+    QStringList filters;
     filters << QString(rcore_file_name_filter) << QString(rcore_lzo_file_name_filter);
 
-	// Construct iterator for core-dumps directory.
+    // Construct iterator for core-dumps directory.
     QDirIterator iter(d->directory, filters, QDir::Files | QDir::NoDotAndDotDot);
 
-	// Iterate over files in the core-dumps directory.		
+    // Iterate over files in the core-dumps directory.
     while (iter.hasNext()) {
-		
-		iter.next();
-		fi = iter.fileInfo();
+
+        iter.next();
+        fi = iter.fileInfo();
 
         if (!d->coresAtDirectory.contains(fi.fileName()) &&
                 CReporterUtils::validateCore(fi.fileName())) {
-				// This is valid rich core file, which hasn't been processed before.
-				d->coresAtDirectory << fi.fileName();
-				coreFilePath = fi.absoluteFilePath();
-				qCDebug(cr) << "New core file:" << fi.fileName();
-				break;
-		}
-	}
+            // This is valid rich core file, which hasn't been processed before.
+            d->coresAtDirectory << fi.fileName();
+            coreFilePath = fi.absoluteFilePath();
+            qCDebug(cr) << "New core file:" << fi.fileName();
+            break;
+        }
+    }
 
     if (coreFilePath.isEmpty()) {
-		// File was deleted by the user or client from the directory.
-		// Refresh directory list.
-		updateCoreList();
-	}
+        // File was deleted by the user or client from the directory.
+        // Refresh directory list.
+        updateCoreList();
+    }
 
-	return coreFilePath;
+    return coreFilePath;
 }
 
 void CReporterCoreDir::createCoreDirectory()
 {
     Q_D(CReporterCoreDir);
 
-    if (CReporterUtils::isMounted(d->mountpoint))
-    {
+    if (CReporterUtils::isMounted(d->mountpoint)) {
         // Construct new QDir pointing to mount point.
         QDir coreRoot(d->mountpoint);
 
-        if (!coreRoot.exists(d->directory))
-        {
+        if (!coreRoot.exists(d->directory)) {
             // If core-dumps -directory doesn't exist.
             // Create new sub-directory.
             if (coreRoot.exists(d->directory.left(d->directory.lastIndexOf('/')))
-                && coreRoot.mkdir(d->directory))
-            {
+                    && coreRoot.mkdir(d->directory)) {
                 qCDebug(cr) << "Created directory:" << d->directory;
                 chmod(CReporterUtils::qstringToChar(d->directory), FILE_PERMISSION);
-            }
-            else
-            {
+            } else {
                 qCWarning(cr) << "Error while creating directory:" << d->directory;
             }
             // Remove old entries from the list.
             d->coresAtDirectory.clear();
-        }
-        else
-        {
+        } else {
             // There was a "core-dumps" directory already. Fetch possible core files.
             updateCoreList();
         }
@@ -185,14 +178,14 @@ void CReporterCoreDir::updateCoreList()
 {
     Q_D(CReporterCoreDir);
 
-	qCDebug(cr) << "Refreshing core directory list.";
+    qCDebug(cr) << "Refreshing core directory list.";
 
     QDir dir(d->directory);
     dir.setFilter(QDir::Files | QDir::NoDotAndDotDot);
     dir.setNameFilters(QStringList() << rcore_file_name_filter << rcore_lzo_file_name_filter);
 
-	// Remove old entries.
-	d->coresAtDirectory.clear();
+    // Remove old entries.
+    d->coresAtDirectory.clear();
 
     QDirIterator it(dir);
     while (it.hasNext()) {

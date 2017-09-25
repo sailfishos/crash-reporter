@@ -58,8 +58,7 @@ void Ut_CReporterSendFileListModel::init()
     QFile file;
     QString filename;
 
-    for (int i = 0; i < numFiles; i++)
-    {
+    for (int i = 0; i < numFiles; i++) {
         filename = tempFileDir + "/testfile" + QString::number(i) + ".extension";
         filenames << filename;
         file.setFileName(filename);
@@ -86,8 +85,7 @@ void Ut_CReporterSendFileListModel::testData()
     QStringList rowData;
     QFileInfo fileinfo;
 
-    for (int i = 0; i < numFiles; i++)
-    {
+    for (int i = 0; i < numFiles; i++) {
         rowData = testModel->data(testModel->index(i), Qt::DisplayRole).toStringList();
         fileinfo.setFile(filenames.at(i));
         details = CReporterUtils::fileSizeToString(fileinfo.size()) + ' '
@@ -100,7 +98,7 @@ void Ut_CReporterSendFileListModel::testData()
 
 void Ut_CReporterSendFileListModel::testWrongRole()
 {
-    QVERIFY(testModel->data(testModel->index(numFiles+10), Qt::EditRole).isNull());
+    QVERIFY(testModel->data(testModel->index(numFiles + 10), Qt::EditRole).isNull());
 }
 
 void Ut_CReporterSendFileListModel::cleanupTestCase()

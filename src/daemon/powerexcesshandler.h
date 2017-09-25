@@ -26,7 +26,8 @@
 
 class PowerExcessHandlerPrivate;
 
-class PowerExcessHandler: public QObject {
+class PowerExcessHandler: public QObject
+{
     Q_OBJECT
 
 public:

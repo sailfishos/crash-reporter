@@ -31,7 +31,8 @@
 
 using CReporter::LoggingCategory::cr;
 
-class PowerExcessHandlerPrivate {
+class PowerExcessHandlerPrivate
+{
 public:
     udev *udevHandle;
     udev_monitor *udevMonitor;
@@ -41,7 +42,8 @@ public:
 };
 
 PowerExcessHandler::PowerExcessHandler(QObject *parent):
-  QObject(parent), d_ptr(new PowerExcessHandlerPrivate) {
+    QObject(parent), d_ptr(new PowerExcessHandlerPrivate)
+{
     Q_D(PowerExcessHandler);
 
     d->udevHandle = udev_new();
@@ -50,13 +52,14 @@ PowerExcessHandler::PowerExcessHandler(QObject *parent):
     udev_monitor_enable_receiving(d->udevMonitor);
 
     d->udevSocketNotifier =
-            new QSocketNotifier(udev_monitor_get_fd(d->udevMonitor),
-                    QSocketNotifier::Read, this);
+        new QSocketNotifier(udev_monitor_get_fd(d->udevMonitor),
+                            QSocketNotifier::Read, this);
     connect(d->udevSocketNotifier, SIGNAL(activated(int)),
             this, SLOT(handleUdevNotification()));
 }
 
-void PowerExcessHandlerPrivate::handleUdevNotification() {
+void PowerExcessHandlerPrivate::handleUdevNotification()
+{
     udev_device *dev = udev_monitor_receive_device(udevMonitor);
     if (!dev) {
         qCDebug(cr) << "udev_monitor_receive_device() failed";
@@ -71,7 +74,7 @@ void PowerExcessHandlerPrivate::handleUdevNotification() {
         static const QString EVENT_SUBSYSTEM("Subsystem");
         if (event == EVENT_WAKELOCK_DUMP || event == EVENT_SUBSYSTEM) {
             qCDebug(cr) << "Power excess detected, requesting dump of "
-                    "system logs.";
+                        "system logs.";
             if (!CReporterUtils::invokeLogCollection(CReporter::PowerExcessPrefix)) {
                 qCDebug(cr) << "Problem invoking rich-core-dumper.";
             }
@@ -81,7 +84,8 @@ void PowerExcessHandlerPrivate::handleUdevNotification() {
     udev_device_unref(dev);
 }
 
-PowerExcessHandler::~PowerExcessHandler() {
+PowerExcessHandler::~PowerExcessHandler()
+{
     Q_D(PowerExcessHandler);
 
     udev_monitor_unref(d->udevMonitor);

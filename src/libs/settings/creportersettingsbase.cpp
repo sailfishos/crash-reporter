@@ -42,7 +42,7 @@
 // CReporterSettingsBasePrivate::CReporterSettingsBasePrivate
 // ----------------------------------------------------------------------------
 CReporterSettingsBasePrivate::CReporterSettingsBasePrivate() :
-        m_settings(0)
+    m_settings(0)
 {
 }
 
@@ -61,14 +61,14 @@ CReporterSettingsBasePrivate::~CReporterSettingsBasePrivate()
 // CReporterSettingsBase::CReporterSettingsBase
 // ----------------------------------------------------------------------------
 CReporterSettingsBase::CReporterSettingsBase(const QString &organization,
-                                             const QString &application, QObject *parent) :
-        d_ptr(new CReporterSettingsBasePrivate())
+        const QString &application, QObject *parent) :
+    d_ptr(new CReporterSettingsBasePrivate())
 {
     Q_UNUSED(parent);
 
     creporterSettingsInit(CReporter::SystemSettingsLocation);
     d_ptr->m_settings = new QSettings(QSettings::NativeFormat, QSettings::UserScope,
-                                   organization, application, this);
+                                      organization, application, this);
 
 }
 
@@ -113,11 +113,9 @@ bool CReporterSettingsBase::isValid() const
 
     if (d->m_settings == 0) {
         return false;
-    }
-    else if (!QFile::exists(d->m_settings->fileName())) {
+    } else if (!QFile::exists(d->m_settings->fileName())) {
         return false;
-    }
-    else {
+    } else {
         return true;
     }
 }

@@ -49,8 +49,8 @@ static bool notificationTimeoutSet;
 
 // CReporterNotification mock object.
 CReporterNotification::CReporterNotification(const QString &eventType,
-                                             const QString &summary, const QString &body,
-                                             const QString &imageName, QObject *parent)
+        const QString &summary, const QString &body,
+        const QString &imageName, QObject *parent)
 {
     ntfEventType = eventType;
     ntfSummary = summary;
@@ -90,8 +90,8 @@ bool CReporterNotification::isPublished() const
 }
 
 // CReporterInfobanner mock object.
-CReporterInfoBanner* CReporterInfoBanner::show(const QString &message, const QString &bannerType,
-                                               const QString &iconID)
+CReporterInfoBanner *CReporterInfoBanner::show(const QString &message, const QString &bannerType,
+        const QString &iconID)
 {
     Q_UNUSED(message);
     Q_UNUSED(iconID);
@@ -100,7 +100,7 @@ CReporterInfoBanner* CReporterInfoBanner::show(const QString &message, const QSt
 }
 
 CReporterInfoBanner::CReporterInfoBanner(QString bannerType) :
-        MBanner()
+    MBanner()
 {
     Q_UNUSED(bannerType);
 }
@@ -127,7 +127,7 @@ class CReporterUtils
     static QString fileSizeToString(const quint64 size);
     static bool appendToLzo(const QString &text, const QString &filePath);
     static bool removeFile(const QString &path);
-    static QStringList parseCrashInfoFromFilename( const QString& filePath );
+    static QStringList parseCrashInfoFromFilename( const QString &filePath );
 };
 
 QString CReporterUtils::fileSizeToString(const quint64 size)
@@ -166,7 +166,7 @@ static QString userCommentsText;
 
 // CReporterNotificationDialog mock object.
 CReporterNotificationDialog::CReporterNotificationDialog(const QStringList &details,
-                                                          const QString &server, const QString &filesize)
+        const QString &server, const QString &filesize)
 {
     Q_UNUSED(details);
     Q_UNUSED(server);
@@ -230,10 +230,10 @@ void Ut_CReporterNotifyDialogPlugin::init()
     static MApplication *app = 0;
 
     if (app == 0) {
-            int argc = 2;
-            const char *argv[] = {"./ut_creporternotifydialogplugin", "-software", 0};
-            app = new MApplication(argc, (char **)argv);
-        }
+        int argc = 2;
+        const char *argv[] = {"./ut_creporternotifydialogplugin", "-software", 0};
+        app = new MApplication(argc, (char **)argv);
+    }
 
     m_Server = new TestDialogServer();
     m_Subject = new CReporterNotifyDialogPlugin();
@@ -252,7 +252,7 @@ void Ut_CReporterNotifyDialogPlugin::cleanup()
 
     if (m_Subject != 0) {
         if (m_Subject->isInitialized()) {
-           m_Subject->destroy();
+            m_Subject->destroy();
         }
         delete m_Subject;
         m_Subject = 0;
@@ -265,10 +265,10 @@ void Ut_CReporterNotifyDialogPlugin::cleanupTestCase()
 
 void Ut_CReporterNotifyDialogPlugin::testInitializePlugin()
 {
-   // Test plugin initialized successfully.
-   m_Subject->initialize(m_Server);
-   QVERIFY(m_Subject->name() == CReporter::NotifyNewDialogType);
-   QVERIFY(m_Subject->isInitialized() == true);
+    // Test plugin initialized successfully.
+    m_Subject->initialize(m_Server);
+    QVERIFY(m_Subject->name() == CReporter::NotifyNewDialogType);
+    QVERIFY(m_Subject->isInitialized() == true);
 }
 
 void Ut_CReporterNotifyDialogPlugin::testRequestPluginNotInitialized()
@@ -296,7 +296,7 @@ void Ut_CReporterNotifyDialogPlugin::testRequestPluginInvalidNumberOfArguments()
     m_Subject->initialize(m_Server);
     QVariantList args;
     args << QString("/media/mmc1/core-dumps/test-1234-11-4321.rcore.lzo")
-            << QString("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo");
+         << QString("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo");
 
     bool retVal = m_Subject->requestDialog(args);
     QVERIFY(retVal == false);

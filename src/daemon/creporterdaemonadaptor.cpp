@@ -40,14 +40,14 @@ CReporterDaemonAdaptor::CReporterDaemonAdaptor(QObject *parent) :
     QDBusAbstractAdaptor(parent)
 {
     setAutoRelaySignals(true);
-} 
+}
 
 //-----------------------------------------------------------------------------
 // CReporterDaemonAdaptor::~CReporterDaemonAdaptor
 // ----------------------------------------------------------------------------
 CReporterDaemonAdaptor::~CReporterDaemonAdaptor()
 {
-} 
+}
 
 //-----------------------------------------------------------------------------
 // CReporterDaemonAdaptor::startCoreMonitoring
@@ -64,7 +64,7 @@ void CReporterDaemonAdaptor::startCoreMonitoring()
 // ----------------------------------------------------------------------------
 void CReporterDaemonAdaptor::stopCoreMonitoring()
 {
-   // Handle method call com.nokia.Maemo.CrashReporterDaemon.stopCoreMonitoring
+    // Handle method call com.nokia.Maemo.CrashReporterDaemon.stopCoreMonitoring
     QMetaObject::invokeMethod(parent(), "stopCoreMonitoring",
                               Q_ARG(bool, true));
 }
@@ -74,11 +74,11 @@ void CReporterDaemonAdaptor::stopCoreMonitoring()
 // ----------------------------------------------------------------------------
 QStringList CReporterDaemonAdaptor::getAllCoreFiles()
 {
-	QStringList out;
+    QStringList out;
     // Handle method call com.nokia.Maemo.CrashReporterDaemon.getAllCoreFiles
     QMetaObject::invokeMethod(parent(), "collectAllCoreFiles",
                               Q_RETURN_ARG(QStringList, out));
-	return out;
+    return out;
 }
 
 // End of file.

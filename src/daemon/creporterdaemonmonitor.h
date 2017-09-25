@@ -38,62 +38,62 @@ class CReporterDaemonMonitorPrivate;
 /*!
  * @class CReporterDaemonMonitor
  * @brief This class implements the monitor for the "core-dump" directories.
- * 
+ *
  *  This class is instantiated by the CReporterDaemon class, when client requests
  *  to start monitoring for core-dumps directories and destroyed when client wants to
  *  stop monitoring. Actual monitoring handled by the QFileSystemWatcher class instance.
- *  When instantiated, class connects directoryChanged signal to private slot. 
+ *  When instantiated, class connects directoryChanged signal to private slot.
  */
 class CReporterDaemonMonitor : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
-    public:
-        /*!
-         * Creates new instance of coredump directory monitor.
-         *
-         * @param parent the parent QObject.
-         *
-         * @sa CReporterCoreRegistry
-         */
-        CReporterDaemonMonitor(QObject *parent);
+public:
+    /*!
+     * Creates new instance of coredump directory monitor.
+     *
+     * @param parent the parent QObject.
+     *
+     * @sa CReporterCoreRegistry
+     */
+    CReporterDaemonMonitor(QObject *parent);
 
-        /*!
-         * @brief Class destructor.
-         *
-         */
-        ~CReporterDaemonMonitor();
+    /*!
+     * @brief Class destructor.
+     *
+     */
+    ~CReporterDaemonMonitor();
 
-        /*!
-          * @brief Returns auto-delete max similar cores property
-          *
-          * @return Number of similar cores to keep
-          */
-        int autoDeleteMaxSimilarCores();
+    /*!
+      * @brief Returns auto-delete max similar cores property
+      *
+      * @return Number of similar cores to keep
+      */
+    int autoDeleteMaxSimilarCores();
 
-        /*!
-          * @brief Sets auto-delete max similar count.
-          *
-          * @param value number of similar cores to keep
-          */
-        void setAutoDeleteMaxSimilarCores(int value);
+    /*!
+      * @brief Sets auto-delete max similar count.
+      *
+      * @param value number of similar cores to keep
+      */
+    void setAutoDeleteMaxSimilarCores(int value);
 
 signals:
-        /*!
-          * @brief Sent, when new rich-core dump is found.
-          *
-          * @param path Absolute file path to rich-core dump.
-          */
-        void richCoreNotify(const QString &path);
+    /*!
+      * @brief Sent, when new rich-core dump is found.
+      *
+      * @param path Absolute file path to rich-core dump.
+      */
+    void richCoreNotify(const QString &path);
 
-    private: // data
-	
-        Q_DECLARE_PRIVATE(CReporterDaemonMonitor)
-        //! @arg Pointer to private class.
-        CReporterDaemonMonitorPrivate *d_ptr;
+private: // data
+
+    Q_DECLARE_PRIVATE(CReporterDaemonMonitor)
+    //! @arg Pointer to private class.
+    CReporterDaemonMonitorPrivate *d_ptr;
 
 #ifdef CREPORTER_UNIT_TEST
-	friend class Ut_CReporterDaemonMonitor;
+    friend class Ut_CReporterDaemonMonitor;
 #endif
 };
 

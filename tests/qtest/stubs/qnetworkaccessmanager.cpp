@@ -2,8 +2,8 @@
 #include "qnetworkreply.h"
 #include <QAuthenticator>
 
-QNetworkReply *QNetworkAccessManager::post(const QNetworkRequest &request, 
-					   const QByteArray &data)
+QNetworkReply *QNetworkAccessManager::post(const QNetworkRequest &request,
+        const QByteArray &data)
 {
     Q_UNUSED(request);
     Q_UNUSED(data);
@@ -12,8 +12,8 @@ QNetworkReply *QNetworkAccessManager::post(const QNetworkRequest &request,
 }
 
 
-QNetworkReply *QNetworkAccessManager::put(const QNetworkRequest &request, 
-					  const QByteArray &data)
+QNetworkReply *QNetworkAccessManager::put(const QNetworkRequest &request,
+        const QByteArray &data)
 {
     Q_UNUSED(request);
     Q_UNUSED(data);

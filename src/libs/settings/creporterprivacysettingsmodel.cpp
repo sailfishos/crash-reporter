@@ -41,54 +41,54 @@
 /* TODO: move what doesn't have to be shared with rich-core-dumper to
  * application settings. */
 namespace Settings {
-    //! When true, rich-core dumps are produced.
-    const QString CoreDumping("Settings/coredumping");
-    //! When true, user notifications are displayed.
-    const QString Notifications("Settings/notifications");
-    //! When true, duplicate rich cores are deleted automatically.
-    const QString AutoDeleteDuplicates("Settings/avoid-dups");
-    //! Stores how many similar core dumps are kept when avoid-dups is enabled.
-    const QString AutoDeleteMaxSimilarCores("Settings/maxsimilarcores");
-    //! When true, crash-reporter tries to upload rich-core dumps automatically.
-    const QString AutomaticSending("Settings/automaticsending");
-    //! True when user has accepted crash reporter's privacy notice.
-    const QString NoticeAccepted("Settings/privacy-notice-accepted");
-    //! When true, crash-reporter can use mobile connection for data transfers.
-    const QString AllowMobileData("Settings/allow-mobile-data");
+//! When true, rich-core dumps are produced.
+const QString CoreDumping("Settings/coredumping");
+//! When true, user notifications are displayed.
+const QString Notifications("Settings/notifications");
+//! When true, duplicate rich cores are deleted automatically.
+const QString AutoDeleteDuplicates("Settings/avoid-dups");
+//! Stores how many similar core dumps are kept when avoid-dups is enabled.
+const QString AutoDeleteMaxSimilarCores("Settings/maxsimilarcores");
+//! When true, crash-reporter tries to upload rich-core dumps automatically.
+const QString AutomaticSending("Settings/automaticsending");
+//! True when user has accepted crash reporter's privacy notice.
+const QString NoticeAccepted("Settings/privacy-notice-accepted");
+//! When true, crash-reporter can use mobile connection for data transfers.
+const QString AllowMobileData("Settings/allow-mobile-data");
 }
 
 /*!
  * Settings affecting what information is included in the crash reports.
  */
 namespace Privacy {
-    //! If set to true, core dump is included in the crash report.
-    const QString IncludeCore("Privacy/INCLUDE_CORE");
-    //! If set to true, syslog is included in the crash reporter.
-    const QString IncludeSysLog("Privacy/INCLUDE_SYSLOG");
-    //! If set to true, package list is included in the crash reporter.
-    const QString IncludePkgList("Privacy/INCLUDE_PKGLIST");
-    //! If set to true, stack trace is included in the crash report.
-    const QString IncludeStackTrace("Privacy/INCLUDE_STACK_TRACE");
-    /*!
-     * If set to true, core dump size is reduced before it's included in
-     * the crash reporter.
-     */
-    const QString ReduceCore("Privacy/REDUCE_CORE");
-    /*!
-     * If set to true, rich-core-dumper will attempt to download missing debug
-     * symbols before generating a stack trace.
-     */
-    const QString DownloadDebuginfo("Privacy/DOWNLOAD_DEBUGINFO");
+//! If set to true, core dump is included in the crash report.
+const QString IncludeCore("Privacy/INCLUDE_CORE");
+//! If set to true, syslog is included in the crash reporter.
+const QString IncludeSysLog("Privacy/INCLUDE_SYSLOG");
+//! If set to true, package list is included in the crash reporter.
+const QString IncludePkgList("Privacy/INCLUDE_PKGLIST");
+//! If set to true, stack trace is included in the crash report.
+const QString IncludeStackTrace("Privacy/INCLUDE_STACK_TRACE");
+/*!
+ * If set to true, core dump size is reduced before it's included in
+ * the crash reporter.
+ */
+const QString ReduceCore("Privacy/REDUCE_CORE");
+/*!
+ * If set to true, rich-core-dumper will attempt to download missing debug
+ * symbols before generating a stack trace.
+ */
+const QString DownloadDebuginfo("Privacy/DOWNLOAD_DEBUGINFO");
 }
 
-CReporterPrivacySettingsModel* CReporterPrivacySettingsModel::sm_Instance = 0;
+CReporterPrivacySettingsModel *CReporterPrivacySettingsModel::sm_Instance = 0;
 
 // ======== MEMBER FUNCTIONS ========
 
 // ----------------------------------------------------------------------------
 // CReporterPrivacySettingsModel::instance
 // ----------------------------------------------------------------------------
-CReporterPrivacySettingsModel* CReporterPrivacySettingsModel::instance()
+CReporterPrivacySettingsModel *CReporterPrivacySettingsModel::instance()
 {
     if (sm_Instance == 0) {
         // Get default settings, if not overriden by the user.
@@ -119,7 +119,7 @@ void CReporterPrivacySettingsModel::freeSingleton()
 // CReporterPrivacySettingsModel::CReporterPrivacySettingsModel
 // ----------------------------------------------------------------------------
 CReporterPrivacySettingsModel::CReporterPrivacySettingsModel() :
-        CReporterSettingsBase("crash-reporter-settings", "crash-reporter-privacy")
+    CReporterSettingsBase("crash-reporter-settings", "crash-reporter-privacy")
 {
 
 }
@@ -319,7 +319,7 @@ void CReporterPrivacySettingsModel::setAutomaticSendingEnabled(bool value)
 // ----------------------------------------------------------------------------
 void CReporterPrivacySettingsModel::setIncludeCore(bool value)
 {
-   setValue(Privacy::IncludeCore, QVariant(value));
+    setValue(Privacy::IncludeCore, QVariant(value));
 }
 
 // ----------------------------------------------------------------------------
@@ -327,7 +327,7 @@ void CReporterPrivacySettingsModel::setIncludeCore(bool value)
 // ----------------------------------------------------------------------------
 void CReporterPrivacySettingsModel::setIncludeSystemLog(bool value)
 {
-   setValue(Privacy::IncludeSysLog, QVariant(value));
+    setValue(Privacy::IncludeSysLog, QVariant(value));
 }
 
 // ----------------------------------------------------------------------------
@@ -335,7 +335,7 @@ void CReporterPrivacySettingsModel::setIncludeSystemLog(bool value)
 // ----------------------------------------------------------------------------
 void CReporterPrivacySettingsModel::setIncludePackageList(bool value)
 {
-   setValue(Privacy::IncludePkgList, QVariant(value));
+    setValue(Privacy::IncludePkgList, QVariant(value));
 }
 
 void CReporterPrivacySettingsModel::setIncludeStackTrace(bool value)
