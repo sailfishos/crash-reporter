@@ -32,7 +32,6 @@ class JournalSpy: public QObject
 
 public:
     JournalSpy();
-
     ~JournalSpy();
 
 private:

@@ -25,16 +25,10 @@
 #ifndef CREPORTERDIALOGPLUGININTERFACE_H
 #define CREPORTERDIALOGPLUGININTERFACE_H
 
-// System includes.
-
 #include <QString>
 #include <QVariant>
 
-// User includes.
-
 #include "creporterdialogserverinterface.h"
-
-// Forward declarations.
 
 class CReporterDialogRequest;
 
@@ -113,5 +107,3 @@ Q_DECLARE_INTERFACE(CReporterDialogPluginInterface,
                     "com.nokia.CReporterDialogPluginInterface");
 
 #endif // CREPORTERDIALOGPLUGININTERFACE_H
-
-// end of file

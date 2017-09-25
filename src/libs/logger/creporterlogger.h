@@ -28,17 +28,12 @@
 #ifndef CREPORTERLOGGER_H
 #define CREPORTERLOGGER_H
 
-// System includes.
-
 #include <QFile>
 #include <QTextStream>
-
-// User includes.
 
 #include "creporterexport.h"
 #include "creporternamespace.h"
 
-// Forward declarations.
 class CReporterLoggerPrivate;
 
 /*!
@@ -62,10 +57,6 @@ public:
      */
     CReporterLogger(const QString type = "none");
 
-    /*!
-     * @brief Class destructor.
-     *
-     */
     ~CReporterLogger();
 
 protected:
@@ -97,5 +88,3 @@ private:
 typedef CReporterLogger Logger;
 
 #endif // CREPORTERLOGGER_H
-
-// end of file.

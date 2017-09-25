@@ -25,36 +25,22 @@
  *
  */
 
-// System includes.
-
 #include <QDebug>
 #include <QTime>
 #include <stdlib.h>
 #include <iostream>
 #include <syslog.h>
 
-// User includes.
-
 #include "creporterlogger.h"
-
-// Local constants and definitions.
 
 #define CREPORTER_LOGGER_FILE       "file"
 #define CREPORTER_LOGGER_SYSLOG     "syslog"
 
-// Static initializations.
 
 CReporterLogger *CReporterLogger::sm_Instance = 0;
 bool CReporterLogger::sm_Syslog = false;
 CReporter::LogType CReporterLogger::sm_LogType = CReporter::LogNone;
 
-// ******** Class CReporterLoggerPrivate ********
-
-// ******** Class CReporterLogger ********
-
-// ----------------------------------------------------------------------------
-// CReporterLogger::CReporterLogger
-// ----------------------------------------------------------------------------
 CReporterLogger::CReporterLogger(const QString type)
 {
     // save ourself in a static variable
@@ -99,9 +85,6 @@ CReporterLogger::CReporterLogger(const QString type)
     m_old_msg_handler = qInstallMessageHandler(CReporterLogger::messageHandler);
 }
 
-// ----------------------------------------------------------------------------
-// CReporterLogger::~CReporterLogger
-// ----------------------------------------------------------------------------
 CReporterLogger::~CReporterLogger ()
 {
     if (m_old_msg_handler) {
@@ -116,9 +99,6 @@ CReporterLogger::~CReporterLogger ()
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterLogger::messageHandler
-// ----------------------------------------------------------------------------
 void CReporterLogger::messageHandler(QtMsgType type,
                                      const QMessageLogContext &context,
                                      const QString &msg)
@@ -162,5 +142,3 @@ void CReporterLogger::messageHandler(QtMsgType type,
         exit(1);
     }
 }
-
-// End of file.

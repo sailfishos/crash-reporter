@@ -22,8 +22,6 @@
  *
  */
 
-// System includes.
-
 #include <sys/types.h> // for chmod()
 #include <sys/stat.h>
 
@@ -31,24 +29,18 @@
 #include <QDebug>
 #include <QDirIterator>
 
-// User includes.
-
 #include "creportercoredir.h"
 #include "creportercoredir_p.h"
 #include "creporterutils.h"
 
 using CReporter::LoggingCategory::cr;
 
-// Local macros and definitions.
 
 #define FILE_PERMISSION     0777
-
-// Local constants.
 
 const char rcore_file_name_filter[] = "*.rcore";
 const char rcore_lzo_file_name_filter[] = "*.rcore.lzo";
 
-// ======== MEMBER FUNCTIONS ========
 
 CReporterCoreDir::CReporterCoreDir(QString &mpoint, QObject *parent)
     : QObject(parent), d_ptr(new CReporterCoreDirPrivate())
@@ -193,5 +185,3 @@ void CReporterCoreDir::updateCoreList()
         d->coresAtDirectory.append(it.fileName());
     }
 }
-
-// End of file

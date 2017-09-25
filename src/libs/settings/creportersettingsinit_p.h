@@ -25,8 +25,6 @@
 #ifndef CREPORTERSETTINGSINIT_P_H
 #define CREPORTERSETTINGSINIT_P_H
 
-// System includes.
-
 #include <QString>
 
 /*!
@@ -37,5 +35,3 @@ void creporterSettingsInit(const QString &systemPath = QString(),
                            const QString &userPath = QString());
 
 #endif // CREPORTERSETTINGSINIT_P_H
-
-// End of file.

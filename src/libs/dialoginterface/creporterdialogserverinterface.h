@@ -25,11 +25,8 @@
 #ifndef CREPORTERDIALOGSERVERINTERFACE_H
 #define CREPORTERDIALOGSERVERINTERFACE_H
 
-// System includes.
-
 #include <QVariantList>
 
-// Forward declarations.
 
 class MRemoteAction;
 class MDialog;
@@ -106,5 +103,3 @@ Q_DECLARE_INTERFACE(CReporterDialogServerInterface,
                     "com.nokia.CReporterDialogServerInterface");
 
 #endif // CREPORTERDIALOGSERVERINTERFACE_H
-
-// End of file.

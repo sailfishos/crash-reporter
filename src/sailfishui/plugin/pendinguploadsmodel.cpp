@@ -40,8 +40,10 @@ public:
     QList<Item> contents;
 };
 
-PendingUploadsModel::PendingUploadsModel(QObject *parent):
-    QAbstractListModel(parent), d_ptr(new PendingUploadsModelPrivate) {}
+PendingUploadsModel::PendingUploadsModel(QObject *parent)
+    : QAbstractListModel(parent), d_ptr(new PendingUploadsModelPrivate)
+{
+}
 
 PendingUploadsModel::~PendingUploadsModel()
 {

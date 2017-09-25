@@ -25,15 +25,9 @@
 #ifndef CREPORTERHTTPCLIENT_H
 #define CREPORTERHTTPCLIENT_H
 
-// System includes.
-
 #include <QObject>
 
-// User includes.
-
 #include "creporterexport.h"
-
-// Forward declarations.
 
 class CReporterHttpClientPrivate;
 class CReporterHttpCntx;
@@ -72,17 +66,8 @@ public:
         Aborting,
     };
 
-    /*!
-     * @brief Class constructor.
-     *
-     * @param parent Parent object pointer.
-     */
     CReporterHttpClient(QObject *parent = 0);
 
-    /*!
-     * @brief Class destructor.
-     *
-     */
     ~CReporterHttpClient();
 
     /*!
@@ -157,14 +142,12 @@ public Q_SLOTS:
 
 private:
     Q_DECLARE_PRIVATE( CReporterHttpClient )
-    //! @arg Private class data.
+
     CReporterHttpClientPrivate *d_ptr;
 #ifdef CREPORTER_UNIT_TEST
     friend class Ut_CReporterHttpClient;
-#endif // CREPORTER_UNIT_TEST
-
+#endif
 };
 
 #endif // CREPORTERHTTPCLIENT_H
 
-// End of file

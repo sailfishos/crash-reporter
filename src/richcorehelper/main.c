@@ -26,7 +26,8 @@
 #include <time.h>
 #include <unistd.h>
 
-int main(int argc, const char **argv) {
+int main(int argc, const char **argv)
+{
     if (argc != 2) {
         fprintf(stderr, "usage: rich-core-helper report_label\n");
         return EXIT_FAILURE;

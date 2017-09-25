@@ -25,13 +25,10 @@
  *
  */
 
-// System includes.
 
 #include <QFile>
 #include <QDir>
 #include <QDebug>
-
-// User includes.
 
 #include "creportersettingsbase.h"
 #include "creporterprivacysettingsmodel.h"
@@ -83,11 +80,6 @@ const QString DownloadDebuginfo("Privacy/DOWNLOAD_DEBUGINFO");
 
 CReporterPrivacySettingsModel *CReporterPrivacySettingsModel::sm_Instance = 0;
 
-// ======== MEMBER FUNCTIONS ========
-
-// ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::instance
-// ----------------------------------------------------------------------------
 CReporterPrivacySettingsModel *CReporterPrivacySettingsModel::instance()
 {
     if (sm_Instance == 0) {
@@ -104,9 +96,6 @@ CReporterPrivacySettingsModel *CReporterPrivacySettingsModel::instance()
     return sm_Instance;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::freeSingleton
-// ----------------------------------------------------------------------------
 void CReporterPrivacySettingsModel::freeSingleton()
 {
     if (sm_Instance != 0) {
@@ -115,26 +104,17 @@ void CReporterPrivacySettingsModel::freeSingleton()
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::CReporterPrivacySettingsModel
-// ----------------------------------------------------------------------------
 CReporterPrivacySettingsModel::CReporterPrivacySettingsModel() :
     CReporterSettingsBase("crash-reporter-settings", "crash-reporter-privacy")
 {
 
 }
 
-// ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::CReporterPrivacySettingsModel
-// ----------------------------------------------------------------------------
 CReporterPrivacySettingsModel::~CReporterPrivacySettingsModel()
 {
 
 }
 
-// ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::coreDumpingEnabled
-// ----------------------------------------------------------------------------
 bool CReporterPrivacySettingsModel::coreDumpingEnabled() const
 {
     return value(Settings::CoreDumping, QVariant(true)).toBool();
@@ -167,49 +147,31 @@ bool CReporterPrivacySettingsModel::notificationsEnabled() const
     return value(Settings::Notifications, QVariant(true)).toBool();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::autoDeleteDuplicates
-// ----------------------------------------------------------------------------
 bool CReporterPrivacySettingsModel::autoDeleteDuplicates() const
 {
     return value(Settings::AutoDeleteDuplicates, QVariant(true)).toBool();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::autoDeleteMaxSimilarCores
-// ----------------------------------------------------------------------------
 int CReporterPrivacySettingsModel::autoDeleteMaxSimilarCores() const
 {
     return value(Settings::AutoDeleteMaxSimilarCores, QVariant(5)).toInt();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::automaticSendingEnabled
-// ----------------------------------------------------------------------------
 bool CReporterPrivacySettingsModel::automaticSendingEnabled() const
 {
     return value(Settings::AutomaticSending, QVariant(true)).toBool();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::includeCore
-// ----------------------------------------------------------------------------
 bool CReporterPrivacySettingsModel::includeCore() const
 {
     return value(Privacy::IncludeCore, QVariant(true)).toBool();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::includeSystemLog
-// ----------------------------------------------------------------------------
 bool CReporterPrivacySettingsModel::includeSystemLog() const
 {
     return value(Privacy::IncludeSysLog, QVariant(true)).toBool();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::includePackageList
-// ----------------------------------------------------------------------------
 bool CReporterPrivacySettingsModel::includePackageList() const
 {
     return value(Privacy::IncludePkgList, QVariant(true)).toBool();
@@ -235,17 +197,11 @@ bool CReporterPrivacySettingsModel::allowMobileData() const
     return value(Settings::AllowMobileData, QVariant(false)).toBool();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::reduceCore
-// ----------------------------------------------------------------------------
 bool CReporterPrivacySettingsModel::reduceCore() const
 {
     return value(Privacy::ReduceCore, QVariant(true)).toBool();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::setCoreDumpingEnabled
-// ----------------------------------------------------------------------------
 void CReporterPrivacySettingsModel::setCoreDumpingEnabled(bool value)
 {
     if (setValue(Settings::CoreDumping, QVariant(value)))
@@ -288,51 +244,33 @@ void CReporterPrivacySettingsModel::setNotificationsEnabled(bool value)
         emit notificationsEnabledChanged();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::setAutoDeleteDuplicates
-// ----------------------------------------------------------------------------
 void CReporterPrivacySettingsModel::setAutoDeleteDuplicates(bool value)
 {
     if (setValue(Settings::AutoDeleteDuplicates, QVariant(value)))
         emit autoDeleteDuplicatesChanged();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::setAutoDeleteMaxSimilarCores
-// ----------------------------------------------------------------------------
 void CReporterPrivacySettingsModel::setAutoDeleteMaxSimilarCores(int value)
 {
     setValue(Settings::AutoDeleteMaxSimilarCores, QVariant(value));
 }
 
-// ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::setAutomaticSendingEnabled
-// ----------------------------------------------------------------------------
 void CReporterPrivacySettingsModel::setAutomaticSendingEnabled(bool value)
 {
     if (setValue(Settings::AutomaticSending, QVariant(value)))
         emit automaticSendingEnabledChanged();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::setIncludeCore
-// ----------------------------------------------------------------------------
 void CReporterPrivacySettingsModel::setIncludeCore(bool value)
 {
     setValue(Privacy::IncludeCore, QVariant(value));
 }
 
-// ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::setIncludeSystemLog
-// ----------------------------------------------------------------------------
 void CReporterPrivacySettingsModel::setIncludeSystemLog(bool value)
 {
     setValue(Privacy::IncludeSysLog, QVariant(value));
 }
 
-// ----------------------------------------------------------------------------
-// CReporterPrivacySettingsModel::setIncludePackageList
-// ----------------------------------------------------------------------------
 void CReporterPrivacySettingsModel::setIncludePackageList(bool value)
 {
     setValue(Privacy::IncludePkgList, QVariant(value));
@@ -366,6 +304,3 @@ void CReporterPrivacySettingsModel::setReduceCore(bool value)
 {
     setValue(Privacy::ReduceCore, QVariant(value));
 }
-
-// End of file.
-

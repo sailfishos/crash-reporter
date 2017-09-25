@@ -44,11 +44,12 @@ private:
     CReporterSavedState *q_ptr;
 };
 
-CReporterSavedStatePrivate::CReporterSavedStatePrivate(CReporterSavedState *q):
-    q_ptr(q) {}
+CReporterSavedStatePrivate::CReporterSavedStatePrivate(CReporterSavedState *q)
+    : q_ptr(q)
+{
+}
 
-int CReporterSavedStatePrivate::intValue(const QString &key,
-        const QVariant &defaultValue) const
+int CReporterSavedStatePrivate::intValue(const QString &key, const QVariant &defaultValue) const
 {
     const Q_Q(CReporterSavedState);
 
@@ -60,9 +61,11 @@ int CReporterSavedStatePrivate::intValue(const QString &key,
 
 CReporterSavedState *CReporterSavedState::_instance = 0;
 
-CReporterSavedState::CReporterSavedState():
-    CReporterSettingsBase("crash-reporter-settings", "saved-state"),
-    d_ptr(new CReporterSavedStatePrivate(this)) {}
+CReporterSavedState::CReporterSavedState()
+    : CReporterSettingsBase("crash-reporter-settings", "saved-state"),
+      d_ptr(new CReporterSavedStatePrivate(this))
+{
+}
 
 CReporterSavedState *CReporterSavedState::instance()
 {
@@ -81,7 +84,9 @@ void CReporterSavedState::freeSingleton()
     }
 }
 
-CReporterSavedState::~CReporterSavedState() {}
+CReporterSavedState::~CReporterSavedState()
+{
+}
 
 quint32 CReporterSavedState::crashNotificationId() const
 {

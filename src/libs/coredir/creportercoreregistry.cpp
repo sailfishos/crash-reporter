@@ -25,8 +25,6 @@
  *
  */
 
-// System includes
-
 #include <stdlib.h> // for getenv()
 
 #include <QCoreApplication>
@@ -35,8 +33,6 @@
 #include <QDir>
 #include <QSignalMapper>
 
-// User includes
-
 #include "creportercoreregistry.h"
 #include "creportercoreregistry_p.h"
 #include "creportercoredir.h"
@@ -44,16 +40,12 @@
 
 using CReporter::LoggingCategory::cr;
 
-// Local macros and definitions.
-
 #define NUM_ENV_MOUNTPOINTS 2
 #define NUM_STATIC_MOUNTPOINTS 1
 #define MAX_CORE_DIRS (NUM_ENV_MOUNTPOINTS + NUM_STATIC_MOUNTPOINTS + 1)
 #define MAX_MOUNTPOINT_NAMELEN (128)
 
 #define MMC_EVENT_TIMEOUT   5000 // Time to wait (ms) after mmc state has changed.
-
-// Local constants.
 
 static const char
 mountpoint_env_names[NUM_ENV_MOUNTPOINTS][MAX_MOUNTPOINT_NAMELEN] = {
@@ -75,7 +67,6 @@ mountpoint_static[NUM_STATIC_MOUNTPOINTS][MAX_MOUNTPOINT_NAMELEN] = {
 
 const char core_dumps_suffix[] = "/core-dumps";
 
-// ======== MEMBER FUNCTIONS ========
 
 CReporterCoreRegistryPrivate::CReporterCoreRegistryPrivate()
 {
@@ -103,9 +94,7 @@ CReporterCoreRegistry::~CReporterCoreRegistry()
     Q_D(CReporterCoreRegistry);
 
     QList<CReporterCoreDir *> dirs = d->coreDirs;
-    // Clear list.
     d->coreDirs.clear();
-    // Delete entries.
     qDeleteAll(dirs);
     delete d_ptr;
 }
@@ -171,7 +160,6 @@ void CReporterCoreRegistry::refreshRegistry()
     emit registryRefreshNeeded();
 }
 
-// ======== LOCAL FUNCTIONS ========
 
 void CReporterCoreRegistry::mmcStateChanged(const QString &key)
 {
@@ -197,7 +185,7 @@ void CReporterCoreRegistry::createCoreLocationRegistry()
             d->coreDirs << dir;
         }
     }
-#endif // defined(__arm__) && (!defined(CREPORTER_SDK_HOST) || !defined(CREPORTER_UNIT_TEST))
+#endif
 
     if (d->coreDirs.empty()) {
         qCDebug(cr) << "Nothing in the environment. Using static mountpoints.";
@@ -209,7 +197,7 @@ void CReporterCoreRegistry::createCoreLocationRegistry()
 
 #if defined(CREPORTER_SDK_HOST) || defined(CREPORTER_UNIT_TEST)
             mpoint.prepend(QDir::homePath());
-#endif // defined(CREPORTER_SDK_HOST) || defined(CREPORTER_UNIT_TEST)
+#endif
 
             CReporterCoreDir *dir = new CReporterCoreDir(mpoint, this);
             d->coreDirs << dir;

@@ -25,11 +25,7 @@
 #ifndef CREPORTERDAEMONADAPTOR_H
 #define CREPORTERDAEMONADAPTOR_H
 
-// System includes
-
 #include <QtDBus/QtDBus>
-
-// Forward declarations
 
 class QStringList;
 class CReporterDaemonAdaptorPrivate;
@@ -48,17 +44,7 @@ class CReporterDaemonAdaptor : public QDBusAbstractAdaptor
     Q_CLASSINFO("D-Bus Interface", "com.nokia.CrashReporter.Daemon")
 
 public:
-    /*!
-     * @brief Constructor for the CReporterDaemonAdaptor class
-     *
-     * @param parent pointer to the parent class instance.
-     */
     CReporterDaemonAdaptor(QObject *parent);
-
-    /*!
-     * @brief Class destructor.
-     *
-     */
     ~CReporterDaemonAdaptor();
 
 public Q_SLOTS:
@@ -87,10 +73,8 @@ public Q_SLOTS:
      */
     QStringList getAllCoreFiles();
 
-private: // data
-
+private:
     Q_DECLARE_PRIVATE(CReporterDaemonAdaptor)
-    //! Pointer to private data class.
     CReporterDaemonAdaptorPrivate *d_ptr;
 };
 

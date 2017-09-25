@@ -25,8 +25,6 @@
  *
  */
 
-// System includes.
-
 #include <QAuthenticator>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -38,8 +36,6 @@
 #include <QSslConfiguration>
 #include <QNetworkProxy>
 #include <QTime>
-
-// User includes.
 
 #include "creportercoreregistry.h"
 #include "creporterhttpclient.h"
@@ -65,9 +61,6 @@ CReporterHttpClientPrivate::CReporterHttpClientPrivate(CReporterHttpClient *pare
             q_ptr, &CReporterHttpClient::cancel);
 }
 
-// ----------------------------------------------------------------------------
-// CReporterHttpClientPrivate::~CReporterHttpClientPrivate
-// ----------------------------------------------------------------------------
 CReporterHttpClientPrivate::~CReporterHttpClientPrivate()
 {
     CReporterApplicationSettings::freeSingleton();
@@ -83,9 +76,6 @@ CReporterHttpClientPrivate::~CReporterHttpClientPrivate()
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterHttpClientPrivate::init
-// ----------------------------------------------------------------------------
 void CReporterHttpClientPrivate::init(bool deleteAfterSending)
 {
     qCDebug(cr) << "Initiating HTTP session.";
@@ -111,9 +101,6 @@ void CReporterHttpClientPrivate::init(bool deleteAfterSending)
     stateChange(CReporterHttpClient::Init);
 }
 
-// ----------------------------------------------------------------------------
-// CReporterHttpClientPrivate::createRequest
-// ----------------------------------------------------------------------------
 bool CReporterHttpClientPrivate::createRequest(const QString &file)
 {
     Q_ASSERT(m_manager != NULL);
@@ -181,9 +168,6 @@ bool CReporterHttpClientPrivate::createRequest(const QString &file)
     return true;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterHttpClientPrivate::cancel
-// ----------------------------------------------------------------------------
 void CReporterHttpClientPrivate::cancel()
 {
     stateChange( CReporterHttpClient::Aborting );
@@ -198,11 +182,6 @@ void CReporterHttpClientPrivate::cancel()
     handleFinished();
 }
 
-// ======== LOCAL FUNCTIONS ========
-
-// ----------------------------------------------------------------------------
-// CReporterHttpClientPrivate::handleAuthenticationRequired
-// ----------------------------------------------------------------------------
 void CReporterHttpClientPrivate::handleAuthenticationRequired(QNetworkReply *reply,
         QAuthenticator *authenticator)
 {
@@ -215,9 +194,6 @@ void CReporterHttpClientPrivate::handleAuthenticationRequired(QNetworkReply *rep
     authenticator->setPassword(CReporterApplicationSettings::instance()->password());
 }
 
-// ----------------------------------------------------------------------------
-// CReporterHttpClientPrivate::handleSslErrors
-// ----------------------------------------------------------------------------
 void CReporterHttpClientPrivate::handleSslErrors(const QList<QSslError> &errors )
 {
     QString errorString;
@@ -233,9 +209,6 @@ void CReporterHttpClientPrivate::handleSslErrors(const QList<QSslError> &errors 
     m_reply->ignoreSslErrors();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterHttpClientPrivate::handleError
-// ----------------------------------------------------------------------------
 void CReporterHttpClientPrivate::handleError(QNetworkReply::NetworkError error)
 {
     if (m_reply && m_reply->error() != QNetworkReply::NoError) {
@@ -294,9 +267,6 @@ void CReporterHttpClientPrivate::parseReply()
     uploadlog.close();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterHttpClientPrivate::handleFinished
-// ----------------------------------------------------------------------------
 void CReporterHttpClientPrivate::handleFinished()
 {
     qCDebug(cr) << "Uploading file:" << m_currentFile.fileName() << "finished.";
@@ -320,9 +290,6 @@ void CReporterHttpClientPrivate::handleFinished()
     emit finished();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterHttpClientPrivate::handleUploadProgress
-// ----------------------------------------------------------------------------
 void CReporterHttpClientPrivate::handleUploadProgress(qint64 bytesSent, qint64 bytesTotal)
 {
     qCDebug(cr) << "Sent:" << bytesSent << "Total:" << bytesTotal;
@@ -346,9 +313,6 @@ void CReporterHttpClientPrivate::handleUploadProgress(qint64 bytesSent, qint64 b
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterHttpClientPrivate::stateChange
-// ----------------------------------------------------------------------------
 void CReporterHttpClientPrivate::stateChange(CReporterHttpClient::State nextState)
 {
     qCDebug(cr) << "Current state:" << q_ptr->stateToString( m_clientState );
@@ -357,9 +321,6 @@ void CReporterHttpClientPrivate::stateChange(CReporterHttpClient::State nextStat
     emit stateChanged( m_clientState );
 }
 
-// ----------------------------------------------------------------------------
-// CReporterHttpClientPrivate::createPutRequest
-// ----------------------------------------------------------------------------
 bool CReporterHttpClientPrivate::createPutRequest(QNetworkRequest &request,
         QByteArray &dataToSend)
 {
@@ -393,42 +354,27 @@ CReporterHttpClient::CReporterHttpClient(QObject *parent):
     connect( d, SIGNAL(finished()), this, SIGNAL(finished()) );
 }
 
-// ----------------------------------------------------------------------------
-// CReporterHttpClient::~CReporterHttpClient
-// ----------------------------------------------------------------------------
 CReporterHttpClient::~CReporterHttpClient()
 {
     qCDebug(cr) << "Client destroyed.";
 }
 
-// ----------------------------------------------------------------------------
-// CReporterHttpClient::initSession
-// ----------------------------------------------------------------------------
 void CReporterHttpClient::initSession(bool deleteAfterSending)
 {
     Q_D(CReporterHttpClient);
     d->init(deleteAfterSending);
 }
 
-// ----------------------------------------------------------------------------
-// CReporterHttpClient::state
-// ----------------------------------------------------------------------------
 CReporterHttpClient::State CReporterHttpClient::state() const
 {
     return d_ptr->m_clientState;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterHttpClient::stateToString
-// ----------------------------------------------------------------------------
 QString CReporterHttpClient::stateToString(CReporterHttpClient::State state) const
 {
     return  QString(clientstate_string[state]);
 }
 
-// ----------------------------------------------------------------------------
-// CReporterHttpClient::upload
-// ----------------------------------------------------------------------------
 bool CReporterHttpClient::upload(const QString &file)
 {
     Q_D( CReporterHttpClient );
@@ -437,9 +383,6 @@ bool CReporterHttpClient::upload(const QString &file)
     return d->createRequest(file);
 }
 
-// ----------------------------------------------------------------------------
-// CReporterHttpClient::cancel
-// ----------------------------------------------------------------------------
 void CReporterHttpClient::cancel()
 {
     Q_D(CReporterHttpClient);
@@ -447,5 +390,3 @@ void CReporterHttpClient::cancel()
 
     d->cancel();
 }
-
-// End of file

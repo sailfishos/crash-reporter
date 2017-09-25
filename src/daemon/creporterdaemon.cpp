@@ -25,8 +25,6 @@
  *
  */
 
-// User includes.
-
 #include "creporterdaemon.h"
 #include "creporterdaemon_p.h"
 #include "creporterdaemonadaptor.h"
@@ -54,9 +52,6 @@ CReporterDaemon::CReporterDaemon() :
 #endif
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemon::~CReporterDaemon
-// ----------------------------------------------------------------------------
 CReporterDaemon::~CReporterDaemon()
 {
     qCDebug(cr) << "Daemon destroyed.";
@@ -65,9 +60,6 @@ CReporterDaemon::~CReporterDaemon()
     CReporterSavedState::freeSingleton();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemon::setDelayedStartup
-// ----------------------------------------------------------------------------
 void CReporterDaemon::setDelayedStartup(int timeout)
 {
     Q_D(CReporterDaemon);
@@ -78,9 +70,6 @@ void CReporterDaemon::setDelayedStartup(int timeout)
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemon::initiateDaemon
-// ----------------------------------------------------------------------------
 bool CReporterDaemon::initiateDaemon()
 {
     qCDebug(cr) << "Starting daemon...";
@@ -136,9 +125,6 @@ bool CReporterDaemon::initiateDaemon()
     return true;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemon::startCoreMonitoring
-// ----------------------------------------------------------------------------
 void CReporterDaemon::startCoreMonitoring(const bool fromDBus)
 {
     Q_D(CReporterDaemon);
@@ -161,9 +147,6 @@ void CReporterDaemon::startCoreMonitoring(const bool fromDBus)
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemon::stopCoreMonitoring
-// ----------------------------------------------------------------------------
 void CReporterDaemon::stopCoreMonitoring(const bool fromDBus)
 {
     Q_D(CReporterDaemon);
@@ -182,9 +165,6 @@ void CReporterDaemon::stopCoreMonitoring(const bool fromDBus)
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemon::collectAllCoreFiles
-// ----------------------------------------------------------------------------
 QStringList CReporterDaemon::collectAllCoreFiles()
 {
     return CReporterCoreRegistry::instance()->collectAllCoreFiles();
@@ -207,9 +187,6 @@ void CReporterDaemon::timerEvent(QTimerEvent *event)
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemon::startService
-// ----------------------------------------------------------------------------
 bool CReporterDaemon::startService()
 {
     qCDebug(cr) << "Starting D-Bus service...";
@@ -238,9 +215,6 @@ bool CReporterDaemon::startService()
     return true;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemon::stopService
-// ----------------------------------------------------------------------------
 void CReporterDaemon::stopService()
 {
     qCDebug(cr) << "Stopping D-Bus service...";
@@ -249,8 +223,8 @@ void CReporterDaemon::stopService()
     QDBusConnection::sessionBus().unregisterObject(CReporter::DaemonObjectPath);
 }
 
-CReporterDaemonPrivate::CReporterDaemonPrivate(CReporterDaemon *parent):
-    monitor(0), timerId(0), q_ptr(parent)
+CReporterDaemonPrivate::CReporterDaemonPrivate(CReporterDaemon *parent)
+    : monitor(0), timerId(0), q_ptr(parent)
 {
     Q_Q(CReporterDaemon);
 

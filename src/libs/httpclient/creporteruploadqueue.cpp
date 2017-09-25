@@ -22,13 +22,10 @@
  *
  */
 
-// System includes.
 
 #include <QObject>
 #include <QQueue>
 #include <QDebug>
-
-// User includes.
 
 #include "creporteruploadqueue.h"
 #include "creporteruploaditem.h"
@@ -36,11 +33,6 @@
 
 using CReporter::LoggingCategory::cr;
 
-/*!
-   * \class CReporterUploadQueuePrivate
-   * \brief Private data class for CReporterUploadQueue.
-   *
-   */
 class CReporterUploadQueuePrivate
 {
 public:
@@ -49,13 +41,6 @@ public:
     int nbrOfItems;
 };
 
-// *** Class CReporterUploadQueue ****
-
-// ======== MEMBER FUNCTIONS ========
-
-// ----------------------------------------------------------------------------
-// CReporterUploadQueue::CReporterUploadQueue
-// ----------------------------------------------------------------------------
 CReporterUploadQueue::CReporterUploadQueue(QObject *parent) :
     QObject(parent),
     d_ptr(new CReporterUploadQueuePrivate())
@@ -66,9 +51,6 @@ CReporterUploadQueue::CReporterUploadQueue(QObject *parent) :
     d_ptr->nbrOfItems = 0;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadQueue::~CReporterUploadQueue
-// ----------------------------------------------------------------------------
 CReporterUploadQueue::~CReporterUploadQueue()
 {
     qCDebug(cr) << "Upload queue destroyed.";
@@ -79,9 +61,6 @@ CReporterUploadQueue::~CReporterUploadQueue()
     d_ptr = 0;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadQueue::enqueue
-// ----------------------------------------------------------------------------
 void CReporterUploadQueue::enqueue(CReporterUploadItem *item)
 {
     Q_ASSERT(item != 0);
@@ -105,9 +84,6 @@ void CReporterUploadQueue::enqueue(CReporterUploadItem *item)
     d_ptr->nbrOfItems++;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadQueue::itemFinished
-// ----------------------------------------------------------------------------
 void CReporterUploadQueue::itemFinished()
 {
     qCDebug(cr) << "Item finished.";
@@ -125,17 +101,11 @@ void CReporterUploadQueue::itemFinished()
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadQueue::totalNumberOfItems()
-// ----------------------------------------------------------------------------
 int CReporterUploadQueue::totalNumberOfItems() const
 {
     return d_ptr->nbrOfItems;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadQueue::clear
-// ----------------------------------------------------------------------------
 void CReporterUploadQueue::clear()
 {
     if (d_ptr->uploadQueue.size() != 0) {
@@ -147,9 +117,6 @@ void CReporterUploadQueue::clear()
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadQueue::emitNextItem
-// ----------------------------------------------------------------------------
 void CReporterUploadQueue::emitNextItem()
 {
     qCDebug(cr) << "Emit nextItem().";
@@ -157,5 +124,3 @@ void CReporterUploadQueue::emitNextItem()
 
     emit nextItem(item);
 }
-
-// End of file.

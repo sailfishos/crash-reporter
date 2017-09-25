@@ -22,47 +22,27 @@
  *
  */
 
-// System includes.
-
 #include <QSettings>
 #include <QFile>
 
-// User includes.
 
 #include "creportersettingsbase_p.h"
 #include "creportersettingsbase.h"
 #include "creportersettingsinit_p.h"
 #include "creporternamespace.h"
 
-// ******** Class CReporterSettingsBasePrivate ********
-
-// ======== MEMBER FUNCTIONS ========
-
-// ----------------------------------------------------------------------------
-// CReporterSettingsBasePrivate::CReporterSettingsBasePrivate
-// ----------------------------------------------------------------------------
 CReporterSettingsBasePrivate::CReporterSettingsBasePrivate() :
     m_settings(0)
 {
 }
 
-// ----------------------------------------------------------------------------
-// CReporterSettingsBasePrivate::~CReporterSettingsBasePrivate
-// ----------------------------------------------------------------------------
 CReporterSettingsBasePrivate::~CReporterSettingsBasePrivate()
 {
 }
 
-// ======== Class CReporterSettingsBase ========
-
-// ======== MEMBER FUNCTIONS ========
-
-// ----------------------------------------------------------------------------
-// CReporterSettingsBase::CReporterSettingsBase
-// ----------------------------------------------------------------------------
 CReporterSettingsBase::CReporterSettingsBase(const QString &organization,
-        const QString &application, QObject *parent) :
-    d_ptr(new CReporterSettingsBasePrivate())
+                                             const QString &application, QObject *parent)
+    : d_ptr(new CReporterSettingsBasePrivate())
 {
     Q_UNUSED(parent);
 
@@ -72,18 +52,12 @@ CReporterSettingsBase::CReporterSettingsBase(const QString &organization,
 
 }
 
-// ----------------------------------------------------------------------------
-// CReporterSettingsBase::~CReporterSettingsBase
-// ----------------------------------------------------------------------------
 CReporterSettingsBase::~CReporterSettingsBase()
 {
     delete d_ptr;
     d_ptr = 0;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterSettingsBase::writeSettings
-// ----------------------------------------------------------------------------
 void CReporterSettingsBase::writeSettings()
 {
     Q_D(CReporterSettingsBase);
@@ -91,9 +65,6 @@ void CReporterSettingsBase::writeSettings()
     d->m_settings->sync();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterSettingsBase::settingsFile
-// ----------------------------------------------------------------------------
 QString CReporterSettingsBase::settingsFile() const
 {
     Q_D(const CReporterSettingsBase);
@@ -104,9 +75,6 @@ QString CReporterSettingsBase::settingsFile() const
     return d->m_settings->fileName();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterSettingsBase::isValid
-// ----------------------------------------------------------------------------
 bool CReporterSettingsBase::isValid() const
 {
     Q_D(const CReporterSettingsBase);
@@ -120,9 +88,6 @@ bool CReporterSettingsBase::isValid() const
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterSettingsBase::setValue
-// ----------------------------------------------------------------------------
 bool CReporterSettingsBase::setValue(const QString &key, const QVariant &value)
 {
     Q_D(CReporterSettingsBase);
@@ -140,13 +105,8 @@ bool CReporterSettingsBase::setValue(const QString &key, const QVariant &value)
     return false;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterSettingsBase::value
-// ----------------------------------------------------------------------------
 QVariant CReporterSettingsBase::value(const QString &key, const QVariant &defaultValue) const
 {
     // Find and return value.
     return d_ptr->m_settings->value(key, defaultValue);
 }
-
-// End of file.

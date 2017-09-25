@@ -67,10 +67,6 @@ public:
       */
     static void freeSingleton();
 
-    /*!
-      * @brief Class destructor.
-      *
-      */
     ~CReporterPrivacySettingsModel();
 
     /*!
@@ -340,5 +336,3 @@ private:
 };
 
 #endif // CREPORTERPRIVACYSETTINGSMODEL_H
-
-// End of file.

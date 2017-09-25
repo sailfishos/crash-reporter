@@ -25,15 +25,9 @@
 #ifndef CREPORTERSETTINGSBASE_P_H
 #define CREPORTERSETTINGSBASE_P_H
 
-// System includes.
-
 #include <QObject>
 
-// User includes.
-
 #include "creportersettingsbase.h"
-
-// Forward declarations.
 
 class QSettings;
 
@@ -48,16 +42,7 @@ class CReporterSettingsBasePrivate : public QObject
     Q_OBJECT
 
 public:
-    /*!
-     * @brief Class constructor.
-     *
-     */
     CReporterSettingsBasePrivate();
-
-    /*!
-     * @brief Class destructor.
-     *
-     */
     virtual ~CReporterSettingsBasePrivate();
 
 public:
@@ -66,10 +51,8 @@ public:
 
 private:
     Q_DECLARE_PUBLIC(CReporterSettingsBase)
-    //! @arg Pointer to public class.
+
     CReporterSettingsBase *q_ptr;
 };
 
 #endif // CREPORTERSETTINGSBASE_P_H
-
-// End of file.

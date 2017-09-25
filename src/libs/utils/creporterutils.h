@@ -25,12 +25,8 @@
 #ifndef CREPORTERUTILS_H
 #define CREPORTERUTILS_H
 
-// System includes
-
 #include <QFileInfo>
 #include <QLoggingCategory>
-
-// User includes.
 
 #include "creporterexport.h"
 
@@ -39,8 +35,8 @@ class QProcess;
 namespace CReporter {
 namespace LoggingCategory {
 Q_DECLARE_LOGGING_CATEGORY(cr)
-} // namespace LoggingCategory
-} // namespace CReporter
+}
+}
 
 /*! @class CReporterUtils
  *  @brief This class implements utility functions.
@@ -48,8 +44,8 @@ Q_DECLARE_LOGGING_CATEGORY(cr)
 class CREPORTER_EXPORT CReporterUtils: public QObject
 {
     Q_OBJECT
-public:
 
+public:
     /*!
      * Checks if the file at given path can be accepted for upload.
      *

@@ -72,8 +72,10 @@ void CrashReporterAdapterPrivate::updateCoreDirectoryModels()
     pendingUploadsModel.setData(coreFiles);
 }
 
-CrashReporterAdapter::CrashReporterAdapter(QObject *parent):
-    QObject(parent), d_ptr(new CrashReporterAdapterPrivate(this)) {}
+CrashReporterAdapter::CrashReporterAdapter(QObject *parent)
+    : QObject(parent), d_ptr(new CrashReporterAdapterPrivate(this))
+{
+}
 
 int CrashReporterAdapter::reportsToUpload() const
 {

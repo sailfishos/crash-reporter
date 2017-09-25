@@ -25,12 +25,8 @@
 #ifndef CREPORTERCOREREGISTRY_H
 #define CREPORTERCOREREGISTRY_H
 
-// System includes
-
 #include <QObject>
 #include <QStringList>
-
-// Forward declarations
 
 class CReporterCoreRegistryPrivate;
 
@@ -47,10 +43,6 @@ class CReporterCoreRegistry : public QObject
 public:
     static CReporterCoreRegistry *instance();
 
-    /*!
-     * @brief Class destructor.
-     *
-     */
     ~CReporterCoreRegistry();
 
     /*!
@@ -127,16 +119,14 @@ private:
       */
     void createCoreLocationRegistry();
 
-private: // data
-
+private:
     Q_DECLARE_PRIVATE(CReporterCoreRegistry)
-    //! @arg Pointer to private data class.
+
     CReporterCoreRegistryPrivate *d_ptr;
 
 #ifdef CREPORTER_UNIT_TEST
     friend class Ut_CReporterCoreRegistry;
 #endif
-
 };
 
 #endif /* CREPORTERCOREREGISTRY_H */

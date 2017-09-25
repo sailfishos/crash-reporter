@@ -39,7 +39,7 @@ private:
     Q_DECLARE_PRIVATE(PowerExcessHandler)
     QScopedPointer<PowerExcessHandlerPrivate> d_ptr;
 
-    Q_PRIVATE_SLOT(d_func(), void handleUdevNotification());
+    Q_PRIVATE_SLOT(d_func(), void handleUdevNotification())
 };
 
 #endif // POWEREXCESSWATCH_H

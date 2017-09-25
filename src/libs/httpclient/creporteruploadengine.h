@@ -25,15 +25,9 @@
 #ifndef CREPORTERUPLOADENGINE_H
 #define CREPORTERUPLOADENGINE_H
 
-// System includes.
-
 #include <QObject>
 
-// System includes.
-
 #include "creporterexport.h"
-
-// Forward declarations.
 
 class CReporterUploadEnginePrivate;
 class CReporterUploadQueue;
@@ -74,10 +68,6 @@ public:
       */
     CReporterUploadEngine(CReporterUploadQueue *queue, QObject *parent = 0);
 
-    /*!
-      * @brief Class destructor.
-      *
-      */
     ~CReporterUploadEngine();
 
     /*!
@@ -106,13 +96,11 @@ public Q_SLOTS:
 
 private:
     Q_DECLARE_PRIVATE(CReporterUploadEngine)
-    //! @arg Pointer to private class.
+
     CReporterUploadEnginePrivate *d_ptr;
 #ifdef CREPORTER_UNIT_TEST
     friend class Ut_CReporterUploadEngine;
-#endif // CREPORTER_UNIT_TEST
+#endif
 };
 
 #endif // CREPORTERUPLOADENGINE_H
-
-// End of file.

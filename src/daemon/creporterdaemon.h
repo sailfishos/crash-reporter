@@ -25,12 +25,8 @@
 #ifndef CREPORTERDAEMON_H
 #define CREPORTERDAEMON_H
 
-// System includes.
-
 #include <QObject>
 #include <QStringList>
-
-// Forward declarations.
 
 class CReporterDaemonPrivate;
 
@@ -44,17 +40,7 @@ class CReporterDaemon : public QObject
     Q_OBJECT
 
 public:
-    /*!
-     * @brief Class constructor.
-     *
-     * @param path Configuration file path.
-     */
     CReporterDaemon();
-
-    /*!
-     * @brief Class destructor.
-     *
-     */
     ~CReporterDaemon();
 
     /*!
@@ -120,19 +106,16 @@ private:
       */
     void stopService();
 
-private: // data
-
-    Q_DECLARE_PRIVATE( CReporterDaemon )
+private:
+    Q_DECLARE_PRIVATE(CReporterDaemon)
     QScopedPointer<CReporterDaemonPrivate> d_ptr;
 
-    Q_PRIVATE_SLOT(d_func(), void onNotificationsSettingChanged());
+    Q_PRIVATE_SLOT(d_func(), void onNotificationsSettingChanged())
 
 #ifdef CREPORTER_UNIT_TEST
     friend class Ut_CReporterDaemon;
     friend class Ut_CReporterDaemonProxy;
-#endif // CREPORTER_UNIT_TEST
+#endif
 };
 
 #endif // CREPORTERDAEMON_H
-
-// End of file

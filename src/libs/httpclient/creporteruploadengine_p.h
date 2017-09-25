@@ -25,21 +25,15 @@
 #ifndef CREPORTERUPLOADENGINE_P_H
 #define CREPORTERUPLOADENGINE_P_H
 
-// System includes.
-
 #include <QObject>
 
-// User includes.
-
 #include "creporteruploadengine.h"
-
-// Forward declarations.
 
 class CReporterUploadItem;
 class CReporterUploadQueue;
 #ifdef CREPORTER_LIBBEARER_ENABLED
 class CReporterNwSessionMgr;
-#endif // CREPORTER_LIBBEARER_ENABLED
+#endif
 
 /*!
   * @class CReporterUploadEnginePrivate
@@ -69,16 +63,7 @@ public:
         Aborting,
     } State;
 
-    /*!
-     * @brief Class constructor.
-     *
-     */
     CReporterUploadEnginePrivate();
-
-    /*!
-     * @brief Class destructor.
-     *
-     */
     ~CReporterUploadEnginePrivate();
 
     /*!
@@ -180,13 +165,10 @@ public:
     State state;
 
     Q_DECLARE_PUBLIC(CReporterUploadEngine)
-    //! @arg Pointer to public class.
     CReporterUploadEngine *q_ptr;
 #ifdef CREPORTER_UNIT_TEST
     friend class Ut_CReporterUploadEngine;
-#endif // CREPORTER_UNIT_TEST
+#endif
 };
 
 #endif // CREPORTERUPLOADENGINE_P_H
-
-// End of file.

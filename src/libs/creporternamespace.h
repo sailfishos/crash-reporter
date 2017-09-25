@@ -144,4 +144,3 @@ const QString AutoUploaderNotificationEventType = "x-nemo.crash-reporter.autoupl
 
 #endif // CREPORTERNAMESPACE_H
 
-// End of file.

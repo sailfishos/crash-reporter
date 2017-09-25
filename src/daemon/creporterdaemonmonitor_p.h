@@ -25,12 +25,8 @@
 #ifndef CREPORTERDAEMONMONITOR_P_H
 #define CREPORTERDAEMONMONITOR_P_H
 
-// System includes.
-
 #include <QDateTime>
 #include <QFileSystemWatcher>
-
-// Forward declarations.
 
 class CReporterCoreRegistry;
 class CReporterDaemonMonitor;
@@ -51,10 +47,6 @@ public:
       */
     CReporterHandledRichCore(const QString &filePath);
 
-    /*!
-      * @brief Class destructor.
-      *
-      */
     ~CReporterHandledRichCore();
 
     /*!
@@ -86,16 +78,7 @@ class CReporterDaemonMonitorPrivate : public QObject
     Q_OBJECT
 
 public:
-    /*!
-     * @brief Class constructor.
-     *
-     */
     CReporterDaemonMonitorPrivate();
-
-    /*!
-     * @brief Class destructor.
-     *
-     */
     ~CReporterDaemonMonitorPrivate();
 
 public Q_SLOTS:
@@ -176,5 +159,3 @@ private slots:
 };
 
 #endif // CREPORTERDAEMONMONITOR_P_H
-
-// End of file.

@@ -62,18 +62,18 @@ DBUS_INTERFACES = \
 SOURCES += coredir/creportercoredir.cpp \
            coredir/creportercoreregistry.cpp \
            httpclient/creporterhttpclient.cpp \
-            httpclient/creporteruploaditem.cpp \
-            httpclient/creporteruploadqueue.cpp \
-            httpclient/creporteruploadengine.cpp \
-            utils/creporterutils.cpp \
-            logger/creporterlogger.cpp \
-            serviceif/creporterdaemonproxy.cpp \
-            settings/creporterprivacysettingsmodel.cpp \
+           httpclient/creporteruploaditem.cpp \
+           httpclient/creporteruploadqueue.cpp \
+           httpclient/creporteruploadengine.cpp \
+           utils/creporterutils.cpp \
+           logger/creporterlogger.cpp \
+           serviceif/creporterdaemonproxy.cpp \
+           settings/creporterprivacysettingsmodel.cpp \
            settings/creportersavedstate.cpp \
-            settings/creportersettingsbase.cpp \
-            settings/creporterapplicationsettings.cpp \
-            settings/creportersettingsinit.cpp \
-            notification/creporternotification.cpp \
+           settings/creportersettingsbase.cpp \
+           settings/creporterapplicationsettings.cpp \
+           settings/creportersettingsinit.cpp \
+           notification/creporternotification.cpp \
 
 # Public headers
 PUBLIC_HEADERS += creporternamespace.h \

@@ -25,13 +25,10 @@
  *
  */
 
-// System includes.
-
 #include <QDebug>
 #include <QNetworkConfiguration>
 #include <QNetworkConfigurationManager>
 
-// User includes.
 
 #include "creporternwsessionmgr.h"
 #include "creporterutils.h"
@@ -42,11 +39,6 @@
 
 using CReporter::LoggingCategory::cr;
 
-/*!
-  * \class CReporterNwSessionMgrPrivate
-  *
-  * \brief Private CReporterNwSessionMgr class.
-  */
 class CReporterNwSessionMgrPrivate
 {
 public:
@@ -74,24 +66,14 @@ bool CReporterNwSessionMgrPrivate::connectionIsActive()
     return ((config.state() & QNetworkConfiguration::Active) == QNetworkConfiguration::Active);
 }
 
-// *** Class CReporterNwSessionMgr ****
-
-// ======== MEMBER FUNCTIONS ========
-
-// ----------------------------------------------------------------------------
-// CReporterNwSessionMgr::CReporterNwSessionMgr
-// ----------------------------------------------------------------------------
-CReporterNwSessionMgr::CReporterNwSessionMgr(QObject *parent) :
-    QObject(parent),
-    d_ptr(new CReporterNwSessionMgrPrivate())
+CReporterNwSessionMgr::CReporterNwSessionMgr(QObject *parent)
+    : QObject(parent),
+      d_ptr(new CReporterNwSessionMgrPrivate())
 {
     Q_D(CReporterNwSessionMgr);
     d->networkSession = 0;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterNwSessionMgr::~CReporterNwSessionMgr
-// ----------------------------------------------------------------------------
 CReporterNwSessionMgr::~CReporterNwSessionMgr()
 {
     Q_D(CReporterNwSessionMgr);
@@ -101,9 +83,6 @@ CReporterNwSessionMgr::~CReporterNwSessionMgr()
     d_ptr = 0;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterNwSessionMgr::opened
-// ----------------------------------------------------------------------------
 bool CReporterNwSessionMgr::opened() const
 {
     Q_D(const CReporterNwSessionMgr);
@@ -146,9 +125,6 @@ bool CReporterNwSessionMgr::canUseNetworkConnection()
            !CReporterNwSessionMgrPrivate::connectionIsActive();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterNwSessionMgr::open
-// ----------------------------------------------------------------------------
 bool CReporterNwSessionMgr::open()
 {
     Q_D(CReporterNwSessionMgr);
@@ -190,9 +166,6 @@ bool CReporterNwSessionMgr::open()
     return false;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterNwSessionMgr::close
-// ----------------------------------------------------------------------------
 void CReporterNwSessionMgr::close()
 {
     Q_D(CReporterNwSessionMgr);
@@ -203,9 +176,6 @@ void CReporterNwSessionMgr::close()
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterNwSessionMgr::stop
-// ----------------------------------------------------------------------------
 void CReporterNwSessionMgr::stop()
 {
     Q_D(CReporterNwSessionMgr);
@@ -216,9 +186,6 @@ void CReporterNwSessionMgr::stop()
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterNwSessionMgr::networkError
-// ----------------------------------------------------------------------------
 void CReporterNwSessionMgr::networkError(QNetworkSession::SessionError error)
 {
     Q_D(CReporterNwSessionMgr);
@@ -234,9 +201,6 @@ void CReporterNwSessionMgr::networkError(QNetworkSession::SessionError error)
     emit networkError(errorString);
 }
 
-// ----------------------------------------------------------------------------
-// CReporterNwSessionMgr::networkStateChanged
-// ----------------------------------------------------------------------------
 void CReporterNwSessionMgr::networkStateChanged(QNetworkSession::State state)
 {
     Q_D(CReporterNwSessionMgr);
@@ -273,5 +237,3 @@ void CReporterNwSessionMgr::networkStateChanged(QNetworkSession::State state)
         break;
     };
 }
-
-// End of file.

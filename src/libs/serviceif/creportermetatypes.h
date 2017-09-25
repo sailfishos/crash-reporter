@@ -31,5 +31,3 @@
 Q_DECLARE_METATYPE(QVariantList)
 
 #endif // CREPORTERMETATYPES_H
-
-// End of file.

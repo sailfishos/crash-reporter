@@ -39,7 +39,8 @@ static const time_t AFTER_BOOT_DELAY = 5 * 60; // seconds
 DBusConnection *system_bus;
 pid_t child_pid = 0;
 
-static void invoke_endurance_collect() {
+static void invoke_endurance_collect()
+{
     if (child_pid != 0) {
         syslog(LOG_WARNING, "Previous snapshot collection is still running, "
                 "not spawning a new one.");
@@ -62,7 +63,8 @@ static void invoke_endurance_collect() {
     }
 }
 
-static void set_timer(int fd, time_t seconds) {
+static void set_timer(int fd, time_t seconds)
+{
     struct itimerspec its;
     its.it_value.tv_sec = seconds;
     its.it_value.tv_nsec = 0;
@@ -72,8 +74,9 @@ static void set_timer(int fd, time_t seconds) {
     timerfd_settime(fd, 0, &its, NULL);
 }
 
-static int mce_method(const char *method) {
-    if(!system_bus) {
+static int mce_method(const char *method)
+{
+    if (!system_bus) {
         return FALSE;
     }
 
@@ -86,7 +89,7 @@ static int mce_method(const char *method) {
     dbus_message_set_no_reply(req, TRUE);
 
     int result = TRUE;
-    if(!dbus_connection_send(system_bus, req, 0)) {
+    if (!dbus_connection_send(system_bus, req, 0)) {
         syslog(LOG_ERR, "Failed to send %s.%s.", MCE_REQUEST_IF, method);
         result = FALSE;
     }
@@ -96,11 +99,12 @@ static int mce_method(const char *method) {
     return result;
 }
 
-static int dbus_connect() {
+static int dbus_connect()
+{
     DBusError err = DBUS_ERROR_INIT;
 
     system_bus = dbus_bus_get(DBUS_BUS_SYSTEM, &err);
-    if(!system_bus) {
+    if (!system_bus) {
         syslog(LOG_CRIT, "Couldn't connect to DBus: %s: %s",
                 err.name, err.message);
     }
@@ -109,19 +113,22 @@ static int dbus_connect() {
     return system_bus != NULL;
 }
 
-static void dbus_disconnect() {
-    if(system_bus) {
+static void dbus_disconnect()
+{
+    if (system_bus) {
         dbus_connection_unref(system_bus);
         system_bus = NULL;
     }
 }
 
-static void send_keepalive() {
+static void send_keepalive()
+{
     syslog(LOG_NOTICE, "Sending MCE CPU keepalive.");
     mce_method(MCE_CPU_KEEPALIVE_START_REQ);
 }
 
-static void discard_input(int fd) {
+static void discard_input(int fd)
+{
     // Reading from SIGCHLD signal fd returns EINVAL with smaller buffer
     char buf[sizeof (struct signalfd_siginfo)];
     ssize_t bytes_read;
@@ -167,7 +174,8 @@ static void after_boot_delay(iphb_t iphb)
     }
 }
 
-int main() {
+int main()
+{
     int result = EXIT_SUCCESS;
 
     openlog("endurance-collect-daemon", LOG_PID, LOG_USER);

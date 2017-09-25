@@ -25,15 +25,9 @@
 #ifndef CREPORTERUPLOADQUEUE_H
 #define CREPORTERUPLOADQUEUE_H
 
-// System includes.
-
 #include <QObject>
 
-// User includes.
-
 #include "creporterexport.h"
-
-// Forward declarations.
 
 class CReporterUploadQueuePrivate;
 class CReporterUploadItem;
@@ -56,10 +50,6 @@ public:
      */
     CReporterUploadQueue(QObject *parent = 0);
 
-    /*!
-     * @brief Class destructor.
-     *
-     */
     ~CReporterUploadQueue();
 
     void enqueue(CReporterUploadItem *item);
@@ -118,13 +108,11 @@ protected:
 
 private:
     Q_DECLARE_PRIVATE(CReporterUploadQueue)
-    //! @arg Pointer to private class.
+
     CReporterUploadQueuePrivate *d_ptr;
 #ifdef CREPORTER_UNIT_TEST
     friend class Ut_CReporterUploadQueue;
-#endif // CREPORTER_UNIT_TEST
+#endif
 };
 
 #endif // CREPORTERUPLOADQUEUE_H
-
-// End of file.

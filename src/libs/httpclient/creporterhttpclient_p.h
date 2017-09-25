@@ -25,18 +25,12 @@
 #ifndef CREPORTERHTTPCLIENT_P_H
 #define CREPORTERHTTPCLIENT_P_H
 
-// System includes.
-
 #include  <QList>
 #include <QNetworkReply>
 #include <QFileInfo>
 #include <QTimer>
 
-// User includes.
-
 #include "creporterhttpclient.h"
-
-// Forward declarations.
 
 class CReporterCoreRegistry;
 class QNetworkAccessManager;
@@ -56,11 +50,6 @@ class CReporterHttpClientPrivate : public QObject
 
 public:
     CReporterHttpClientPrivate(CReporterHttpClient *parent);
-
-    /*!
-     * Class destructor.
-     *
-     */
     ~CReporterHttpClientPrivate();
 
     /*!
@@ -191,10 +180,7 @@ public:
     Q_DECLARE_PUBLIC(CReporterHttpClient)
 
 protected:
-    //! @arg Public class reference.
     CReporterHttpClient *q_ptr;
 };
 
 #endif // CREPORTERHTTPCLIENT_P_H
-
-// End of file.

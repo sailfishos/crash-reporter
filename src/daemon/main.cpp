@@ -25,15 +25,11 @@
  *
  */
 
-// System includes
-
 #include <csignal>
 
 #include <QCoreApplication>
 #include <QDebug>
 #include <QTranslator>
-
-// User includes.
 
 #include "creporterdaemon.h"
 #include "creporterutils.h"
@@ -42,18 +38,16 @@
 
 #ifndef QT_NO_DEBUG_OUTPUT
 #include "creporterlogger.h"
-#endif // QT_NO_DEBUG_OUTPUT
+#endif
 
 using CReporter::LoggingCategory::cr;
-
-// Local macros and definitions.
 
 #define CREPORTER_PID_FILE      "/tmp/crash-reporter-daemon.pid"
 #define CREPORTER_STARTUP_DELAY 30000 // 30 sec timer to delay start up
 
 #ifndef QT_NO_DEBUG_OUTPUT
 #define LOG_FILE    "/tmp/crash-reporter-daemon.log"
-#endif // QT_NO_DEBUG_OUTPUT
+#endif
 
 /*!
  * @brief Gets crash-reporter-daemon pid and saves it to file.
@@ -107,7 +101,7 @@ Q_DECL_EXPORT int main(int argc, char **argv)
 
 #ifndef QT_NO_DEBUG_OUTPUT
     Logger logger(CReporterApplicationSettings::instance()->loggerType());
-#endif // QT_NO_DEBUG_OUTPUT
+#endif
 
     QCoreApplication app(argc, argv);
 
@@ -139,5 +133,3 @@ Q_DECL_EXPORT int main(int argc, char **argv)
     CReporterApplicationSettings::instance()->freeSingleton();
     return retVal;
 }
-
-// End of file.

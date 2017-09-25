@@ -28,17 +28,11 @@
 #ifndef CREPORTERNOTIFICATION_H
 #define CREPORTERNOTIFICATION_H
 
-// System includes.
-
 #include <QObject>
 #include <QString>
 #include <QVariant>
 
-// User includes.
-
 #include "creporterexport.h"
-
-// Forward declarations.
 
 class CReporterNotificationPrivate;
 
@@ -86,10 +80,6 @@ public:
     CReporterNotification(const QString &eventType, int id,
                           QObject *parent = 0);
 
-    /*!
-      * @brief Class destructor.
-      *
-      */
     virtual ~CReporterNotification();
 
     /*!
@@ -166,15 +156,13 @@ Q_SIGNALS:
     void timeouted();
 
 private:
-    Q_DECLARE_PRIVATE(CReporterNotification);
-    //! @arg Pointer to private class.
+    Q_DECLARE_PRIVATE(CReporterNotification)
+
     CReporterNotificationPrivate *d_ptr;
 
 #ifndef CREPORTER_UNIT_TEST
-    Q_PRIVATE_SLOT(d_func(), void removeAfterTimeout());
+    Q_PRIVATE_SLOT(d_func(), void removeAfterTimeout())
 #endif
 };
 
 #endif // CREPORTERNOTIFICATION_H
-
-// End of file.

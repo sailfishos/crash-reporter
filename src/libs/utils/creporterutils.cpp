@@ -25,8 +25,6 @@
  *
  */
 
-// System includes.
-
 #include <sys/types.h> // for stat()
 #include <sys/stat.h>
 
@@ -40,8 +38,6 @@
 #include <QFile>
 #include <QProcess>
 
-// User includes.
-
 #include "creporterutils.h"
 
 #include "creporternamespace.h"
@@ -51,12 +47,10 @@
 namespace CReporter {
 namespace LoggingCategory {
 Q_LOGGING_CATEGORY(cr, "creporter", QtInfoMsg)
-} // namespace LoggingCategory
-} // namespace CReporter
+}
+}
 
 using CReporter::LoggingCategory::cr;
-
-// Local constants.
 
 const QString richCoreTmpNoteFile = "/tmp/rich-core-note.txt";
 const QString coreSuffixRcore = "rcore";
@@ -64,26 +58,17 @@ const QString coreSuffixRcoreLzo = "rcore.lzo";
 
 CReporterUtils::CReporterUtils() {}
 
-// ----------------------------------------------------------------------------
-// CReporterUtils::validateCore
-// ----------------------------------------------------------------------------
 bool CReporterUtils::validateCore(const QString &path)
 {
     return (path.endsWith(coreSuffixRcoreLzo, Qt::CaseInsensitive) ||
             path.endsWith(coreSuffixRcore, Qt::CaseInsensitive));
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUtils::qstringToChar
-// ----------------------------------------------------------------------------
 char *CReporterUtils::qstringToChar(const QString &str)
 {
     return str.toLatin1().data();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUtils::isMounted
-// ----------------------------------------------------------------------------
 bool CReporterUtils::isMounted(const QString &path)
 {
 #if defined(CREPORTER_SDK_HOST) || defined(CREPORTER_UNIT_TEST)
@@ -105,9 +90,6 @@ bool CReporterUtils::isMounted(const QString &path)
 #endif // defined(CREPORTER_SDK_HOST) || defined(CREPORTER_UNIT_TEST)
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUtils::removeFile
-// ----------------------------------------------------------------------------
 bool CReporterUtils::removeFile(const QString &path)
 {
     QFileInfo fi(path);
@@ -115,9 +97,6 @@ bool CReporterUtils::removeFile(const QString &path)
     return QFile::remove(fi.absoluteFilePath());
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUtils::parseCrashInfoFromFilename
-// ----------------------------------------------------------------------------
 QStringList CReporterUtils::parseCrashInfoFromFilename(const QString &filePath)
 {
     qCDebug(cr) << "Parse:" << filePath;
@@ -169,9 +148,6 @@ QStringList CReporterUtils::parseCrashInfoFromFilename(const QString &filePath)
     return result;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUtils::appendToLzo
-// ----------------------------------------------------------------------------
 bool CReporterUtils::appendToLzo(const QString &text, const QString &filePath)
 {
     QFile tmpFile(richCoreTmpNoteFile);

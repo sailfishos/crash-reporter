@@ -30,9 +30,7 @@
 #if defined(CREPORTER_EXPORTS)
 #    define CREPORTER_EXPORT Q_DECL_EXPORT
 #else
-#        define CREPORTER_EXPORT Q_DECL_IMPORT
+#    define CREPORTER_EXPORT Q_DECL_IMPORT
 #endif
 
 #endif // CREPORTEREXPORT_H
-
-// End of file.

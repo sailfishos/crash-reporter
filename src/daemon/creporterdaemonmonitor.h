@@ -25,12 +25,8 @@
 #ifndef CREPORTERDAEMONMONITOR_H
 #define CREPORTERDAEMONMONITOR_H
 
-// System includes.
-
 #include <QObject>
 #include <QVariantList>
-
-// Forward declarations.
 
 class CReporterCoreRegistry;
 class CReporterDaemonMonitorPrivate;
@@ -58,10 +54,6 @@ public:
      */
     CReporterDaemonMonitor(QObject *parent);
 
-    /*!
-     * @brief Class destructor.
-     *
-     */
     ~CReporterDaemonMonitor();
 
     /*!
@@ -86,10 +78,8 @@ signals:
       */
     void richCoreNotify(const QString &path);
 
-private: // data
-
+private:
     Q_DECLARE_PRIVATE(CReporterDaemonMonitor)
-    //! @arg Pointer to private class.
     CReporterDaemonMonitorPrivate *d_ptr;
 
 #ifdef CREPORTER_UNIT_TEST
@@ -98,5 +88,3 @@ private: // data
 };
 
 #endif // CREPORTERDAEMONMONITOR_H
-
-// End of file.

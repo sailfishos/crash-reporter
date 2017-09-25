@@ -22,36 +22,21 @@
  *
  */
 
-// System includes.
-
 #include <QStringList>
 #include <QMetaObject>
 
-// User includes.
-
 #include "creporterdaemonadaptor.h"
 
-// ======== MEMBER FUNCTIONS ========
-
-//-----------------------------------------------------------------------------
-// CReporterDaemonAdaptor::CReporterDaemonAdaptor
-// ----------------------------------------------------------------------------
 CReporterDaemonAdaptor::CReporterDaemonAdaptor(QObject *parent) :
     QDBusAbstractAdaptor(parent)
 {
     setAutoRelaySignals(true);
 }
 
-//-----------------------------------------------------------------------------
-// CReporterDaemonAdaptor::~CReporterDaemonAdaptor
-// ----------------------------------------------------------------------------
 CReporterDaemonAdaptor::~CReporterDaemonAdaptor()
 {
 }
 
-//-----------------------------------------------------------------------------
-// CReporterDaemonAdaptor::startCoreMonitoring
-// ----------------------------------------------------------------------------
 void CReporterDaemonAdaptor::startCoreMonitoring()
 {
     // Handle method call com.nokia.Maemo.CrashReporterDaemon.startCoreMonitoring
@@ -59,9 +44,6 @@ void CReporterDaemonAdaptor::startCoreMonitoring()
                               Q_ARG(bool, true));
 }
 
-//-----------------------------------------------------------------------------
-// CReporterDaemonAdaptor::stopCoreMonitoring
-// ----------------------------------------------------------------------------
 void CReporterDaemonAdaptor::stopCoreMonitoring()
 {
     // Handle method call com.nokia.Maemo.CrashReporterDaemon.stopCoreMonitoring
@@ -69,9 +51,6 @@ void CReporterDaemonAdaptor::stopCoreMonitoring()
                               Q_ARG(bool, true));
 }
 
-//-----------------------------------------------------------------------------
-// CReporterDaemonAdaptor::getAllCoreFiles
-// ----------------------------------------------------------------------------
 QStringList CReporterDaemonAdaptor::getAllCoreFiles()
 {
     QStringList out;
@@ -80,5 +59,3 @@ QStringList CReporterDaemonAdaptor::getAllCoreFiles()
                               Q_RETURN_ARG(QStringList, out));
     return out;
 }
-
-// End of file.

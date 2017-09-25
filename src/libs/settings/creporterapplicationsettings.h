@@ -30,11 +30,7 @@
 
 #include "creportersettingsbase.h"
 
-// Forward declarations.
-
 class CReporterApplicationSettingsPrivate;
-
-// Public namespaces.
 
 /*!
   * @namespace Server
@@ -104,10 +100,6 @@ public:
      */
     static void freeSingleton();
 
-    /*!
-     * @brief Class destructor.
-     *
-     */
     ~CReporterApplicationSettings();
 
     QString serverUrl() const;
@@ -168,5 +160,3 @@ private:
 };
 
 #endif // CREPORTERAPPLICATIONSETTINGS_H
-
-// End of file.

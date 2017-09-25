@@ -22,12 +22,8 @@
  *
  */
 
-// System includes.
-
 #include <QFileInfo>
 #include <QDebug>
-
-// User includes.
 
 #include "creporteruploaditem.h"
 #include "creporterhttpclient.h"
@@ -35,17 +31,8 @@
 
 using CReporter::LoggingCategory::cr;
 
-// Local constants and macros.
-
 const char *status_string[] = {"Waiting", "Sending", "Error", "Finished", "Cancelled", "Unknown"};
 
-// *** Class CReporterUploadItemPrivate ****
-
-/*!
-  * @class CReporterUploadItemPrivate
-  * @brief Private CReporterUploadItem class.
-  *
-  */
 class CReporterUploadItemPrivate
 {
 public:
@@ -57,13 +44,6 @@ public:
     CReporterUploadItem::ItemStatus status;
 };
 
-// *** Class CReporterUploadItem ****
-
-// ======== MEMBER FUNCTIONS ========
-
-// ----------------------------------------------------------------------------
-// CReporterUploadItem::CReporterUploadItem
-// ----------------------------------------------------------------------------
 CReporterUploadItem::CReporterUploadItem(const QString &file) :
     d_ptr(new CReporterUploadItemPrivate())
 {
@@ -80,67 +60,43 @@ CReporterUploadItem::CReporterUploadItem(const QString &file) :
     d->status = Waiting;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadItem::~CReporterUploadItem
-// ----------------------------------------------------------------------------
 CReporterUploadItem::~CReporterUploadItem()
 {
     delete d_ptr;
     d_ptr = 0;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadItem::filesize
-// ----------------------------------------------------------------------------
 qint64 CReporterUploadItem::filesize() const
 {
     return d_ptr->filesize;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadItem::filename
-// ----------------------------------------------------------------------------
 QString CReporterUploadItem::filename() const
 {
     return d_ptr->filename;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadItem::markDone
-// ----------------------------------------------------------------------------
 void CReporterUploadItem::markDone()
 {
     qCDebug(cr) << "Item done.";
     emit done();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadItem::status
-// ----------------------------------------------------------------------------
 CReporterUploadItem::ItemStatus CReporterUploadItem::status() const
 {
     return d_ptr->status;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadItem::statusString
-// ----------------------------------------------------------------------------
 QString CReporterUploadItem::statusString() const
 {
     return QString(status_string[d_ptr->status]);
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadItem::errorString
-// ----------------------------------------------------------------------------
 QString CReporterUploadItem::errorString() const
 {
     return d_ptr->errorString;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadItem::startUpload
-// ----------------------------------------------------------------------------
 bool CReporterUploadItem::startUpload()
 {
     Q_D(CReporterUploadItem);
@@ -162,9 +118,6 @@ bool CReporterUploadItem::startUpload()
     return false;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadItem::cancel
-// ----------------------------------------------------------------------------
 void CReporterUploadItem::cancel()
 {
     Q_D( CReporterUploadItem );
@@ -184,9 +137,6 @@ void CReporterUploadItem::cancel()
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadItem::setStatus
-// ----------------------------------------------------------------------------
 void CReporterUploadItem::setStatus(ItemStatus status)
 {
     Q_D(CReporterUploadItem);
@@ -195,9 +145,6 @@ void CReporterUploadItem::setStatus(ItemStatus status)
     qCDebug(cr) << "New status:" << statusString();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadItem::uploadError
-// ----------------------------------------------------------------------------
 void CReporterUploadItem::uploadError(const QString &file, const QString &errorString)
 {
     Q_D(CReporterUploadItem);
@@ -218,22 +165,14 @@ void CReporterUploadItem::uploadError(const QString &file, const QString &errorS
     emit uploadFinished();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadItem::emitUploadFinished
-// ----------------------------------------------------------------------------
 void CReporterUploadItem::emitUploadFinished()
 {
     setStatus(Finished);
     emit uploadFinished();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadItem::setErrorString
-// ----------------------------------------------------------------------------
 void CReporterUploadItem::setErrorString(const QString &errorString)
 {
     Q_D( CReporterUploadItem );
     d->errorString = errorString;
 }
-
-// End of file.

@@ -38,7 +38,6 @@ class CReporterDaemonPrivate
 public:
     CReporterDaemonPrivate(CReporterDaemon *parent);
 
-    //! @arg Pointer to monitor object.
     CReporterDaemonMonitor *monitor;
     //! @arg Startup delay timer Id.
     int timerId;

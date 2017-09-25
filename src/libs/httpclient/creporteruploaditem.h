@@ -25,15 +25,9 @@
 #ifndef CREPORTERUPLOADITEM_H
 #define CREPORTERUPLOADITEM_H
 
-// System includes.
-
 #include <QObject>
 
-// System includes.
-
 #include "creporterexport.h"
-
-// Forward declarations.
 
 class CReporterUploadItemPrivate;
 
@@ -47,7 +41,6 @@ class CREPORTER_EXPORT CReporterUploadItem : public QObject
     Q_OBJECT
 
 public:
-
     /*!
      * @enum ItemStatus
      * @brief Values for upload item status.
@@ -72,10 +65,6 @@ public:
      */
     CReporterUploadItem(const QString &file);
 
-    /*!
-     * @brief Class destructor.
-     *
-     */
     virtual ~CReporterUploadItem();
 
     /*!
@@ -185,14 +174,12 @@ protected:
     void setErrorString(const QString &errorString);
 
 private:
-    Q_DECLARE_PRIVATE(CReporterUploadItem);
-    //! @arg Pointer to private class.
+    Q_DECLARE_PRIVATE(CReporterUploadItem)
+
     CReporterUploadItemPrivate *d_ptr;
 #ifdef CREPORTER_UNIT_TEST
     friend class Ut_CReporterUploadItem;
-#endif // CREPORTER_UNIT_TEST
+#endif
 };
 
 #endif // CREPORTERUPLOADITEM_H
-
-// End of file.

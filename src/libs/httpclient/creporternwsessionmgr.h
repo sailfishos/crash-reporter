@@ -28,15 +28,11 @@
 #ifndef CREPORTERNWSESSIONMGR_H
 #define CREPORTERNWSESSIONMGR_H
 
-// System includes.
-
 #include <QObject>
 #include <QNetworkSession>
 
-// User includes.
 #include "creporterexport.h"
 
-// Forward declarations.
 
 class CReporterNwSessionMgrPrivate;
 
@@ -52,16 +48,7 @@ class CREPORTER_EXPORT CReporterNwSessionMgr : public QObject
     Q_OBJECT
 
 public:
-    /*!
-     * @brief Class constructor.
-     *
-     */
     CReporterNwSessionMgr(QObject *parent = 0);
-
-    /*!
-     * @brief Class destructor.
-     *
-     */
     ~CReporterNwSessionMgr();
 
     /*!
@@ -139,10 +126,8 @@ protected Q_SLOTS:
 
 private:
     Q_DECLARE_PRIVATE(CReporterNwSessionMgr)
-    //! @arg Pointer to a private class.
+
     CReporterNwSessionMgrPrivate *d_ptr;
 };
 
 #endif // CREPORTERNWSESSIONMGR_H
-
-// End of file.

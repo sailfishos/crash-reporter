@@ -25,16 +25,10 @@
 #ifndef CREPORTERSETTINGSBASE_H
 #define CREPORTERSETTINGSBASE_H
 
-// System includes.
-
 #include <QVariant>
 #include <QObject>
 
-// User includes.
-
 #include "creporterexport.h"
-
-// Forward declarations.
 
 class CReporterSettingsBasePrivate;
 
@@ -58,10 +52,6 @@ public:
     CReporterSettingsBase(const QString &organization, const QString &application = QString(),
                           QObject *parent = 0);
 
-    /*!
-     * @brief Class destructor.
-     *
-     */
     virtual ~CReporterSettingsBase();
 
     /*!
@@ -117,10 +107,8 @@ protected:
 
 private:
     Q_DECLARE_PRIVATE(CReporterSettingsBase)
-    //! Pointer to private data class.
+
     CReporterSettingsBasePrivate *d_ptr;
 };
 
 #endif // CREPORTERSETTINGSBASE_H
-
-// End of file.

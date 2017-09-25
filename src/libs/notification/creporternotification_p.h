@@ -67,10 +67,6 @@ public:
      */
     CReporterNotificationPrivate(const QString &eventType, CReporterNotification *q);
 
-    /*!
-      * @brief Class destructor.
-      *
-      */
     virtual ~CReporterNotificationPrivate();
 
     void sendDBusNotify();
@@ -103,10 +99,8 @@ public:
 
 private:
     Q_DECLARE_PUBLIC(CReporterNotification)
-    //! @arg Pointer to public class.
+
     CReporterNotification *q_ptr;
 };
 
 #endif // CREPORTERNOTIFICATION_P_H
-
-// End of file.

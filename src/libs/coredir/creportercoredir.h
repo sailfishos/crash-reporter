@@ -25,12 +25,8 @@
 #ifndef CREPORTERCOREDIR_H
 #define CREPORTERCOREDIR_H
 
-// System includes
-
 #include <QObject>
 #include <QStringList>
-
-// Forward declarations.
 
 class CReporterCoreDirPrivate;
 
@@ -48,7 +44,6 @@ class CReporterCoreDir : public QObject
     Q_OBJECT
 
 public:
-
     /*!
      * @brief Class constructor.
      *
@@ -57,10 +52,6 @@ public:
      */
     CReporterCoreDir( QString &mpoint, QObject *parent = 0 );
 
-    /*!
-     * @brief Class destructor.
-     *
-     */
     ~CReporterCoreDir();
 
     /*!
@@ -119,16 +110,13 @@ public Q_SLOTS:
       */
     void updateCoreList();
 
-private: // data
-
+private:
     Q_DECLARE_PRIVATE(CReporterCoreDir)
-    //! Pointer to the private class data.
+
     CReporterCoreDirPrivate *d_ptr;
 #ifdef CREPORTER_UNIT_TEST
     friend class Ut_CReporterCoreDir;
-#endif // CREPORTER_UNIT_TEST
+#endif
 };
 
 #endif // CREPORTERCOREDIR_H
-
-// End of file

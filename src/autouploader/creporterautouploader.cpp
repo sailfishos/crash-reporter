@@ -25,12 +25,8 @@
  *
  */
 
-// System includes.
-
 #include <QDebug>
 #include <QDBusConnection>
-
-// User includes.
 
 #include "creporterautouploader.h"
 #include "creporternamespace.h"
@@ -55,7 +51,6 @@ using CReporter::LoggingCategory::cr;
 class CReporterAutoUploaderPrivate
 {
 public:
-
     //! @arg Upload engine.
     CReporterUploadEngine *engine;
     //! @arg Upload queue.
@@ -73,7 +68,8 @@ public:
 
 };
 
-CReporterAutoUploader::CReporterAutoUploader() : d_ptr(new CReporterAutoUploaderPrivate)
+CReporterAutoUploader::CReporterAutoUploader()
+    : d_ptr(new CReporterAutoUploaderPrivate)
 {
     d_ptr->engine = 0;
     d_ptr->activated = false;
@@ -97,9 +93,6 @@ CReporterAutoUploader::CReporterAutoUploader() : d_ptr(new CReporterAutoUploader
     qCDebug(cr) << "Started Auto Uploader service.";
 }
 
-// ----------------------------------------------------------------------------
-// CReporterAutoUploader::~CReporterAutoUploader
-// ----------------------------------------------------------------------------
 CReporterAutoUploader::~CReporterAutoUploader()
 {
     quit();
@@ -155,9 +148,6 @@ bool CReporterAutoUploader::uploadFiles(const QStringList &fileList,
     return true;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterAutoUploader::quit
-// ----------------------------------------------------------------------------
 void CReporterAutoUploader::quit()
 {
     qCDebug(cr) << "Quit auto uploader.";
@@ -175,9 +165,6 @@ void CReporterAutoUploader::quit()
     qApp->quit();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterAutoUploader::engineFinished
-// ----------------------------------------------------------------------------
 void CReporterAutoUploader::engineFinished(int error, int sent, int total)
 {
     QString message;

@@ -34,8 +34,6 @@
 #include <QFileInfo>
 #include <QDBusReply>
 
-// User includes.
-
 #include "creporterdaemonmonitor.h"
 #include "creporterdaemonmonitor_p.h"
 #include "creportercoreregistry.h"
@@ -49,13 +47,6 @@
 
 using CReporter::LoggingCategory::cr;
 
-// ******** Class CReporterHandledRichCore ********
-
-// ======== MEMBER FUNCTIONS ========
-
-// ----------------------------------------------------------------------------
-// CReporterHandledRichCore::CReporterHandledRichCore
-// ----------------------------------------------------------------------------
 CReporterHandledRichCore::CReporterHandledRichCore(const QString &filePath):
     lastCountReset(QDateTime::currentDateTimeUtc())
 {
@@ -72,16 +63,10 @@ CReporterHandledRichCore::CReporterHandledRichCore(const QString &filePath):
     qCDebug(cr) << "Name:" << binaryName << ", Signal:" << signalNumber;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterHandledRichCore::~CReporterHandledRichCore
-// ----------------------------------------------------------------------------
 CReporterHandledRichCore::~CReporterHandledRichCore()
 {
 }
 
-// ----------------------------------------------------------------------------
-// CReporterHandledRichCore::operator==
-// ----------------------------------------------------------------------------
 bool CReporterHandledRichCore::operator==(const CReporterHandledRichCore &other) const
 {
     return (binaryName == other.binaryName) &&
@@ -90,11 +75,6 @@ bool CReporterHandledRichCore::operator==(const CReporterHandledRichCore &other)
 
 // ******** Class CReporterDaemonMonitorPrivate ********
 
-// ======== MEMBER FUNCTIONS ========
-
-// ----------------------------------------------------------------------------
-// CReporterDaemonMonitorPrivate::CReporterDaemonMonitorPrivate
-// ----------------------------------------------------------------------------
 CReporterDaemonMonitorPrivate::CReporterDaemonMonitorPrivate() :
     autoDeleteMaxSimilarCores(0),
     crashNotification(new CReporterNotification(
@@ -110,9 +90,6 @@ CReporterDaemonMonitorPrivate::CReporterDaemonMonitorPrivate() :
             this, &CReporterDaemonMonitorPrivate::onSetAutoUploadChanged);
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemonMonitorPrivate::~CReporterDaemonMonitorPrivate
-// ----------------------------------------------------------------------------
 CReporterDaemonMonitorPrivate::~CReporterDaemonMonitorPrivate()
 {
     CReporterSavedState *state = CReporterSavedState::instance();
@@ -121,9 +98,6 @@ CReporterDaemonMonitorPrivate::~CReporterDaemonMonitorPrivate()
     qDeleteAll(handledRichCores);
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemonMonitorPrivate::addDirectoryWatcher
-// ----------------------------------------------------------------------------
 void CReporterDaemonMonitorPrivate::addDirectoryWatcher()
 {
     qCDebug(cr) << "Adding core directory watcher...";
@@ -148,9 +122,6 @@ void CReporterDaemonMonitorPrivate::addDirectoryWatcher()
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemonMonitorPrivate::removeDirectoryWatcher()
-// ----------------------------------------------------------------------------
 void CReporterDaemonMonitorPrivate::removeDirectoryWatcher()
 {
     qCDebug(cr) << "Removing core directory watcher...";
@@ -159,9 +130,6 @@ void CReporterDaemonMonitorPrivate::removeDirectoryWatcher()
     watcher.removePaths(watcher.directories());
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemonMonitorPrivate::handleDirectoryChanged
-// ----------------------------------------------------------------------------
 void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
 {
     qCDebug(cr) << "Directory:" << path << "has changed.";
@@ -275,9 +243,6 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemonMonitorPrivate::handleParentDirectoryChanged
-// ----------------------------------------------------------------------------
 void CReporterDaemonMonitorPrivate::handleParentDirectoryChanged()
 {
     qCDebug(cr) << "Parent dir has changed. Trying to re-add directory watchers.";
@@ -301,9 +266,6 @@ void CReporterDaemonMonitorPrivate::handleParentDirectoryChanged()
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemonMonitorPrivate::checkForDuplicates
-// ----------------------------------------------------------------------------
 bool CReporterDaemonMonitorPrivate::checkForDuplicates(const QString &path)
 {
     // Ignore reports that don't contain core dumps.
@@ -354,9 +316,6 @@ bool CReporterDaemonMonitorPrivate::checkForDuplicates(const QString &path)
     return false;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemonMonitorPrivate::handleNotificationEvent
-// ----------------------------------------------------------------------------
 void CReporterDaemonMonitorPrivate::handleNotificationEvent()
 {
     // Handle timeouted and activated signals from CReporterNotification
@@ -397,9 +356,6 @@ CReporterDaemonMonitor::CReporterDaemonMonitor(QObject *parent):
     d_ptr->addDirectoryWatcher();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemonMonitor::~CReporterDaemonMonitor
-// ----------------------------------------------------------------------------
 CReporterDaemonMonitor::~CReporterDaemonMonitor()
 {
     d_ptr->removeDirectoryWatcher();
@@ -408,17 +364,11 @@ CReporterDaemonMonitor::~CReporterDaemonMonitor()
     d_ptr = 0;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemonMonitor::autoDeleteMaxSimilarCores
-// ----------------------------------------------------------------------------
 int CReporterDaemonMonitor::autoDeleteMaxSimilarCores()
 {
     return d_ptr->autoDeleteMaxSimilarCores;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemonMonitor::setAutoDeleteMaxSimilarCores
-// ----------------------------------------------------------------------------
 void CReporterDaemonMonitor::setAutoDeleteMaxSimilarCores(int value)
 {
     d_ptr->autoDeleteMaxSimilarCores = value;
