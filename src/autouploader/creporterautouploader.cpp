@@ -154,8 +154,8 @@ bool CReporterAutoUploader::uploadFiles(const QStringList &fileList,
         d_ptr->progressNotification->update(
                 //% "Uploading reports"
                 qtTrId("crash_reporter-notify-uploading_reports"),
-                //% "%1 report(s) to upload"
-                qtTrId("crash_reporter-notify-num_to_upload").arg(fileList.count()));
+                //% "%n report(s) to upload"
+                qtTrId("crash_reporter-notify-num_to_upload", fileList.count()));
     }
 
     return true;
@@ -193,19 +193,27 @@ void CReporterAutoUploader::engineFinished(int error, int sent, int total)
     // Construct message.
     switch (error)
     {
-        case CReporterUploadEngine::NoError:
-            //% "%1 report(s) uploaded successfully."
-            message = qtTrId("qtn_%1_crash_reports_uploaded_successfully_text").arg(total);
-            break;
-        case CReporterUploadEngine::ProtocolError:
-        case CReporterUploadEngine::ConnectionNotAvailable:
-        case CReporterUploadEngine::ConnectionClosed:
-            //% "Failed to upload report(s)."
-            message = qtTrId("qtn_failed_to_send_crash_reports_text");
-            //% "<br>Upload results: %1 files attempted %2 files succeeded."
-            message += qtTrId("qtn_%1_files_attempted_%2_files_succeeded_text").arg(total).arg(sent);
-            break;
-        default:
+    case CReporterUploadEngine::NoError:
+        //% "%n report(s) uploaded successfully."
+        message = qtTrId("qtn_crash_reports_uploaded_successfully_text", total);
+        break;
+    case CReporterUploadEngine::ProtocolError:
+    case CReporterUploadEngine::ConnectionNotAvailable:
+    case CReporterUploadEngine::ConnectionClosed:
+    {
+        //% "Failed to upload report(s)."
+        message = qtTrId("qtn_failed_to_send_crash_reports_text");
+        //% "%n files attempted"
+        QString attemptPart = qtTrId("qtn_crash_reporter-files_attempted", total);
+        //% "%n files succeeded"
+        QString succeedPart = qtTrId("qtn_crash_reporter-files_succeeded", sent);
+        //: %1 replaced with qtn_crash_reporter-files_attempted and %2 with qtn_crash_reporter-files_succeeded
+        //: E.g. "<br>Upload results: 3 files attempted 1 file succeeded."
+        //% "<br>Upload results: %1 %2."
+        message += qtTrId("qtn_crash_reporter-upload_result").arg(attemptPart).arg(succeedPart);
+        break;
+    }
+    default:
         // We should never enter here.
         break;
     }
@@ -244,8 +252,8 @@ void CReporterAutoUploader::engineFinished(int error, int sent, int total)
             d_ptr->failedNotification->update(
                     //% "Failed to send all reports"
                     qtTrId("crash_reporter-notify-send_failed"),
-                    //% "%1 uploads failed"
-                    qtTrId("crash_reporter-notify-num_failed").arg(failures),
+                    //% "%n uploads failed"
+                    qtTrId("crash_reporter-notify-num_failed", failures),
                     failures);
         } else {
             d_ptr->failedNotification->remove();
@@ -256,10 +264,8 @@ void CReporterAutoUploader::engineFinished(int error, int sent, int total)
         if (sent > 0) {
             sent += state->uploadSuccessCount();
 
-            //% "Report uploaded"
-            QString summary = (sent == 1) ? qtTrId("crash_reporter-notify-report_uploaded")
-                                          : //% "Reports uploaded"
-                                            qtTrId("crash_reporter-notify-reports_uploaded");
+            //% "Report(s) uploaded"
+            QString summary = qtTrId("crash_reporter-notify-reports_uploaded", sent);
             d_ptr->successNotification->update(summary, QString(), sent);
         }
 
