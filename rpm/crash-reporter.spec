@@ -76,7 +76,6 @@ make %{_smp_mflags}
 %files
 %defattr(-,root,root,-)
 %doc README COPYING
-%config %{_sysconfdir}/dbus-1/system.d/crash-reporter-dbus.conf
 /lib/systemd/system/*
 /usr/bin/crash*
 /usr/lib/oneshot.d/*
@@ -84,6 +83,7 @@ make %{_smp_mflags}
 %attr(0755,root,root) /usr/libexec/crash-reporter-journalspy
 %attr(0755,root,root) /usr/libexec/endurance-collect*
 %attr(4755,root,root) /usr/libexec/rich-core-helper
+%attr(4750,root,privileged) /usr/libexec/crashreporter-servicehelper
 %dir /usr/share/crash-reporter
 /usr/share/crash-reporter/*
 /usr/share/dbus-1/services/*.service

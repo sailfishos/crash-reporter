@@ -38,6 +38,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QFile>
+#include <QProcess>
 
 // User includes.
 
@@ -284,6 +285,21 @@ QProcess *CReporterUtils::invokeLogCollection(const QString &label)
             richCoreHelper.data(), &QProcess::deleteLater);
 
     return richCoreHelper.take();
+}
+
+static void runServiceHelper(const QString &service, bool run)
+{
+    QProcess::execute("/usr/libexec/crashreporter-servicehelper", QStringList() << service << (run ? "start" : "stop"));
+}
+
+void CReporterUtils::setEnduranceServiceState(bool run)
+{
+    runServiceHelper(QStringLiteral("endurance"), run);
+}
+
+void CReporterUtils::setJournalSpyServiceState(bool run)
+{
+    runServiceHelper(QStringLiteral("journalspy"), run);
 }
 
 CReporterUtils *CReporterUtils::instance()
