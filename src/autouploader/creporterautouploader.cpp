@@ -103,11 +103,8 @@ CReporterAutoUploader::CReporterAutoUploader() : d_ptr(new CReporterAutoUploader
 CReporterAutoUploader::~CReporterAutoUploader()
 {
     quit();
-    if (d_ptr)
-    {
-        delete d_ptr;
-        d_ptr = 0;
-    }
+    delete d_ptr;
+    d_ptr = 0;
 
     CReporterSavedState::freeSingleton();
 
