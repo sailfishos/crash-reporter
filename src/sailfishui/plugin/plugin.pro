@@ -40,4 +40,4 @@ SOURCES += \
 
 INSTALLS += target qml
 
-OTHER_FILES = *.qml
+OTHER_FILES = *.qml $$DBUS_INTERFACES

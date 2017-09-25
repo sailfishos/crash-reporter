@@ -56,9 +56,6 @@ settings.files += \
 	data/crash-reporter.conf \
 	data/journalspy-expressions.conf \
 
-dbus_config.path = /etc/dbus-1/system.d
-dbus_config.files = data/crash-reporter-dbus.conf
-
 systemd_service.path = $${CREPORTER_SYSTEM_SYSTEMD_USER_SERVICES}
 systemd_service.files = data/crash-reporter.service
 
@@ -82,5 +79,5 @@ endurance_script.files = scripts/endurance-collect
 oneshot.path = $${CREPORTER_SYSTEM_ONESHOT}
 oneshot.files = scripts/crash-reporter-service-default
 
-INSTALLS += scripts notifications settings dbus_config systemd_service \
+INSTALLS += scripts notifications settings systemd_service \
 	systemd_services endurance_script oneshot

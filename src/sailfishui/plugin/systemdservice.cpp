@@ -294,6 +294,16 @@ SystemdService::SystemdService(QObject *parent):
             this, SLOT(checkUnitState()));
 }
 
+SystemdService::~SystemdService()
+{
+    Q_D(SystemdService);
+
+    /* Properly unsubscribe from receiving DBus signals in order to stop systemd
+     * pointlessly sending them if we were the sole listener. */
+    d->manager->Unsubscribe();
+}
+
+
 QString SystemdService::serviceName() const
 {
     Q_D(const SystemdService);
@@ -447,7 +457,9 @@ bool SystemdService::masked() const
     return (d->unit && d->unit->loadState() == "masked");
 }
 
-void SystemdService::classBegin() {}
+void SystemdService::classBegin()
+{
+}
 
 void SystemdService::componentComplete()
 {
@@ -459,15 +471,6 @@ void SystemdService::componentComplete()
     }
 
     d->initializeDBusInterface();
-}
-
-SystemdService::~SystemdService()
-{
-    Q_D(SystemdService);
-
-    /* Properly unsubscribe from receiving DBus signals in order to stop systemd
-     * pointlessly sending them if we were the sole listener. */
-    d->manager->Unsubscribe();
 }
 
 #include "moc_systemdservice.cpp"

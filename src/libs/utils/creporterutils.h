@@ -154,6 +154,9 @@ public:
      */
     static QProcess *invokeLogCollection(const QString &label);
 
+    Q_INVOKABLE static void setEnduranceServiceState(bool run);
+    Q_INVOKABLE static void setJournalSpyServiceState(bool run);
+
     static CReporterUtils *instance();
 
 private:

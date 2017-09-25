@@ -41,18 +41,10 @@ class SystemdService: public QObject, public QQmlParserStatus {
     Q_PROPERTY(bool masked READ masked WRITE setMasked NOTIFY maskedChanged)
 
 public:
-    SystemdService(QObject *parent = 0);
-
-    QString serviceName() const;
-    void setServiceName(const QString& serviceName);
-
     enum ManagerType {
         SystemManager,
         UserManager
     };
-
-    ManagerType managerType() const;
-    void setManagerType(ManagerType managerType);
 
     enum State {
         Inactive,
@@ -60,6 +52,15 @@ public:
         Active,
         Deactivating
     };
+
+    SystemdService(QObject *parent = 0);
+    ~SystemdService();
+
+    QString serviceName() const;
+    void setServiceName(const QString& serviceName);
+
+    ManagerType managerType() const;
+    void setManagerType(ManagerType managerType);
 
     State state() const;
 
@@ -75,7 +76,6 @@ public:
     void classBegin();
     void componentComplete();
 
-    ~SystemdService();
 signals:
     void serviceNameChanged();
     void managerTypeChanged();
@@ -88,17 +88,17 @@ private:
     Q_DECLARE_PRIVATE(SystemdService)
     QScopedPointer<SystemdServicePrivate> d_ptr;
 
-    Q_PRIVATE_SLOT(d_func(), void gotUnitPath(QDBusPendingCallWatcher *));
-    Q_PRIVATE_SLOT(d_func(), void unitFileStateChanged(QDBusPendingCallWatcher *));
-    Q_PRIVATE_SLOT(d_func(), void maskingChanged(QDBusPendingCallWatcher *));
-    Q_PRIVATE_SLOT(d_func(), void reloaded(QDBusPendingCallWatcher *));
-    Q_PRIVATE_SLOT(d_func(), void stateChanged(QDBusPendingCallWatcher *));
+    Q_PRIVATE_SLOT(d_func(), void gotUnitPath(QDBusPendingCallWatcher *))
+    Q_PRIVATE_SLOT(d_func(), void unitFileStateChanged(QDBusPendingCallWatcher *))
+    Q_PRIVATE_SLOT(d_func(), void maskingChanged(QDBusPendingCallWatcher *))
+    Q_PRIVATE_SLOT(d_func(), void reloaded(QDBusPendingCallWatcher *))
+    Q_PRIVATE_SLOT(d_func(), void stateChanged(QDBusPendingCallWatcher *))
     Q_PRIVATE_SLOT(d_func(), void propertiesChanged(const QString &,
                                                     const QVariantMap &,
-                                                    const QStringList &));
-    Q_PRIVATE_SLOT(d_func(), void handleUnitNew(const QString &, const QDBusObjectPath &));
-    Q_PRIVATE_SLOT(d_func(), void handleUnitRemoved(const QString &, const QDBusObjectPath &));
-    Q_PRIVATE_SLOT(d_func(), void checkUnitState());
+                                                    const QStringList &))
+    Q_PRIVATE_SLOT(d_func(), void handleUnitNew(const QString &, const QDBusObjectPath &))
+    Q_PRIVATE_SLOT(d_func(), void handleUnitRemoved(const QString &, const QDBusObjectPath &))
+    Q_PRIVATE_SLOT(d_func(), void checkUnitState())
 };
 
 #endif // SYSTEMDSERVICE_H

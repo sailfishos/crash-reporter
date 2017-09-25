@@ -48,11 +48,11 @@ signals:
 
 private:
     Q_DISABLE_COPY(CrashReporterAdapter)
+    Q_DECLARE_PRIVATE(CrashReporterAdapter)
 
-    Q_DECLARE_PRIVATE(CrashReporterAdapter);
     QScopedPointer<CrashReporterAdapterPrivate> d_ptr;
 
-    Q_PRIVATE_SLOT(d_func(), void updateCoreDirectoryModels());
+    Q_PRIVATE_SLOT(d_func(), void updateCoreDirectoryModels())
 };
 
 #endif // CRASHREPORTERADAPTER_H

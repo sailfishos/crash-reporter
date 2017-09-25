@@ -32,7 +32,8 @@
 
 using CReporter::LoggingCategory::cr;
 
-class JournalSpyPrivate {
+class JournalSpyPrivate
+{
 public:
     JournalSpyPrivate(JournalSpy *parent);
     ~JournalSpyPrivate();
@@ -43,8 +44,8 @@ private:
     void loadExpressions();
     void parsePattern(const QString &name, QIODevice &io);
 
+    JournalSpy *q_ptr;
     sd_journal *journal;
-    int fd;
 
     struct Expression {
         QString name;
@@ -58,11 +59,10 @@ private:
     QList<Expression> expressions;
 
     Q_DECLARE_PUBLIC(JournalSpy)
-    JournalSpy *q_ptr;
 };
 
-JournalSpyPrivate::JournalSpyPrivate(JournalSpy *parent):
-  q_ptr(parent)
+JournalSpyPrivate::JournalSpyPrivate(JournalSpy *parent)
+    : q_ptr(parent), journal(0)
 {
     Q_Q(JournalSpy);
 
@@ -77,7 +77,7 @@ JournalSpyPrivate::JournalSpyPrivate(JournalSpy *parent):
         return;
     }
 
-    fd = sd_journal_get_fd(journal);
+    int fd = sd_journal_get_fd(journal);
     if (fd < 0) {
         qCDebug(cr) << "sd_journal_get_fd() failed.";
         return;
@@ -208,9 +208,13 @@ JournalSpyPrivate::~JournalSpyPrivate()
     sd_journal_close(journal);
 }
 
-JournalSpy::JournalSpy():
-  d_ptr(new JournalSpyPrivate(this)) {}
+JournalSpy::JournalSpy()
+    : d_ptr(new JournalSpyPrivate(this))
+{
+}
 
-JournalSpy::~JournalSpy() {}
+JournalSpy::~JournalSpy()
+{
+}
 
 #include "moc_journalspy.cpp"

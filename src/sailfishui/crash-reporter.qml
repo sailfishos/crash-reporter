@@ -24,7 +24,6 @@ import Sailfish.Silica 1.0
 import com.jolla.settings.crashreporter 1.0
 
 Page {
-
     SilicaFlickable {
         anchors.fill: parent
         contentHeight: content.height + Theme.paddingLarge
@@ -111,10 +110,7 @@ Page {
                 onClicked: PrivacySettings.autoDeleteDuplicates = !PrivacySettings.autoDeleteDuplicates
             }
 
-            SystemdServiceSwitch {
-                serviceName: "crash-reporter-endurance.service"
-                managerType: SystemdService.SystemManager
-
+            TextSwitch {
                 //% "Endurance reports"
                 text: qsTrId("settings_crash-reporter_enable_endurance")
                 //% "Reports system statistics helping diagnose problems that "
@@ -122,24 +118,27 @@ Page {
                 //% "device like memory leaks, excessive battery drain, or "
                 //% "decreasing performance."
                 description: qsTrId("settings_crash-reporter_enable_endurance_description")
-
-                onBeforeStateChange: {
-                    PrivacySettings.endurance = newState
+                automaticCheck: false
+                checked: PrivacySettings.endurance
+                onClicked: {
+                    checked = !checked
+                    PrivacySettings.endurance = checked
+                    Utils.setEnduranceServiceState(checked)
                 }
             }
 
-            SystemdServiceSwitch {
-                serviceName: "crash-reporter-journalspy.service"
-                managerType: SystemdService.SystemManager
-
+            TextSwitch {
                 //% "Journal spy"
                 text: qsTrId("settings_crash-reporter_enable_journalspy")
                 //% "Watches system logs for predefined regular expressions "
                 //% "and creates a telemetry submission upon a found match."
                 description: qsTrId("settings_crash-reporter_enable_journalspy_description")
-
-                onBeforeStateChange: {
-                    PrivacySettings.journalSpy = newState
+                automaticCheck: false
+                checked: PrivacySettings.journalSpy
+                onClicked: {
+                    checked = !checked
+                    PrivacySettings.journalSpy = checked
+                    Utils.setJournalSpyServiceState(checked)
                 }
             }
 
