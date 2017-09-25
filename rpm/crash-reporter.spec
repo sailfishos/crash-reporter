@@ -116,13 +116,6 @@ make %{_smp_mflags}
 /usr/lib/pkgconfig/*.pc
 
 %post
-# Remove timer unit symlink potentially left by old installation.
-rm -f /etc/systemd/system/basic.target.wants/crash-reporter-endurance.timer
-# Remove any endurance service symlinks in /etc. The service is now permanently
-# enabled in /lib/systemd.
-rm -f /etc/systemd/system/basic.target.wants/crash-reporter-endurance.service \
-  /etc/systemd/system/multi-user.target.wants/crash-reporter-endurance.service
-rmdir --ignore-fail-on-non-empty /etc/systemd/system/multi-user.target.wants
 systemctl daemon-reload
 ## on first install
 #if [ "$1" -eq 1 ]; then
