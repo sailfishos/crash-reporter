@@ -42,6 +42,10 @@ public:
 PendingUploadsModel::PendingUploadsModel(QObject *parent):
   QAbstractListModel(parent), d_ptr(new PendingUploadsModelPrivate) {}
 
+PendingUploadsModel::~PendingUploadsModel()
+{
+}
+
 int PendingUploadsModel::rowCount(const QModelIndex &parent) const
 {
     Q_D(const PendingUploadsModel);
@@ -126,5 +130,3 @@ void PendingUploadsModel::setData(const QStringList &data)
     }
     endInsertRows();
 }
-
-PendingUploadsModel::~PendingUploadsModel() {}

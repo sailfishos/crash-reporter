@@ -41,18 +41,10 @@ class SystemdService: public QObject, public QQmlParserStatus {
     Q_PROPERTY(bool masked READ masked WRITE setMasked NOTIFY maskedChanged)
 
 public:
-    SystemdService(QObject *parent = 0);
-
-    QString serviceName() const;
-    void setServiceName(const QString& serviceName);
-
     enum ManagerType {
         SystemManager,
         UserManager
     };
-
-    ManagerType managerType() const;
-    void setManagerType(ManagerType managerType);
 
     enum State {
         Inactive,
@@ -60,6 +52,15 @@ public:
         Active,
         Deactivating
     };
+
+    SystemdService(QObject *parent = 0);
+    ~SystemdService();
+
+    QString serviceName() const;
+    void setServiceName(const QString& serviceName);
+
+    ManagerType managerType() const;
+    void setManagerType(ManagerType managerType);
 
     State state() const;
 
@@ -75,7 +76,6 @@ public:
     void classBegin();
     void componentComplete();
 
-    ~SystemdService();
 signals:
     void serviceNameChanged();
     void managerTypeChanged();

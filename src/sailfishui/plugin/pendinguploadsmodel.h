@@ -29,10 +29,6 @@ class PendingUploadsModelPrivate;
 class PendingUploadsModel: public QAbstractListModel {
     Q_OBJECT
 public:
-    PendingUploadsModel(QObject *parent = 0);
-
-    int rowCount(const QModelIndex &parent) const;
-
     enum DataRole {
         Application = Qt::UserRole + 1,
         PID,
@@ -41,12 +37,16 @@ public:
         DateCreated,
     };
 
+    PendingUploadsModel(QObject *parent = 0);
+    ~PendingUploadsModel();
+
+    int rowCount(const QModelIndex &parent) const;
+
     QVariant data(const QModelIndex &index, int role) const;
     QHash<int,QByteArray> roleNames() const;
 
     void setData(const QStringList &data);
 
-    ~PendingUploadsModel();
 private:
     Q_DECLARE_PRIVATE(PendingUploadsModel)
     QScopedPointer<PendingUploadsModelPrivate> d_ptr;
