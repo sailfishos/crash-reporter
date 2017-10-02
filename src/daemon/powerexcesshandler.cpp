@@ -41,8 +41,8 @@ public:
     void handleUdevNotification();
 };
 
-PowerExcessHandler::PowerExcessHandler(QObject *parent):
-    QObject(parent), d_ptr(new PowerExcessHandlerPrivate)
+PowerExcessHandler::PowerExcessHandler(QObject *parent)
+    : QObject(parent), d_ptr(new PowerExcessHandlerPrivate)
 {
     Q_D(PowerExcessHandler);
 

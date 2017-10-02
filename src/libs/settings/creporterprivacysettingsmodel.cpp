@@ -104,15 +104,13 @@ void CReporterPrivacySettingsModel::freeSingleton()
     }
 }
 
-CReporterPrivacySettingsModel::CReporterPrivacySettingsModel() :
-    CReporterSettingsBase("crash-reporter-settings", "crash-reporter-privacy")
+CReporterPrivacySettingsModel::CReporterPrivacySettingsModel()
+    : CReporterSettingsBase("crash-reporter-settings", "crash-reporter-privacy")
 {
-
 }
 
 CReporterPrivacySettingsModel::~CReporterPrivacySettingsModel()
 {
-
 }
 
 bool CReporterPrivacySettingsModel::coreDumpingEnabled() const

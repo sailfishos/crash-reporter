@@ -44,8 +44,8 @@ public:
     CReporterUploadItem::ItemStatus status;
 };
 
-CReporterUploadItem::CReporterUploadItem(const QString &file) :
-    d_ptr(new CReporterUploadItemPrivate())
+CReporterUploadItem::CReporterUploadItem(const QString &file)
+    : d_ptr(new CReporterUploadItemPrivate())
 {
     Q_D(CReporterUploadItem);
 
@@ -120,7 +120,7 @@ bool CReporterUploadItem::startUpload()
 
 void CReporterUploadItem::cancel()
 {
-    Q_D( CReporterUploadItem );
+    Q_D(CReporterUploadItem);
     qCDebug(cr) << "Cancel upload;" << d->filename;
 
     ItemStatus previousStatus = d->status;
@@ -173,6 +173,6 @@ void CReporterUploadItem::emitUploadFinished()
 
 void CReporterUploadItem::setErrorString(const QString &errorString)
 {
-    Q_D( CReporterUploadItem );
+    Q_D(CReporterUploadItem);
     d->errorString = errorString;
 }

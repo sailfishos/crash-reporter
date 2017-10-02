@@ -41,9 +41,9 @@ public:
     int nbrOfItems;
 };
 
-CReporterUploadQueue::CReporterUploadQueue(QObject *parent) :
-    QObject(parent),
-    d_ptr(new CReporterUploadQueuePrivate())
+CReporterUploadQueue::CReporterUploadQueue(QObject *parent)
+    : QObject(parent),
+      d_ptr(new CReporterUploadQueuePrivate())
 {
     qCDebug(cr) << "Upload queue initialized.";
     d_ptr->uploadQueue.clear();

@@ -78,8 +78,8 @@ CReporterCoreRegistryPrivate::~CReporterCoreRegistryPrivate()
     delete mapper;
 }
 
-CReporterCoreRegistry::CReporterCoreRegistry(QObject *parent):
-    QObject(parent), d_ptr(new CReporterCoreRegistryPrivate())
+CReporterCoreRegistry::CReporterCoreRegistry(QObject *parent)
+    : QObject(parent), d_ptr(new CReporterCoreRegistryPrivate())
 {
     createCoreLocationRegistry();
 
@@ -115,19 +115,19 @@ QStringList CReporterCoreRegistry::collectAllCoreFiles() const
 
 QStringList CReporterCoreRegistry::getCoreLocationPaths()
 {
-    Q_D( CReporterCoreRegistry );
+    Q_D(CReporterCoreRegistry);
     QStringList paths;
 
     QListIterator<CReporterCoreDir *> iter(d->coreDirs);
 
-    while ( iter.hasNext() ) {
+    while (iter.hasNext()) {
         // Get paths for core locations.
         CReporterCoreDir *pCoreDir =  (CReporterCoreDir *) iter.next();
-        QDir dir( pCoreDir->getDirectory() );
+        QDir dir(pCoreDir->getDirectory());
 
         qCDebug(cr) << "Got directory:" << pCoreDir->getDirectory();
 
-        if ( dir.exists() ) {
+        if (dir.exists()) {
             qCDebug(cr) << "Exists. Add to list";
             paths.append(dir.absolutePath());
         }
@@ -139,15 +139,15 @@ QStringList CReporterCoreRegistry::getCoreLocationPaths()
 
 QString CReporterCoreRegistry::checkDirectoryForCores(const QString &path)
 {
-    Q_D( CReporterCoreRegistry );
+    Q_D(CReporterCoreRegistry);
 
     QString coreFilePath;
     QListIterator<CReporterCoreDir *> iter(d->coreDirs);
 
-    while ( iter.hasNext() ) {
+    while (iter.hasNext()) {
         CReporterCoreDir *pCoreDir =  (CReporterCoreDir *) iter.next();
         // Find the correct location.
-        if ( pCoreDir->getDirectory() == path ) {
+        if (pCoreDir->getDirectory() == path) {
             coreFilePath = pCoreDir->checkDirectoryForCores();
         }
     }
@@ -164,7 +164,7 @@ void CReporterCoreRegistry::refreshRegistry()
 void CReporterCoreRegistry::mmcStateChanged(const QString &key)
 {
     qCDebug(cr) << "Key:" << key << "has changed.";
-    QTimer::singleShot( MMC_EVENT_TIMEOUT, this, SIGNAL(coreLocationsUpdated()) );
+    QTimer::singleShot(MMC_EVENT_TIMEOUT, this, SIGNAL(coreLocationsUpdated()));
 }
 
 void CReporterCoreRegistry::createCoreLocationRegistry()
@@ -176,12 +176,11 @@ void CReporterCoreRegistry::createCoreLocationRegistry()
     qCDebug(cr) << "Get mountpoints from the environment.";
     // Get mount points from environment.
     for (int i = 0; i < NUM_ENV_MOUNTPOINTS; i++) {
-
         name = mountpoint_env_names[i];
         QString mpoint(getenv(name));
 
         if (!mpoint.isEmpty()) {
-            CReporterCoreDir *dir = new CReporterCoreDir( mpoint, this );
+            CReporterCoreDir *dir = new CReporterCoreDir(mpoint, this);
             d->coreDirs << dir;
         }
     }
@@ -191,9 +190,8 @@ void CReporterCoreRegistry::createCoreLocationRegistry()
         qCDebug(cr) << "Nothing in the environment. Using static mountpoints.";
         // Nothing in environment, use static values as fallback.
         for (int i = 0; i < NUM_STATIC_MOUNTPOINTS; i++) {
-
             name = mountpoint_static[i];
-            QString mpoint( name );
+            QString mpoint(name);
 
 #if defined(CREPORTER_SDK_HOST) || defined(CREPORTER_UNIT_TEST)
             mpoint.prepend(QDir::homePath());

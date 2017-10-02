@@ -52,7 +52,10 @@ private:
         QHash<QString, QRegularExpression> rexp;
         qint64 lastHit;
 
-        Expression(const QString &name): name(name), lastHit(0) {}
+        Expression(const QString &name)
+            : name(name), lastHit(0)
+        {
+        }
         bool matches(sd_journal *journal) const;
     };
 

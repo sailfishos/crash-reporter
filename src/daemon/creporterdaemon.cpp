@@ -40,8 +40,8 @@
 
 using CReporter::LoggingCategory::cr;
 
-CReporterDaemon::CReporterDaemon() :
-    d_ptr(new CReporterDaemonPrivate(this))
+CReporterDaemon::CReporterDaemon()
+    : d_ptr(new CReporterDaemonPrivate(this))
 {
     // Adaptor class is deleted automatically, when the class, it is
     // attached to is deleted.

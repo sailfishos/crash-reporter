@@ -50,7 +50,7 @@ public:
      * @param mpoint Core location mount point.
      * @param parent Owner of this object (default= 0).
      */
-    CReporterCoreDir( QString &mpoint, QObject *parent = 0 );
+    CReporterCoreDir(QString &mpoint, QObject *parent = 0);
 
     ~CReporterCoreDir();
 
@@ -73,21 +73,21 @@ public:
      *
      * @param dir Core dumps directory path.
      */
-    void setDirectory( const QString &dir );
+    void setDirectory(const QString &dir);
 
     /*!
      * @brief Set mount point for this core location.
      *
      * @param mpoint Mountpoint path.
      */
-    void setMountpoint( const QString &mpoint );
+    void setMountpoint(const QString &mpoint);
 
     /*!
      * @brief Collects all valid core files from this directory and appends into lists.
      *
      * @param coreList Reference to list populated with absolute core file paths.
      */
-    void collectAllCoreFilesAtLocation( QStringList &coreList );
+    void collectAllCoreFilesAtLocation(QStringList &coreList);
 
     /*!
      * @brief Checks directory for new core files.

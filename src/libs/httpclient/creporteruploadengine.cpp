@@ -217,10 +217,9 @@ void CReporterUploadEnginePrivate::emitFinished(CReporterUploadEngine::ErrorType
     emit q_ptr->finished(static_cast<int>(error), sent, total);
 }
 
-CReporterUploadEngine::CReporterUploadEngine(CReporterUploadQueue *queue,
-        QObject *parent) :
-    QObject(parent),
-    d_ptr(new CReporterUploadEnginePrivate())
+CReporterUploadEngine::CReporterUploadEngine(CReporterUploadQueue *queue, QObject *parent)
+    : QObject(parent),
+      d_ptr(new CReporterUploadEnginePrivate())
 {
     Q_D(CReporterUploadEngine);
 

@@ -47,16 +47,14 @@
 
 using CReporter::LoggingCategory::cr;
 
-CReporterHandledRichCore::CReporterHandledRichCore(const QString &filePath):
-    lastCountReset(QDateTime::currentDateTimeUtc())
+CReporterHandledRichCore::CReporterHandledRichCore(const QString &filePath)
+    : lastCountReset(QDateTime::currentDateTimeUtc())
 {
     // Parse needed info for file path.
     QStringList rCoreInfo = CReporterUtils::parseCrashInfoFromFilename(filePath);
 
     binaryName = rCoreInfo[0];
     signalNumber = rCoreInfo[2].toInt();
-
-    QFileInfo fi(filePath);
 
     count = 0;
 
@@ -73,14 +71,13 @@ bool CReporterHandledRichCore::operator==(const CReporterHandledRichCore &other)
            (signalNumber == other.signalNumber);
 }
 
-// ******** Class CReporterDaemonMonitorPrivate ********
 
-CReporterDaemonMonitorPrivate::CReporterDaemonMonitorPrivate() :
-    autoDeleteMaxSimilarCores(0),
-    crashNotification(new CReporterNotification(
-                          CReporter::AutoUploaderNotificationEventType,
-                          CReporterSavedState::instance()->crashNotificationId(), this)),
-    crashCount(0)
+CReporterDaemonMonitorPrivate::CReporterDaemonMonitorPrivate()
+    : autoDeleteMaxSimilarCores(0),
+      crashNotification(new CReporterNotification(
+                            CReporter::AutoUploaderNotificationEventType,
+                            CReporterSavedState::instance()->crashNotificationId(), this)),
+      crashCount(0)
 {
     connect(crashNotification, &CReporterNotification::timeouted,
             this, &CReporterDaemonMonitorPrivate::resetCrashCount);
@@ -321,10 +318,7 @@ void CReporterDaemonMonitorPrivate::handleNotificationEvent()
     // Handle timeouted and activated signals from CReporterNotification
     // and destroy instance.
     CReporterNotification *notification = qobject_cast<CReporterNotification *>(sender());
-
-    if (notification != 0) {
-        delete notification;
-    }
+    delete notification;
 }
 
 void CReporterDaemonMonitorPrivate::resetCrashCount()
@@ -347,8 +341,8 @@ void CReporterDaemonMonitorPrivate::onSetAutoUploadChanged()
     proxy.quit();
 }
 
-CReporterDaemonMonitor::CReporterDaemonMonitor(QObject *parent):
-    QObject(parent), d_ptr(new CReporterDaemonMonitorPrivate())
+CReporterDaemonMonitor::CReporterDaemonMonitor(QObject *parent)
+    : QObject(parent), d_ptr(new CReporterDaemonMonitorPrivate())
 {
     d_ptr->q_ptr = this;
 

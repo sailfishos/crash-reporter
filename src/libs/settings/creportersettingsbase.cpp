@@ -31,8 +31,8 @@
 #include "creportersettingsinit_p.h"
 #include "creporternamespace.h"
 
-CReporterSettingsBasePrivate::CReporterSettingsBasePrivate() :
-    m_settings(0)
+CReporterSettingsBasePrivate::CReporterSettingsBasePrivate()
+    : m_settings(0)
 {
 }
 

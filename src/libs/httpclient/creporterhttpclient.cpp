@@ -48,12 +48,12 @@ using CReporter::LoggingCategory::cr;
 const char *clientstate_string[] = {"None", "Init", "Connecting", "Sending", "Aborting"};
 const int CONNECTION_TIMEOUT_MS = 2 * 60 * 1000;
 
-CReporterHttpClientPrivate::CReporterHttpClientPrivate(CReporterHttpClient *parent):
-    QObject(parent),
-    m_manager(0),
-    m_reply(0),
-    m_connectionTimeout(this),
-    q_ptr(parent)
+CReporterHttpClientPrivate::CReporterHttpClientPrivate(CReporterHttpClient *parent)
+    : QObject(parent),
+      m_manager(0),
+      m_reply(0),
+      m_connectionTimeout(this),
+      q_ptr(parent)
 {
     m_clientState = CReporterHttpClient::None;
     m_connectionTimeout.setInterval(CONNECTION_TIMEOUT_MS);
@@ -70,10 +70,8 @@ CReporterHttpClientPrivate::~CReporterHttpClientPrivate()
         m_reply = 0;
     }
 
-    if (m_manager != 0) {
-        delete m_manager;
-        m_manager = 0;
-    }
+    delete m_manager;
+    m_manager = 0;
 }
 
 void CReporterHttpClientPrivate::init(bool deleteAfterSending)
@@ -170,7 +168,7 @@ bool CReporterHttpClientPrivate::createRequest(const QString &file)
 
 void CReporterHttpClientPrivate::cancel()
 {
-    stateChange( CReporterHttpClient::Aborting );
+    stateChange(CReporterHttpClient::Aborting);
 
     if (m_reply != 0) {
         qCDebug(cr) << "Canceling HTTP transaction.";
@@ -194,11 +192,11 @@ void CReporterHttpClientPrivate::handleAuthenticationRequired(QNetworkReply *rep
     authenticator->setPassword(CReporterApplicationSettings::instance()->password());
 }
 
-void CReporterHttpClientPrivate::handleSslErrors(const QList<QSslError> &errors )
+void CReporterHttpClientPrivate::handleSslErrors(const QList<QSslError> &errors)
 {
     QString errorString;
     foreach (const QSslError &error, errors) {
-        if ( !errorString.isEmpty() ) {
+        if (!errorString.isEmpty()) {
             errorString += ", ";
         }
         errorString += error.errorString();
@@ -315,14 +313,13 @@ void CReporterHttpClientPrivate::handleUploadProgress(qint64 bytesSent, qint64 b
 
 void CReporterHttpClientPrivate::stateChange(CReporterHttpClient::State nextState)
 {
-    qCDebug(cr) << "Current state:" << q_ptr->stateToString( m_clientState );
-    qCDebug(cr) << "New state:" << q_ptr->stateToString( nextState );
+    qCDebug(cr) << "Current state:" << q_ptr->stateToString(m_clientState);
+    qCDebug(cr) << "New state:" << q_ptr->stateToString(nextState);
     m_clientState = nextState;
-    emit stateChanged( m_clientState );
+    emit stateChanged(m_clientState);
 }
 
-bool CReporterHttpClientPrivate::createPutRequest(QNetworkRequest &request,
-        QByteArray &dataToSend)
+bool CReporterHttpClientPrivate::createPutRequest(QNetworkRequest &request, QByteArray &dataToSend)
 {
     QFile file(m_currentFile.absoluteFilePath());
     // Abort, if file doesn't exist or IO error.
@@ -342,16 +339,16 @@ bool CReporterHttpClientPrivate::createPutRequest(QNetworkRequest &request,
     return true;
 }
 
-CReporterHttpClient::CReporterHttpClient(QObject *parent):
-    QObject(parent),
-    d_ptr(new CReporterHttpClientPrivate(this))
+CReporterHttpClient::CReporterHttpClient(QObject *parent)
+    : QObject(parent),
+      d_ptr(new CReporterHttpClientPrivate(this))
 {
     Q_D(CReporterHttpClient);
 
-    connect( d, SIGNAL(stateChanged(CReporterHttpClient::State)),
-             this, SIGNAL(clientStateChanged(CReporterHttpClient::State)) );
-    connect( d, SIGNAL(uploadError(QString, QString)), this, SIGNAL(uploadError(QString, QString)) );
-    connect( d, SIGNAL(finished()), this, SIGNAL(finished()) );
+    connect(d, SIGNAL(stateChanged(CReporterHttpClient::State)),
+            this, SIGNAL(clientStateChanged(CReporterHttpClient::State)));
+    connect(d, SIGNAL(uploadError(QString, QString)), this, SIGNAL(uploadError(QString, QString)));
+    connect(d, SIGNAL(finished()), this, SIGNAL(finished()));
 }
 
 CReporterHttpClient::~CReporterHttpClient()
@@ -377,7 +374,7 @@ QString CReporterHttpClient::stateToString(CReporterHttpClient::State state) con
 
 bool CReporterHttpClient::upload(const QString &file)
 {
-    Q_D( CReporterHttpClient );
+    Q_D(CReporterHttpClient);
     qCDebug(cr) << "Upload requested.";
 
     return d->createRequest(file);

@@ -27,8 +27,8 @@
 
 #include "creporterdaemonadaptor.h"
 
-CReporterDaemonAdaptor::CReporterDaemonAdaptor(QObject *parent) :
-    QDBusAbstractAdaptor(parent)
+CReporterDaemonAdaptor::CReporterDaemonAdaptor(QObject *parent)
+    : QDBusAbstractAdaptor(parent)
 {
     setAutoRelaySignals(true);
 }

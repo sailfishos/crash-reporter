@@ -116,7 +116,6 @@ QString CReporterCoreDir::checkDirectoryForCores()
 
     // Iterate over files in the core-dumps directory.
     while (iter.hasNext()) {
-
         iter.next();
         fi = iter.fileInfo();
 

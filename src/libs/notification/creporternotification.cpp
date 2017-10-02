@@ -138,19 +138,17 @@ void CReporterNotificationPrivate::onNotificationRemoved(quint32 id)
     }
 }
 
-CReporterNotification::CReporterNotification(const QString &eventType,
-        const QString &summary, const QString &body,
-        QObject *parent) :
-    QObject(parent),
-    d_ptr(new CReporterNotificationPrivate(eventType, this))
+CReporterNotification::CReporterNotification(const QString &eventType, const QString &summary, const QString &body,
+                                             QObject *parent)
+    : QObject(parent),
+      d_ptr(new CReporterNotificationPrivate(eventType, this))
 {
     update(summary, body);
 }
 
-CReporterNotification::CReporterNotification(const QString &eventType, int id,
-        QObject *parent):
-    QObject(parent),
-    d_ptr(new CReporterNotificationPrivate(eventType, this))
+CReporterNotification::CReporterNotification(const QString &eventType, int id, QObject *parent)
+    : QObject(parent),
+      d_ptr(new CReporterNotificationPrivate(eventType, this))
 {
     d_ptr->id = id;
 }

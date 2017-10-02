@@ -77,7 +77,7 @@ CReporterNwSessionMgr::CReporterNwSessionMgr(QObject *parent)
 CReporterNwSessionMgr::~CReporterNwSessionMgr()
 {
     Q_D(CReporterNwSessionMgr);
-    if (d->networkSession) delete d->networkSession;
+    delete d->networkSession;
     d->networkSession = 0;
     delete d_ptr;
     d_ptr = 0;

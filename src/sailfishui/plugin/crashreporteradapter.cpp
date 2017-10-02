@@ -44,8 +44,8 @@ private:
     CrashReporterAdapter *q_ptr;
 };
 
-CrashReporterAdapterPrivate::CrashReporterAdapterPrivate(CrashReporterAdapter *qq):
-    reportsToUpload(0), q_ptr(qq)
+CrashReporterAdapterPrivate::CrashReporterAdapterPrivate(CrashReporterAdapter *qq)
+    : reportsToUpload(0), q_ptr(qq)
 {
     Q_Q(CrashReporterAdapter);
 

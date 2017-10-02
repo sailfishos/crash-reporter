@@ -141,7 +141,7 @@ public Q_SLOTS:
     void cancel();
 
 private:
-    Q_DECLARE_PRIVATE( CReporterHttpClient )
+    Q_DECLARE_PRIVATE(CReporterHttpClient)
 
     CReporterHttpClientPrivate *d_ptr;
 #ifdef CREPORTER_UNIT_TEST

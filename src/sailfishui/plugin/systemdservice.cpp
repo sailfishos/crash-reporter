@@ -279,8 +279,8 @@ void SystemdServicePrivate::changeState(const QString &state)
     }
 }
 
-SystemdService::SystemdService(QObject *parent):
-    QObject(parent), d_ptr(new SystemdServicePrivate)
+SystemdService::SystemdService(QObject *parent)
+    : QObject(parent), d_ptr(new SystemdServicePrivate)
 {
     Q_D(SystemdService);
     d->q_ptr = this;
