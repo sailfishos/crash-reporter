@@ -25,15 +25,11 @@
  *
  */
 
-// System includes.
-
 #include <signal.h>
 
 #include <QCoreApplication>
 #include <QTranslator>
 #include <QDebug>
-
-// User includes.
 
 #include "creporterautouploader.h"
 #include "creporternamespace.h"
@@ -42,7 +38,7 @@
 
 #ifndef QT_NO_DEBUG_OUTPUT
 #include "creporterlogger.h"
-#endif // QT_NO_DEBUG_OUTPUT
+#endif
 
 using CReporter::LoggingCategory::cr;
 
@@ -55,8 +51,8 @@ using CReporter::LoggingCategory::cr;
 int main(int argc, char **argv)
 {
 #ifndef QT_NO_DEBUG_OUTPUT
-        Logger logger(CReporterApplicationSettings::instance()->loggerType());
-#endif // QT_NO_DEBUG_OUTPUT
+    Logger logger(CReporterApplicationSettings::instance()->loggerType());
+#endif
 
     QCoreApplication app(argc, argv);
 
@@ -70,13 +66,9 @@ int main(int argc, char **argv)
 
     CReporterAutoUploader uploader;
 
-    // Enter Qt main loop.
     int retVal = app.exec();
 
     CReporterApplicationSettings::instance()->freeSingleton();
     qCDebug(cr) << "Shutting down Auto Uploader process.";
     return retVal;
 }
-
-// End of file.
-

@@ -26,7 +26,8 @@
 
 class PowerExcessHandlerPrivate;
 
-class PowerExcessHandler: public QObject {
+class PowerExcessHandler: public QObject
+{
     Q_OBJECT
 
 public:
@@ -38,7 +39,7 @@ private:
     Q_DECLARE_PRIVATE(PowerExcessHandler)
     QScopedPointer<PowerExcessHandlerPrivate> d_ptr;
 
-    Q_PRIVATE_SLOT(d_func(), void handleUdevNotification());
+    Q_PRIVATE_SLOT(d_func(), void handleUdevNotification())
 };
 
 #endif // POWEREXCESSWATCH_H

@@ -52,7 +52,10 @@ private:
         QHash<QString, QRegularExpression> rexp;
         qint64 lastHit;
 
-        Expression(const QString &name): name(name), lastHit(0) {}
+        Expression(const QString &name)
+            : name(name), lastHit(0)
+        {
+        }
         bool matches(sd_journal *journal) const;
     };
 
@@ -91,7 +94,7 @@ JournalSpyPrivate::JournalSpyPrivate(JournalSpy *parent)
     sd_journal_previous_skip(journal, 1);
 
     QSocketNotifier *notifier =
-            new QSocketNotifier(fd, QSocketNotifier::Read, q);
+        new QSocketNotifier(fd, QSocketNotifier::Read, q);
     QObject::connect(notifier, SIGNAL(activated(int)),
                      q, SLOT(handleJournalEntries()));
 }
@@ -125,7 +128,7 @@ bool JournalSpyPrivate::Expression::matches(sd_journal *journal) const
         const char *val;
         std::size_t len;
         if (sd_journal_get_data(journal, it.key().toUtf8(),
-                reinterpret_cast<const void **>(&val), &len) < 0) {
+                                reinterpret_cast<const void **>(&val), &len) < 0) {
             return false;
         }
 
@@ -193,8 +196,8 @@ void JournalSpyPrivate::parsePattern(const QString &name, QIODevice &io)
         }
 
         qCDebug(cr) << "Watching journal for expression"
-                 << qPrintable(journalField) << '='
-                 << qPrintable(pattern.pattern());
+                    << qPrintable(journalField) << '='
+                    << qPrintable(pattern.pattern());
         expression.rexp.insert(journalField, pattern);
     }
 

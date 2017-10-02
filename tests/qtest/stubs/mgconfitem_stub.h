@@ -9,7 +9,7 @@ class MGConfItem : public QObject
 {
     Q_OBJECT
 
- public:
+public:
 
     explicit MGConfItem(const QString &key, QObject *parent = 0);
 
@@ -29,11 +29,11 @@ class MGConfItem : public QObject
 
     QList<QString> listEntries() const;
 
- Q_SIGNALS:
+Q_SIGNALS:
 
     void valueChanged();
 
- private:
+private:
     friend struct MGConfItemPrivate;
     struct MGConfItemPrivate *priv;
 

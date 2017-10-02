@@ -25,17 +25,10 @@
 #ifndef CREPORTERAUTOUPLOADER_H
 #define CREPORTERAUTOUPLOADER_H
 
-// System includes.
-
 #include <QObject>
 #include <QVariant>
 #include <QDBusError>
 #include <QStringList>
-
-// User includes.
-
-
-// Forward declarations.
 
 class CReporterAutoUploaderPrivate;
 
@@ -50,18 +43,9 @@ class CReporterAutoUploader : public QObject
 {
     Q_OBJECT
 
-    public:
-        /*!
-          * @brief Class constructor.
-          *
-          */
-        CReporterAutoUploader();
-
-        /*!
-          * @brief Class destructor.
-          *
-          */
-        ~CReporterAutoUploader();
+public:
+    CReporterAutoUploader();
+    ~CReporterAutoUploader();
 
 public slots:
     /**
@@ -80,28 +64,26 @@ public slots:
      */
     void quit();
 
-    private Q_SLOTS:
+private Q_SLOTS:
 
-        /*!
-          * @brief Called, when upload engine has finished uploading.
-          *
-          * @param error Error code.
-          * @param sent Number of files uploaded succesfully.
-          * @param total Number of files requested to send.
-          */
-        void engineFinished(int error, int sent, int total);
+    /*!
+      * @brief Called, when upload engine has finished uploading.
+      *
+      * @param error Error code.
+      * @param sent Number of files uploaded succesfully.
+      * @param total Number of files requested to send.
+      */
+    void engineFinished(int error, int sent, int total);
 
-    private: // data
+private:
+    Q_DECLARE_PRIVATE(CReporterAutoUploader)
 
-        Q_DECLARE_PRIVATE(CReporterAutoUploader)
-        //! @arg Pointer to private data.
-        CReporterAutoUploaderPrivate *d_ptr;
+    CReporterAutoUploaderPrivate *d_ptr;
 
 #ifdef CREPORTER_UNIT_TEST
     friend class Ut_CReporterAutoUploader;
-#endif // CREPORTER_UNIT_TEST
+#endif
 };
 
 #endif // CREPORTERAUTOUPLOADER_H
 
-// End of file

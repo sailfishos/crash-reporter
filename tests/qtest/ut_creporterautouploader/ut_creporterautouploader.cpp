@@ -34,8 +34,8 @@
 
 // CReporterNotification mock object.
 CReporterNotification::CReporterNotification(const QString &eventType,
-                                             const QString &summary, const QString &body,
-                                             const QString &imageName, QObject *parent)
+        const QString &summary, const QString &body,
+        const QString &imageName, QObject *parent)
 {
     Q_UNUSED(eventType);
     Q_UNUSED(summary);
@@ -138,8 +138,7 @@ void Ut_CReporterAutoUploader::init()
 {
     static MApplication *app = 0;
 
-    if (app == 0)
-    {
+    if (app == 0) {
         int argc = 2;
         const char *argv[] = {"./ut_creporterautouploader", "-software", 0};
         app = new MApplication(argc, (char **)argv);

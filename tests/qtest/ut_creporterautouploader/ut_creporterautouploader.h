@@ -45,10 +45,10 @@ class CReporterUploadQueue : public QObject
 {
     Q_OBJECT
 
-    public:
-        CReporterUploadQueue(QObject *parent=0);
-        ~CReporterUploadQueue();
-        void enqueue(CReporterUploadItem *item);
+public:
+    CReporterUploadQueue(QObject *parent = 0);
+    ~CReporterUploadQueue();
+    void enqueue(CReporterUploadItem *item);
 };
 
 // CReporterUploadEngine mock class.
@@ -56,30 +56,30 @@ class CReporterUploadEngine : public QObject
 {
     Q_OBJECT
 
-    public:
+public:
 
-        typedef enum{
-            //! No error.
-            NoError = 0,
-            //! Indicates errors occured on HTTP/ SSL protocol levels.
-            ProtocolError,
-            //! Error occured, when trying to establish internet connection.
-            ConnectionNotAvailable,
-            //! Internet connection was closed due to network disconnected.
-            ConnectionClosed,
-        } ErrorType;
+    typedef enum {
+        //! No error.
+        NoError = 0,
+        //! Indicates errors occured on HTTP/ SSL protocol levels.
+        ProtocolError,
+        //! Error occured, when trying to establish internet connection.
+        ConnectionNotAvailable,
+        //! Internet connection was closed due to network disconnected.
+        ConnectionClosed,
+    } ErrorType;
 
-        CReporterUploadEngine(CReporterUploadQueue *queue, QObject *parent=0);
+    CReporterUploadEngine(CReporterUploadQueue *queue, QObject *parent = 0);
 
-        ~CReporterUploadEngine();
+    ~CReporterUploadEngine();
 
-      QString lastError() const;
+    QString lastError() const;
 
-    Q_SIGNALS:
-        void finished(int error, int sent, int total);
+Q_SIGNALS:
+    void finished(int error, int sent, int total);
 
-    public Q_SLOTS:
-        void cancelAll();
+public Q_SLOTS:
+    void cancelAll();
 };
 
 // Unit test class.
@@ -87,21 +87,21 @@ class Ut_CReporterAutoUploader : public QObject
 {
     Q_OBJECT
 
-    private Q_SLOTS:
+private Q_SLOTS:
 
-        void initTestCase();
-        void init();
+    void initTestCase();
+    void init();
 
-        void testUploadFiles();
-        void testUploadFilesInvalid();
-        void testUploadFilesAgain();
-        void testQuit();
+    void testUploadFiles();
+    void testUploadFilesInvalid();
+    void testUploadFilesAgain();
+    void testQuit();
 
-        void cleanup();
-        void cleanupTestCase();
+    void cleanup();
+    void cleanupTestCase();
 
-    private:
-        CReporterAutoUploader *m_Subject;
+private:
+    CReporterAutoUploader *m_Subject;
 };
 
 #endif // UT_CREPORTERAUTOUPLOADER_H

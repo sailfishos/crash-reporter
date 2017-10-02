@@ -25,16 +25,10 @@
 #ifndef CREPORTERSETTINGSBASE_H
 #define CREPORTERSETTINGSBASE_H
 
-// System includes.
-
 #include <QVariant>
 #include <QObject>
 
-// User includes.
-
 #include "creporterexport.h"
-
-// Forward declarations.
 
 class CReporterSettingsBasePrivate;
 
@@ -47,80 +41,74 @@ class CREPORTER_EXPORT CReporterSettingsBase : public QObject
 {
     Q_OBJECT
 
-    public:
-        /*!
-         * @brief Class constructor.
-         *
-         * @param organization Organization for QSettings object.
-         * @param application Application for QSettings object.
-         * @param parent Parent object.
-         */
-        CReporterSettingsBase(const QString &organization, const QString &application = QString(),
-                              QObject *parent=0);
+public:
+    /*!
+     * @brief Class constructor.
+     *
+     * @param organization Organization for QSettings object.
+     * @param application Application for QSettings object.
+     * @param parent Parent object.
+     */
+    CReporterSettingsBase(const QString &organization, const QString &application = QString(),
+                          QObject *parent = 0);
 
-        /*!
-         * @brief Class destructor.
-         *
-         */
-        virtual ~CReporterSettingsBase();
+    virtual ~CReporterSettingsBase();
 
-        /*!
-         * @brief Saves any unsaved settings in the permanent storage.
-         *
-         */
-        void writeSettings();
+    /*!
+     * @brief Saves any unsaved settings in the permanent storage.
+     *
+     */
+    void writeSettings();
 
-        /*!
-         * @brief Return path to settings file.
-         *
-         * @return Absolute path to settings file. It's up to the calling code to check, if
-         * file exists.
-         */
-        QString settingsFile() const;
+    /*!
+     * @brief Return path to settings file.
+     *
+     * @return Absolute path to settings file. It's up to the calling code to check, if
+     * file exists.
+     */
+    QString settingsFile() const;
 
-        /*!
-         * @brief Checks, if these settings are valid.
-         *
-         * @return Returns True, if valid otherwise false.
-         */
-         bool isValid() const;
+    /*!
+     * @brief Checks, if these settings are valid.
+     *
+     * @return Returns True, if valid otherwise false.
+     */
+    bool isValid() const;
 
-    Q_SIGNALS:
-        /*!
-          * @brief Sent, when @a key has changed to @a value.
-          *
-          * @param key Changed key.
-          * @param value New value.
-          */
-         void valueChanged(const QString &key, const QVariant &value);
+Q_SIGNALS:
+    /*!
+      * @brief Sent, when @a key has changed to @a value.
+      *
+      * @param key Changed key.
+      * @param value New value.
+      */
+    void valueChanged(const QString &key, const QVariant &value);
 
-    protected:
-        /*!
-         * @brief Sets setting value.
-         *
-         * @param key Setting of which value to set.
-         * @param value New key value.
-         *
-         * @return true if value was changed, false if new value equals the
-         * value already stored.
-         */
-        bool setValue(const QString &key, const QVariant &value);
+protected:
+    /*!
+     * @brief Sets setting value.
+     *
+     * @param key Setting of which value to set.
+     * @param value New key value.
+     *
+     * @return true if value was changed, false if new value equals the
+     * value already stored.
+     */
+    bool setValue(const QString &key, const QVariant &value);
 
-        /*!
-         * @brief Returns setting value of key.
-         *
-         * @param key Setting key of which value to find.
-         * @param defaultValue Returned, if setting doesn't exist.
-         * @return Setting value.
-         */
-        QVariant value(const QString &key, const QVariant &defaultValue = QVariant()) const;
+    /*!
+     * @brief Returns setting value of key.
+     *
+     * @param key Setting key of which value to find.
+     * @param defaultValue Returned, if setting doesn't exist.
+     * @return Setting value.
+     */
+    QVariant value(const QString &key, const QVariant &defaultValue = QVariant()) const;
 
-    private:
-        Q_DECLARE_PRIVATE(CReporterSettingsBase)
-        //! Pointer to private data class.
-        CReporterSettingsBasePrivate *d_ptr;
+private:
+    Q_DECLARE_PRIVATE(CReporterSettingsBase)
+
+    CReporterSettingsBasePrivate *d_ptr;
 };
 
 #endif // CREPORTERSETTINGSBASE_H
-
-// End of file.

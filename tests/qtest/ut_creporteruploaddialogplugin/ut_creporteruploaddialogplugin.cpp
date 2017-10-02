@@ -58,8 +58,8 @@ CReporterUploadQueue::~CReporterUploadQueue()
 
 void CReporterUploadQueue::enqueue(CReporterUploadItem *item)
 {
-  Q_UNUSED(item);
-  itemsAddedCount++;
+    Q_UNUSED(item);
+    itemsAddedCount++;
 }
 
 static QString errorString;
@@ -94,7 +94,7 @@ void CReporterUploadEngine::cancelAll()
 
 // CReporterUploadDialog mock object.
 CReporterUploadDialog::CReporterUploadDialog(CReporterUploadQueue *queue,
-                                             QGraphicsItem *parent)
+        QGraphicsItem *parent)
 {
     Q_UNUSED(parent);
     Q_UNUSED(queue);
@@ -111,7 +111,7 @@ void CReporterUploadDialog::createcontent()
 
 void CReporterUploadDialog::updateProgress(int done)
 {
-     Q_UNUSED(done);
+    Q_UNUSED(done);
 }
 
 void CReporterUploadDialog::uploadFinished()
@@ -141,10 +141,10 @@ void Ut_CReporterUploadDialogPlugin::init()
     static MApplication *app = 0;
 
     if (app == 0) {
-            int argc = 2;
-            const char *argv[] = {"./ut_creporteruploaddialogplugin", "-software", 0};
-            app = new MApplication(argc, (char **)argv);
-        }
+        int argc = 2;
+        const char *argv[] = {"./ut_creporteruploaddialogplugin", "-software", 0};
+        app = new MApplication(argc, (char **)argv);
+    }
 
     m_Server = new TestDialogServer();
     m_Subject = new CReporterUploadDialogPlugin();
@@ -163,7 +163,7 @@ void Ut_CReporterUploadDialogPlugin::cleanup()
 
     if (m_Subject != 0) {
         if (m_Subject->isInitialized()) {
-           m_Subject->destroy();
+            m_Subject->destroy();
         }
         delete m_Subject;
         m_Subject = 0;
@@ -176,10 +176,10 @@ void Ut_CReporterUploadDialogPlugin::cleanupTestCase()
 
 void Ut_CReporterUploadDialogPlugin::testInitializePlugin()
 {
-   // Test plugin initialized successfully.
-   m_Subject->initialize(m_Server);
-   QVERIFY(m_Subject->name() == CReporter::UploadDialogType);
-   QVERIFY(m_Subject->isInitialized() == true);
+    // Test plugin initialized successfully.
+    m_Subject->initialize(m_Server);
+    QVERIFY(m_Subject->name() == CReporter::UploadDialogType);
+    QVERIFY(m_Subject->isInitialized() == true);
 }
 
 void Ut_CReporterUploadDialogPlugin::testRequestPluginNotInitialized()
@@ -209,7 +209,7 @@ void Ut_CReporterUploadDialogPlugin::testInvalidRequestArguments1()
     m_Subject->initialize(m_Server);
     QVariantList args;
     args << QString("/media/mmc1/core-dumps/test-1234-11-4321.rcore.lzo") <<
-            QString("/media/mmc2/core-dumps/test-1234-11-4321.rcore.lzo");
+         QString("/media/mmc2/core-dumps/test-1234-11-4321.rcore.lzo");
 
     bool retVal = m_Subject->requestDialog(args);
     QVERIFY(retVal == false);
@@ -244,20 +244,20 @@ void Ut_CReporterUploadDialogPlugin::testUploadFilesSuccessfully()
     QVariantList args;
     QStringList files;
     files << QString("/media/mmc1/core-dumps/test-1234-11-4321.rcore.lzo")
-            << QString("/media/mmc1/core-dumps/test-1234-9-4321.rcore.lzo");
+          << QString("/media/mmc1/core-dumps/test-1234-9-4321.rcore.lzo");
     args << files;
 
-   QVERIFY(m_Subject->requestDialog(args) == true);
+    QVERIFY(m_Subject->requestDialog(args) == true);
 
-   m_Subject->dialogAppeared();
-   QVERIFY(itemsAddedCount == 2);
+    m_Subject->dialogAppeared();
+    QVERIFY(itemsAddedCount == 2);
 
-   m_Subject->engineFinished(static_cast<int>(CReporterUploadEngine::NoError), 2, 2);
+    m_Subject->engineFinished(static_cast<int>(CReporterUploadEngine::NoError), 2, 2);
 
-   QVERIFY(m_Server->createRequestCalled == true);
-   QVERIFY(lastErrorCalled == false);
-   // Now request is not completed until the dialog has disappeared so this cannot be tested here.
-   //QVERIFY(requestedCompletedSpy.count() == 1);
+    QVERIFY(m_Server->createRequestCalled == true);
+    QVERIFY(lastErrorCalled == false);
+    // Now request is not completed until the dialog has disappeared so this cannot be tested here.
+    //QVERIFY(requestedCompletedSpy.count() == 1);
 }
 
 void Ut_CReporterUploadDialogPlugin::testUploadFilesFailed()
@@ -267,21 +267,21 @@ void Ut_CReporterUploadDialogPlugin::testUploadFilesFailed()
     QVariantList args;
     QStringList files;
     files << QString("/media/mmc1/core-dumps/test-1234-11-4321.rcore.lzo")
-            << QString("/media/mmc1/core-dumps/test-1234-9-4321.rcore.lzo");
+          << QString("/media/mmc1/core-dumps/test-1234-9-4321.rcore.lzo");
     args << files;
 
-   QVERIFY(m_Subject->requestDialog(args) == true);
+    QVERIFY(m_Subject->requestDialog(args) == true);
 
-   m_Subject->dialogAppeared();
-   QVERIFY(itemsAddedCount == 2);
+    m_Subject->dialogAppeared();
+    QVERIFY(itemsAddedCount == 2);
 
-   m_Subject->engineFinished(static_cast<int>(CReporterUploadEngine::ProtocolError), 1, 2);
+    m_Subject->engineFinished(static_cast<int>(CReporterUploadEngine::ProtocolError), 1, 2);
 
-   errorString = "Error";
-   // Now request is not completed until the dialog has disappeared so this cannot be tested here.
-   //QVERIFY(requestedCompletedSpy.count() == 1);
-   QVERIFY(lastErrorCalled == true);
-   QVERIFY(m_Server->createRequestCalled == true);
+    errorString = "Error";
+    // Now request is not completed until the dialog has disappeared so this cannot be tested here.
+    //QVERIFY(requestedCompletedSpy.count() == 1);
+    QVERIFY(lastErrorCalled == true);
+    QVERIFY(m_Server->createRequestCalled == true);
 }
 
 void Ut_CReporterUploadDialogPlugin::testUploadCancelled()
@@ -291,24 +291,24 @@ void Ut_CReporterUploadDialogPlugin::testUploadCancelled()
     QVariantList args;
     QStringList files;
     files << QString("/media/mmc1/core-dumps/test-1234-11-4321.rcore.lzo")
-            << QString("/media/mmc1/core-dumps/test-1234-9-4321.rcore.lzo");
+          << QString("/media/mmc1/core-dumps/test-1234-9-4321.rcore.lzo");
     args << files;
 
-   QVERIFY(m_Subject->requestDialog(args) == true);
+    QVERIFY(m_Subject->requestDialog(args) == true);
 
-   m_Subject->dialogAppeared();
-   QVERIFY(itemsAddedCount == 2);
+    m_Subject->dialogAppeared();
+    QVERIFY(itemsAddedCount == 2);
 
-   m_Subject->actionPerformed(CReporter::CancelButton);
+    m_Subject->actionPerformed(CReporter::CancelButton);
 
-   QVERIFY(cancelAllCalled == true);
-   m_Subject->engineFinished(static_cast<int>(CReporterUploadEngine::ProtocolError), 1, 2);
+    QVERIFY(cancelAllCalled == true);
+    m_Subject->engineFinished(static_cast<int>(CReporterUploadEngine::ProtocolError), 1, 2);
 
-   errorString = "Cancelled";
-   // Now request is not completed until the dialog has disappeared so this cannot be tested here.
-   //QVERIFY(requestedCompletedSpy.count() == 1);
-   QVERIFY(lastErrorCalled == true);
-   QVERIFY(m_Server->createRequestCalled == true);
+    errorString = "Cancelled";
+    // Now request is not completed until the dialog has disappeared so this cannot be tested here.
+    //QVERIFY(requestedCompletedSpy.count() == 1);
+    QVERIFY(lastErrorCalled == true);
+    QVERIFY(m_Server->createRequestCalled == true);
 }
 
 void Ut_CReporterUploadDialogPlugin::testDialogRejected()
@@ -318,23 +318,23 @@ void Ut_CReporterUploadDialogPlugin::testDialogRejected()
     QVariantList args;
     QStringList files;
     files << QString("/media/mmc1/core-dumps/test-1234-11-4321.rcore.lzo")
-            << QString("/media/mmc1/core-dumps/test-1234-9-4321.rcore.lzo");
+          << QString("/media/mmc1/core-dumps/test-1234-9-4321.rcore.lzo");
     args << files;
 
-   QVERIFY(m_Subject->requestDialog(args) == true);
-   m_Subject->dialogAppeared();
-   QVERIFY(itemsAddedCount == 2);
+    QVERIFY(m_Subject->requestDialog(args) == true);
+    m_Subject->dialogAppeared();
+    QVERIFY(itemsAddedCount == 2);
 
-   m_Subject->dialogRejected();
+    m_Subject->dialogRejected();
 
-   QVERIFY(cancelAllCalled == true);
-   m_Subject->engineFinished(static_cast<int>(CReporterUploadEngine::ProtocolError), 1, 2);
+    QVERIFY(cancelAllCalled == true);
+    m_Subject->engineFinished(static_cast<int>(CReporterUploadEngine::ProtocolError), 1, 2);
 
-   errorString = "Cancelled";
-   // Now request is not completed until the dialog has disappeared so this cannot be tested here.
-   //QVERIFY(requestedCompletedSpy.count() == 1);
-   QVERIFY(lastErrorCalled == true);
-   QVERIFY(m_Server->createRequestCalled == true);
+    errorString = "Cancelled";
+    // Now request is not completed until the dialog has disappeared so this cannot be tested here.
+    //QVERIFY(requestedCompletedSpy.count() == 1);
+    QVERIFY(lastErrorCalled == true);
+    QVERIFY(m_Server->createRequestCalled == true);
 }
 
 QTEST_APPLESS_MAIN(Ut_CReporterUploadDialogPlugin)

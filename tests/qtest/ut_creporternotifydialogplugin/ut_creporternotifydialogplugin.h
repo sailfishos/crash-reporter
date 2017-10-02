@@ -34,30 +34,30 @@ class Ut_CReporterNotifyDialogPlugin : public QObject
 {
     Q_OBJECT
 
-    private Q_SLOTS:
+private Q_SLOTS:
 
-        void initTestCase();
-        void init();
+    void initTestCase();
+    void init();
 
-        void testInitializePlugin();
-        void testRequestPluginNotInitialized();
-        void testDestroyPlugin();
-        void testRequestPluginInvalidNumberOfArguments();
-        void testRequestPluginEmptyFilePath();
-        void testRequestPluginInvalidArgumentType();
-        void testRequestHandledFileSent();
-        void testRequestHandledFileDeleted();
-        void testRequestHandledSettingsOpened();
-        void testNotificationTimeout();
-        void testUpdateNotification();
-        void testDialogRejected();
-        
-        void cleanupTestCase();
-        void cleanup();
+    void testInitializePlugin();
+    void testRequestPluginNotInitialized();
+    void testDestroyPlugin();
+    void testRequestPluginInvalidNumberOfArguments();
+    void testRequestPluginEmptyFilePath();
+    void testRequestPluginInvalidArgumentType();
+    void testRequestHandledFileSent();
+    void testRequestHandledFileDeleted();
+    void testRequestHandledSettingsOpened();
+    void testNotificationTimeout();
+    void testUpdateNotification();
+    void testDialogRejected();
 
-    private:
-        CReporterNotifyDialogPlugin *m_Subject;
-        TestDialogServer *m_Server;
+    void cleanupTestCase();
+    void cleanup();
+
+private:
+    CReporterNotifyDialogPlugin *m_Subject;
+    TestDialogServer *m_Server;
 };
 
 #endif // UT_CREPORTERNOTIFYDIALOGPLUGIN_H

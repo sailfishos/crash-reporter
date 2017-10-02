@@ -34,25 +34,25 @@ class Ut_CReporterSendAllDialogPlugin : public QObject
 {
     Q_OBJECT
 
-    private Q_SLOTS:
+private Q_SLOTS:
 
-        void initTestCase();
-        void init();
+    void initTestCase();
+    void init();
 
-        void testInitializePlugin();
-        void testRequestPluginNotInitialized();
-        void testDestroyPlugin();
-        void testRequestPluginInvalidArguments();
-        void testRequestHandledFilesSent();
-        void testRequestHandledFilesDeleted();
-        void testRejectDialog();
-        
-        void cleanupTestCase();
-        void cleanup();
+    void testInitializePlugin();
+    void testRequestPluginNotInitialized();
+    void testDestroyPlugin();
+    void testRequestPluginInvalidArguments();
+    void testRequestHandledFilesSent();
+    void testRequestHandledFilesDeleted();
+    void testRejectDialog();
 
-    private:
-        CReporterSendAllDialogPlugin *m_Subject;
-        TestDialogServer *m_Server;
+    void cleanupTestCase();
+    void cleanup();
+
+private:
+    CReporterSendAllDialogPlugin *m_Subject;
+    TestDialogServer *m_Server;
 };
 
 #endif // UT_CREPORTERSENDALLDIALOGPLUGIN_H

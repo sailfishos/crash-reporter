@@ -22,11 +22,7 @@
  *
  */
 
-// System includes.
-
 #include <QSettings>
-
-// User includes.
 
 #include "creportersettingsinit_p.h"
 
@@ -40,10 +36,8 @@ void creporterSettingsInit(const QString &systemPath, const QString &userPath)
             QSettings::setPath(QSettings::NativeFormat, QSettings::SystemScope, systemPath);
         }
         if (!userPath.isNull()) {
-               QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, userPath);
+            QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, userPath);
         }
         initialized = true;
     }
 }
-
-// End of file.

@@ -33,19 +33,19 @@ class Ut_CReporterPrivacySettingsModel : public QObject
 {
     Q_OBJECT
 
-    private slots:
+private slots:
 
-        void initTestCase();
-        void init();
+    void initTestCase();
+    void init();
 
-        void testReadSettings();
-        void testWriteSettings();
+    void testReadSettings();
+    void testWriteSettings();
 
-        void cleanupTestCase();
-        void cleanup();
+    void cleanupTestCase();
+    void cleanup();
 
-    private:
-        QSettings *m_settings;
+private:
+    QSettings *m_settings;
 };
 
 #endif // UT_CREPORTERPRIVACYSETTINGSMODEL_H

@@ -35,35 +35,35 @@
 #include "creportertestutils.h"
 #include "ut_creportercoreregistry.h"
 
-extern QMap<QString, MGConfItem*> gMGConfItems;
+extern QMap<QString, MGConfItem *> gMGConfItems;
 
 void Ut_CReporterCoreRegistry::initTestCase()
 {
-	CReporterTestUtils::createTestMountpoints();
+    CReporterTestUtils::createTestMountpoints();
 }
 
 void Ut_CReporterCoreRegistry::testRegistryRefreshNeededEmission()
-{	
+{
 
     CReporterCoreRegistry *registry = CReporterCoreRegistry::instance();
-	QSignalSpy registryRefreshNeededSpy( registry,
-			SIGNAL(registryRefreshNeeded()) );
+    QSignalSpy registryRefreshNeededSpy( registry,
+                                         SIGNAL(registryRefreshNeeded()) );
 
-	registry->refreshRegistry();
+    registry->refreshRegistry();
 
-	QCOMPARE( registryRefreshNeededSpy.count(), 1 );
+    QCOMPARE( registryRefreshNeededSpy.count(), 1 );
 }
 
 void Ut_CReporterCoreRegistry::testCoreLocationsUpdatedEmission()
 {
     QSignalSpy coreLocationsUpdatedSpy(CReporterCoreRegistry::instance(),
-            SIGNAL(coreLocationsUpdated()));
+                                       SIGNAL(coreLocationsUpdated()));
 
     MGConfItem *conf = gMGConfItems["/system/osso/af/mmc-cover-open"];
     conf->set(QVariant(true));
 
-	QTest::qWait( 5100 );
-	QCOMPARE( coreLocationsUpdatedSpy.count(), 1 );
+    QTest::qWait( 5100 );
+    QCOMPARE( coreLocationsUpdatedSpy.count(), 1 );
 }
 
 void Ut_CReporterCoreRegistry::cleanupTestCase()

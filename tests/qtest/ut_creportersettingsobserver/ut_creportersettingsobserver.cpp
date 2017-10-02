@@ -54,7 +54,7 @@ void Ut_CReporterSettingsObserver::initTestCase()
 
 void Ut_CReporterSettingsObserver::testSettingValueChangedSignal()
 {
-    QSignalSpy valueChangedSpy(m_subject, SIGNAL(valueChanged(QString,QVariant)));
+    QSignalSpy valueChangedSpy(m_subject, SIGNAL(valueChanged(QString, QVariant)));
     // Add watcher to key.
     m_subject->addWatcher(Settings::ValueNotifications);
     // Change setting value.
@@ -72,7 +72,7 @@ void Ut_CReporterSettingsObserver::testSettingValueChangedSignal()
 
 void Ut_CReporterSettingsObserver::testWatcherRemovedAndSettingValueChanged()
 {
-    QSignalSpy valueChangedSpy(m_subject, SIGNAL(valueChanged(QString,QVariant)));
+    QSignalSpy valueChangedSpy(m_subject, SIGNAL(valueChanged(QString, QVariant)));
     // Add watcher to key.
     m_subject->addWatcher(Settings::ValueCoreDumping);
 
@@ -89,7 +89,7 @@ void Ut_CReporterSettingsObserver::testWatcherRemovedAndSettingValueChanged()
 
 void Ut_CReporterSettingsObserver::testSettingFileRemoved()
 {
-    QSignalSpy valueChangedSpy(m_subject, SIGNAL(valueChanged(QString,QVariant)));
+    QSignalSpy valueChangedSpy(m_subject, SIGNAL(valueChanged(QString, QVariant)));
     // Add watcher to key.
     m_subject->addWatcher(Settings::ValueCoreDumping);
 

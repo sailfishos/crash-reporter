@@ -34,17 +34,17 @@ class QSettings;
 
 class Ut_CReporterDaemonProxy : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 private slots:
 
-	void initTestCase();
-	void init();
+    void initTestCase();
+    void init();
 
     void testProxyCollectAllCoreFiles();
 
-	void cleanupTestCase();
-	void cleanup();
+    void cleanupTestCase();
+    void cleanup();
 
 private:
 

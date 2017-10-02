@@ -25,16 +25,8 @@
 #ifndef CREPORTERCOREDIR_P_H
 #define CREPORTERCOREDIR_P_H
 
-// System includes
-
 #include <QStringList>
 
-/*!
- * \class CReporterCoreDirPrivate
- * \brief Private CReporterCoreDir class.
- *
- * \sa CReporterCoreDir
- */
 class CReporterCoreDirPrivate
 {
 public:

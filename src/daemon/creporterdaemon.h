@@ -25,12 +25,8 @@
 #ifndef CREPORTERDAEMON_H
 #define CREPORTERDAEMON_H
 
-// System includes.
-
 #include <QObject>
 #include <QStringList>
-
-// Forward declarations.
 
 class CReporterDaemonPrivate;
 
@@ -41,21 +37,11 @@ class CReporterDaemonPrivate;
  */
 class CReporterDaemon : public QObject
 {
-	Q_OBJECT
-		
+    Q_OBJECT
+
 public:
-	/*!
-     * @brief Class constructor.
-	 *
-     * @param path Configuration file path.
-	 */
     CReporterDaemon();
-	
-	/*!
-     * @brief Class destructor.
- 	 *
- 	 */ 
-	~CReporterDaemon();
+    ~CReporterDaemon();
 
     /*!
       * @brief Sets delayed start up for daemon.
@@ -65,38 +51,38 @@ public:
     void setDelayedStartup(int timeout);
 
 public Q_SLOTS:
-	/*!
+    /*!
      * @brief Initiates daemon process.
-	 *
+     *
      * @return true, if success otherwise false.
-	 */
-	 bool initiateDaemon();
-	 
-	/*!
+     */
+    bool initiateDaemon();
+
+    /*!
      * @brief This function emits monitoringActivated signal, if rich core monitoring is not
-	 * initiated yet.
- 	 * 
+     * initiated yet.
+     *
      * @param fromDBus True, if requested through DBus IF; otherwise false.
      * @sa CReporterDaemonMonitor
      * @sa CReporterDaemonMonitor::monitoringActivated
- 	 */
-    void startCoreMonitoring(const bool fromDBus=false);
+     */
+    void startCoreMonitoring(const bool fromDBus = false);
 
-	/*!
+    /*!
      * @brief This function emits monitoringDeactivated signal, if monitoring has been initiated.
      *
      * @param fromDBus True, if requested through DBus If; otherwise false.
      * @sa CReporterDaemonMonitor
      * @sa CReporterDaemonMonitor::monitoringDeactivated
- 	 */
-    void stopCoreMonitoring(const bool fromDBus=false);
+     */
+    void stopCoreMonitoring(const bool fromDBus = false);
 
-	/*!
+    /*!
      *@brief  Returns a list of core file paths in the core-dumps directories.
      *
      * @return List of absolute core file paths. Empty, if no files found.
      */
-   QStringList collectAllCoreFiles();
+    QStringList collectAllCoreFiles();
 
 private slots:
     /*!
@@ -112,27 +98,24 @@ private:
       *
       * @return True, if registering was successfull; otherwise false.
       */
-	bool startService();
+    bool startService();
 
     /*!
       * @brief Stops D-Bus service and unregisters object.
       *
       */
-	void stopService();
-	
-private: // data
+    void stopService();
 
-	Q_DECLARE_PRIVATE( CReporterDaemon )
+private:
+    Q_DECLARE_PRIVATE(CReporterDaemon)
     QScopedPointer<CReporterDaemonPrivate> d_ptr;
 
-    Q_PRIVATE_SLOT(d_func(), void onNotificationsSettingChanged());
+    Q_PRIVATE_SLOT(d_func(), void onNotificationsSettingChanged())
 
 #ifdef CREPORTER_UNIT_TEST
-	friend class Ut_CReporterDaemon;
+    friend class Ut_CReporterDaemon;
     friend class Ut_CReporterDaemonProxy;
-#endif // CREPORTER_UNIT_TEST
+#endif
 };
 
 #endif // CREPORTERDAEMON_H
-
-// End of file

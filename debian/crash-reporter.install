@@ -1,9 +1,0 @@
-usr/bin/crash*
-usr/share/dbus-1/services/*.service
-usr/lib/duicontrolpanel/*.desktop
-usr/lib/duicontrolpanel/applets/*crash*.so*
-usr/lib/crash-reporter/dialogplugins/*
-usr/share/crash-reporter/*
-usr/share/man/man1/*
-usr/share/themes/base/meegotouch/icons/*
-usr/share/meegotouch/notifications/eventtypes/*

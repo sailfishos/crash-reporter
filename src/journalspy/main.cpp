@@ -47,7 +47,7 @@ int main(int argc, char **argv)
     QCoreApplication app(argc, argv);
 
     qCDebug(cr) << qPrintable(QFileInfo(argv[0]).fileName()) << CREPORTERVERSION
-             << "[" << app.applicationPid() << "] started.";
+                << "[" << app.applicationPid() << "] started.";
 
     JournalSpy journalSpy;
 

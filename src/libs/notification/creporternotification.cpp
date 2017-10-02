@@ -34,28 +34,20 @@
 
 using CReporter::LoggingCategory::cr;
 
-// ======== Class CReporterNotificationPrivate ========
-
-// ======== MEMBER FUNCTIONS ========
-
-// ----------------------------------------------------------------------------
-// CReporterNotificationPrivate::CReporterNotificationPrivate
-// ----------------------------------------------------------------------------
-CReporterNotificationPrivate::CReporterNotificationPrivate(const QString &eventType,
-                                                           CReporterNotification *q):
-  id(0), timeout(-1), callWatcher(0), category(eventType),
-  proxy(new OrgFreedesktopNotificationsInterface("org.freedesktop.Notifications",
-          "/org/freedesktop/Notifications", QDBusConnection::sessionBus(), this)),
-  q_ptr(q)
+CReporterNotificationPrivate::CReporterNotificationPrivate(const QString &eventType, CReporterNotification *q)
+    : id(0), timeout(-1), callWatcher(0), category(eventType),
+      proxy(new OrgFreedesktopNotificationsInterface("org.freedesktop.Notifications",
+                                                     "/org/freedesktop/Notifications",
+                                                     QDBusConnection::sessionBus(), this)),
+      q_ptr(q)
 {
     connect(proxy, &OrgFreedesktopNotificationsInterface::NotificationClosed,
             this, &CReporterNotificationPrivate::onNotificationRemoved);
 }
 
-// ----------------------------------------------------------------------------
-// CReporterNotificationPrivate::~CReporterNotificationPrivate
-// ----------------------------------------------------------------------------
-CReporterNotificationPrivate::~CReporterNotificationPrivate() {}
+CReporterNotificationPrivate::~CReporterNotificationPrivate()
+{
+}
 
 void CReporterNotificationPrivate::sendDBusNotify()
 {
@@ -64,9 +56,9 @@ void CReporterNotificationPrivate::sendDBusNotify()
         //: Action name for crash reporter notifications
         //% "Show settings"
         actions << QStringLiteral("default") << qtTrId("crash_reporter-show-settings");
-    };
+    }
 
-    auto encodeArgument = [](const QString &argument) {
+    auto encodeArgument = [](const QString & argument) {
         QByteArray a;
         QDataStream ds(&a, QIODevice::WriteOnly);
         ds << QVariant(argument);
@@ -76,7 +68,7 @@ void CReporterNotificationPrivate::sendDBusNotify()
                                            "/com/jolla/settings/ui "
                                            "com.jolla.settings.ui "
                                            "showPage ") +
-        encodeArgument(QStringLiteral("system_settings/system/crash_reporter"));
+                            encodeArgument(QStringLiteral("system_settings/system/crash_reporter"));
 
     QVariantMap hints;
     hints.insert("category", category);
@@ -86,15 +78,14 @@ void CReporterNotificationPrivate::sendDBusNotify()
     hints.insert("x-nemo-remote-action-default", defaultAction);
 
     QDBusPendingReply<quint32> reply =
-            //: Group name for crash reporter notifications
-            //% "Crash reporter"
-            proxy->Notify(qtTrId("crash_reporter-notify-app_name"), id, QString(), summary, body,
-                    actions, hints, -1);
+        //: Group name for crash reporter notifications
+        //% "Crash reporter"
+        proxy->Notify(qtTrId("crash_reporter-notify-app_name"), id, QString(), summary, body,
+                      actions, hints, -1);
 
-    qCDebug(cr)
-             << "Sending Notify for notification" << id
-             << "of category" << category
-             << "with summary" << summary << "and body" << body;
+    qCDebug(cr) << "Sending Notify for notification" << id
+                << "of category" << category
+                << "with summary" << summary << "and body" << body;
 
     callWatcher = new QDBusPendingCallWatcher(reply, this);
 }
@@ -147,33 +138,21 @@ void CReporterNotificationPrivate::onNotificationRemoved(quint32 id)
     }
 }
 
-// ======== Class CReporterNotification ========
-
-// ======== MEMBER FUNCTIONS ========
-
-// ----------------------------------------------------------------------------
-// CReporterNotification::CReporterNotification
-// ----------------------------------------------------------------------------
-CReporterNotification::CReporterNotification(const QString &eventType,
-                                             const QString &summary, const QString &body,
-                                             QObject *parent) :
-    QObject(parent),
-    d_ptr(new CReporterNotificationPrivate(eventType, this))
+CReporterNotification::CReporterNotification(const QString &eventType, const QString &summary, const QString &body,
+                                             QObject *parent)
+    : QObject(parent),
+      d_ptr(new CReporterNotificationPrivate(eventType, this))
 {
     update(summary, body);
 }
 
-CReporterNotification::CReporterNotification(const QString &eventType, int id,
-                                             QObject *parent):
-  QObject(parent),
-  d_ptr(new CReporterNotificationPrivate(eventType, this))
+CReporterNotification::CReporterNotification(const QString &eventType, int id, QObject *parent)
+    : QObject(parent),
+      d_ptr(new CReporterNotificationPrivate(eventType, this))
 {
     d_ptr->id = id;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterNotification::~CReporterNotification
-// ----------------------------------------------------------------------------
 CReporterNotification::~CReporterNotification()
 {
     delete d_ptr;
@@ -196,17 +175,11 @@ void CReporterNotification::setTimeout(int ms)
     d->timeout = ms;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterNotification::operator==
-// ----------------------------------------------------------------------------
 bool CReporterNotification::operator==(const CReporterNotification &other) const
 {
     return (d_ptr == other.d_ptr);
 }
 
-// ----------------------------------------------------------------------------
-// CReporterNotification::update
-// ----------------------------------------------------------------------------
 void CReporterNotification::update(const QString &summary, const QString &body,
                                    int count)
 {
@@ -224,9 +197,6 @@ void CReporterNotification::update(const QString &summary, const QString &body,
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterNotification::remove
-// ----------------------------------------------------------------------------
 void CReporterNotification::remove()
 {
     Q_D(CReporterNotification);
@@ -238,21 +208,15 @@ void CReporterNotification::remove()
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterNotification::isPublished
-// ----------------------------------------------------------------------------
 bool CReporterNotification::isPublished() const
 {
-	// TODO: Re-implement for Sailfish
-	return true;
+    // TODO: Re-implement for Sailfish
+    return true;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterNotification::removeAll()
-// ----------------------------------------------------------------------------
 void CReporterNotification::removeAll()
 {
-	// TODO: Re-implement for Sailfish
+    // TODO: Re-implement for Sailfish
 }
 
 #include "moc_creporternotification.cpp"

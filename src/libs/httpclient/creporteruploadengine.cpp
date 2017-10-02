@@ -25,12 +25,8 @@
  *
  */
 
-// System includes.
-
 #include <QDebug>
 #include <QVariant>
-
-// User includes.
 
 #include "creporteruploadengine.h"
 #include "creporteruploadengine_p.h"
@@ -44,18 +40,10 @@
 
 using CReporter::LoggingCategory::cr;
 
-// Local constants.
-
 const char *state_string[] = {"NoConnection", "Connecting", "Connected", "Closing", "Aborting"};
 const char *error_string[] = {"NoError", "ProtocolError", "ConnectionNotAvailable", "ConnectionClosed"};
 
-// *** Class CReporterUploadEnginePrivate ****
 
-// ======== MEMBER FUNCTIONS ========
-
-// ----------------------------------------------------------------------------
-// CReporterUploadEnginePrivate::CReporterUploadEnginePrivate
-// ----------------------------------------------------------------------------
 CReporterUploadEnginePrivate::CReporterUploadEnginePrivate()
 {
     currentItem = 0;
@@ -67,35 +55,26 @@ CReporterUploadEnginePrivate::CReporterUploadEnginePrivate()
 #ifdef CREPORTER_LIBBEARER_ENABLED
     networkSession = new CReporterNwSessionMgr(this);
 
-     // Network signals.
-     connect(networkSession, SIGNAL(networkError(QString)),
-             this, SLOT(connectionError(QString)));
-     connect(networkSession, SIGNAL(sessionDisconnected()),
+    // Network signals.
+    connect(networkSession, SIGNAL(networkError(QString)),
+            this, SLOT(connectionError(QString)));
+    connect(networkSession, SIGNAL(sessionDisconnected()),
             this, SLOT(sessionDisconnected()));
-      connect(networkSession, SIGNAL(sessionOpened()),
+    connect(networkSession, SIGNAL(sessionOpened()),
             this, SLOT(sessionOpened()));
 #endif // CREPORTER_LIBBEARER_ENABLED
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadEnginePrivate::~CReporterUploadEnginePrivate
-// ----------------------------------------------------------------------------
 CReporterUploadEnginePrivate::~CReporterUploadEnginePrivate()
 {
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadEnginePrivate::stateChange
-// ----------------------------------------------------------------------------
 void CReporterUploadEnginePrivate::stateChange(State nextState)
 {
     qCDebug(cr) << "State:" << state_string[state] << ", next state:" << state_string[nextState];
     state = nextState;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadEnginePrivate::uploadItem
-// ----------------------------------------------------------------------------
 void CReporterUploadEnginePrivate::uploadItem(CReporterUploadItem *item)
 {
     qCDebug(cr) << "Got new item to upload:" << item->filename();
@@ -118,9 +97,6 @@ void CReporterUploadEnginePrivate::uploadItem(CReporterUploadItem *item)
     item->startUpload();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadEnginePrivate::queueDone
-// ----------------------------------------------------------------------------
 void CReporterUploadEnginePrivate::queueDone()
 {
     qCDebug(cr) << "Queue is empty.";
@@ -135,23 +111,19 @@ void CReporterUploadEnginePrivate::queueDone()
     emitFinished(error, sentFiles, queue->totalNumberOfItems());
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadEnginePrivate::uploadFinished
-// ----------------------------------------------------------------------------
 void CReporterUploadEnginePrivate::uploadFinished()
 {
     CReporterUploadItem *item = qobject_cast<CReporterUploadItem *>(sender());
 
     qCDebug(cr) << "Upload item:" << item->filename()
-            << "finished. Item status was:" << item->statusString();
+                << "finished. Item status was:" << item->statusString();
 
     if (item->status() == CReporterUploadItem::Error && state != NoConnection) {
         setErrorType(CReporterUploadEngine::ProtocolError);
         setErrorString(item->errorString());
         // Let's try to go on with other files if there was an error but the connection might work
-    }
-    else if (item->status() == CReporterUploadItem::Error ||
-        item->status() == CReporterUploadItem::Cancelled) {
+    } else if (item->status() == CReporterUploadItem::Error ||
+               item->status() == CReporterUploadItem::Cancelled) {
         // If failure was detected during upload or cancel was requested by the user,
         // cancel also all pending uploads.
         // Failure in upload means, HTTP level error of which we cannot recover.
@@ -166,8 +138,7 @@ void CReporterUploadEnginePrivate::uploadFinished()
         }
         // Empty queue.
         queue->clear();
-    }
-    else {
+    } else {
         sentFiles++;
     }
     // Mark upload item as done. If there is no more pending uploads, queue will
@@ -176,9 +147,6 @@ void CReporterUploadEnginePrivate::uploadFinished()
 }
 
 #ifdef CREPORTER_LIBBEARER_ENABLED
-// ----------------------------------------------------------------------------
-// CReporterUploadEnginePrivate::sessionOpened()
-// ----------------------------------------------------------------------------
 void CReporterUploadEnginePrivate::sessionOpened()
 {
     qCDebug(cr) << "Network session opened => start upload.";
@@ -189,9 +157,6 @@ void CReporterUploadEnginePrivate::sessionOpened()
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadEnginePrivate::sessionDisconnected
-// ----------------------------------------------------------------------------
 void CReporterUploadEnginePrivate::sessionDisconnected()
 {
     // Handle network session closure.
@@ -202,28 +167,25 @@ void CReporterUploadEnginePrivate::sessionDisconnected()
     stateChange(NoConnection);
 
     switch (oldState) {
-        case Closing:
-            // Closed upon request.
-            // emitFinished(error, sentFiles, queue->totalNumberOfItems()); // workaround for qnetworksession not closing bug
-            break;
-        case Connecting:
-            // Unable to create connection.
-            setErrorType(CReporterUploadEngine::ConnectionNotAvailable);
-            currentItem->cancel();
-            break;
-        case Connected:
-            // Disconnected by the network.
-            setErrorType(CReporterUploadEngine::ConnectionClosed);
-            currentItem->cancel();
-            break;
-        default:
-            break;
+    case Closing:
+        // Closed upon request.
+        // emitFinished(error, sentFiles, queue->totalNumberOfItems()); // workaround for qnetworksession not closing bug
+        break;
+    case Connecting:
+        // Unable to create connection.
+        setErrorType(CReporterUploadEngine::ConnectionNotAvailable);
+        currentItem->cancel();
+        break;
+    case Connected:
+        // Disconnected by the network.
+        setErrorType(CReporterUploadEngine::ConnectionClosed);
+        currentItem->cancel();
+        break;
+    default:
+        break;
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadEnginePrivate::connectionError
-// ----------------------------------------------------------------------------
 void CReporterUploadEnginePrivate::connectionError(const QString &errorString)
 {
     qCDebug(cr) << "Error in network connection. Setting error.";
@@ -232,9 +194,6 @@ void CReporterUploadEnginePrivate::connectionError(const QString &errorString)
 }
 #endif // CREPORTER_LIBBEARER_ENABLED
 
-// ----------------------------------------------------------------------------
-// CReporterUploadEnginePrivate::setErrorString
-// ----------------------------------------------------------------------------
 void CReporterUploadEnginePrivate::setErrorString(const QString &message)
 {
     if (errorMessage.isNull()) {
@@ -242,9 +201,6 @@ void CReporterUploadEnginePrivate::setErrorString(const QString &message)
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadEnginePrivate::setErrorType
-// ----------------------------------------------------------------------------
 void CReporterUploadEnginePrivate::setErrorType(const CReporterUploadEngine::ErrorType &type)
 {
     if (error == CReporterUploadEngine::NoError) {
@@ -252,13 +208,8 @@ void CReporterUploadEnginePrivate::setErrorType(const CReporterUploadEngine::Err
     }
 }
 
-// ======== LOCAL FUNCTIONS ========
-
-// ----------------------------------------------------------------------------
-// CReporterUploadEnginePrivate::emitFinished
-// ----------------------------------------------------------------------------
 void CReporterUploadEnginePrivate::emitFinished(CReporterUploadEngine::ErrorType error,
-                                                int sent, int total)
+        int sent, int total)
 {
     qCDebug(cr) << "Signalling finished(). Error:" << error_string[error];
 
@@ -266,18 +217,10 @@ void CReporterUploadEnginePrivate::emitFinished(CReporterUploadEngine::ErrorType
     emit q_ptr->finished(static_cast<int>(error), sent, total);
 }
 
-// *** Class CReporterUploadEngine ****
-
-// ======== MEMBER FUNCTIONS ========
-
-// ----------------------------------------------------------------------------
-// CReporterUploadEngine::CReporterUploadEngine
-// ----------------------------------------------------------------------------
- CReporterUploadEngine::CReporterUploadEngine(CReporterUploadQueue *queue,
-                                              QObject *parent) :
-         QObject(parent),
-         d_ptr(new CReporterUploadEnginePrivate())
- {
+CReporterUploadEngine::CReporterUploadEngine(CReporterUploadQueue *queue, QObject *parent)
+    : QObject(parent),
+      d_ptr(new CReporterUploadEnginePrivate())
+{
     Q_D(CReporterUploadEngine);
 
     d->queue = queue;
@@ -288,36 +231,24 @@ void CReporterUploadEnginePrivate::emitFinished(CReporterUploadEngine::ErrorType
     connect(queue, SIGNAL(nextItem(CReporterUploadItem *)),
             d_ptr, SLOT(uploadItem(CReporterUploadItem *)));
     connect(queue, SIGNAL(done()), d_ptr, SLOT(queueDone()));
- }
+}
 
-// ----------------------------------------------------------------------------
-// CReporterUploadEngine::~CReporterUploadEngine
-// ----------------------------------------------------------------------------
 CReporterUploadEngine::~CReporterUploadEngine()
 {
     delete d_ptr;
     d_ptr = 0;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadEngine::lastError
-// ----------------------------------------------------------------------------
 QString CReporterUploadEngine::lastError() const
 {
     return d_ptr->errorMessage;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadEngine::cancelAll
-// ----------------------------------------------------------------------------
 void CReporterUploadEngine::cancelAll()
 {
     Q_D(CReporterUploadEngine);
     qCDebug(cr) << "Aborting upload(s).";
-    if (d->currentItem)
-    {
+    if (d->currentItem) {
         d->currentItem->cancel();
     }
 }
-
-// End of file.

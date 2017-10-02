@@ -43,17 +43,17 @@
 #include "creportersettingsinit_p.h"
 #include "creporternotification.h"
 
-static const char* test_files1[] = { 
-	"test_core.rcore.lzo",
-	"test_1234.rcore.lzo",
-	"test_5678_core.rcore.lzo",
-	};
+static const char *test_files1[] = {
+    "test_core.rcore.lzo",
+    "test_1234.rcore.lzo",
+    "test_5678_core.rcore.lzo",
+};
 
-static const char* test_files_invalid1[] = { 
-	".test_core.rcore.lzo",
+static const char *test_files_invalid1[] = {
+    ".test_core.rcore.lzo",
     /*"crash-reporter-daemon.rcore.lzo",
     "crash-reporter-ui.rcore.lzo",*/
-	};
+};
 
 static bool serviceRegisteredReply;
 // Overridden here to able to fake UI launch failing. Otherwise the Qt implementation seems
@@ -71,8 +71,8 @@ static bool notificationUpdated;
 
 // CReporterNotification mock object.
 CReporterNotification::CReporterNotification(const QString &eventType,
-                                             const QString &summary, const QString &body,
-                                             QObject *parent)
+        const QString &summary, const QString &body,
+        QObject *parent)
 {
     Q_UNUSED(eventType);
     Q_UNUSED(summary);
@@ -82,7 +82,7 @@ CReporterNotification::CReporterNotification(const QString &eventType,
 }
 
 CReporterNotification::CReporterNotification(const QString &eventType, int id,
-                                             QObject *parent)
+        QObject *parent)
 {
     Q_UNUSED(eventType);
     Q_UNUSED(id);
@@ -133,7 +133,8 @@ TestDialogServer::~TestDialogServer()
 }
 
 QDBusError::ErrorType TestDialogServer::callReceived(const QString &dialogName,
-                                const QVariantList &arguments, const QDBusMessage &message) {
+        const QVariantList &arguments, const QDBusMessage &message)
+{
 
     requestedDialog = dialogName;
     callArguments = arguments;
@@ -150,7 +151,7 @@ void TestDialogServer::quit()
 
 void Ut_CReporterDaemon::initTestCase()
 {
-	CReporterTestUtils::createTestMountpoints();
+    CReporterTestUtils::createTestMountpoints();
     daemon = 0;
     settings = 0;
 
@@ -197,8 +198,8 @@ void Ut_CReporterDaemon::testInitiateDaemon()
     daemon = new CReporterDaemon;
 
     CReporterTestUtils::createTestDataFiles(
-            CReporterCoreRegistry::instance()->getCoreLocationPaths(),
-            compareFiles, test_files1);
+        CReporterCoreRegistry::instance()->getCoreLocationPaths(),
+        compareFiles, test_files1);
 
     QVERIFY(daemon->initiateDaemon() == true);
 
@@ -259,7 +260,7 @@ void Ut_CReporterDaemon::testDelayedStartup()
 void Ut_CReporterDaemon::testCollectAllCoreFiles()
 {
     QStringList compareFiles;
-	
+
     daemon = new CReporterDaemon;
     QVERIFY(daemon->initiateDaemon() == true);
 
@@ -278,8 +279,8 @@ void Ut_CReporterDaemon::testCollectAllCoreFiles()
 
 void Ut_CReporterDaemon::testCollectAllCoreFilesNotValidFiles()
 {
-	QStringList compareFiles;
-	QFile file;
+    QStringList compareFiles;
+    QFile file;
 
     daemon = new CReporterDaemon;
     QVERIFY(daemon->initiateDaemon() == true);
@@ -361,8 +362,8 @@ void Ut_CReporterDaemon::testLaunchingUIFailed()
     QStringList compareFiles;
     daemon = new CReporterDaemon;
     CReporterTestUtils::createTestDataFiles(
-            CReporterCoreRegistry::instance()->getCoreLocationPaths(),
-            compareFiles, test_files1);
+        CReporterCoreRegistry::instance()->getCoreLocationPaths(),
+        compareFiles, test_files1);
 
     // Destroy UI.
     delete testDialogServer;

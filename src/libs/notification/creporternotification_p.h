@@ -57,7 +57,7 @@ class CReporterNotificationPrivate : public QObject
 {
     Q_OBJECT
 
-    public:
+public:
 
     /**
      * @brief Class constructor.
@@ -67,46 +67,40 @@ class CReporterNotificationPrivate : public QObject
      */
     CReporterNotificationPrivate(const QString &eventType, CReporterNotification *q);
 
-        /*!
-          * @brief Class destructor.
-          *
-          */
-        virtual ~CReporterNotificationPrivate();
+    virtual ~CReporterNotificationPrivate();
 
     void sendDBusNotify();
-        void retrieveNotificationId();
+    void retrieveNotificationId();
     void removeAfterTimeout();
 
 private slots:
     void onNotificationRemoved(quint32 id);
 
-    public:
-        //! Id of the notification assigned by the notification manager.
-        quint32 id;
-        //! Notification's expiration time in milliseconds.
-        int timeout;
-        //! Pending reply on the notification creation from the notification manager.
-        QDBusPendingCallWatcher *callWatcher;
-        //! Category of the notification, e.g. "x-nemo.crash-reporter.autouploader".
-        QString category;
-        //! Notification's summary string.
-        QString summary;
-        //! Notification's body.
-        QString body;
-        /**
-         * Number of events this notification represents, i.e.
-         * "x-nemo-item-count" hint.
-         */
-        int count;
-        //! DBus proxy of org.freedesktop.Notification
-        OrgFreedesktopNotificationsInterface *proxy;
+public:
+    //! Id of the notification assigned by the notification manager.
+    quint32 id;
+    //! Notification's expiration time in milliseconds.
+    int timeout;
+    //! Pending reply on the notification creation from the notification manager.
+    QDBusPendingCallWatcher *callWatcher;
+    //! Category of the notification, e.g. "x-nemo.crash-reporter.autouploader".
+    QString category;
+    //! Notification's summary string.
+    QString summary;
+    //! Notification's body.
+    QString body;
+    /**
+     * Number of events this notification represents, i.e.
+     * "x-nemo-item-count" hint.
+     */
+    int count;
+    //! DBus proxy of org.freedesktop.Notification
+    OrgFreedesktopNotificationsInterface *proxy;
 
 private:
     Q_DECLARE_PUBLIC(CReporterNotification)
-        //! @arg Pointer to public class.
-        CReporterNotification *q_ptr;
+
+    CReporterNotification *q_ptr;
 };
 
 #endif // CREPORTERNOTIFICATION_P_H
-
- // End of file.

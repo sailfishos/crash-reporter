@@ -5,7 +5,7 @@ QString gDcpRequestedAppletPage;
 bool gDcpSuccess;
 
 DuiControlPanelIf::DuiControlPanelIf(const QString &preferredService, QObject *parent) :
-        MServiceFwBaseIf(preferredService, parent)
+    MServiceFwBaseIf(preferredService, parent)
 {
 
 }

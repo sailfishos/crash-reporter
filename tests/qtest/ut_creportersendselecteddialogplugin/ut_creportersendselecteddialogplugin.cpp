@@ -49,8 +49,8 @@ static bool notificationTimeoutSet;
 // ----------------------------------------------------------------------------
 
 CReporterNotification::CReporterNotification(const QString &eventType,
-                                             const QString &summary, const QString &body,
-                                             const QString &imageName, QObject *parent)
+        const QString &summary, const QString &body,
+        const QString &imageName, QObject *parent)
 {
     ntfEventType = eventType;
     ntfSummary = summary;
@@ -92,7 +92,7 @@ class CReporterUtils
     static QString fileSizeToString(const quint64 size);
     static bool appendToLzo(const QString &text, const QString &filePath);
     static bool removeFile(const QString &path);
-    static QStringList parseCrashInfoFromFilename( const QString& filePath );
+    static QStringList parseCrashInfoFromFilename( const QString &filePath );
 };
 
 QString CReporterUtils::fileSizeToString(const quint64 size)
@@ -113,7 +113,7 @@ bool CReporterUtils::removeFile(const QString &path)
 // CReporterSendSelectedDialog mock object.
 // ----------------------------------------------------------------------------
 CReporterSendSelectedDialog::CReporterSendSelectedDialog(const QStringList &files,
-                                                         const QString &server)
+        const QString &server)
 {
     Q_UNUSED(files);
     Q_UNUSED(server);
@@ -153,10 +153,10 @@ void Ut_CReporterSendSelectedDialogPlugin::init()
     static MApplication *app = 0;
 
     if (app == 0) {
-            int argc = 2;
-            const char *argv[] = {"./ut_creportersendselecteddialogplugin", "-software", 0};
-            app = new MApplication(argc, (char **)argv);
-        }
+        int argc = 2;
+        const char *argv[] = {"./ut_creportersendselecteddialogplugin", "-software", 0};
+        app = new MApplication(argc, (char **)argv);
+    }
 
     m_Server = new TestDialogServer();
     m_Subject = new CReporterSendSelectedDialogPlugin();
@@ -169,10 +169,10 @@ void Ut_CReporterSendSelectedDialogPlugin::initTestCase()
 
 void Ut_CReporterSendSelectedDialogPlugin::testInitializePlugin()
 {
-   // Test plugin initialized successfully.
-   m_Subject->initialize(m_Server);
-   QVERIFY(m_Subject->name() == CReporter::SendSelectedDialogType );
-   QVERIFY(m_Subject->isInitialized() == true);
+    // Test plugin initialized successfully.
+    m_Subject->initialize(m_Server);
+    QVERIFY(m_Subject->name() == CReporter::SendSelectedDialogType );
+    QVERIFY(m_Subject->isInitialized() == true);
 }
 
 void Ut_CReporterSendSelectedDialogPlugin::testRequestPluginNotInitialized()
@@ -225,7 +225,7 @@ void Ut_CReporterSendSelectedDialogPlugin::testRequestHandledFilesSent()
     QVariantList args;
     QStringList files;
     files << QString("/media/mmc1/core-dumps/test-1234-11-4321.rcore.lzo") <<
-            QString("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo");
+          QString("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo");
     args << files;
     // Open via notification
     args << bool(true);
@@ -261,7 +261,7 @@ void Ut_CReporterSendSelectedDialogPlugin::testRequestHandledFilesDeleted()
     QVariantList args;
     QStringList files;
     files << QString("/media/mmc1/core-dumps/test-1234-11-4321.rcore.lzo") <<
-            QString("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo");
+          QString("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo");
     args << files;
     // Open via notification
     args << bool(true);
@@ -295,7 +295,7 @@ void Ut_CReporterSendSelectedDialogPlugin::testRejectDialog()
     QVariantList args;
     QStringList files;
     files << QString("/media/mmc1/core-dumps/test-1234-11-4321.rcore.lzo") <<
-            QString("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo");
+          QString("/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo");
     args << files;
     // Do not open via notification
     args << bool(false);
@@ -324,7 +324,7 @@ void Ut_CReporterSendSelectedDialogPlugin::cleanup()
 
     if (m_Subject != 0) {
         if (m_Subject->isInitialized()) {
-           m_Subject->destroy();
+            m_Subject->destroy();
         }
         delete m_Subject;
         m_Subject = 0;

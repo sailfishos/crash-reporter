@@ -25,43 +25,32 @@
  *
  */
 
-// System includes.
-
 #include <QSettings>
-
-// User includes.
 
 #include "creporterapplicationsettings.h"
 #include "creportersettingsinit_p.h"
 #include "creporternamespace.h"
 
-// Pointer to this class.
-CReporterApplicationSettings* CReporterApplicationSettings::sm_Instance = 0;
+CReporterApplicationSettings *CReporterApplicationSettings::sm_Instance = 0;
 
-/*!
-  * @class CReporterApplicationSettingsPrivate
-  * @brief Private CReporterApplicationSettings class.
-  *
-  */
 class CReporterApplicationSettingsPrivate
 {
-    public:
-        CReporterApplicationSettingsPrivate(CReporterApplicationSettings *q);
+public:
+    CReporterApplicationSettingsPrivate(CReporterApplicationSettings *q);
 
-        int intValue(const QString &key, const QVariant &defaultValue) const;
+    int intValue(const QString &key, const QVariant &defaultValue) const;
 
-    private:
-        Q_DECLARE_PUBLIC(CReporterApplicationSettings)
-        CReporterApplicationSettings *q_ptr;
+private:
+    Q_DECLARE_PUBLIC(CReporterApplicationSettings)
+    CReporterApplicationSettings *q_ptr;
 };
 
-CReporterApplicationSettingsPrivate::CReporterApplicationSettingsPrivate(CReporterApplicationSettings *q):
-    q_ptr(q)
+CReporterApplicationSettingsPrivate::CReporterApplicationSettingsPrivate(CReporterApplicationSettings *q)
+    : q_ptr(q)
 {
 }
 
-int CReporterApplicationSettingsPrivate::intValue(const QString &key,
-                                                  const QVariant &defaultValue) const
+int CReporterApplicationSettingsPrivate::intValue(const QString &key, const QVariant &defaultValue) const
 {
     const Q_Q(CReporterApplicationSettings);
 
@@ -71,12 +60,7 @@ int CReporterApplicationSettingsPrivate::intValue(const QString &key,
     return ok ? result : defaultValue.toInt();
 }
 
-// ======== MEMBER FUNCTIONS ========
-
-// ----------------------------------------------------------------------------
-// CReporterApplicationSettings::instance
-// ----------------------------------------------------------------------------
-CReporterApplicationSettings* CReporterApplicationSettings::instance()
+CReporterApplicationSettings *CReporterApplicationSettings::instance()
 {
     if (sm_Instance == 0) {
         sm_Instance = new CReporterApplicationSettings();
@@ -84,9 +68,6 @@ CReporterApplicationSettings* CReporterApplicationSettings::instance()
     return sm_Instance;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterApplicationSettings::freeSingleton
-// ----------------------------------------------------------------------------
 void CReporterApplicationSettings::freeSingleton()
 {
     if (sm_Instance != 0) {
@@ -95,9 +76,6 @@ void CReporterApplicationSettings::freeSingleton()
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterApplicationSettings::~CReporterApplicationSettings
-// ----------------------------------------------------------------------------
 CReporterApplicationSettings::~CReporterApplicationSettings()
 {
     delete d_ptr;
@@ -107,7 +85,7 @@ CReporterApplicationSettings::~CReporterApplicationSettings()
 QString CReporterApplicationSettings::serverUrl() const
 {
     return value(Server::ValueServerAddress,
-            QStringLiteral("https://crashes.projects.maemo.org")).toString();
+                 QStringLiteral("https://crashes.projects.maemo.org")).toString();
 }
 
 void CReporterApplicationSettings::setServerUrl(const QString &url)
@@ -219,13 +197,8 @@ void CReporterApplicationSettings::setLoggerType(const QString &type)
         emit loggerTypeChanged();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterApplicationSettings::CReporterApplicationSettings
-// ----------------------------------------------------------------------------
-CReporterApplicationSettings::CReporterApplicationSettings() :
-    CReporterSettingsBase("crash-reporter-settings", "crash-reporter"),
-    d_ptr(new CReporterApplicationSettingsPrivate(this))
+CReporterApplicationSettings::CReporterApplicationSettings()
+    : CReporterSettingsBase("crash-reporter-settings", "crash-reporter"),
+      d_ptr(new CReporterApplicationSettingsPrivate(this))
 {
 }
-
-// End of file.

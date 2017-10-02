@@ -68,7 +68,7 @@ void Ut_CReporterPrivacySettingsModel::testReadSettings()
 {
     bool enabled;
     QVERIFY(CReporterPrivacySettingsModel::instance()->settingsFile() == settingsFile);
-    QVERIFY(CReporterPrivacySettingsModel::instance()->isValid()== true);
+    QVERIFY(CReporterPrivacySettingsModel::instance()->isValid() == true);
 
     enabled = CReporterPrivacySettingsModel::instance()->notificationsEnabled();
     QVERIFY(enabled == false);
@@ -95,7 +95,7 @@ void Ut_CReporterPrivacySettingsModel::testReadSettings()
 void Ut_CReporterPrivacySettingsModel::testWriteSettings()
 {
     QSignalSpy valueChangedSpy(CReporterPrivacySettingsModel::instance(),
-                               SIGNAL(valueChanged(QString,QVariant)));
+                               SIGNAL(valueChanged(QString, QVariant)));
 
     CReporterPrivacySettingsModel::instance()->setNotificationsEnabled(true);
     CReporterPrivacySettingsModel::instance()->setCoreDumpingEnabled(false);

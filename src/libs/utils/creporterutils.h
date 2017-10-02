@@ -25,12 +25,8 @@
 #ifndef CREPORTERUTILS_H
 #define CREPORTERUTILS_H
 
-// System includes
-
 #include <QFileInfo>
 #include <QLoggingCategory>
-
-// User includes.
 
 #include "creporterexport.h"
 
@@ -39,17 +35,18 @@ class QProcess;
 namespace CReporter {
 namespace LoggingCategory {
 Q_DECLARE_LOGGING_CATEGORY(cr)
-} // namespace LoggingCategory
-} // namespace CReporter
+}
+}
 
 /*! @class CReporterUtils
  *  @brief This class implements utility functions.
  */
-class CREPORTER_EXPORT CReporterUtils: public QObject {
+class CREPORTER_EXPORT CReporterUtils: public QObject
+{
     Q_OBJECT
-public:
 
-	/*!
+public:
+    /*!
      * Checks if the file at given path can be accepted for upload.
      *
      * Valid files are those which have .rcore or .rcore.lzo suffix, the others
@@ -57,31 +54,31 @@ public:
      *
      * @param path rich core file path
      * @return true if it can be accepted, otherwise false
-	 */
+     */
     static bool validateCore(const QString &path);
 
-	/*!
+    /*!
      * @brief This function converts QString to char* format.
-	 *
+     *
      * @param str string to convert.
      * @return string in char* format.
-	 */
-    static char* qstringToChar(const QString &str);
+     */
+    static char *qstringToChar(const QString &str);
 
-	/*!
+    /*!
      * @brief Checks the status of the path using stat().
-     * 
+     *
      * @param path Reference to path of which status is to be checked.
      * @return true, if mounted otherwise false.
-     */ 
+     */
     static bool isMounted(const QString &path);
 
-	/*!
-	 * Removes the given file.
-	 *
+    /*!
+     * Removes the given file.
+     *
      * @param file Path to the file to remove.
      * @return true, if operation succeeds, otherwise false.
-	 */
+     */
     static bool removeFile(const QString &path);
 
     /*!

@@ -25,15 +25,11 @@
  *
  */
 
-// System includes
-
 #include <csignal>
 
 #include <QCoreApplication>
 #include <QDebug>
 #include <QTranslator>
-
-// User includes.
 
 #include "creporterdaemon.h"
 #include "creporterutils.h"
@@ -42,18 +38,16 @@
 
 #ifndef QT_NO_DEBUG_OUTPUT
 #include "creporterlogger.h"
-#endif // QT_NO_DEBUG_OUTPUT
+#endif
 
 using CReporter::LoggingCategory::cr;
-
-// Local macros and definitions.
 
 #define CREPORTER_PID_FILE      "/tmp/crash-reporter-daemon.pid"
 #define CREPORTER_STARTUP_DELAY 30000 // 30 sec timer to delay start up
 
 #ifndef QT_NO_DEBUG_OUTPUT
 #define LOG_FILE    "/tmp/crash-reporter-daemon.log"
-#endif // QT_NO_DEBUG_OUTPUT
+#endif
 
 /*!
  * @brief Gets crash-reporter-daemon pid and saves it to file.
@@ -67,27 +61,28 @@ bool getPid(QCoreApplication &app)
     qint64 pid = 0;
     bool firstStartup = true;
 
-	// Get new PID.
-	pid = app.applicationPid();
+    // Get new PID.
+    pid = app.applicationPid();
     qCDebug(cr) << CReporter::DaemonBinaryName << "[" << pid << "] starting...";
 
     if (pidFile.exists()) {
         firstStartup = false;
-		qCDebug(cr) << "Removing stale PID file.";
-		pidFile.remove();
-	}
-	
+        qCDebug(cr) << "Removing stale PID file.";
+        pidFile.remove();
+    }
+
     if (pidFile.open(QIODevice::WriteOnly)) {
         QTextStream out(&pidFile);
-		out << pid;
-		pidFile.close();
-	}
+        out << pid;
+        pidFile.close();
+    }
 
     qCDebug(cr) << "Startup delayed =" << firstStartup;
     return firstStartup;
 }
 
-void signalHandler(int signal) {
+void signalHandler(int signal)
+{
     Q_UNUSED(signal)
 
     QCoreApplication::exit(0);
@@ -106,7 +101,7 @@ Q_DECL_EXPORT int main(int argc, char **argv)
 
 #ifndef QT_NO_DEBUG_OUTPUT
     Logger logger(CReporterApplicationSettings::instance()->loggerType());
-#endif // QT_NO_DEBUG_OUTPUT
+#endif
 
     QCoreApplication app(argc, argv);
 
@@ -115,14 +110,13 @@ Q_DECL_EXPORT int main(int argc, char **argv)
     app.installTranslator(translator);
 
     bool firstStartup = getPid(app);
-	
+
     CReporterDaemon daemon;
 
     if (firstStartup) {
         // If no PID file was found, delay startup.
         daemon.setDelayedStartup(CREPORTER_STARTUP_DELAY);
-    }
-    else {
+    } else {
         if (!daemon.initiateDaemon()) {
             // Connecting to D-BUS user session most propably failed.
             // Remove PID file (to delay next startup) and quit application.
@@ -139,5 +133,3 @@ Q_DECL_EXPORT int main(int argc, char **argv)
     CReporterApplicationSettings::instance()->freeSingleton();
     return retVal;
 }
-
-// End of file.

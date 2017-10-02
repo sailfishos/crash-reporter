@@ -25,8 +25,6 @@
  *
  */
 
-// User includes.
-
 #include "creporterdaemon.h"
 #include "creporterdaemon_p.h"
 #include "creporterdaemonadaptor.h"
@@ -42,8 +40,8 @@
 
 using CReporter::LoggingCategory::cr;
 
-CReporterDaemon::CReporterDaemon() :
-  d_ptr(new CReporterDaemonPrivate(this))
+CReporterDaemon::CReporterDaemon()
+    : d_ptr(new CReporterDaemonPrivate(this))
 {
     // Adaptor class is deleted automatically, when the class, it is
     // attached to is deleted.
@@ -54,20 +52,14 @@ CReporterDaemon::CReporterDaemon() :
 #endif
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemon::~CReporterDaemon
-// ----------------------------------------------------------------------------
 CReporterDaemon::~CReporterDaemon()
-{	
+{
     qCDebug(cr) << "Daemon destroyed.";
 
     CReporterPrivacySettingsModel::instance()->freeSingleton();
     CReporterSavedState::freeSingleton();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemon::setDelayedStartup
-// ----------------------------------------------------------------------------
 void CReporterDaemon::setDelayedStartup(int timeout)
 {
     Q_D(CReporterDaemon);
@@ -78,30 +70,24 @@ void CReporterDaemon::setDelayedStartup(int timeout)
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemon::initiateDaemon
-// ----------------------------------------------------------------------------
 bool CReporterDaemon::initiateDaemon()
 {
     qCDebug(cr) << "Starting daemon...";
 
-    if (!CReporterPrivacySettingsModel::instance()->isValid())
-    {
+    if (!CReporterPrivacySettingsModel::instance()->isValid()) {
         qCWarning(cr) << "Invalid settings";
         // Exit, if settings are missing.
         return false;
     }
 
-    QString filename = CReporterPrivacySettingsModel::instance()->settingsFile(); 
+    QString filename = CReporterPrivacySettingsModel::instance()->settingsFile();
 
-    if (!startService())
-    {
-		return false;
-	}
+    if (!startService()) {
+        return false;
+    }
 
     if (CReporterPrivacySettingsModel::instance()->notificationsEnabled()
-        || CReporterPrivacySettingsModel::instance()->automaticSendingEnabled())
-    {
+            || CReporterPrivacySettingsModel::instance()->automaticSendingEnabled()) {
         // Read from settings file, if monitor should be started.
         startCoreMonitoring();
     }
@@ -113,27 +99,23 @@ bool CReporterDaemon::initiateDaemon()
     state->writeSettings();
 #endif
 
-    if (CReporterPrivacySettingsModel::instance()->automaticSendingEnabled())
-    {
+    if (CReporterPrivacySettingsModel::instance()->automaticSendingEnabled()) {
         QStringList files = collectAllCoreFiles();
 
         if (!files.isEmpty() &&
-            CReporterNwSessionMgr::canUseNetworkConnection() &&
-            !CReporterUtils::notifyAutoUploader(files))
-        {
+                CReporterNwSessionMgr::canUseNetworkConnection() &&
+                !CReporterUtils::notifyAutoUploader(files)) {
             qCDebug(cr) << "Failed to add files to the queue.";
         }
-    }
-    else if (CReporterPrivacySettingsModel::instance()->notificationsEnabled())
-    {
+    } else if (CReporterPrivacySettingsModel::instance()->notificationsEnabled()) {
         QStringList files = collectAllCoreFiles();
 
         if (!files.isEmpty()) {
             CReporterNotification *notification = new CReporterNotification(
-                    CReporter::ApplicationNotificationEventType,
-                    //% "This system has stored crash reports."
-                    qtTrId("crash_reporter-notify-has_stored_cores"),
-                    QString(), this);
+                CReporter::ApplicationNotificationEventType,
+                //% "This system has stored crash reports."
+                qtTrId("crash_reporter-notify-has_stored_cores"),
+                QString(), this);
 
             connect(notification, &CReporterNotification::timeouted,
                     notification, &CReporterNotification::deleteLater);
@@ -143,9 +125,6 @@ bool CReporterDaemon::initiateDaemon()
     return true;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemon::startCoreMonitoring
-// ----------------------------------------------------------------------------
 void CReporterDaemon::startCoreMonitoring(const bool fromDBus)
 {
     Q_D(CReporterDaemon);
@@ -153,7 +132,7 @@ void CReporterDaemon::startCoreMonitoring(const bool fromDBus)
     qCDebug(cr) << "Core monitoring requested. Called from DBus =" << fromDBus;
 
     if (!d->monitor) {
-		// Create monitor instance and start monitoring cores.
+        // Create monitor instance and start monitoring cores.
         d->monitor = new CReporterDaemonMonitor(this);
         Q_CHECK_PTR(d->monitor);
 
@@ -164,34 +143,28 @@ void CReporterDaemon::startCoreMonitoring(const bool fromDBus)
             CReporterPrivacySettingsModel::instance()->writeSettings();
         }
         d->monitor->setAutoDeleteMaxSimilarCores(
-                CReporterPrivacySettingsModel::instance()->autoDeleteMaxSimilarCores());
+            CReporterPrivacySettingsModel::instance()->autoDeleteMaxSimilarCores());
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemon::stopCoreMonitoring
-// ----------------------------------------------------------------------------
 void CReporterDaemon::stopCoreMonitoring(const bool fromDBus)
 {
     Q_D(CReporterDaemon);
-	
-    if (d->monitor) {
-		// Delete monitor instance and stop core monitoring.
-		delete d->monitor;
-        d->monitor = 0;
-        
-		qCDebug(cr) << "Core monitoring stopped.";
 
-          if (fromDBus) {
-              CReporterPrivacySettingsModel::instance()->setNotificationsEnabled(false);
-              CReporterPrivacySettingsModel::instance()->writeSettings();
+    if (d->monitor) {
+        // Delete monitor instance and stop core monitoring.
+        delete d->monitor;
+        d->monitor = 0;
+
+        qCDebug(cr) << "Core monitoring stopped.";
+
+        if (fromDBus) {
+            CReporterPrivacySettingsModel::instance()->setNotificationsEnabled(false);
+            CReporterPrivacySettingsModel::instance()->writeSettings();
         }
-	}
+    }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemon::collectAllCoreFiles
-// ----------------------------------------------------------------------------
 QStringList CReporterDaemon::collectAllCoreFiles()
 {
     return CReporterCoreRegistry::instance()->collectAllCoreFiles();
@@ -214,50 +187,44 @@ void CReporterDaemon::timerEvent(QTimerEvent *event)
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemon::startService
-// ----------------------------------------------------------------------------
 bool CReporterDaemon::startService()
 {
-	qCDebug(cr) << "Starting D-Bus service...";
+    qCDebug(cr) << "Starting D-Bus service...";
 
     if (!QDBusConnection::sessionBus().isConnected()) {
-	  qCWarning(cr) << "D-Bus not running?";
-	  return false;
-	  }
+        qCWarning(cr) << "D-Bus not running?";
+        return false;
+    }
 
     if (!QDBusConnection::sessionBus().registerObject(CReporter::DaemonObjectPath, this)) {
-      qCWarning(cr) << "Failed to register object, daemon already running?";
-      return false;
-	  }
+        qCWarning(cr) << "Failed to register object, daemon already running?";
+        return false;
+    }
 
     qCDebug(cr) << "Object:" << CReporter::DaemonObjectPath << "registered.";
 
     if (!QDBusConnection::sessionBus().registerService(CReporter::DaemonServiceName)) {
-      qCWarning(cr) << "Failed to register service, daemon already running?";
-      return false;
-	  }
+        qCWarning(cr) << "Failed to register service, daemon already running?";
+        return false;
+    }
 
     qCDebug(cr) << "Service:" << CReporter::DaemonServiceName << "registered.";
 
     // Good to go.
-	qCDebug(cr) << "D-Bus service started.";
-	return true;
+    qCDebug(cr) << "D-Bus service started.";
+    return true;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterDaemon::stopService
-// ----------------------------------------------------------------------------
 void CReporterDaemon::stopService()
 {
-	qCDebug(cr) << "Stopping D-Bus service...";
+    qCDebug(cr) << "Stopping D-Bus service...";
 
     QDBusConnection::sessionBus().unregisterService(CReporter::DaemonServiceName);
     QDBusConnection::sessionBus().unregisterObject(CReporter::DaemonObjectPath);
 }
 
-CReporterDaemonPrivate::CReporterDaemonPrivate(CReporterDaemon *parent):
-  monitor(0), timerId(0), q_ptr(parent)
+CReporterDaemonPrivate::CReporterDaemonPrivate(CReporterDaemon *parent)
+    : monitor(0), timerId(0), q_ptr(parent)
 {
     Q_Q(CReporterDaemon);
 
@@ -271,7 +238,7 @@ void CReporterDaemonPrivate::onNotificationsSettingChanged()
     Q_Q(CReporterDaemon);
 
     CReporterPrivacySettingsModel &settings =
-            *CReporterPrivacySettingsModel::instance();
+        *CReporterPrivacySettingsModel::instance();
 
     if (settings.notificationsEnabled()) {
         q->startCoreMonitoring();

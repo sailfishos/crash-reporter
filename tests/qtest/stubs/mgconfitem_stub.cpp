@@ -1,13 +1,12 @@
 #include <MGConfItem>
 
 // MGConfItem stubs
-struct MGConfItemPrivate
-{
+struct MGConfItemPrivate {
     QString key;
     QVariant value;
 };
 
-QMap<QString, MGConfItem*> gMGConfItems;
+QMap<QString, MGConfItem *> gMGConfItems;
 
 MGConfItem::MGConfItem(const QString &key, QObject *parent)
     : QObject (parent)

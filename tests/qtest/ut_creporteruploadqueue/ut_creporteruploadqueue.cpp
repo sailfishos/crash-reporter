@@ -60,13 +60,13 @@ void Ut_CReporterUploadQueue::initTestCase()
 void Ut_CReporterUploadQueue::testEnqueueItems()
 {
     // Verify that items are enqueued and dequeued correctly.
-    QSignalSpy itemAddedSpy(m_Subject, SIGNAL(itemAdded(CReporterUploadItem*)));
-    QSignalSpy nextItemSpy(m_Subject, SIGNAL(nextItem(CReporterUploadItem*)));
+    QSignalSpy itemAddedSpy(m_Subject, SIGNAL(itemAdded(CReporterUploadItem *)));
+    QSignalSpy nextItemSpy(m_Subject, SIGNAL(nextItem(CReporterUploadItem *)));
 
     QStringList files;
     files << "/media/mmc1/core-dumps/application-1234-11-4321.rcore.lzo"
-            << "/media/mmc1/core-dumps/application-1234-9-4321.rcore.lzo"
-            << "/media/mmc2/core-dumps/application-1234-11-4321.rcore.lzo";
+          << "/media/mmc1/core-dumps/application-1234-9-4321.rcore.lzo"
+          << "/media/mmc2/core-dumps/application-1234-11-4321.rcore.lzo";
 
     // Add some items into queue.
     foreach (QString file, files) {
@@ -78,7 +78,7 @@ void Ut_CReporterUploadQueue::testEnqueueItems()
     QVERIFY(m_Subject->totalNumberOfItems() == 3);
 
     // Mark items as done.
-    foreach (CReporterUploadItem* item, items) {
+    foreach (CReporterUploadItem *item, items) {
         item->emitDone();
     }
 

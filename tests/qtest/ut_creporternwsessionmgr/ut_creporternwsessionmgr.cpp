@@ -24,31 +24,35 @@
 
 #include "ut_creporternwsessionmgr.h"
 
-void Ut_CReporterNwSessionMgr::test_opened() {
-	mgr = new CReporterNwSessionMgr();
-	QCOMPARE(mgr->opened(), false);
+void Ut_CReporterNwSessionMgr::test_opened()
+{
+    mgr = new CReporterNwSessionMgr();
+    QCOMPARE(mgr->opened(), false);
 }
 
-void Ut_CReporterNwSessionMgr::test_open() {
-	mgr = new CReporterNwSessionMgr();
-	mgr->open();
-	QCOMPARE(mgr->opened(), true);
+void Ut_CReporterNwSessionMgr::test_open()
+{
+    mgr = new CReporterNwSessionMgr();
+    mgr->open();
+    QCOMPARE(mgr->opened(), true);
 }
 
-void Ut_CReporterNwSessionMgr::test_openTwice() {
-	mgr = new CReporterNwSessionMgr();
-	mgr->open();
-	QCOMPARE(mgr->opened(), true);
-	mgr->open();
-	QCOMPARE(mgr->opened(), true);
+void Ut_CReporterNwSessionMgr::test_openTwice()
+{
+    mgr = new CReporterNwSessionMgr();
+    mgr->open();
+    QCOMPARE(mgr->opened(), true);
+    mgr->open();
+    QCOMPARE(mgr->opened(), true);
 }
 
-void Ut_CReporterNwSessionMgr::test_close() {
-	mgr = new CReporterNwSessionMgr();
-	mgr->open();
-	QCOMPARE(mgr->opened(), true);
+void Ut_CReporterNwSessionMgr::test_close()
+{
+    mgr = new CReporterNwSessionMgr();
+    mgr->open();
+    QCOMPARE(mgr->opened(), true);
     mgr->stop();
-	QCOMPARE(mgr->opened(), false);
+    QCOMPARE(mgr->opened(), false);
 }
 
 QTEST_MAIN(Ut_CReporterNwSessionMgr)

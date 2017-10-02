@@ -25,8 +25,6 @@
  *
  */
 
-// System includes.
-
 #include <sys/types.h> // for stat()
 #include <sys/stat.h>
 
@@ -40,8 +38,6 @@
 #include <QFile>
 #include <QProcess>
 
-// User includes.
-
 #include "creporterutils.h"
 
 #include "creporternamespace.h"
@@ -51,12 +47,10 @@
 namespace CReporter {
 namespace LoggingCategory {
 Q_LOGGING_CATEGORY(cr, "creporter", QtInfoMsg)
-} // namespace LoggingCategory
-} // namespace CReporter
+}
+}
 
 using CReporter::LoggingCategory::cr;
-
-// Local constants.
 
 const QString richCoreTmpNoteFile = "/tmp/rich-core-note.txt";
 const QString coreSuffixRcore = "rcore";
@@ -64,50 +58,38 @@ const QString coreSuffixRcoreLzo = "rcore.lzo";
 
 CReporterUtils::CReporterUtils() {}
 
-// ----------------------------------------------------------------------------
-// CReporterUtils::validateCore
-// ----------------------------------------------------------------------------
 bool CReporterUtils::validateCore(const QString &path)
 {
     return (path.endsWith(coreSuffixRcoreLzo, Qt::CaseInsensitive) ||
             path.endsWith(coreSuffixRcore, Qt::CaseInsensitive));
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUtils::qstringToChar
-// ----------------------------------------------------------------------------
-char* CReporterUtils::qstringToChar(const QString &str)
+char *CReporterUtils::qstringToChar(const QString &str)
 {
-	return str.toLatin1().data();
+    return str.toLatin1().data();
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUtils::isMounted
-// ----------------------------------------------------------------------------
 bool CReporterUtils::isMounted(const QString &path)
 {
 #if defined(CREPORTER_SDK_HOST) || defined(CREPORTER_UNIT_TEST)
     Q_UNUSED(path);
-	// Skip, if running in scratchbox.
-	qCDebug(cr) << "Scratchbox target -> skip check and return true";
-	return true;	
+    // Skip, if running in scratchbox.
+    qCDebug(cr) << "Scratchbox target -> skip check and return true";
+    return true;
 #else
-	struct stat st;
+    struct stat st;
     memset(&st, 0, sizeof(st));
-    
+
     if (stat(CReporterUtils::qstringToChar(path), &st) == 0) {
-		qCDebug(cr) << "Path:" << path << "is mounted. Device ID:" << st.st_dev;
-		return true;
+        qCDebug(cr) << "Path:" << path << "is mounted. Device ID:" << st.st_dev;
+        return true;
     }
 
-	qCDebug(cr) << "Path:" << path << "not mounted.";
-	return false;
+    qCDebug(cr) << "Path:" << path << "not mounted.";
+    return false;
 #endif // defined(CREPORTER_SDK_HOST) || defined(CREPORTER_UNIT_TEST)
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUtils::removeFile
-// ----------------------------------------------------------------------------
 bool CReporterUtils::removeFile(const QString &path)
 {
     QFileInfo fi(path);
@@ -115,9 +97,6 @@ bool CReporterUtils::removeFile(const QString &path)
     return QFile::remove(fi.absoluteFilePath());
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUtils::parseCrashInfoFromFilename
-// ----------------------------------------------------------------------------
 QStringList CReporterUtils::parseCrashInfoFromFilename(const QString &filePath)
 {
     qCDebug(cr) << "Parse:" << filePath;
@@ -169,17 +148,14 @@ QStringList CReporterUtils::parseCrashInfoFromFilename(const QString &filePath)
     return result;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUtils::appendToLzo
-// ----------------------------------------------------------------------------
 bool CReporterUtils::appendToLzo(const QString &text, const QString &filePath)
 {
     QFile tmpFile(richCoreTmpNoteFile);
     // Create local temp file, where comments are written.
     if (!tmpFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
-          qCDebug(cr) << "Unable to open file:" << filePath;
-          return false;
-          }
+        qCDebug(cr) << "Unable to open file:" << filePath;
+        return false;
+    }
 
     QTextStream out(&tmpFile);
     out << text;
@@ -203,12 +179,12 @@ QString CReporterUtils::deviceUid()
     static OrgNemoSsuInterface *ssuProxy = 0;
     if (!ssuProxy) {
         ssuProxy = new OrgNemoSsuInterface("org.nemo.ssu", "/org/nemo/ssu",
-                QDBusConnection::systemBus(), qApp);
+                                           QDBusConnection::systemBus(), qApp);
     }
 
     QDBusPendingReply<QString> reply = ssuProxy->deviceUid();
     reply.waitForFinished();
-    if (reply.isError()){
+    if (reply.isError()) {
         qCDebug(cr) << "DBus unavailable, UUID might be incorrect.";
         return SsuDeviceInfo().deviceUid();
     } else {
@@ -241,16 +217,16 @@ bool CReporterUtils::reportIncludesCrash(const QString &fileName)
 }
 
 bool CReporterUtils::notifyAutoUploader(const QStringList &filesToUpload,
-        bool obeyNetworkRestrictions)
+                                        bool obeyNetworkRestrictions)
 {
     qCDebug(cr) << "Requesting crash-reporter-autouploader to upload"
-             << filesToUpload.size() << "files.";
+                << filesToUpload.size() << "files.";
 
     ComNokiaCrashReporterAutoUploaderInterface proxy(CReporter::AutoUploaderServiceName,
             CReporter::AutoUploaderObjectPath, QDBusConnection::sessionBus());
 
     QDBusPendingReply <bool>reply =
-            proxy.uploadFiles(filesToUpload, obeyNetworkRestrictions);
+        proxy.uploadFiles(filesToUpload, obeyNetworkRestrictions);
     // This blocks.
     reply.waitForFinished();
 
@@ -274,7 +250,7 @@ QProcess *CReporterUtils::invokeLogCollection(const QString &label)
     QScopedPointer<QProcess> richCoreHelper(new QProcess(qApp));
 
     richCoreHelper->start("/usr/libexec/rich-core-helper",
-            QStringList() << label);
+                          QStringList() << label);
     if (!richCoreHelper->waitForStarted()) {
         qCDebug(cr) << "Problem invoking rich-core-dumper.";
         return 0;

@@ -34,24 +34,24 @@ class Ut_CReporterMessageBoxDialogPlugin : public QObject
 {
     Q_OBJECT
 
-    private Q_SLOTS:
+private Q_SLOTS:
 
-        void initTestCase();
-        void init();
+    void initTestCase();
+    void init();
 
-        void testInitializePlugin();
-        void testRequestPluginNotInitialized();
-        void testDestroyPlugin();
-        void testRequestPluginInvalidArgumentCount();
-        void testRequestPluginInvalidArgumentType();
-        void testShowMessageBox();
+    void testInitializePlugin();
+    void testRequestPluginNotInitialized();
+    void testDestroyPlugin();
+    void testRequestPluginInvalidArgumentCount();
+    void testRequestPluginInvalidArgumentType();
+    void testShowMessageBox();
 
-        void cleanupTestCase();
-        void cleanup();
+    void cleanupTestCase();
+    void cleanup();
 
-    private:
-        CReporterMessageBoxDialogPlugin *m_Subject;
-        TestDialogServer *m_Server;
+private:
+    CReporterMessageBoxDialogPlugin *m_Subject;
+    TestDialogServer *m_Server;
 };
 
 #endif // UT_CREPORTERMESSAGEBOXDIALOGPLUGIN_H

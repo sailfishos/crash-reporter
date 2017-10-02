@@ -25,11 +25,7 @@
 #ifndef CREPORTERCOREREGISTRY_P_H
 #define CREPORTERCOREREGISTRY_P_H
 
-// System includes.
-
 #include <QList>
-
-// Forward declarations
 
 class CReporterCoreDir;
 class QSignalMapper;
@@ -42,26 +38,15 @@ class QSignalMapper;
  */
 class CReporterCoreRegistryPrivate
 {
-    public:
-        /*!
-          * @brief Class constructor.
-          *
-          */
-        CReporterCoreRegistryPrivate();
+public:
+    CReporterCoreRegistryPrivate();
+    virtual ~CReporterCoreRegistryPrivate();
 
-        /*!
-          * @brief Class destructor.
-          *
-          */
-        virtual ~CReporterCoreRegistryPrivate();
-
-    public:
-        //! @arg Signal mapper to map gconf value changes.
-        QSignalMapper *mapper;
-        //! @arg List of CReporterCoreDir instances.
-        QList<CReporterCoreDir*> coreDirs;
+public:
+    //! @arg Signal mapper to map gconf value changes.
+    QSignalMapper *mapper;
+    //! @arg List of CReporterCoreDir instances.
+    QList<CReporterCoreDir *> coreDirs;
 };
 
 #endif // CREPORTERCOREREGISTRY_P_H
-
-// End of file.

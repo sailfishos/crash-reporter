@@ -35,25 +35,25 @@ class CReporterHttpClient : public QObject
 {
     Q_OBJECT
 
-    CReporterHttpClient(QObject* parent=0);
+    CReporterHttpClient(QObject *parent = 0);
 
     ~CReporterHttpClient();
 
-    void initSession(bool deleteAfterSending=true);
+    void initSession(bool deleteAfterSending = true);
 
-    Q_SIGNALS:
-        void finished();
-        void uploadError(const QString &file, const QString &errorString);
-        void updateProgress(int done);
+Q_SIGNALS:
+    void finished();
+    void uploadError(const QString &file, const QString &errorString);
+    void updateProgress(int done);
 
-    public Q_SLOTS:
-        bool upload(const QString &file);
-        void cancel();
+public Q_SLOTS:
+    bool upload(const QString &file);
+    void cancel();
 
-    public:
-        void emitFinished();
-        void emitUploadError(const QString &file, const QString &errorString);
-        void emitUpdateProgress(int done);
+public:
+    void emitFinished();
+    void emitUploadError(const QString &file, const QString &errorString);
+    void emitUpdateProgress(int done);
 };
 
 // CReporterNwSessionMgr mock class.
@@ -61,30 +61,30 @@ class CReporterNwSessionMgr : public QObject
 {
     Q_OBJECT
 
-    public:
-        CReporterNwSessionMgr(QObject *parent=0);
-        ~CReporterNwSessionMgr();
-        bool opened() const;
-        void emitSessionOpened();
-        void emitSessionDisconnected();
-        void emitNetworkError(const QString &errorString);
+public:
+    CReporterNwSessionMgr(QObject *parent = 0);
+    ~CReporterNwSessionMgr();
+    bool opened() const;
+    void emitSessionOpened();
+    void emitSessionDisconnected();
+    void emitNetworkError(const QString &errorString);
 
-    Q_SIGNALS:
-        void sessionOpened();
-        void sessionDisconnected();
-        void networkError(const QString &errorString);
+Q_SIGNALS:
+    void sessionOpened();
+    void sessionDisconnected();
+    void networkError(const QString &errorString);
 
-    public Q_SLOTS:
-        bool open();
-        void close();
-        void stop();
+public Q_SLOTS:
+    bool open();
+    void close();
+    void stop();
 };
 
 class Ut_CReporterUploadEngine : public QObject
 {
     Q_OBJECT
 
-    private Q_SLOTS:
+private Q_SLOTS:
     void initTestCase();
     void init();
 

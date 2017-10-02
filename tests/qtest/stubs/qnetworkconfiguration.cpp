@@ -7,5 +7,5 @@ QNetworkConfiguration::BearerType QNetworkConfiguration::bearerType() const
 
 QNetworkConfiguration::StateFlags QNetworkConfiguration::state() const
 {
-	return Active;
+    return Active;
 }

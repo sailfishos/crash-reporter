@@ -26,7 +26,8 @@
 
 class PendingUploadsModelPrivate;
 
-class PendingUploadsModel: public QAbstractListModel {
+class PendingUploadsModel: public QAbstractListModel
+{
     Q_OBJECT
 public:
     enum DataRole {
@@ -43,7 +44,7 @@ public:
     int rowCount(const QModelIndex &parent) const;
 
     QVariant data(const QModelIndex &index, int role) const;
-    QHash<int,QByteArray> roleNames() const;
+    QHash<int, QByteArray> roleNames() const;
 
     void setData(const QStringList &data);
 

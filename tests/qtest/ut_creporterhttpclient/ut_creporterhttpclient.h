@@ -31,13 +31,13 @@ class CReporterHttpClient;
 
 class Ut_CReporterHttpClient : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 private slots:
 
-	void initTestCase();
-	void init();
-	void cleanup();
+    void initTestCase();
+    void init();
+    void cleanup();
     void cleanupTestCase();
 
     void testInitSession();

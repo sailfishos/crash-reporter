@@ -22,7 +22,8 @@
 #include "unitfilechange.h"
 
 QDBusArgument &operator<<(QDBusArgument &argument,
-                          const UnitFileChange &change) {
+                          const UnitFileChange &change)
+{
     argument.beginStructure();
     argument << change.type << change.fileName << change.destination;
     argument.endStructure();
@@ -30,7 +31,8 @@ QDBusArgument &operator<<(QDBusArgument &argument,
 }
 
 const QDBusArgument &operator>>(const QDBusArgument &argument,
-                                UnitFileChange &change) {
+                                UnitFileChange &change)
+{
     argument.beginStructure();
     argument >> change.type >> change.fileName >> change.destination;
     argument.endStructure();

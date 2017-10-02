@@ -25,34 +25,34 @@
 #include "creporterdialogserverinterface.h"
 
 class TestDialogServer : public QObject,
-                                          public CReporterDialogServerInterface
+    public CReporterDialogServerInterface
 {
     Q_OBJECT
     Q_INTERFACES(CReporterDialogServerInterface)
 
-    public:
-        TestDialogServer(QObject *parent = 0) :
-            QObject(parent)
-        {
-            createRequestCalled = false;
-            showDialogCalled = false;
-            hideDialogCalled = false;
-            requestCreated = true;
-            dialog = 0;
-        }
+public:
+    TestDialogServer(QObject *parent = 0) :
+        QObject(parent)
+    {
+        createRequestCalled = false;
+        showDialogCalled = false;
+        hideDialogCalled = false;
+        requestCreated = true;
+        dialog = 0;
+    }
 
-        virtual bool createRequest(const QString &dialogName,
-                                    const QVariantList &arguments);
+    virtual bool createRequest(const QString &dialogName,
+                               const QVariantList &arguments);
 
-        virtual void processRequests();
+    virtual void processRequests();
 
-        virtual void showDialog(MDialog *dialog);
-        virtual void hideDialog(MDialog *dialog);
+    virtual void showDialog(MDialog *dialog);
+    virtual void hideDialog(MDialog *dialog);
 
-    public:
-        bool createRequestCalled;
-        bool showDialogCalled;
-        bool hideDialogCalled;
-        bool requestCreated;
-        MDialog *dialog;
+public:
+    bool createRequestCalled;
+    bool showDialogCalled;
+    bool hideDialogCalled;
+    bool requestCreated;
+    MDialog *dialog;
 };

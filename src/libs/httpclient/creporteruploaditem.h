@@ -25,15 +25,9 @@
 #ifndef CREPORTERUPLOADITEM_H
 #define CREPORTERUPLOADITEM_H
 
-// System includes.
-
 #include <QObject>
 
-// System includes.
-
 #include "creporterexport.h"
-
-// Forward declarations.
 
 class CReporterUploadItemPrivate;
 
@@ -47,7 +41,6 @@ class CREPORTER_EXPORT CReporterUploadItem : public QObject
     Q_OBJECT
 
 public:
-
     /*!
      * @enum ItemStatus
      * @brief Values for upload item status.
@@ -72,15 +65,11 @@ public:
      */
     CReporterUploadItem(const QString &file);
 
-    /*!
-     * @brief Class destructor.
-     *
-     */
     virtual ~CReporterUploadItem();
 
     /*!
      * @brief Returns size of the file to upload.
-     * 
+     *
      * @return File size in bytes.
      */
     qint64 filesize() const;
@@ -101,11 +90,11 @@ public:
 
     /*!
      * @brief Returns item status.
-     * 
+     *
      * @return Item status.
      */
     CReporterUploadItem::ItemStatus status() const;
-    
+
     /*!
      * @brief Returns status in string.
      *
@@ -120,21 +109,21 @@ public:
      */
     QString errorString() const;
 
- public Q_SLOTS:
+public Q_SLOTS:
     /*!
      * @brief Starts uploading to remote server.
      *
      * @return True, if HTTP request was sent successfully; otherwise false.
      */
     bool startUpload();
-    
+
     /*!
      * @brief Cancels upload.
      *
      */
     void cancel();
 
- Q_SIGNALS:
+Q_SIGNALS:
     /*!
      * @brief Sent after markDone() is called for item.
      *
@@ -150,29 +139,29 @@ public:
 
     /*!
      * @brief Sent, when upload has finished.
-     * 
+     *
      */
     void uploadFinished();
 
- private Q_SLOTS:
+private Q_SLOTS:
     /*!
      * @brief Emits uploadFinished().
-     * 
+     *
      */
     void emitUploadFinished();
 
     /*!
      * @brief Called, when uploading fails due to an error.
-     * 
+     *
      * @param file Path to file of which uploading failed.
      * @param errorString HTTP error string.
      */
     void uploadError(const QString &file, const QString &errorString);
 
- protected:
+protected:
     /*!
      * @brief Sets item status.
-     * 
+     *
      * @param status Next status.
      */
     void setStatus(ItemStatus status);
@@ -184,15 +173,13 @@ public:
      */
     void setErrorString(const QString &errorString);
 
- private:
-    Q_DECLARE_PRIVATE(CReporterUploadItem);
-    //! @arg Pointer to private class.
+private:
+    Q_DECLARE_PRIVATE(CReporterUploadItem)
+
     CReporterUploadItemPrivate *d_ptr;
 #ifdef CREPORTER_UNIT_TEST
     friend class Ut_CReporterUploadItem;
-#endif // CREPORTER_UNIT_TEST
+#endif
 };
 
 #endif // CREPORTERUPLOADITEM_H
-
-// End of file.

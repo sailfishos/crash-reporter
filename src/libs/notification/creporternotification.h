@@ -28,17 +28,11 @@
 #ifndef CREPORTERNOTIFICATION_H
 #define CREPORTERNOTIFICATION_H
 
-// System includes.
-
 #include <QObject>
 #include <QString>
 #include <QVariant>
 
-// User includes.
-
 #include "creporterexport.h"
-
-// Forward declarations.
 
 class CReporterNotificationPrivate;
 
@@ -51,128 +45,124 @@ class CREPORTER_EXPORT CReporterNotification : public QObject
 {
     Q_OBJECT
 
-    public:
-        /*!
-          * @brief Class constructor.
-          *
-          * @param eventType Type of the notification.
-          * @param summary Summary text to be used in the notification. Defaults to no summary text.
-          * @param body Body text to be used in the notification. Defaults to no body text.
-          * @param parent Parent object.
-          */
-        CReporterNotification(const QString &eventType,
-                              const QString &summary = QString(),
-                              const QString &body = QString(),
-                              QObject *parent = 0);
+public:
+    /*!
+      * @brief Class constructor.
+      *
+      * @param eventType Type of the notification.
+      * @param summary Summary text to be used in the notification. Defaults to no summary text.
+      * @param body Body text to be used in the notification. Defaults to no body text.
+      * @param parent Parent object.
+      */
+    CReporterNotification(const QString &eventType,
+                          const QString &summary = QString(),
+                          const QString &body = QString(),
+                          QObject *parent = 0);
 
-        /*!
-         * Creates new CReporterNotification to represent an existing operating
-         * system notification element.
-         *
-         * Use this constructor if you want the object to reuse and update
-         * existing notification already shown in OS notification area. New
-         * notification element is opened only when a notification with given id
-         * doesn't exist. How the notification is presented to the user is
-         * system specific.
-         *
-         * Just creating a CReporterNotification won't trigger any update of
-         * the notification element, call update() to change its summary and
-         * body.
-         *
-         * @param eventType Type of the notification.
-         * @param id Handle of existing element in system notification area.
-         * @param parent Parent object.
-         */
-        CReporterNotification(const QString &eventType, int id,
-                              QObject *parent = 0);
+    /*!
+     * Creates new CReporterNotification to represent an existing operating
+     * system notification element.
+     *
+     * Use this constructor if you want the object to reuse and update
+     * existing notification already shown in OS notification area. New
+     * notification element is opened only when a notification with given id
+     * doesn't exist. How the notification is presented to the user is
+     * system specific.
+     *
+     * Just creating a CReporterNotification won't trigger any update of
+     * the notification element, call update() to change its summary and
+     * body.
+     *
+     * @param eventType Type of the notification.
+     * @param id Handle of existing element in system notification area.
+     * @param parent Parent object.
+     */
+    CReporterNotification(const QString &eventType, int id,
+                          QObject *parent = 0);
 
-        /*!
-          * @brief Class destructor.
-          *
-          */
-        virtual ~CReporterNotification();
+    virtual ~CReporterNotification();
 
-        /*!
-         * @return Handle to a notification element in the operating system.
-         */
-        int id();
+    /*!
+     * @return Handle to a notification element in the operating system.
+     */
+    int id();
 
-        /*!
-         * Sets the period after which the notification is removed from system
-         * notification area.
-         *
-         * @param ms Expiration timeout in milliseconds.
-         */
-        void setTimeout(int ms);
+    /*!
+     * Sets the period after which the notification is removed from system
+     * notification area.
+     *
+     * @param ms Expiration timeout in milliseconds.
+     */
+    void setTimeout(int ms);
 
-        /*!
-          * @brief Returns true if @a other is a @e copy of this notification; otherwise returns false.
-          *
-          */
-        bool operator==(const CReporterNotification &other) const;
+    /*!
+      * @brief Returns true if @a other is a @e copy of this notification; otherwise returns false.
+      *
+      */
+    bool operator==(const CReporterNotification &other) const;
 
-        /*!
-          * @brief Returns true if @a other is a @e not copy of this notification; otherwise returns false.
-          *
-          */
-        inline bool operator!=(const CReporterNotification &other) const
-        { return !operator==(other); }
+    /*!
+      * @brief Returns true if @a other is a @e not copy of this notification; otherwise returns false.
+      *
+      */
+    inline bool operator!=(const CReporterNotification &other) const
+    {
+        return !operator==(other);
+    }
 
-        /*!
-          * @brief Updates notification.
-          *
-          * @param summary Summary text to be used in the notification. Defaults to no summary text.
-          * @param body Body text to be used in the notification. Defaults to no body text.
-          * @param count Number of events this notification represents.
-          */
-        void update(const QString &summary = QString(),
-                    const QString &body = QString(),
-                    int count = 1);
+    /*!
+      * @brief Updates notification.
+      *
+      * @param summary Summary text to be used in the notification. Defaults to no summary text.
+      * @param body Body text to be used in the notification. Defaults to no body text.
+      * @param count Number of events this notification represents.
+      */
+    void update(const QString &summary = QString(),
+                const QString &body = QString(),
+                int count = 1);
 
-        /*!
-          * @brief Returns whether notification is published or not.
-          *
-          * @return True, if published; otherwise false.
-          */
-        bool isPublished() const;
+    /*!
+      * @brief Returns whether notification is published or not.
+      *
+      * @return True, if published; otherwise false.
+      */
+    bool isPublished() const;
 
-        /*!
-          * @brief Removes all notifications not dismissed.
-          *
-          */
-        static void removeAll();
+    /*!
+      * @brief Removes all notifications not dismissed.
+      *
+      */
+    static void removeAll();
 
-    public Q_SLOTS:
+public Q_SLOTS:
 
-        /*!
-          * @brief Removes the notification.
-          *
-          */
-        void remove();
+    /*!
+      * @brief Removes the notification.
+      *
+      */
+    void remove();
 
-    Q_SIGNALS:
-        /*!
-         * @brief Emitted, when user interacts with the notification.
-         *
-         */
-        void activated();
+Q_SIGNALS:
+    /*!
+     * @brief Emitted, when user interacts with the notification.
+     *
+     */
+    void activated();
 
-       /*!
-        * @brief Emitted, when notification timeout occurred and the notification was removed.
-        *
-        */
-        void timeouted();
+    /*!
+     * @brief Emitted, when notification timeout occurred and the notification was removed.
+     *
+     */
+    void timeouted();
 
-    private:
-        Q_DECLARE_PRIVATE(CReporterNotification);
-        //! @arg Pointer to private class.
-        CReporterNotificationPrivate *d_ptr;
+private:
+    Q_DECLARE_PRIVATE(CReporterNotification)
+
+    CReporterNotificationPrivate *d_ptr;
 
 #ifndef CREPORTER_UNIT_TEST
-        Q_PRIVATE_SLOT(d_func(), void removeAfterTimeout());
+    Q_PRIVATE_SLOT(d_func(), void removeAfterTimeout())
 #endif
 };
 
 #endif // CREPORTERNOTIFICATION_H
-
-// End of file.

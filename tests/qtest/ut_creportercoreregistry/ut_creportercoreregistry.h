@@ -32,17 +32,17 @@ class CReporterCoreRegistry;
 
 class Ut_CReporterCoreRegistry : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 private slots:
 
-	void initTestCase();
+    void initTestCase();
 
-	void testRegistryRefreshNeededEmission();
-	void testCoreLocationsUpdatedEmission();
-	
-	void cleanupTestCase();
-	void cleanup();
+    void testRegistryRefreshNeededEmission();
+    void testCoreLocationsUpdatedEmission();
+
+    void cleanupTestCase();
+    void cleanup();
 };
 
 #endif /* UT_CREPORTERCOREREGISTRY_H */

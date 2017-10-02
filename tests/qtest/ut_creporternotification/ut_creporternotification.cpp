@@ -60,7 +60,7 @@ void Ut_CReporterNotification::init()
 void Ut_CReporterNotification::testNotificationActivated()
 {
     notification = new CReporterNotification("crash-reporter", "test-summary",
-                                             "test-body", "icon-test");
+            "test-body", "icon-test");
     // Spy activated signal from notification.
     QSignalSpy activatedSpy(notification, SIGNAL(activated()));
 
@@ -74,8 +74,8 @@ void Ut_CReporterNotification::testNotificationActivated()
 
     // Interact with the notification via D-Bus and block.
     QDBusMessage reply = QDBusConnection::sessionBus().call(QDBusMessage::createMethodCall(
-            QDBusConnection::sessionBus().baseService(), objPath,
-            CREPORTER_DBUS_NTF_INTERFACE, "activate"));
+                             QDBusConnection::sessionBus().baseService(), objPath,
+                             CREPORTER_DBUS_NTF_INTERFACE, "activate"));
 
     if (reply.type() == QDBusMessage::ErrorMessage) {
         qDebug() << reply.errorMessage();
@@ -88,7 +88,7 @@ void Ut_CReporterNotification::testNotificationActivated()
 void Ut_CReporterNotification::testNotificationTimeOut()
 {
     notification = new CReporterNotification("crash-reporter", "test-summary",
-                                             "test-body", "icon-test");
+            "test-body", "icon-test");
 
     // Wait for notification.
     QTest::qWait(1000);

@@ -27,16 +27,17 @@
 class CrashReporterAdapterPrivate;
 class QAbstractListModel;
 
-class CrashReporterAdapter: public QObject {
+class CrashReporterAdapter: public QObject
+{
     Q_OBJECT
     Q_PROPERTY(int reportsToUpload READ reportsToUpload NOTIFY reportsToUploadChanged)
-    Q_PROPERTY(QAbstractListModel * pendingUploads READ pendingUploads CONSTANT)
+    Q_PROPERTY(QAbstractListModel *pendingUploads READ pendingUploads CONSTANT)
 
 public:
     CrashReporterAdapter(QObject *parent = 0);
 
     int reportsToUpload() const;
-    QAbstractListModel * pendingUploads();
+    QAbstractListModel *pendingUploads();
 
     Q_INVOKABLE void uploadAllCrashReports() const;
 

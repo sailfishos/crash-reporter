@@ -22,13 +22,10 @@
  *
  */
 
-// System includes.
 
 #include <QObject>
 #include <QQueue>
 #include <QDebug>
-
-// User includes.
 
 #include "creporteruploadqueue.h"
 #include "creporteruploaditem.h"
@@ -36,29 +33,17 @@
 
 using CReporter::LoggingCategory::cr;
 
-/*!
-   * \class CReporterUploadQueuePrivate
-   * \brief Private data class for CReporterUploadQueue.
-   *
-   */
 class CReporterUploadQueuePrivate
 {
-    public:
-        QQueue<CReporterUploadItem *> uploadQueue;
-        bool notified;
-        int nbrOfItems;
+public:
+    QQueue<CReporterUploadItem *> uploadQueue;
+    bool notified;
+    int nbrOfItems;
 };
 
-// *** Class CReporterUploadQueue ****
-
-// ======== MEMBER FUNCTIONS ========
-
-// ----------------------------------------------------------------------------
-// CReporterUploadQueue::CReporterUploadQueue
-// ----------------------------------------------------------------------------
-CReporterUploadQueue::CReporterUploadQueue(QObject *parent) :
-        QObject(parent),
-        d_ptr(new CReporterUploadQueuePrivate())
+CReporterUploadQueue::CReporterUploadQueue(QObject *parent)
+    : QObject(parent),
+      d_ptr(new CReporterUploadQueuePrivate())
 {
     qCDebug(cr) << "Upload queue initialized.";
     d_ptr->uploadQueue.clear();
@@ -66,9 +51,6 @@ CReporterUploadQueue::CReporterUploadQueue(QObject *parent) :
     d_ptr->nbrOfItems = 0;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadQueue::~CReporterUploadQueue
-// ----------------------------------------------------------------------------
 CReporterUploadQueue::~CReporterUploadQueue()
 {
     qCDebug(cr) << "Upload queue destroyed.";
@@ -79,9 +61,6 @@ CReporterUploadQueue::~CReporterUploadQueue()
     d_ptr = 0;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadQueue::enqueue
-// ----------------------------------------------------------------------------
 void CReporterUploadQueue::enqueue(CReporterUploadItem *item)
 {
     Q_ASSERT(item != 0);
@@ -105,9 +84,6 @@ void CReporterUploadQueue::enqueue(CReporterUploadItem *item)
     d_ptr->nbrOfItems++;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadQueue::itemFinished
-// ----------------------------------------------------------------------------
 void CReporterUploadQueue::itemFinished()
 {
     qCDebug(cr) << "Item finished.";
@@ -119,28 +95,21 @@ void CReporterUploadQueue::itemFinished()
         qCDebug(cr) << "Queue is empty => emit done()";
         d_ptr->notified = false;
         emit done();
-    }
-    else {
+    } else {
         qCDebug(cr) << "Queue size:" << d_ptr->uploadQueue.size();
         emit emitNextItem();
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadQueue::totalNumberOfItems()
-// ----------------------------------------------------------------------------
 int CReporterUploadQueue::totalNumberOfItems() const
 {
     return d_ptr->nbrOfItems;
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadQueue::clear
-// ----------------------------------------------------------------------------
 void CReporterUploadQueue::clear()
 {
     if (d_ptr->uploadQueue.size() != 0) {
-         QQueue<CReporterUploadItem *> items = d_ptr->uploadQueue;
+        QQueue<CReporterUploadItem *> items = d_ptr->uploadQueue;
         // Clear list.
         d_ptr->uploadQueue.clear();
         // Delete entries.
@@ -148,15 +117,10 @@ void CReporterUploadQueue::clear()
     }
 }
 
-// ----------------------------------------------------------------------------
-// CReporterUploadQueue::emitNextItem
-// ----------------------------------------------------------------------------
 void CReporterUploadQueue::emitNextItem()
 {
     qCDebug(cr) << "Emit nextItem().";
-    CReporterUploadItem* item = d_ptr->uploadQueue.dequeue();
+    CReporterUploadItem *item = d_ptr->uploadQueue.dequeue();
 
     emit nextItem(item);
 }
-
-// End of file.

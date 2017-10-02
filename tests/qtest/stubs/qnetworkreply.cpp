@@ -14,7 +14,7 @@ QNetworkReply::~QNetworkReply()
 
 void QNetworkReply::emitUploadProgress (qint64 prog, qint64 total)
 {
-    emit uploadProgress (prog,total);
+    emit uploadProgress (prog, total);
 }
 
 void QNetworkReply::emitFinished ()
@@ -48,6 +48,6 @@ void QNetworkReply::emitError (QNetworkReply::NetworkError error_)
     emit error (error_);
 }
 
-    
+
 
 QT_END_NAMESPACE

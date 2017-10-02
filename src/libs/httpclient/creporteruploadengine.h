@@ -25,15 +25,9 @@
 #ifndef CREPORTERUPLOADENGINE_H
 #define CREPORTERUPLOADENGINE_H
 
-// System includes.
-
 #include <QObject>
 
-// System includes.
-
 #include "creporterexport.h"
-
-// Forward declarations.
 
 class CReporterUploadEnginePrivate;
 class CReporterUploadQueue;
@@ -48,71 +42,65 @@ class CREPORTER_EXPORT CReporterUploadEngine : public QObject
 {
     Q_OBJECT
 
-    public:
-        /*!
-          * @enum ErrorType
-          * @brief Descripes possible errors occured during upload.
-          *
-          */
-        typedef enum{
-            //! No error.
-            NoError = 0,
-            //! Indicates errors occured on HTTP/ SSL protocol levels.
-            ProtocolError,
-            //! Error occured, when trying to establish internet connection.
-            ConnectionNotAvailable,
-            //! Internet connection was closed due to network disconnected.
-            ConnectionClosed,
-        } ErrorType;
+public:
+    /*!
+      * @enum ErrorType
+      * @brief Descripes possible errors occured during upload.
+      *
+      */
+    typedef enum {
+        //! No error.
+        NoError = 0,
+        //! Indicates errors occured on HTTP/ SSL protocol levels.
+        ProtocolError,
+        //! Error occured, when trying to establish internet connection.
+        ConnectionNotAvailable,
+        //! Internet connection was closed due to network disconnected.
+        ConnectionClosed,
+    } ErrorType;
 
-        /*!
-          * @brief Class constructor.
-          *
-          * @param queue Upload queue reference.
-          * @param parent Parent object reference.
-          *
-          */
-        CReporterUploadEngine(CReporterUploadQueue *queue, QObject *parent=0);
+    /*!
+      * @brief Class constructor.
+      *
+      * @param queue Upload queue reference.
+      * @param parent Parent object reference.
+      *
+      */
+    CReporterUploadEngine(CReporterUploadQueue *queue, QObject *parent = 0);
 
-        /*!
-          * @brief Class destructor.
-          *
-          */
-        ~CReporterUploadEngine();
+    ~CReporterUploadEngine();
 
-        /*!
-          * @brief Returns last error string.
-          *
-          * @return Last error string, if available; empty if no error or not valid.
-          */
-        QString lastError() const;
+    /*!
+      * @brief Returns last error string.
+      *
+      * @return Last error string, if available; empty if no error or not valid.
+      */
+    QString lastError() const;
 
-    Q_SIGNALS:
-        /*!
-          * @brief Sent, when engine has finished uploading files.
-          *
-          * @param error Error code.
-          * @param sent Number of files uploaded successfully.
-          * @param total Total number of files requested to send.
-          */
-        void finished(int error, int sent, int total);
+Q_SIGNALS:
+    /*!
+      * @brief Sent, when engine has finished uploading files.
+      *
+      * @param error Error code.
+      * @param sent Number of files uploaded successfully.
+      * @param total Total number of files requested to send.
+      */
+    void finished(int error, int sent, int total);
 
-    public Q_SLOTS:
-        /*!
-         * @brief Cancels all pending uploads.
-         *
-         */
-        void cancelAll();
+public Q_SLOTS:
+    /*!
+     * @brief Cancels all pending uploads.
+     *
+     */
+    void cancelAll();
 
-    private:
-        Q_DECLARE_PRIVATE(CReporterUploadEngine)
-        //! @arg Pointer to private class.
-        CReporterUploadEnginePrivate *d_ptr;
+private:
+    Q_DECLARE_PRIVATE(CReporterUploadEngine)
+
+    CReporterUploadEnginePrivate *d_ptr;
 #ifdef CREPORTER_UNIT_TEST
     friend class Ut_CReporterUploadEngine;
-#endif // CREPORTER_UNIT_TEST
+#endif
 };
 
 #endif // CREPORTERUPLOADENGINE_H
-
-// End of file.

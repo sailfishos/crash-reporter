@@ -26,7 +26,7 @@
 #include "creporterdialogserver_stub.h"
 
 bool TestDialogServer::createRequest(const QString &dialogName,
-                                const QVariantList &arguments)
+                                     const QVariantList &arguments)
 {
     Q_UNUSED(dialogName);
     Q_UNUSED(arguments);
