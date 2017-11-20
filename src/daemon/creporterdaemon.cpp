@@ -75,7 +75,7 @@ bool CReporterDaemon::initiateDaemon()
     qCDebug(cr) << "Starting daemon...";
 
     if (!CReporterPrivacySettingsModel::instance()->isValid()) {
-        qCWarning(cr) << "Invalid settings";
+        qCWarning(cr) << "Invalid settings, exiting";
         // Exit, if settings are missing.
         return false;
     }
@@ -83,6 +83,7 @@ bool CReporterDaemon::initiateDaemon()
     QString filename = CReporterPrivacySettingsModel::instance()->settingsFile();
 
     if (!startService()) {
+        qCWarning(cr) << "Failed to start D-Bus service, exiting";
         return false;
     }
 
@@ -192,7 +193,7 @@ bool CReporterDaemon::startService()
     qCDebug(cr) << "Starting D-Bus service...";
 
     if (!QDBusConnection::sessionBus().isConnected()) {
-        qCWarning(cr) << "D-Bus not running?";
+        qCWarning(cr) << "Could not connect to session D-Bus";
         return false;
     }
 

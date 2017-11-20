@@ -196,7 +196,7 @@ void CReporterNwSessionMgr::networkError(QNetworkSession::SessionError error)
     }
 
     QString errorString = d->networkSession->errorString();
-    qCDebug(cr) << "Network error occured:" << errorString;
+    qCWarning(cr) << "Network error occured:" << errorString;
 
     emit networkError(errorString);
 }

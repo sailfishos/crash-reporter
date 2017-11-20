@@ -150,7 +150,7 @@ void CReporterUploadItem::uploadError(const QString &file, const QString &errorS
     Q_D(CReporterUploadItem);
     Q_UNUSED(file);
 
-    qCDebug(cr) << "Upload failed;" << d->filename;
+    qCWarning(cr) << "Upload failed:" << d->filename << errorString;
 
     disconnect(d->http, SIGNAL(finished()), this, SLOT(emitUploadFinished()));
     disconnect(d->http, SIGNAL(uploadError(QString, QString)),

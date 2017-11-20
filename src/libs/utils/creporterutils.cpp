@@ -153,7 +153,7 @@ bool CReporterUtils::appendToLzo(const QString &text, const QString &filePath)
     QFile tmpFile(richCoreTmpNoteFile);
     // Create local temp file, where comments are written.
     if (!tmpFile.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        qCDebug(cr) << "Unable to open file:" << filePath;
+        qCWarning(cr) << "Unable to open file:" << filePath;
         return false;
     }
 
@@ -168,7 +168,7 @@ bool CReporterUtils::appendToLzo(const QString &text, const QString &filePath)
 
     // Remove temp file.
     if (!tmpFile.remove()) {
-        qCDebug(cr) << "Unable to remove file:" << richCoreTmpNoteFile;
+        qCWarning(cr) << "Unable to remove file:" << richCoreTmpNoteFile;
     }
     return true;
 }
@@ -185,7 +185,7 @@ QString CReporterUtils::deviceUid()
     QDBusPendingReply<QString> reply = ssuProxy->deviceUid();
     reply.waitForFinished();
     if (reply.isError()) {
-        qCDebug(cr) << "DBus unavailable, UUID might be incorrect.";
+        qCWarning(cr) << "DBus unavailable, UUID might be incorrect.";
         return SsuDeviceInfo().deviceUid();
     } else {
         return reply.value();
@@ -231,14 +231,7 @@ bool CReporterUtils::notifyAutoUploader(const QStringList &filesToUpload,
     reply.waitForFinished();
 
     if (reply.isError()) {
-        qCWarning(cr) << "D-Bus error occurred.";
-
-        // Trace error.
-        QDBusError dBusError(reply.error());
-
-        qCDebug(cr) << "Name:" << dBusError.name();
-        qCDebug(cr) << "Message:" << dBusError.message();
-        qCDebug(cr) << "Error string:" << dBusError.errorString(dBusError.type());
+        qCWarning(cr) << "D-Bus error occurred:" << reply.error().name() << reply.error().message();
 
         return false;
     }
@@ -252,7 +245,7 @@ QProcess *CReporterUtils::invokeLogCollection(const QString &label)
     richCoreHelper->start("/usr/libexec/rich-core-helper",
                           QStringList() << label);
     if (!richCoreHelper->waitForStarted()) {
-        qCDebug(cr) << "Problem invoking rich-core-dumper.";
+        qCWarning(cr) << "Problem invoking rich-core-dumper.";
         return 0;
     }
 

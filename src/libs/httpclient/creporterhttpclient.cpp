@@ -141,7 +141,7 @@ bool CReporterHttpClientPrivate::createRequest(const QString &file)
     qCDebug(cr) << "Upload URL:" << url.toString();
 
     if (!createPutRequest(request, dataToSend)) {
-        qCDebug(cr) << "Failed to create network request.";
+        qCWarning(cr) << "Failed to create network request.";
         return false;
     }
 
@@ -201,7 +201,7 @@ void CReporterHttpClientPrivate::handleSslErrors(const QList<QSslError> &errors)
         }
         errorString += error.errorString();
     }
-    qCDebug(cr) << "One or more SSL errors occured:" << errorString;
+    qCWarning(cr) << "One or more SSL errors occured:" << errorString;
 
     // Ignore and continue connection.
     m_reply->ignoreSslErrors();
@@ -212,12 +212,9 @@ void CReporterHttpClientPrivate::handleError(QNetworkReply::NetworkError error)
     if (m_reply && m_reply->error() != QNetworkReply::NoError) {
         // Finished is emitted by QNetworkReply after this, inidicating that
         // the connection is over.
-        qCCritical(cr) << "Upload failed.";
         QString errorString = m_reply->errorString();
-
         m_reply = 0;
-
-        qCDebug(cr) << "Error code:" << error << "," << errorString;
+        qCWarning(cr) << "Upload failed. Error code:" << error << "," << errorString;
         emit uploadError(m_currentFile.fileName(), errorString);
     }
 }
@@ -225,25 +222,25 @@ void CReporterHttpClientPrivate::handleError(QNetworkReply::NetworkError error)
 void CReporterHttpClientPrivate::parseReply()
 {
     if (!m_reply) {
-        qCDebug(cr) << "Server reply is NULL";
+        qCWarning(cr) << "Server reply is NULL";
         return;
     }
 
     if (!m_reply->open(QIODevice::ReadOnly)) {
-        qCDebug(cr) << "Couldn't open server reply for reading.";
+        qCWarning(cr) << "Couldn't open server reply for reading.";
         return;
     }
 
     QJsonDocument reply = QJsonDocument::fromJson(m_reply->readAll());
     if (reply.isNull() || !reply.isObject()) {
-        qCDebug(cr) << "Error parsing JSON server reply.";
+        qCWarning(cr) << "Error parsing JSON server reply.";
         return;
     }
 
     QJsonObject json = reply.object();
     int submissionId = static_cast<int>(json.value("submission_id").toDouble(0));
     if (submissionId == 0) {
-        qCDebug(cr) << "Failed to parse submission id from JSON.";
+        qCWarning(cr) << "Failed to parse submission id from JSON.";
         return;
     }
 
@@ -255,7 +252,7 @@ void CReporterHttpClientPrivate::parseReply()
     QString corePath(CReporterCoreRegistry::instance()->getCoreLocationPaths().first());
     QFile uploadlog(corePath + "/uploadlog");
     if (!uploadlog.open(QIODevice::WriteOnly | QIODevice::Append)) {
-        qCDebug(cr) << "Couldn't open uploadlog for writing.";
+        qCWarning(cr) << "Couldn't open uploadlog for writing.";
         return;
     }
 

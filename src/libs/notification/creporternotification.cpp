@@ -112,7 +112,7 @@ void CReporterNotificationPrivate::retrieveNotificationId()
         qCDebug(cr) << "Create notification with id: " << id;
     } else if (reply.isError()) {
         QDBusError error = reply.error();
-        qCDebug(cr) << "Failed to create notification: " << error.name() << " - " << error.message();
+        qCWarning(cr) << "Failed to create notification: " << error.name() << " - " << error.message();
     }
 }
 

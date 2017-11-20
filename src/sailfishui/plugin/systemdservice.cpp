@@ -82,7 +82,7 @@ void SystemdServicePrivate::initializeDBusInterface()
     QDBusPendingCall reply = manager->Reload();
     reply.waitForFinished();
     if (reply.isError()) {
-        qCDebug(cr) << "Couldn't reload systemd unit files" << reply.error().type() << reply.error().message();
+        qCWarning(cr) << "Couldn't reload systemd unit files" << reply.error().type() << reply.error().message();
     }
 
     qDBusRegisterMetaType<UnitFileChange>();
@@ -92,7 +92,7 @@ void SystemdServicePrivate::initializeDBusInterface()
     reply = manager->Subscribe();
     reply.waitForFinished();
     if (reply.isError()) {
-        qCDebug(cr) << "Couldn't subscribe to systemd manager" << reply.error().type() << reply.error().message();
+        qCWarning(cr) << "Couldn't subscribe to systemd manager" << reply.error().type() << reply.error().message();
     }
 
     reply = manager->LoadUnit(serviceName);
@@ -115,7 +115,7 @@ void SystemdServicePrivate::gotUnitPath(QDBusPendingCallWatcher *call)
 
     QDBusPendingReply<QDBusObjectPath> reply = *call;
     if (reply.isError()) {
-        qCDebug(cr) << "Failed to get DBus path for unit" << serviceName << ":"
+        qCWarning(cr) << "Failed to get DBus path for unit" << serviceName << ":"
                     << reply.error().name() << reply.error().message();
     } else {
         QString path = reply.argumentAt<0>().path();
@@ -199,7 +199,7 @@ void SystemdServicePrivate::stateChanged(QDBusPendingCallWatcher *call)
 {
     QDBusPendingReply<QDBusObjectPath> reply = *call;
     if (reply.isError()) {
-        qCDebug(cr) << "Couldn't change systemd service state"
+        qCWarning(cr) << "Couldn't change systemd service state"
                     << reply.error().name() << reply.error().message();
     }
 
@@ -210,7 +210,7 @@ void SystemdServicePrivate::unitFileStateChanged(QDBusPendingCallWatcher *call)
 {
     QDBusPendingCall reply = *call;
     if (reply.isError()) {
-        qCDebug(cr) << "Couldn't enable or disable a unit file"
+        qCWarning(cr) << "Couldn't enable or disable a unit file"
                     << reply.error().name() << reply.error().message();
     }
 
@@ -221,7 +221,7 @@ void SystemdServicePrivate::maskingChanged(QDBusPendingCallWatcher *call)
 {
     QDBusPendingCall reply = *call;
     if (reply.isError()) {
-        qCDebug(cr) << "Couldn't mask or unmask a unit file"
+        qCWarning(cr) << "Couldn't mask or unmask a unit file"
                     << reply.error().name() << reply.error().message();
     } else {
         reload();
@@ -247,7 +247,7 @@ void SystemdServicePrivate::reloaded(QDBusPendingCallWatcher *call)
 
     QDBusPendingCall reply = *call;
     if (reply.isError()) {
-        qCDebug(cr) << "Couldn't reload a unit file"
+        qCWarning(cr) << "Couldn't reload a unit file"
                     << reply.error().name() << reply.error().message();
     } else {
         /* Seems systemd won't notify when LoadState property changes.
@@ -317,7 +317,7 @@ void SystemdService::setServiceName(const QString &serviceName)
     Q_D(SystemdService);
 
     if (!d->serviceName.isEmpty()) {
-        qCDebug(cr) << "Changing systemd service name not supported";
+        qCWarning(cr) << "Changing systemd service name not supported";
         return;
     }
 
@@ -356,7 +356,7 @@ void SystemdService::start()
     Q_D(SystemdService);
 
     if (!d->unit) {
-        qCDebug(cr) << "Systemd unit proxy not initialized!";
+        qCWarning(cr) << "Systemd unit proxy not initialized!";
         return;
     }
 
@@ -375,7 +375,7 @@ void SystemdService::stop()
     Q_D(SystemdService);
 
     if (!d->unit) {
-        qCDebug(cr) << "Systemd unit proxy not initialized!";
+        qCWarning(cr) << "Systemd unit proxy not initialized!";
         return;
     }
 
@@ -403,7 +403,7 @@ void SystemdService::setEnabled(bool state)
     QDBusPendingCallWatcher *watcher;
 
     if (!d->unit) {
-        qCDebug(cr) << "Systemd unit proxy not initialized!";
+        qCWarning(cr) << "Systemd unit proxy not initialized!";
         return;
     }
 
@@ -432,7 +432,7 @@ void SystemdService::setMasked(bool state)
     QDBusPendingCallWatcher *watcher;
 
     if (!d->unit) {
-        qCDebug(cr) << "Systemd unit proxy not initialized!";
+        qCWarning(cr) << "Systemd unit proxy not initialized!";
         return;
     }
 
@@ -467,7 +467,7 @@ void SystemdService::componentComplete()
     Q_D(SystemdService);
 
     if (d->serviceName.isEmpty()) {
-        qCDebug(cr) << "Systemd service name must be specified!";
+        qCWarning(cr) << "Systemd service name must be specified!";
         return;
     }
 

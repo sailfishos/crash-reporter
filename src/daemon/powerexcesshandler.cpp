@@ -62,7 +62,7 @@ void PowerExcessHandlerPrivate::handleUdevNotification()
 {
     udev_device *dev = udev_monitor_receive_device(udevMonitor);
     if (!dev) {
-        qCDebug(cr) << "udev_monitor_receive_device() failed";
+        qCWarning(cr) << "udev_monitor_receive_device() failed";
         return;
     }
 
@@ -76,7 +76,7 @@ void PowerExcessHandlerPrivate::handleUdevNotification()
             qCDebug(cr) << "Power excess detected, requesting dump of "
                         "system logs.";
             if (!CReporterUtils::invokeLogCollection(CReporter::PowerExcessPrefix)) {
-                qCDebug(cr) << "Problem invoking rich-core-dumper.";
+                qCWarning(cr) << "Problem invoking rich-core-dumper.";
             }
         }
     }
