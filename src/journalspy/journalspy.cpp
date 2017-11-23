@@ -111,9 +111,14 @@ void JournalSpyPrivate::handleJournalEntries()
                 qint64 previousHit = e.lastHit;
                 e.lastHit = QDateTime::currentMSecsSinceEpoch();
                 if (e.lastHit - previousHit > JournalSpy::SILENT_PERIOD_MS) {
-                    qCDebug(cr) << "Triggering log collection upon found match in "
-                                "the journal:" << e.name;
-                    CReporterUtils::invokeLogCollection("JournalSpy-" + e.name);
+                    if (CReporterUtils::shouldSavePower()) {
+                        qCDebug(cr) << "Battery low, NOT triggering log collection upon found match in the journal:"
+                            << e.name;
+                    } else {
+                        qCDebug(cr) << "Triggering log collection upon found match in the journal:"
+                            << e.name;
+                        CReporterUtils::invokeLogCollection("JournalSpy-" + e.name);
+                    }
                 }
                 break;
             }

@@ -73,10 +73,14 @@ void PowerExcessHandlerPrivate::handleUdevNotification()
         static const QString EVENT_WAKELOCK_DUMP("WakelockDump");
         static const QString EVENT_SUBSYSTEM("Subsystem");
         if (event == EVENT_WAKELOCK_DUMP || event == EVENT_SUBSYSTEM) {
-            qCDebug(cr) << "Power excess detected, requesting dump of "
-                        "system logs.";
-            if (!CReporterUtils::invokeLogCollection(CReporter::PowerExcessPrefix)) {
-                qCWarning(cr) << "Problem invoking rich-core-dumper.";
+            if (CReporterUtils::shouldSavePower()) {
+                qCDebug(cr) << "Power excess detected, NOT requesting dump of system logs on low battery.";
+            } else {
+                qCDebug(cr) << "Power excess detected, requesting dump of system logs.";
+
+                if (!CReporterUtils::invokeLogCollection(CReporter::PowerExcessPrefix)) {
+                    qCWarning(cr) << "Problem invoking rich-core-dumper.";
+                }
             }
         }
     }

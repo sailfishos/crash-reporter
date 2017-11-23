@@ -106,6 +106,7 @@ bool CReporterDaemon::initiateDaemon()
 
         if (!files.isEmpty() &&
                 CReporterNwSessionMgr::canUseNetworkConnection() &&
+                !CReporterUtils::shouldSavePower() &&
                 !CReporterUtils::notifyAutoUploader(files)) {
             qCDebug(cr) << "Failed to add files to the queue.";
         }

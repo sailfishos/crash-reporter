@@ -52,12 +52,13 @@ public slots:
      * Queues given rich core files for upload.
      *
      * @param fileList list of files to upload.
-     * @param obeyNetworkRestrictions @c false if the files should be uploaded
-     *                                regardless of the network connection type,
-     *                                i.e. also over paid mobile/3G.
+     * @param obeyResourcesRestrictions @c false if the files should be uploaded
+     *                                  regardless of the network connection type,
+     *                                  i.e. also over paid mobile/3G, and battery
+     *                                  state.
      * @return @c true if files were successfully queued for upload.
      */
-    bool uploadFiles(const QStringList &fileList, bool obeyNetworkRestrictions);
+    bool uploadFiles(const QStringList &fileList, bool obeyResourcesRestrictions);
 
     /**
      * Makes auto-uploader exit its main loop.

@@ -52,6 +52,9 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
     Q_PROPERTY(bool downloadDebuginfo READ downloadDebuginfo WRITE setDownloadDebuginfo NOTIFY downloadDebuginfoChanged)
     Q_PROPERTY(bool privacyNoticeAccepted READ privacyNoticeAccepted WRITE setPrivacyNoticeAccepted NOTIFY privacyNoticeAcceptedChanged)
     Q_PROPERTY(bool allowMobileData READ allowMobileData WRITE setAllowMobileData NOTIFY allowMobileDataChanged)
+    Q_PROPERTY(bool restrictWhenLowBattery READ restrictWhenLowBattery WRITE setRestrictWhenLowBattery NOTIFY restrictWhenLowBatteryChanged)
+    Q_PROPERTY(bool restrictWhenDischarging READ restrictWhenDischarging WRITE setRestrictWhenDischarging NOTIFY restrictWhenDischargingChanged)
+    Q_PROPERTY(int dischargingThreshold READ dischargingThreshold WRITE setDischargingThreshold NOTIFY dischargingThresholdChanged)
 
 public:
     /*!
@@ -195,6 +198,29 @@ public:
     bool allowMobileData() const;
 
     /*!
+     * Controls whether to restrict execution of power-intensive tasks when battery is low regardless
+     * of charger presence.
+     *
+     * @return @c true when so
+     */
+    bool restrictWhenLowBattery() const;
+
+    /*!
+     * Controls whether to restrict execution of power-intensive tasks when discharging and bttery is
+     * below dischargingThreshold.
+     *
+     * @return @c true when so
+     */
+    bool restrictWhenDischarging() const;
+
+    /*!
+     * The minimum battery capacity required when restrictWhenLowBattery is active.
+     *
+     * @return percentage of maximum battery capacity
+     */
+    int dischargingThreshold() const;
+
+    /*!
     * @brief Enables or disables core dumping.
     *
     * @note This setting used by the rich-core.
@@ -303,6 +329,29 @@ public:
     void setAllowMobileData(bool value);
 
     /*!
+     * Controls whether to restrict execution of power-intensive tasks when battery is low regardless
+     * of charger presence.
+     *
+     * @param value to restrict, or not to restrict
+     */
+    void setRestrictWhenLowBattery(bool value);
+
+    /*!
+     * Controls whether to restrict execution of power-intensive tasks when discharging and bttery is
+     * below dischargingThreshold.
+     *
+     * @param value to restrict, or not to restrict
+     */
+    void setRestrictWhenDischarging(bool value);
+
+    /*!
+     * Sets the minimum battery capacity required when restrictWhenLowBattery is active.
+     *
+     * @param value percentage of maximum battery capacity
+     */
+    void setDischargingThreshold(int value);
+
+    /*!
       * @brief Enables or disables core-dump size shrinking.
       *
       * @note This setting used by the rich-core.
@@ -321,6 +370,9 @@ signals:
     void downloadDebuginfoChanged();
     void privacyNoticeAcceptedChanged();
     void allowMobileDataChanged();
+    void restrictWhenLowBatteryChanged();
+    void restrictWhenDischargingChanged();
+    void dischargingThresholdChanged();
 
 protected:
     CReporterPrivacySettingsModel();
