@@ -88,6 +88,7 @@ install -m0644 -t %{buildroot}%{_docdir}/%{name}-%{version} README
 %{_oneshotdir}/*
 %{_userunitdir}/*
 %attr(0755,root,root) /usr/libexec/crash-reporter-journalspy
+%attr(0755,root,root) /usr/libexec/crash-reporter-storagemon
 %attr(0755,root,root) /usr/libexec/endurance-collect*
 %attr(4755,root,root) /usr/libexec/rich-core-helper
 %attr(4750,root,privileged) /usr/libexec/crashreporter-servicehelper
@@ -123,10 +124,14 @@ install -m0644 -t %{buildroot}%{_docdir}/%{name}-%{version} README
 
 %post
 systemctl daemon-reload
+systemctl-user daemon-reload ||:
 
 %preun
 if [ "$1" = 0 ]; then
-  systemctl-user stop crash-reporter.service
+  systemctl-user stop crash-reporter.service \
+                      crash-reporter-storagemon.path \
+                      crash-reporter-storagemon.timer \
+                      crash-reporter-storagemon.service
   systemctl stop crash-reporter-endurance.service
 fi
 

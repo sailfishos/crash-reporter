@@ -27,6 +27,7 @@
  */
 namespace SavedState {
 const QString CrashNotificationId = "SavedState/crash_notification_id";
+const QString StorageUsageNotificationId = "SavedState/storageUsage_notification_id";
 const QString UploadSuccessNotificationId = "SavedState/upload_success_notification_id";
 const QString UploadFailedNotificationId = "SavedState/upload_failed_notification_id";
 const QString UploadSuccessCount = "SavedState/upload_success_count";
@@ -99,6 +100,20 @@ void CReporterSavedState::setCrashNotificationId(quint32 id)
 {
     if (setValue(SavedState::CrashNotificationId, id)) {
         emit crashNotificationIdChanged();
+    }
+}
+
+quint32 CReporterSavedState::storageUsageNotificationId() const
+{
+    const Q_D(CReporterSavedState);
+
+    return d->intValue(SavedState::StorageUsageNotificationId, 0);
+}
+
+void CReporterSavedState::setStorageUsageNotificationId(quint32 id)
+{
+    if (setValue(SavedState::StorageUsageNotificationId, id)) {
+        emit storageUsageNotificationIdChanged();
     }
 }
 

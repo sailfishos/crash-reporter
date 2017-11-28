@@ -53,8 +53,24 @@ settings.files += \
 	data/crash-reporter.conf \
 	data/journalspy-expressions.conf \
 
-systemd_service.path = $${CREPORTER_SYSTEM_SYSTEMD_USER_SERVICES}
-systemd_service.files = data/crash-reporter.service
+PATHS_TARGET_WANTS = \
+	$(INSTALL_ROOT)/$$CREPORTER_SYSTEM_SYSTEMD_USER_SERVICES/paths.target.wants
+TIMERS_TARGET_WANTS = \
+	$(INSTALL_ROOT)/$$CREPORTER_SYSTEM_SYSTEMD_USER_SERVICES/timers.target.wants
+
+systemd_user_services.path = $${CREPORTER_SYSTEM_SYSTEMD_USER_SERVICES}
+systemd_user_services.files = \
+        data/crash-reporter.service \
+        data/crash-reporter-storagemon.path \
+        data/crash-reporter-storagemon.timer \
+        data/crash-reporter-storagemon.service
+systemd_user_services.commands = \
+	mkdir $$PATHS_TARGET_WANTS; \
+	ln -s ../crash-reporter-storagemon.path \
+		$$PATHS_TARGET_WANTS/crash-reporter-storagemon.path; \
+	mkdir $$TIMERS_TARGET_WANTS; \
+	ln -s ../crash-reporter-storagemon.timer \
+		$$TIMERS_TARGET_WANTS/crash-reporter-storagemon.timer;
 
 MULTI_USER_TARGET_WANTS = \
 	$(INSTALL_ROOT)/$$CREPORTER_SYSTEM_SYSTEMD_SYSTEM_SERVICES/multi-user.target.wants
@@ -76,5 +92,5 @@ endurance_script.files = scripts/endurance-collect
 oneshot.path = $${CREPORTER_SYSTEM_ONESHOT}
 oneshot.files = scripts/crash-reporter-service-default
 
-INSTALLS += scripts settings systemd_service \
+INSTALLS += scripts settings systemd_user_services \
 	systemd_services endurance_script oneshot

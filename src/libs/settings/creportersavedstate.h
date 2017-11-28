@@ -34,6 +34,7 @@ class CReporterSavedState: public CReporterSettingsBase
     Q_OBJECT
 
     Q_PROPERTY(quint32 crashNotificationId READ crashNotificationId WRITE setCrashNotificationId NOTIFY crashNotificationIdChanged)
+    Q_PROPERTY(quint32 storageUsageNotificationId READ storageUsageNotificationId WRITE setStorageUsageNotificationId NOTIFY storageUsageNotificationIdChanged)
     Q_PROPERTY(quint32 uploadSuccessNotificationId READ uploadSuccessNotificationId WRITE setUploadSuccessNotificationId NOTIFY uploadSuccessNotificationIdChanged)
     Q_PROPERTY(quint32 uploadFailedNotificationId READ uploadFailedNotificationId WRITE setUploadFailedNotificationId NOTIFY uploadFailedNotificationIdChanged)
     Q_PROPERTY(int uploadSuccessCount READ uploadSuccessCount WRITE setUploadSuccessCount NOTIFY uploadSuccessCountChanged)
@@ -56,6 +57,9 @@ public:
     quint32 crashNotificationId() const;
     void setCrashNotificationId(quint32 id);
 
+    quint32 storageUsageNotificationId() const;
+    void setStorageUsageNotificationId(quint32 id);
+
     quint32 uploadSuccessNotificationId() const;
     void setUploadSuccessNotificationId(quint32 id);
 
@@ -67,6 +71,7 @@ public:
 
 signals:
     void crashNotificationIdChanged();
+    void storageUsageNotificationIdChanged();
     void uploadSuccessNotificationIdChanged();
     void uploadFailedNotificationIdChanged();
     void uploadSuccessCountChanged();
