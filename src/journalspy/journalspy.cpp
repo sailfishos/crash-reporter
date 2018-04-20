@@ -71,23 +71,23 @@ JournalSpyPrivate::JournalSpyPrivate(JournalSpy *parent)
 
     loadExpressions();
     if (expressions.isEmpty()) {
-        qCDebug(cr) << "No defined expressions to watch.";
+        qCWarning(cr) << "No defined expressions to watch.";
         return;
     }
 
     if (sd_journal_open(&journal, SD_JOURNAL_LOCAL_ONLY | SD_JOURNAL_SYSTEM)) {
-        qCDebug(cr) << "Failed to open systemd journal.";
+        qCWarning(cr) << "Failed to open systemd journal.";
         return;
     }
 
     int fd = sd_journal_get_fd(journal);
     if (fd < 0) {
-        qCDebug(cr) << "sd_journal_get_fd() failed.";
+        qCWarning(cr) << "sd_journal_get_fd() failed.";
         return;
     }
 
     if (sd_journal_seek_tail(journal)) {
-        qCDebug(cr) << "sd_journal_seek_tail() failed.";
+        qCWarning(cr) << "sd_journal_seek_tail() failed.";
         return;
     }
     // Workaround for https://bugzilla.redhat.com/show_bug.cgi?id=979487.
@@ -191,7 +191,7 @@ void JournalSpyPrivate::parsePattern(const QString &name, QIODevice &io)
 
         QRegularExpression pattern(QRegularExpression(line.mid(separator + 1)));
         if (!pattern.isValid()) {
-            qCDebug(cr) << "Invalid regular expression" << pattern.pattern();
+            qCWarning(cr) << "Invalid regular expression" << pattern.pattern();
             continue;
         }
 
