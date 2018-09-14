@@ -24,21 +24,14 @@ import Sailfish.Silica 1.0
 import com.jolla.settings.crashreporter 1.0
 
 Item {
-    property bool declined
+    id: root
 
-    Component.onCompleted: {
-        parent.statusChanged.connect(pageStatusChanged)
-        parent.enabled = Qt.binding(function() {
-            return PrivacySettings.privacyNoticeAccepted
-        })
-    }
+    property Page page
+    readonly property bool pageActive: page.status === PageStatus.Active
 
-    function pageStatusChanged() {
-        if ((status == PageStatus.Active) && !PrivacySettings.privacyNoticeAccepted) {
-            if (declined == true) {
-                /* Reset the state back so that user is not pushed back
-                 * immediately when he enters the page again. */
-                declined = false
+    onPageActiveChanged: {
+        if (pageActive) {
+            if (PrivacySettings.privacyNoticeAccepted) {
                 pageStack.pop()
             } else {
                 pageStack.push(privacyNoticeDialog)
@@ -56,59 +49,60 @@ Item {
 
             onRejected: {
                 PrivacySettings.privacyNoticeAccepted = false
-                declined = true
             }
 
-            DialogHeader { id: header }
+            SilicaFlickable {
+                anchors.fill: parent
+                contentHeight: column.height
+                Column {
+                    id: column
 
-            Column {
-                anchors.top: header.bottom
-                x: Theme.horizontalPageMargin
-                width: parent.width - x*2
+                    width: parent.width
+                    spacing: Theme.paddingLarge
+                    DialogHeader {}
+                    Label {
+                        x: Theme.horizontalPageMargin
+                        width: parent.width - x*2
 
-                spacing: Theme.paddingLarge
+                        font.pixelSize: Theme.fontSizeLarge
+                        //% "Privacy notice"
+                        text: qsTrId("quick-feedback_privacy_notice")
+                        wrapMode: Text.WordWrap
+                        color: Theme.highlightColor
+                    }
+                    Label {
+                        x: Theme.horizontalPageMargin
+                        width: parent.width - x*2
 
-                Label {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    width: parent.width - (2 * Theme.paddingMedium)
+                        font.pixelSize: Theme.fontSizeSmall
+                        //% "Please be warned that Crash Reporter and Quick "
+                        //% "Feedback upload statistics of device usage to a remote "
+                        //% "server, including pieces of information like IMEI "
+                        //% "number that can uniquely identify your device. Crash "
+                        //% "reports may also include partial or full snapshots of "
+                        //% "program memory, potentially including sensitive data "
+                        //% "like your unencrypted passwords, credit card numbers "
+                        //% "etc."
+                        text: qsTrId("quick-feedback_privacy_notice_text_1")
+                        wrapMode: Text.WordWrap
+                        color: Theme.highlightColor
+                    }
+                    Label {
+                        x: Theme.horizontalPageMargin
+                        width: parent.width - x*2
 
-                    font.pixelSize: Theme.fontSizeLarge
-                    //% "Privacy notice"
-                    text: qsTrId("quick-feedback_privacy_notice")
-                    wrapMode: Text.WordWrap
-                    color: Theme.highlightColor
+                        font.pixelSize: Theme.fontSizeSmall
+                        //% "By accepting this dialog you declare you are aware of "
+                        //% "the potential security risks and give consent to "
+                        //% "process the data collected from your device for the "
+                        //% "purpose of analyzing bugs in the applications or the "
+                        //% "operating system."
+                        text: qsTrId("quick-feedback_privacy_notice_text_2")
+                        wrapMode: Text.WordWrap
+                        color: Theme.highlightColor
+                    }
                 }
-                Label {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    width: parent.width - (2 * Theme.paddingMedium)
-
-                    font.pixelSize: Theme.fontSizeSmall
-                    //% "Please be warned that Crash Reporter and Quick "
-                    //% "Feedback upload statistics of device usage to a remote "
-                    //% "server, including pieces of information like IMEI "
-                    //% "number that can uniquely identify your device. Crash "
-                    //% "reports may also include partial or full snapshots of "
-                    //% "program memory, potentially including sensitive data "
-                    //% "like your unencrypted passwords, credit card numbers "
-                    //% "etc."
-                    text: qsTrId("quick-feedback_privacy_notice_text_1")
-                    wrapMode: Text.WordWrap
-                    color: Theme.highlightColor
-                }
-                Label {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    width: parent.width - (2 * Theme.paddingMedium)
-
-                    font.pixelSize: Theme.fontSizeSmall
-                    //% "By accepting this dialog you declare you are aware of "
-                    //% "the potential security risks and give consent to "
-                    //% "process the data collected from your device for the "
-                    //% "purpose of analyzing bugs in the applications or the "
-                    //% "operating system."
-                    text: qsTrId("quick-feedback_privacy_notice_text_2")
-                    wrapMode: Text.WordWrap
-                    color: Theme.highlightColor
-                }
+                VerticalScrollDecorator {}
             }
         }
     }

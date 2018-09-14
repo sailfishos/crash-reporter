@@ -24,6 +24,8 @@ import Sailfish.Silica 1.0
 import com.jolla.settings.crashreporter 1.0
 
 Page {
+    id: root
+
     SilicaFlickable {
         anchors.fill: parent
         contentHeight: content.height + Theme.paddingLarge
@@ -44,7 +46,7 @@ Page {
                     //% "Show pending uploads"
                     text: qsTrId("quick-feedback_pending_uploads")
                     onClicked: {
-                        pageStack.push("PendingUploads.qml")
+                        pageStack.animatorPush("PendingUploads.qml")
                     }
                 }
                 MenuLabel {
@@ -75,7 +77,7 @@ Page {
                 value: ApplicationSettings.serverUrl + ":" + ApplicationSettings.serverPort + ApplicationSettings.serverPath
 
                 onClicked: {
-                    pageStack.push("ServerSettingsDialog.qml")
+                    pageStack.animatorPush("ServerSettingsDialog.qml")
                 }
             }
 
@@ -247,5 +249,10 @@ Page {
         }
     }
 
-    PrivacyNotice {}
+    Loader {
+        active: !PrivacySettings.privacyNoticeAccepted
+        sourceComponent: PrivacyNotice {
+            page: root
+        }
+    }
 }
