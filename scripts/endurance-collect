@@ -72,7 +72,7 @@ _create_endurance_package()
 
 cd $CORE_DIR
 
-statfile=$(find $ENDURANCE_DIR -type f -name stat -print -quit)
+statfile=$(find $ENDURANCE_DIR -type f -name stat -print |head -n1)
 boot_time=$(_extract_btime $statfile)
 
 if [ -d "$ENDURANCE_DIR" ]; then
@@ -85,7 +85,7 @@ if [ -f "$BOOT_TIME_FILE" ]; then
   boot_time=$(cat "$BOOT_TIME_FILE")
 else
   # Legacy code for smooth transition from older endurance-collect.
-  statfile=$(find $ENDURANCE_DIR -type f -name stat -print -quit)
+  statfile=$(find $ENDURANCE_DIR -type f -name stat -print |head -n1)
   boot_time=$(_extract_btime $statfile)
 fi
 
