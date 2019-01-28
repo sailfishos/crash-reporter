@@ -63,57 +63,68 @@ Requires:               libcrash-reporter0 = %{version}-%{release}
 %description -n         libcrash-reporter0-devel
 Development headers and libraries for crash-reporter.
 
+%package doc
+Summary:                Documentation for %{name}
+Group:                  Documentation
+Requires:               %{name} = %{version}-%{release}
+%description doc
+Man pages for %{name}.
+
 %prep
 %setup -q -n %{name}-%{version}
 
 %build
 %qmake5
-make %{_smp_mflags}
+make %{?_smp_mflags}
 
 %install
 %qmake5_install
 
+mkdir -p %{buildroot}%{_docdir}/%{name}-%{version}
+install -m0644 -t %{buildroot}%{_docdir}/%{name}-%{version} README
+
 %files
 %defattr(-,root,root,-)
-%doc README COPYING
+%license COPYING
 /lib/systemd/system/*
-/usr/bin/crash*
-/usr/lib/oneshot.d/*
-/usr/lib/systemd/user/*
+%{_bindir}/%{name}-*
+%{_libdir}/oneshot.d/*
+%{_libdir}/systemd/user/*
 %attr(0755,root,root) /usr/libexec/crash-reporter-journalspy
 %attr(0755,root,root) /usr/libexec/endurance-collect*
 %attr(4755,root,root) /usr/libexec/rich-core-helper
 %attr(4750,root,privileged) /usr/libexec/crashreporter-servicehelper
-%dir /usr/share/crash-reporter
-/usr/share/crash-reporter/*
-/usr/share/dbus-1/services/*.service
-/usr/share/man/man1/*
-/usr/share/lipstick/notificationcategories/*
+%{_datadir}/%{name}
+%{_datadir}/dbus-1/services/*.service
+%{_datadir}/lipstick/notificationcategories/*
 
 %files -n libcrash-reporter0
 %defattr(-,root,root,-)
-%doc COPYING
-/usr/lib/*crash*.so.*
-/usr/share/translations/*
+%license COPYING
+%{_libdir}/*crash*.so.*
+%{_datadir}/translations/*
 
 %files -n crash-reporter-config-nemo
 %defattr(-,root,root,-)
-%dir /usr/share/crash-reporter-settings
-/usr/share/crash-reporter-settings/*
+%license COPYING
+%{_datadir}/crash-reporter-settings
 
 %files -n jolla-settings-crash-reporter
 %defattr(-,root,root,-)
-/usr/lib/qt5/qml/*
-%dir /usr/share/jolla-settings/pages/crash-reporter
-/usr/share/jolla-settings/pages/crash-reporter/*
-/usr/share/jolla-settings/entries/*
+%{_libdir}/qt5/qml/*
+%{_datadir}/jolla-settings/pages/%{name}
+%{_datadir}/jolla-settings/entries/*
 
 %files -n libcrash-reporter0-devel
 %defattr(-,root,root,-)
-%doc COPYING
-/usr/include/crash-reporter/*.h
-/usr/lib/*.so
-/usr/lib/pkgconfig/*.pc
+%{_includedir}/%{name}
+%{_libdir}/*crash*.so
+%{_libdir}/pkgconfig/*.pc
+
+%files doc
+%defattr(-,root,root,-)
+%{_mandir}/man1/%{name}-*
+%{_docdir}/%{name}-%{version}
 
 %post
 systemctl daemon-reload
