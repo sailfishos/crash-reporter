@@ -208,7 +208,7 @@ Page {
                             return syslogItem
                     }
                     return noneItem
-                } 
+                }
 
                 onCurrentItemChanged: {
                     var type
