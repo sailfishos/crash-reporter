@@ -51,8 +51,10 @@ INCLUDEPATH += . \
 
 LIBS += ../../lib/libcrashreporter.so \
 
-QT += dbus network
-QT -= gui
+QT = \
+    core \
+    dbus \
+    network
 
 SOURCES += main.cpp \
            creporterdaemon.cpp \

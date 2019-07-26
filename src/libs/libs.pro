@@ -28,7 +28,10 @@ include(../../crash-reporter-conf.pri)
 
 TEMPLATE = lib
 CONFIG += dll
-QT += network dbus
+QT = \
+    core \
+    network \
+    dbus
 
 DEFINES += CREPORTER_EXPORTS
 

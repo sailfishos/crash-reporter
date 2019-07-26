@@ -22,6 +22,7 @@ include(../../crash-reporter-conf.pri)
 TEMPLATE = app
 TARGET = crash-reporter-journalspy
 
+QT = core
 CONFIG += link_pkgconfig
 
 INCLUDEPATH += \
