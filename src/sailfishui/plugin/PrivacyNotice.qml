@@ -28,13 +28,17 @@ Item {
 
     property Page page
     readonly property bool pageActive: page.status === PageStatus.Active
+    property bool privacyNoticeShown
 
     onPageActiveChanged: {
         if (pageActive) {
             if (PrivacySettings.privacyNoticeAccepted) {
                 pageStack.pop()
+            } else if (!privacyNoticeShown) {
+                noticeGiven = true
+                pageStack.push(privacyNoticeDialog, null, PageStackAction.Immediate)
             } else {
-                pageStack.push(privacyNoticeDialog)
+                pageStack.pop()
             }
         }
     }
