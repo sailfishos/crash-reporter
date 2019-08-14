@@ -12,6 +12,7 @@ Release:                %{release}
 Prefix:                 /usr
 Group:                  Development/Tools
 URL:                    https://github.com/mer-qa/crash-reporter
+BuildRequires:          groff
 BuildRequires:          qt5-qtdbus-devel
 BuildRequires:          qt5-qtdeclarative-devel
 BuildRequires:          qt5-qtgui-devel
