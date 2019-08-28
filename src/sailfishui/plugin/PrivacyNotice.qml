@@ -35,7 +35,7 @@ Item {
             if (PrivacySettings.privacyNoticeAccepted) {
                 pageStack.pop()
             } else if (!privacyNoticeShown) {
-                noticeGiven = true
+                privacyNoticeShown = true
                 pageStack.push(privacyNoticeDialog, null, PageStackAction.Immediate)
             } else {
                 pageStack.pop()
