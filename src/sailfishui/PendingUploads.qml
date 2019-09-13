@@ -56,21 +56,14 @@ Page {
                 text: qsTrId("quick-feedback_upload_now")
                 onClicked: {
                     root._modifyingReportList = true
-                    Adapter.uploadAllCrashReports();
+                    Adapter.uploadAllCrashReports()
                 }
             }
         }
 
-        header: Item {
-            width: parent.width
-            height: childrenRect.height
-
-            PageHeader {
-                id: header
-
-                //% "Pending uploads"
-                title: qsTrId("crash-reporter_pending_uploads")
-            }
+        header: PageHeader {
+            //% "Pending uploads"
+            title: qsTrId("crash-reporter_pending_uploads")
         }
 
         model: Adapter.pendingUploads
@@ -115,7 +108,7 @@ Page {
 
             Item {
                 x: Theme.horizontalPageMargin
-                width: parent.width - (2 * Theme.paddingLarge)
+                width: parent.width - 2*x
                 height: parent.height
 
                 Label {
