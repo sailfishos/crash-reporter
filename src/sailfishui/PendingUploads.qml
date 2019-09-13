@@ -27,10 +27,9 @@ Page {
     id: root
 
     property bool _modifyingReportList
+    property bool deletingUploads
 
     SilicaListView {
-        id: uploadsView
-
         anchors.fill: parent
 
         PullDownMenu {
@@ -38,8 +37,19 @@ Page {
                 enabled: Adapter.reportsToUpload > 0
                 //% "Delete unsent reports"
                 text: qsTrId("quick-feedback_delete_reports")
-                onClicked: uploadsView.headerItem.showDeleteReportsRemorse()
+                onClicked: {
+                    var remorse = Remorse.popupAction(
+                                root,
+                                //% "Deleted %n crash report(s)"
+                                qsTrId("quick-feedback_deleted", Adapter.reportsToUpload),
+                                function() {
+                                    root._modifyingReportList = true
+                                    Adapter.deleteAllCrashReports()
+                                })
+                    root.deletingUploads = Qt.binding(function() { return remorse && remorse.active })
+                }
             }
+
             MenuItem {
                 enabled: Adapter.reportsToUpload > 0
                 //% "Upload crash reports now"
@@ -61,36 +71,6 @@ Page {
                 //% "Pending uploads"
                 title: qsTrId("crash-reporter_pending_uploads")
             }
-            Item {
-                id: remorseArea
-
-                anchors.top: header.bottom
-                height: 0
-                width: parent.width
-                visible: false
-
-                RemorseItem {
-                    id: remorse
-
-                    onCanceled: _collapse()
-                    onTriggered: _collapse()
-
-                    function _collapse() {
-                        remorseArea.height = 0
-                        height = 0
-                    }
-                }
-            }
-
-            function showDeleteReportsRemorse() {
-                remorseArea.height = Theme.itemSizeSmall
-                //% "Deleting %n crash report(s)"
-                remorse.execute(remorseArea, qsTrId("quick-feedback_deleting", Adapter.reportsToUpload),
-                    function() {
-                        root._modifyingReportList = true
-                        Adapter.deleteAllCrashReports()
-                    })
-            }
         }
 
         model: Adapter.pendingUploads
@@ -101,14 +81,17 @@ Page {
             id: listDelegate
 
             function remove() {
-                 //% "Deleting "
-                 var remorseMessage = qsTrId("settings_crash-reporter_deleting") + model.application
+                //% "Deleted %1"
+                var remorseMessage = qsTrId("settings_crash-reporter_deleted_application").arg(model.application)
 
-                 remorseAction(remorseMessage, function() {
-                     Adapter.deleteCrashReport(model.filePath)
-                 })
+                remorseAction(remorseMessage, function() {
+                    Adapter.deleteCrashReport(model.filePath)
+                })
             }
 
+            enabled: !root.deletingUploads
+            opacity: enabled ? 1.0 : 0.0
+            Behavior on opacity { FadeAnimator {}}
             contentHeight: crashDetails.visible ? Theme.itemSizeMedium : Theme.itemSizeSmall
 
             menu: Component {
