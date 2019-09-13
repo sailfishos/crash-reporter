@@ -218,8 +218,8 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
                 summary = qtTrId("crash_reporter-notify-app_terminated");
             } else {
                 if (++crashCount > 1) {
-                    //% "%1 crashes total"
-                    body = qtTrId("crash_reporter-notify-total_crashes").arg(crashCount);
+                    //% "%n crashes total"
+                    body = qtTrId("crash_reporter-notify-total_crashes", crashCount);
                 }
                 //% "%1 has crashed."
                 summary = qtTrId("crash_reporter-notify-app_crashed");

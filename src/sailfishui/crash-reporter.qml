@@ -50,11 +50,8 @@ Page {
                     }
                 }
                 MenuLabel {
-                    text: Adapter.reportsToUpload + ((Adapter.reportsToUpload == 1) ?
-                        //% " report to upload"
-                        qsTrId("quick-feedback_report_to_upload") :
-                        //% " reports to upload"
-                        qsTrId("quick-feedback_reports_to_upload"));
+                    //% "%n report(s) to upload"
+                    text: qsTrId("quick-feedback_reports_to_upload", Adapter.reportsToUpload)
                 }
             }
 
