@@ -55,12 +55,6 @@ const QString PrivacyDisclaimerFile =  "/usr/share/crash-reporter-settings/priva
 const QString DefaultLogFile = "/tmp/crash-reporter.log";
 
 #ifndef CREPORTER_UNIT_TEST
-//! Dialog server service name
-const QString DialogServerServiceName = "com.nokia.CrashReporter.DialogServer";
-
-//! Dialog server object path.
-const QString DialogServerObjectPath =  "/com/nokia/crashreporter/dialogserver";
-
 //! Daemon service name
 const QString DaemonServiceName = "com.nokia.CrashReporter.Daemon";
 
@@ -73,12 +67,6 @@ const QString AutoUploaderServiceName = "com.nokia.CrashReporter.AutoUploader";
 //! Auto uploader object path.
 const QString AutoUploaderObjectPath =  "/com/nokia/crashreporter/autouploader";
 #else
-//! Dialog server service name
-const QString DialogServerServiceName = "com.nokia.CrashReporter.DialogServer.Ut";
-
-//! Dialog server object path.
-const QString DialogServerObjectPath =  "/com/nokia/crashreporter/dialogserver/ut";
-
 //! Daemon service name
 const QString DaemonServiceName = "com.nokia.CrashReporter.Daemon.Ut";
 

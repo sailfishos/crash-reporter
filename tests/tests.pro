@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS = qtest matti testdata
+SUBDIRS = qtest testdata
