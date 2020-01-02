@@ -29,7 +29,8 @@ TARGET = crash-reporter-daemon
 CONFIG += link_pkgconfig
 
 PKGCONFIG += \
-    libudev
+    libudev \
+    nemonotifications-qt5
 
 packagesExist(qt5-boostable) {
     DEFINES += HAS_BOOSTER

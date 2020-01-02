@@ -46,10 +46,6 @@ include(doc/doc.pri)
 scripts.path = $${CREPORTER_SYSTEM_SHARE}/crash-reporter
 scripts.files = scripts/crash-report-monitoring
 
-notifications.path = $${CREPORTER_SYSTEM_SHARE}/lipstick/notificationcategories/
-notifications.files = data/x-nemo.crash-reporter.autouploader.conf \
-                      data/x-nemo.crash-reporter.notification.conf
-
 settings.path = $$CREPORTER_SETTINGS_PATH
 settings.files += \
 	data/crash-reporter-privacy.conf \
@@ -79,5 +75,5 @@ endurance_script.files = scripts/endurance-collect
 oneshot.path = $${CREPORTER_SYSTEM_ONESHOT}
 oneshot.files = scripts/crash-reporter-service-default
 
-INSTALLS += scripts notifications settings systemd_service \
+INSTALLS += scripts settings systemd_service \
 	systemd_services endurance_script oneshot

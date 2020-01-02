@@ -38,6 +38,8 @@
 #include <QFile>
 #include <QProcess>
 
+#include <notification.h>
+
 #include "creporterutils.h"
 
 #include "creporternamespace.h"
@@ -269,6 +271,21 @@ void CReporterUtils::setEnduranceServiceState(bool run)
 void CReporterUtils::setJournalSpyServiceState(bool run)
 {
     runServiceHelper(QStringLiteral("journalspy"), run);
+}
+
+void CReporterUtils::applyNotificationStyle(Notification *notification)
+{
+    //% "Crash reporter"
+    notification->setAppName(qtTrId("crash_reporter-notify-app_name"));
+    notification->setAppIcon(QLatin1String("icon-m-crash-reporter"));
+    QVariant action = Notification::remoteAction(QLatin1String("default"), QString(),
+                                                 QLatin1String("com.jolla.settings"),
+                                                 QLatin1String("/com/jolla/settings/ui"),
+                                                 QLatin1String("com.jolla.settings.ui"),
+                                                 QLatin1String("showPage"),
+                                                 QVariantList() << QLatin1String("system_settings/system/crash_reporter"));
+
+    notification->setRemoteActions(QVariantList() << action);
 }
 
 CReporterUtils *CReporterUtils::instance()

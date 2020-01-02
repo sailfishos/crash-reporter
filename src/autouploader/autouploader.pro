@@ -32,6 +32,10 @@ QT = \
     dbus \
     network
 
+CONFIG += link_pkgconfig
+
+PKGCONFIG += nemonotifications-qt5
+
 TEMPLATE = app
 TARGET = crash-reporter-autouploader
 

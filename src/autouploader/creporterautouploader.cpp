@@ -28,6 +28,8 @@
 #include <QDebug>
 #include <QDBusConnection>
 
+#include <notification.h>
+
 #include "creporterautouploader.h"
 #include "creporternamespace.h"
 #include "creporternwsessionmgr.h"
@@ -36,7 +38,6 @@
 #include "creporteruploaditem.h"
 #include "creporteruploadengine.h"
 #include "creporterutils.h"
-#include "creporternotification.h"
 #include "creporterprivacysettingsmodel.h"
 
 #include "autouploader_adaptor.h" // generated
@@ -60,11 +61,11 @@ public:
     //! @arg files that have been added to upload queue during this auto uploader session
     QStringList addedFiles;
     /*! Notification object giving user a notice that upload is in progress.*/
-    CReporterNotification *progressNotification;
+    Notification *progressNotification;
     /*! Notification object giving user a notice of successful uploads.*/
-    CReporterNotification *successNotification;
+    Notification *successNotification;
     /*! Notification object giving user a notice of failed uploads.*/
-    CReporterNotification *failedNotification;
+    Notification *failedNotification;
 
 };
 
@@ -73,17 +74,15 @@ CReporterAutoUploader::CReporterAutoUploader()
 {
     d_ptr->engine = 0;
     d_ptr->activated = false;
-    d_ptr->progressNotification =
-        new CReporterNotification(CReporter::AutoUploaderNotificationEventType,
-                                  0, this);
-    d_ptr->successNotification =
-        new CReporterNotification(CReporter::AutoUploaderNotificationEventType,
-                                  CReporterSavedState::instance()->uploadSuccessNotificationId(),
-                                  this);
-    d_ptr->failedNotification =
-        new CReporterNotification(CReporter::AutoUploaderNotificationEventType,
-                                  CReporterSavedState::instance()->uploadFailedNotificationId(),
-                                  this);
+    d_ptr->progressNotification = new Notification(this);
+    d_ptr->successNotification = new Notification(this);
+    d_ptr->successNotification->setReplacesId(CReporterSavedState::instance()->uploadSuccessNotificationId());
+    d_ptr->failedNotification = new Notification(this);
+    d_ptr->failedNotification->setReplacesId(CReporterSavedState::instance()->uploadFailedNotificationId());
+
+    CReporterUtils::applyNotificationStyle(d_ptr->progressNotification);
+    CReporterUtils::applyNotificationStyle(d_ptr->successNotification);
+    CReporterUtils::applyNotificationStyle(d_ptr->failedNotification);
 
     // Create adaptor class. Needs to be taken from the stack.
     new AutoUploaderAdaptor(this);
@@ -102,7 +101,6 @@ CReporterAutoUploader::~CReporterAutoUploader()
     CReporterSavedState::freeSingleton();
 
     qCDebug(cr) << "Service closed.";
-
 }
 
 bool CReporterAutoUploader::uploadFiles(const QStringList &fileList,
@@ -138,11 +136,15 @@ bool CReporterAutoUploader::uploadFiles(const QStringList &fileList,
     }
 
     if (CReporterPrivacySettingsModel::instance()->notificationsEnabled()) {
-        d_ptr->progressNotification->update(
-            //% "Uploading reports"
-            qtTrId("crash_reporter-notify-uploading_reports"),
-            //% "%n report(s) to upload"
-            qtTrId("crash_reporter-notify-num_to_upload", fileList.count()));
+        //% "Uploading reports"
+        QString summary = qtTrId("crash_reporter-notify-uploading_reports");
+        //% "%n report(s) to upload"
+        QString body = qtTrId("crash_reporter-notify-num_to_upload", fileList.count());
+        d_ptr->progressNotification->setSummary(summary);
+        d_ptr->progressNotification->setPreviewSummary(summary);
+        d_ptr->progressNotification->setBody(body);
+        d_ptr->progressNotification->setPreviewBody(body);
+        d_ptr->progressNotification->publish();
     }
 
     return true;
@@ -215,18 +217,23 @@ void CReporterAutoUploader::engineFinished(int error, int sent, int total)
     }
 
     if (CReporterPrivacySettingsModel::instance()->notificationsEnabled()) {
-        d_ptr->progressNotification->remove();
+        d_ptr->progressNotification->close();
 
         if (total > sent) {
             int failures = total - sent;
-            d_ptr->failedNotification->update(
-                //% "Failed to send all reports"
-                qtTrId("crash_reporter-notify-send_failed"),
-                //% "%n uploads failed"
-                qtTrId("crash_reporter-notify-num_failed", failures),
-                failures);
+            //% "Failed to send all reports"
+            QString summary = qtTrId("crash_reporter-notify-send_failed");
+            //% "%n uploads failed"
+            QString body = qtTrId("crash_reporter-notify-num_failed", failures);
+
+            d_ptr->failedNotification->setSummary(summary);
+            d_ptr->failedNotification->setPreviewSummary(summary);
+            d_ptr->failedNotification->setBody(body);
+            d_ptr->failedNotification->setPreviewBody(body);
+            d_ptr->failedNotification->setItemCount(failures);
+            d_ptr->failedNotification->publish();
         } else {
-            d_ptr->failedNotification->remove();
+            d_ptr->failedNotification->close();
         }
 
         CReporterSavedState *state = CReporterSavedState::instance();
@@ -236,11 +243,14 @@ void CReporterAutoUploader::engineFinished(int error, int sent, int total)
 
             //% "Report(s) uploaded"
             QString summary = qtTrId("crash_reporter-notify-reports_uploaded", sent);
-            d_ptr->successNotification->update(summary, QString(), sent);
+            d_ptr->successNotification->setSummary(summary);
+            d_ptr->successNotification->setPreviewSummary(summary);
+            d_ptr->successNotification->setItemCount(sent);
+            d_ptr->successNotification->publish();
         }
 
-        state->setUploadSuccessNotificationId(d_ptr->successNotification->id());
-        state->setUploadFailedNotificationId(d_ptr->failedNotification->id());
+        state->setUploadSuccessNotificationId(d_ptr->successNotification->replacesId());
+        state->setUploadFailedNotificationId(d_ptr->failedNotification->replacesId());
         state->setUploadSuccessCount(sent);
     }
 
