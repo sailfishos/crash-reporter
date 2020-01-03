@@ -235,5 +235,5 @@ void CReporterNwSessionMgr::networkStateChanged(QNetworkSession::State state)
         break;
     default:
         break;
-    };
+    }
 }

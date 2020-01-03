@@ -90,14 +90,14 @@ const QString AutoUploaderBinaryName = "crash-reporter-autouploader";
   * @enum LogType
   * @brief Logging method.
   */
-typedef enum {
+enum LogType {
     //! No logging.
     LogNone = 0,
     //! Use syslog for logging.
     LogSyslog,
     //! Log to a file.
     LogFile,
-} LogType;
+};
 
 //! Prefix for message and core packages created by Quick Feedback
 const QString QuickFeedbackPrefix = "Quickie";

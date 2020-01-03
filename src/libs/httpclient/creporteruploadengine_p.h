@@ -31,9 +31,7 @@
 
 class CReporterUploadItem;
 class CReporterUploadQueue;
-#ifdef CREPORTER_LIBBEARER_ENABLED
 class CReporterNwSessionMgr;
-#endif
 
 /*!
   * @class CReporterUploadEnginePrivate
@@ -48,9 +46,8 @@ public:
     /*!
      * @enum State
      *  @brief Descripes engine state.
-     *
      */
-    typedef enum {
+    enum State {
         //! Initial state. No connection.
         NoConnection = 0,
         //! Engine is establishing internet connection.
@@ -61,7 +58,7 @@ public:
         Closing,
         //! Engine is aborting uploads.
         Aborting,
-    } State;
+    };
 
     CReporterUploadEnginePrivate();
     ~CReporterUploadEnginePrivate();
@@ -129,7 +126,7 @@ public:
      *
      * @param type Error type.
      */
-    void setErrorType(const CReporterUploadEngine::ErrorType &type);
+    void setErrorType(CReporterUploadEngine::ErrorType type);
 
 private:
     /*!

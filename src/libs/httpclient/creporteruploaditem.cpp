@@ -31,7 +31,7 @@
 
 using CReporter::LoggingCategory::cr;
 
-const char *status_string[] = {"Waiting", "Sending", "Error", "Finished", "Cancelled", "Unknown"};
+static const char *status_string[] = {"Waiting", "Sending", "Error", "Finished", "Cancelled", "Unknown"};
 
 class CReporterUploadItemPrivate
 {

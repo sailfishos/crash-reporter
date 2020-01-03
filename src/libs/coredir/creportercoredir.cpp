@@ -38,8 +38,8 @@ using CReporter::LoggingCategory::cr;
 
 #define FILE_PERMISSION     0777
 
-const char rcore_file_name_filter[] = "*.rcore";
-const char rcore_lzo_file_name_filter[] = "*.rcore.lzo";
+static const char rcore_file_name_filter[] = "*.rcore";
+static const char rcore_lzo_file_name_filter[] = "*.rcore.lzo";
 
 
 CReporterCoreDir::CReporterCoreDir(QString &mpoint, QObject *parent)

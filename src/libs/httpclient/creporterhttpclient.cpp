@@ -45,8 +45,8 @@
 
 using CReporter::LoggingCategory::cr;
 
-const char *clientstate_string[] = {"None", "Init", "Connecting", "Sending", "Aborting"};
-const int CONNECTION_TIMEOUT_MS = 2 * 60 * 1000;
+static const char *clientstate_string[] = {"None", "Init", "Connecting", "Sending", "Aborting"};
+static const int CONNECTION_TIMEOUT_MS = 2 * 60 * 1000;
 
 CReporterHttpClientPrivate::CReporterHttpClientPrivate(CReporterHttpClient *parent)
     : QObject(parent),

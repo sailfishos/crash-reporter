@@ -80,7 +80,8 @@ CReporterLogger::CReporterLogger(const QString type)
         break;
     case CReporter::LogNone: // TODO Means rather LogDefault than LogNone
         return;
-    };
+    }
+
     // Register ourselves as a debug message handler
     m_old_msg_handler = qInstallMessageHandler(CReporterLogger::messageHandler);
 }
@@ -131,7 +132,7 @@ void CReporterLogger::messageHandler(QtMsgType type,
         case QtFatalMsg:
             msgLevel = LOG_EMERG;
             break;
-        };
+        }
 
         syslog(msgLevel, "%s", logMessage.toLocal8Bit().constData());
     } else if (CReporterLogger::sm_LogType == CReporter::LogFile) {
