@@ -43,7 +43,7 @@ INCLUDEPATH += ../libs/serviceif \
                ../libs/utils \
                ../libs \
 
-LIBS += ../../lib/libcrashreporter.so \
+LIBS += -L../../lib -lcrashreporter
 
 SOURCES += main.cpp \
            creporterautouploader.cpp \

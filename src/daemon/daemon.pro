@@ -49,7 +49,7 @@ INCLUDEPATH += . \
                ../libs/notification \
 
 
-LIBS += ../../lib/libcrashreporter.so \
+LIBS += -L../../lib -lcrashreporter
 
 QT = \
     core \
