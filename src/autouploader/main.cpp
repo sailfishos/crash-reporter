@@ -34,18 +34,13 @@
 #include "creporternamespace.h"
 #include "creporterutils.h"
 #include "creporterapplicationsettings.h"
-
-#ifndef QT_NO_DEBUG_OUTPUT
 #include "creporterlogger.h"
-#endif
 
 using CReporter::LoggingCategory::cr;
 
 int main(int argc, char **argv)
 {
-#ifndef QT_NO_DEBUG_OUTPUT
     Logger logger(CReporterApplicationSettings::instance()->loggerType());
-#endif
 
     QCoreApplication app(argc, argv);
 
