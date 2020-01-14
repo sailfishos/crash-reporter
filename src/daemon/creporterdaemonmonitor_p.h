@@ -28,9 +28,8 @@
 #include <QDateTime>
 #include <QFileSystemWatcher>
 
-class CReporterCoreRegistry;
 class CReporterDaemonMonitor;
-class CReporterNotification;
+class Notification;
 
 /*!
   * @class CReporterHandledRichCore
@@ -110,14 +109,6 @@ public Q_SLOTS:
      */
     void handleParentDirectoryChanged();
 
-    /*!
-      * @brief Called, when signal is received from CReporterNotification class.
-      *
-      * @sa CReporterNotification::activated()
-      * @sa CReporterNotification::timeouted()
-      */
-    void handleNotificationEvent();
-
     /**
      * Resets the crash counter counter.
      */
@@ -142,7 +133,7 @@ private:
      * A notification object informing user that some process has crashed
      * and about the count of crashes since the daemon launched.
      */
-    CReporterNotification *crashNotification;
+    Notification *crashNotification;
     //! Counts processed crash reports.
     int crashCount;
 

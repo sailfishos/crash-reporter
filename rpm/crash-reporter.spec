@@ -18,13 +18,13 @@ BuildRequires:          qt5-qtdeclarative-devel
 BuildRequires:          qt5-qtgui-devel
 BuildRequires:          qt5-qtnetwork-devel
 BuildRequires:          qt5-qttools-linguist
-BuildRequires:          qt5-qtxml-devel
 BuildRequires:          ssu-devel
 BuildRequires:          pkgconfig(dbus-1)
 BuildRequires:          pkgconfig(libiphb)
 BuildRequires:          pkgconfig(libudev)
 BuildRequires:          pkgconfig(mce)
 BuildRequires:          pkgconfig(qt5-boostable)
+BuildRequires:          pkgconfig(nemonotifications-qt5)
 Requires:               sp-rich-core >= 1.71.2
 Requires:               sp-endurance
 Requires:               oneshot
@@ -97,7 +97,6 @@ install -m0644 -t %{buildroot}%{_docdir}/%{name}-%{version} README
 %attr(4750,root,privileged) /usr/libexec/crashreporter-servicehelper
 %{_datadir}/%{name}
 %{_datadir}/dbus-1/services/*.service
-%{_datadir}/lipstick/notificationcategories/*
 
 %files -n libcrash-reporter0
 %defattr(-,root,root,-)

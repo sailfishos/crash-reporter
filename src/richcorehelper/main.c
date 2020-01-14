@@ -44,7 +44,7 @@ int main(int argc, const char **argv)
      * no spaces. */
     size_t i;
     for (i = 0; i != label_len; ++i) {
-        if (!isalnum(label[i]) && !label[i] == '_' && !label[i] == '-') {
+        if (!isalnum(label[i]) && !(label[i] == '_') && !(label[i] == '-')) {
             goto invalid_label;
         }
     }

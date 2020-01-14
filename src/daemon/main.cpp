@@ -35,19 +35,13 @@
 #include "creporterutils.h"
 #include "creporternamespace.h"
 #include "creporterapplicationsettings.h"
-
-#ifndef QT_NO_DEBUG_OUTPUT
 #include "creporterlogger.h"
-#endif
 
 using CReporter::LoggingCategory::cr;
 
 #define CREPORTER_PID_FILE      "/tmp/crash-reporter-daemon.pid"
 #define CREPORTER_STARTUP_DELAY 30000 // 30 sec timer to delay start up
-
-#ifndef QT_NO_DEBUG_OUTPUT
 #define LOG_FILE    "/tmp/crash-reporter-daemon.log"
-#endif
 
 /*!
  * @brief Gets crash-reporter-daemon pid and saves it to file.
@@ -88,25 +82,21 @@ void signalHandler(int signal)
     QCoreApplication::exit(0);
 }
 
-/*!
-  * @brief Crash Reporter daemon main function.
-  *
-  * @param argc Argument count.
-  * @param argv Arguments.
-  */
 Q_DECL_EXPORT int main(int argc, char **argv)
 {
     signal(SIGINT, &signalHandler);
     signal(SIGTERM, &signalHandler);
 
-#ifndef QT_NO_DEBUG_OUTPUT
     Logger logger(CReporterApplicationSettings::instance()->loggerType());
-#endif
 
     QCoreApplication app(argc, argv);
 
-    QTranslator *translator = new QTranslator(qApp);
-    translator->load("crash-reporter_eng_en", "/usr/share/translations");
+    QTranslator *engineeringEnglish = new QTranslator(&app);
+    engineeringEnglish->load("crash-reporter_eng_en", "/usr/share/translations");
+    app.installTranslator(engineeringEnglish);
+
+    QTranslator *translator = new QTranslator(&app);
+    translator->load(QLocale(), "crash-reporter", "/usr/share/translations");
     app.installTranslator(translator);
 
     bool firstStartup = getPid(app);
@@ -116,18 +106,15 @@ Q_DECL_EXPORT int main(int argc, char **argv)
     if (firstStartup) {
         // If no PID file was found, delay startup.
         daemon.setDelayedStartup(CREPORTER_STARTUP_DELAY);
-    } else {
-        if (!daemon.initiateDaemon()) {
-            // Connecting to D-BUS user session most propably failed.
-            // Remove PID file (to delay next startup) and quit application.
-            QFile::remove(CREPORTER_PID_FILE);
-            return EXIT_FAILURE;
-        }
+    } else if (!daemon.initiateDaemon()) {
+        // Connecting to D-BUS user session most propably failed.
+        // Remove PID file (to delay next startup) and quit application.
+        QFile::remove(CREPORTER_PID_FILE);
+        return EXIT_FAILURE;
     }
 
     qCDebug(cr) << "Crash Reporter version is " << QString(CREPORTERVERSION);
 
-    // Enter Qt main loop.
     int retVal = app.exec();
 
     CReporterApplicationSettings::instance()->freeSingleton();

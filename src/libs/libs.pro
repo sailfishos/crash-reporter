@@ -35,6 +35,9 @@ QT = \
 
 DEFINES += CREPORTER_EXPORTS
 
+CONFIG += link_pkgconfig
+PKGCONFIG += nemonotifications-qt5
+
 message(Building architecture: $$system(uname -m))
 
 # Enable Qt Bearer Management API.
@@ -58,7 +61,6 @@ INCLUDEPATH += . \
 DEPENDPATH = $$INCLUDEPATH
 
 DBUS_INTERFACES = \
-	notification/org.freedesktop.Notification.xml \
 	utils/org.nemo.ssu.xml \
 	../autouploader/com.nokia.CrashReporter.AutoUploader.xml \
 
@@ -76,7 +78,6 @@ SOURCES += coredir/creportercoredir.cpp \
            settings/creportersettingsbase.cpp \
            settings/creporterapplicationsettings.cpp \
            settings/creportersettingsinit.cpp \
-           notification/creporternotification.cpp \
 
 # Public headers
 PUBLIC_HEADERS += creporternamespace.h \
@@ -87,8 +88,6 @@ PUBLIC_HEADERS += creporternamespace.h \
                   httpclient/creporteruploadqueue.h \
                   httpclient/creporteruploadengine.h \
                   utils/creporterutils.h \
-                  dialoginterface/creporterdialogplugininterface.h \
-                  dialoginterface/creporterdialogserverinterface.h \
                   logger/creporterlogger.h \
                   serviceif/creporterdaemonproxy.h \
                   serviceif/creportermetatypes.h \
@@ -96,7 +95,6 @@ PUBLIC_HEADERS += creporternamespace.h \
                   settings/creportersavedstate.h \
                   settings/creportersettingsbase.h \
                   settings/creporterapplicationsettings.h \
-                  notification/creporternotification.h \
                   creporterexport.h \
 
 # Local headers
@@ -107,7 +105,6 @@ HEADERS += $$PUBLIC_HEADERS \
             httpclient/creporteruploadengine_p.h \
             settings/creportersettingsbase_p.h \
             settings/creportersettingsinit_p.h \
-            notification/creporternotification_p.h \
 
 LIBS += -lssu
 

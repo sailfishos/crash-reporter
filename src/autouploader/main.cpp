@@ -25,43 +25,34 @@
  *
  */
 
-#include <signal.h>
-
 #include <QCoreApplication>
 #include <QTranslator>
+#include <QLocale>
 #include <QDebug>
 
 #include "creporterautouploader.h"
 #include "creporternamespace.h"
 #include "creporterutils.h"
 #include "creporterapplicationsettings.h"
-
-#ifndef QT_NO_DEBUG_OUTPUT
 #include "creporterlogger.h"
-#endif
 
 using CReporter::LoggingCategory::cr;
 
-/*!
-  * @brief Crash Reporter Auto Uploader main function.
-  *
-  * @param argc Argument count.
-  * @param argv Arguments.
-  */
 int main(int argc, char **argv)
 {
-#ifndef QT_NO_DEBUG_OUTPUT
     Logger logger(CReporterApplicationSettings::instance()->loggerType());
-#endif
 
     QCoreApplication app(argc, argv);
 
-    QTranslator *translator = new QTranslator(qApp);
-    translator->load("crash-reporter_eng_en", "/usr/share/translations");
+    QTranslator *engineeringEnglish = new QTranslator(&app);
+    engineeringEnglish->load("crash-reporter_eng_en", "/usr/share/translations");
+    app.installTranslator(engineeringEnglish);
+
+    QTranslator *translator = new QTranslator(&app);
+    translator->load(QLocale(), "crash-reporter", "-", "/usr/share/translations");
     app.installTranslator(translator);
 
     qCDebug(cr) << CReporter::AutoUploaderBinaryName << "[" << app.applicationPid() << "]" << "started.";
-
     qCDebug(cr) << "Crash Reporter version is " << QString(CREPORTERVERSION);
 
     CReporterAutoUploader uploader;

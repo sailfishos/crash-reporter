@@ -30,6 +30,7 @@
 
 #include "creporterexport.h"
 
+class Notification;
 class QProcess;
 
 namespace CReporter {
@@ -153,6 +154,8 @@ public:
 
     Q_INVOKABLE static void setEnduranceServiceState(bool run);
     Q_INVOKABLE static void setJournalSpyServiceState(bool run);
+
+    static void applyNotificationStyle(Notification *notification);
 
     static CReporterUtils *instance();
 

@@ -18,7 +18,7 @@ INCLUDEPATH += \
 	../../libs/settings \
 	../../libs/utils \
 
-LIBS += ../../../lib/libcrashreporter.so
+LIBS += -L../../../lib -lcrashreporter
 
 DBUS_INTERFACES = \
 	org.freedesktop.systemd1.Manager.xml \

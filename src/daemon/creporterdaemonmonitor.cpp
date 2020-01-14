@@ -34,6 +34,8 @@
 #include <QFileInfo>
 #include <QDBusReply>
 
+#include <notification.h>
+
 #include "creporterdaemonmonitor.h"
 #include "creporterdaemonmonitor_p.h"
 #include "creportercoreregistry.h"
@@ -41,7 +43,6 @@
 #include "creportersavedstate.h"
 #include "creporterutils.h"
 #include "creporternamespace.h"
-#include "creporternotification.h"
 #include "creporterprivacysettingsmodel.h"
 #include "autouploader_interface.h" // generated
 
@@ -74,12 +75,13 @@ bool CReporterHandledRichCore::operator==(const CReporterHandledRichCore &other)
 
 CReporterDaemonMonitorPrivate::CReporterDaemonMonitorPrivate()
     : autoDeleteMaxSimilarCores(0),
-      crashNotification(new CReporterNotification(
-                            CReporter::AutoUploaderNotificationEventType,
-                            CReporterSavedState::instance()->crashNotificationId(), this)),
+      crashNotification(new Notification(this)),
       crashCount(0)
 {
-    connect(crashNotification, &CReporterNotification::timeouted,
+    CReporterUtils::applyNotificationStyle(crashNotification);
+    crashNotification->setReplacesId(CReporterSavedState::instance()->crashNotificationId());
+
+    connect(crashNotification, &Notification::closed,
             this, &CReporterDaemonMonitorPrivate::resetCrashCount);
 
     connect(CReporterPrivacySettingsModel::instance(),
@@ -90,7 +92,7 @@ CReporterDaemonMonitorPrivate::CReporterDaemonMonitorPrivate()
 CReporterDaemonMonitorPrivate::~CReporterDaemonMonitorPrivate()
 {
     CReporterSavedState *state = CReporterSavedState::instance();
-    state->setCrashNotificationId(crashNotification->id());
+    state->setCrashNotificationId(crashNotification->replacesId());
 
     qDeleteAll(handledRichCores);
 }
@@ -164,6 +166,7 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
 
     QStringList details = CReporterUtils::parseCrashInfoFromFilename(filePath);
     bool isUserTerminated = (details[2].toInt() == SIGQUIT);
+    QString appName = details[0];
 
     emit q_ptr->richCoreNotify(filePath);
 
@@ -175,18 +178,14 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
     if (!isUserTerminated && settings.autoDeleteDuplicates() &&
             checkForDuplicates(filePath)) {
         if (settings.notificationsEnabled()) {
-            CReporterNotification *notification =
-                new CReporterNotification(
-                CReporter::ApplicationNotificationEventType,
-                0, this);
-            notification->setTimeout(5000);
-            connect(notification, &CReporterNotification::timeouted,
-                    notification, &QObject::deleteLater);
+            Notification notification;
+            CReporterUtils::applyNotificationStyle(&notification);
+            notification.setIsTransient(true);
             //% "%1 has crashed again."
-            notification->update(
-                qtTrId("crash_reporter-notify-crashed_again").arg(details[0]),
-                //% "Duplicate crash report was deleted."
-                qtTrId("crash_reporter-notify-duplicate_deleted"));
+            notification.setPreviewSummary(qtTrId("crash_reporter-notify-crashed_again").arg(appName));
+            //% "Duplicate crash report was deleted."
+            notification.setPreviewBody(qtTrId("crash_reporter-notify-duplicate_deleted"));
+            notification.publish();
         }
         CReporterUtils::removeFile(filePath);
         return;
@@ -215,18 +214,22 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
                 summary = qtTrId("crash_reporter-notify-power_excess_detected");
             } else if (isUserTerminated) {
                 //% "%1 was terminated."
-                summary = qtTrId("crash_reporter-notify-app_terminated");
+                summary = qtTrId("crash_reporter-notify-app_terminated").arg(appName);
             } else {
                 if (++crashCount > 1) {
                     //% "%n crashes total"
                     body = qtTrId("crash_reporter-notify-total_crashes", crashCount);
                 }
                 //% "%1 has crashed."
-                summary = qtTrId("crash_reporter-notify-app_crashed");
+                summary = qtTrId("crash_reporter-notify-app_crashed").arg(appName);
             }
 
-            crashNotification->update(summary.arg(details.at(0)), body,
-                                      crashCount);
+            crashNotification->setSummary(summary);
+            crashNotification->setPreviewSummary(summary);
+            crashNotification->setBody(body);
+            crashNotification->setPreviewBody(body);
+            crashNotification->setItemCount(crashCount);
+            crashNotification->publish();
         }
         if (!CReporterNwSessionMgr::canUseNetworkConnection()) {
             qCDebug(cr) << "WiFi not available, not uploading now.";
@@ -311,14 +314,6 @@ bool CReporterDaemonMonitorPrivate::checkForDuplicates(const QString &path)
     handledRichCores << rCore;
 
     return false;
-}
-
-void CReporterDaemonMonitorPrivate::handleNotificationEvent()
-{
-    // Handle timeouted and activated signals from CReporterNotification
-    // and destroy instance.
-    CReporterNotification *notification = qobject_cast<CReporterNotification *>(sender());
-    delete notification;
 }
 
 void CReporterDaemonMonitorPrivate::resetCrashCount()

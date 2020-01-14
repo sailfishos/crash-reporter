@@ -25,6 +25,8 @@
  *
  */
 
+#include <notification.h>
+
 #include "creporterdaemon.h"
 #include "creporterdaemon_p.h"
 #include "creporterdaemonadaptor.h"
@@ -35,7 +37,6 @@
 #include "creporterutils.h"
 #include "creporternamespace.h"
 #include "creporterprivacysettingsmodel.h"
-#include "creporternotification.h"
 #include "powerexcesshandler.h"
 
 using CReporter::LoggingCategory::cr;
@@ -112,14 +113,12 @@ bool CReporterDaemon::initiateDaemon()
         QStringList files = collectAllCoreFiles();
 
         if (!files.isEmpty()) {
-            CReporterNotification *notification = new CReporterNotification(
-                CReporter::ApplicationNotificationEventType,
-                //% "This system has stored crash reports."
-                qtTrId("crash_reporter-notify-has_stored_cores"),
-                QString(), this);
-
-            connect(notification, &CReporterNotification::timeouted,
-                    notification, &CReporterNotification::deleteLater);
+            Notification notification;
+            CReporterUtils::applyNotificationStyle(&notification);
+            //% "This system has stored crash reports."
+            notification.setSummary(qtTrId("crash_reporter-notify-has_stored_cores"));
+            notification.setPreviewSummary(notification.summary());
+            notification.publish();
         }
     }
 

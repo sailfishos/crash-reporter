@@ -45,7 +45,7 @@ public:
      * @enum ItemStatus
      * @brief Values for upload item status.
      */
-    typedef enum ItemStatus {
+    enum ItemStatus {
         //! Item is waiting.
         Waiting = 0,
         //! Item is being uploaded.
@@ -56,7 +56,7 @@ public:
         Finished,
         //! Item was cancelled.
         Cancelled,
-    } ItemStatus;
+    };
 
     /*!
      * @brief Class constructor.

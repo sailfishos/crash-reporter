@@ -46,9 +46,8 @@ public:
     /*!
       * @enum ErrorType
       * @brief Descripes possible errors occured during upload.
-      *
       */
-    typedef enum {
+    enum ErrorType {
         //! No error.
         NoError = 0,
         //! Indicates errors occured on HTTP/ SSL protocol levels.
@@ -57,7 +56,7 @@ public:
         ConnectionNotAvailable,
         //! Internet connection was closed due to network disconnected.
         ConnectionClosed,
-    } ErrorType;
+    };
 
     /*!
       * @brief Class constructor.

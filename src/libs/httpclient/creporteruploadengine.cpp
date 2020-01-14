@@ -40,8 +40,8 @@
 
 using CReporter::LoggingCategory::cr;
 
-const char *state_string[] = {"NoConnection", "Connecting", "Connected", "Closing", "Aborting"};
-const char *error_string[] = {"NoError", "ProtocolError", "ConnectionNotAvailable", "ConnectionClosed"};
+static const char *state_string[] = {"NoConnection", "Connecting", "Connected", "Closing", "Aborting"};
+static const char *error_string[] = {"NoError", "ProtocolError", "ConnectionNotAvailable", "ConnectionClosed"};
 
 
 CReporterUploadEnginePrivate::CReporterUploadEnginePrivate()
@@ -201,7 +201,7 @@ void CReporterUploadEnginePrivate::setErrorString(const QString &message)
     }
 }
 
-void CReporterUploadEnginePrivate::setErrorType(const CReporterUploadEngine::ErrorType &type)
+void CReporterUploadEnginePrivate::setErrorType(CReporterUploadEngine::ErrorType type)
 {
     if (error == CReporterUploadEngine::NoError) {
         error = type;

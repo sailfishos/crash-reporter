@@ -32,6 +32,10 @@ QT = \
     dbus \
     network
 
+CONFIG += link_pkgconfig
+
+PKGCONFIG += nemonotifications-qt5
+
 TEMPLATE = app
 TARGET = crash-reporter-autouploader
 
@@ -43,7 +47,7 @@ INCLUDEPATH += ../libs/serviceif \
                ../libs/utils \
                ../libs \
 
-LIBS += ../../lib/libcrashreporter.so \
+LIBS += -L../../lib -lcrashreporter
 
 SOURCES += main.cpp \
            creporterautouploader.cpp \
