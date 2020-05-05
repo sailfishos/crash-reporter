@@ -22,6 +22,7 @@ BuildRequires:          ssu-devel
 BuildRequires:          pkgconfig(dbus-1)
 BuildRequires:          pkgconfig(libiphb)
 BuildRequires:          pkgconfig(libudev)
+BuildRequires:          pkgconfig(libsystemd)
 BuildRequires:          pkgconfig(mce)
 BuildRequires:          pkgconfig(qt5-boostable)
 BuildRequires:          pkgconfig(nemonotifications-qt5)

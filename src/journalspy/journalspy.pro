@@ -42,7 +42,7 @@ LIBS += \
 	../../lib/libcrashreporter.so \
 
 PKGCONFIG += \
-	libsystemd-journal \
+	libsystemd \
 
 target.path = $$CREPORTER_SYSTEM_LIBEXEC
 
