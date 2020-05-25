@@ -1,16 +1,11 @@
 # spec file for crash-reporter
 
-%define release         0
-%define buildroot       %{_topdir}/%{name}-%{version}-%{release}-root
-
-BuildRoot:              %{buildroot}
-Summary:                Crash Reporting Tool for Mer
+Summary:                Crash Reporting Tool for Sailfish OS
 License:                LGPLv2.1
 Name:                   crash-reporter
-Version:                1.10.64
-Release:                %{release}
+Version:                1.15.2
+Release:                0
 Prefix:                 /usr
-Group:                  Development/Tools
 URL:                    https://github.com/mer-qa/crash-reporter
 BuildRequires:          qt5-qtdbus-devel
 BuildRequires:          qt5-qtdeclarative-devel
@@ -66,7 +61,6 @@ Development headers and libraries for crash-reporter.
 
 %package doc
 Summary:                Documentation for %{name}
-Group:                  Documentation
 Requires:               %{name} = %{version}-%{release}
 %description doc
 Man pages for %{name}.
