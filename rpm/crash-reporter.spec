@@ -12,7 +12,6 @@ Release:                %{release}
 Prefix:                 /usr
 Group:                  Development/Tools
 URL:                    https://github.com/mer-qa/crash-reporter
-BuildRequires:          groff
 BuildRequires:          qt5-qtdbus-devel
 BuildRequires:          qt5-qtdeclarative-devel
 BuildRequires:          qt5-qtgui-devel
@@ -124,7 +123,6 @@ install -m0644 -t %{buildroot}%{_docdir}/%{name}-%{version} README
 
 %files doc
 %defattr(-,root,root,-)
-%{_mandir}/man1/%{name}-*
 %{_docdir}/%{name}-%{version}
 
 %post
