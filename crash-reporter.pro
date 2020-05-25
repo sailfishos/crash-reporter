@@ -41,8 +41,6 @@ contains(DEFINES, CREPORTER_SDK_HOST) {
     system(mkdir -p $HOME/home/user/MyDocs)
 }
 
-include(doc/doc.pri)
-
 scripts.path = $${CREPORTER_SYSTEM_SHARE}/crash-reporter
 scripts.files = scripts/crash-report-monitoring
 
