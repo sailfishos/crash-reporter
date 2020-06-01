@@ -20,6 +20,7 @@ BuildRequires:          pkgconfig(libsystemd)
 BuildRequires:          pkgconfig(mce)
 BuildRequires:          pkgconfig(qt5-boostable)
 BuildRequires:          pkgconfig(nemonotifications-qt5)
+BuildRequires:          systemd
 Requires:               sp-rich-core >= 1.71.2
 Requires:               sp-endurance
 Requires:               oneshot
@@ -81,10 +82,10 @@ install -m0644 -t %{buildroot}%{_docdir}/%{name}-%{version} README
 %files
 %defattr(-,root,root,-)
 %license COPYING
-/lib/systemd/system/*
+%{_unitdir}/*
 %{_bindir}/%{name}-*
-%{_libdir}/oneshot.d/*
-%{_libdir}/systemd/user/*
+%{_oneshotdir}/*
+%{_userunitdir}/*
 %attr(0755,root,root) /usr/libexec/crash-reporter-journalspy
 %attr(0755,root,root) /usr/libexec/endurance-collect*
 %attr(4755,root,root) /usr/libexec/rich-core-helper

@@ -27,7 +27,7 @@ NAME=com.nokia.CrashReporter.Daemon
 OBJECT_PATH=/com/nokia/crashreporter/daemon 
 
 usage() {    
-	echo "Script for requesting Crash Reporter to start or stop monitoring rich cores."
+    echo "Script for requesting Crash Reporter to start or stop monitoring rich cores."
     echo "usage: $0 start | stop"
     exit
 }
@@ -38,17 +38,17 @@ if [ -z "$1" ]; then
 fi
 
 case "$1" in
-  start)
+    start)
         echo "Starting monitoring..."
-        /usr/lib/qt5/bin/qdbus $NAME $OBJECT_PATH com.nokia.CrashReporter.Daemon.startCoreMonitoring
-	;;
-  stop)
-	echo "Stopping monitoring..."
-        /usr/lib/qt5/bin/qdbus $NAME $OBJECT_PATH com.nokia.CrashReporter.Daemon.stopCoreMonitoring
-	;;
+        @LIBDIR@/qt5/bin/qdbus $NAME $OBJECT_PATH com.nokia.CrashReporter.Daemon.startCoreMonitoring
+        ;;
+    stop)
+        echo "Stopping monitoring..."
+        @LIBDIR@/qt5/bin/qdbus $NAME $OBJECT_PATH com.nokia.CrashReporter.Daemon.stopCoreMonitoring
+        ;;
   
-  *)
-      	;;
+    *)
+        ;;
 esac
 
 exit 0
