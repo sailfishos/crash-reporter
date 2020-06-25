@@ -129,7 +129,7 @@ QMAKE_EXTRA_TARGETS += createpkgconfig
 
 pkgconfig.files = $$OUT_PWD/crash-reporter.pc
 pkgconfig.CONFIG += no_check_exist
-pkgconfig.path = $$[QT_INSTALL_PREFIX]/lib/pkgconfig
+pkgconfig.path = $$[QT_INSTALL_LIBS]/pkgconfig
 pkgconfig.depends = createpkgconfig
 
 INSTALLS += target \
