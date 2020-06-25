@@ -71,7 +71,7 @@ Item {
                         font.pixelSize: Theme.fontSizeLarge
                         //% "Privacy notice"
                         text: qsTrId("quick-feedback_privacy_notice")
-                        wrapMode: Text.WordWrap
+                        wrapMode: Text.Wrap
                         color: Theme.highlightColor
                     }
                     Label {
@@ -88,7 +88,7 @@ Item {
                         //% "like your unencrypted passwords, credit card numbers "
                         //% "etc."
                         text: qsTrId("quick-feedback_privacy_notice_text_1")
-                        wrapMode: Text.WordWrap
+                        wrapMode: Text.Wrap
                         color: Theme.highlightColor
                     }
                     Label {
@@ -102,7 +102,7 @@ Item {
                         //% "purpose of analyzing bugs in the applications or the "
                         //% "operating system."
                         text: qsTrId("quick-feedback_privacy_notice_text_2")
-                        wrapMode: Text.WordWrap
+                        wrapMode: Text.Wrap
                         color: Theme.highlightColor
                     }
                 }
