@@ -117,8 +117,6 @@ void PendingUploadsModel::setData(const QStringList &data)
     }
 
     // Append new items.
-    beginInsertRows(QModelIndex(),
-                    d->contents.size(), d->contents.size() + newData.size() - 1);
     foreach (const QString &filePath, newData) {
         QStringList info(CReporterUtils::parseCrashInfoFromFilename(filePath));
 
@@ -129,7 +127,14 @@ void PendingUploadsModel::setData(const QStringList &data)
         item.filePath = filePath;
         item.dateCreated = QFileInfo(filePath).created();
 
-        d->contents.append(item);
+        int i = 0;
+        for (; i < d->contents.count(); ++i) {
+            if (item.dateCreated > d->contents.at(i).dateCreated) {
+                break;
+            }
+        }
+        beginInsertRows(QModelIndex(), i, i);
+        d->contents.insert(i, item);
+        endInsertRows();
     }
-    endInsertRows();
 }
