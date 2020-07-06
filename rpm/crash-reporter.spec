@@ -3,7 +3,7 @@
 Summary:                Crash Reporting Tool for Sailfish OS
 License:                LGPLv2.1
 Name:                   crash-reporter
-Version:                1.15.5
+Version:                1.15.6
 Release:                0
 Prefix:                 /usr
 URL:                    https://github.com/mer-qa/crash-reporter
