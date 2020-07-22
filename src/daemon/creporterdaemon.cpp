@@ -6,8 +6,8 @@
  * Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
  * Author: Riku Halonen <riku.halonen@nokia.com>
  *
- * Copyright (C) 2013 Jolla Ltd.
- * Contact: Jakub Adam <jakub.adam@jollamobile.com>
+ * Copyright (C) 2013 - 2019 Jolla Ltd.
+ * Copyright (C) 2020 Open Mobile Platform LLC.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -117,7 +117,6 @@ bool CReporterDaemon::initiateDaemon()
             CReporterUtils::applyNotificationStyle(&notification);
             //% "This system has stored crash reports."
             notification.setSummary(qtTrId("crash_reporter-notify-has_stored_cores"));
-            notification.setPreviewSummary(notification.summary());
             notification.publish();
         }
     }

@@ -6,8 +6,8 @@
  * Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
  * Author: Raimo Gratseff <ext-raimo.gratseff@nokia.com>
  *
- * Copyright (C) 2013 Jolla Ltd.
- * Contact: Jakub Adam <jakub.adam@jollamobile.com>
+ * Copyright (C) 2013 - 2019 Jolla Ltd.
+ * Copyright (C) 2020 Open Mobile Platform LLC.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -141,9 +141,7 @@ bool CReporterAutoUploader::uploadFiles(const QStringList &fileList,
         //% "%n report(s) to upload"
         QString body = qtTrId("crash_reporter-notify-num_to_upload", fileList.count());
         d_ptr->progressNotification->setSummary(summary);
-        d_ptr->progressNotification->setPreviewSummary(summary);
         d_ptr->progressNotification->setBody(body);
-        d_ptr->progressNotification->setPreviewBody(body);
         d_ptr->progressNotification->publish();
     }
 
@@ -227,9 +225,7 @@ void CReporterAutoUploader::engineFinished(int error, int sent, int total)
             QString body = qtTrId("crash_reporter-notify-num_failed", failures);
 
             d_ptr->failedNotification->setSummary(summary);
-            d_ptr->failedNotification->setPreviewSummary(summary);
             d_ptr->failedNotification->setBody(body);
-            d_ptr->failedNotification->setPreviewBody(body);
             d_ptr->failedNotification->setItemCount(failures);
             d_ptr->failedNotification->publish();
         } else {
@@ -244,7 +240,6 @@ void CReporterAutoUploader::engineFinished(int error, int sent, int total)
             //% "Report(s) uploaded"
             QString summary = qtTrId("crash_reporter-notify-reports_uploaded", sent);
             d_ptr->successNotification->setSummary(summary);
-            d_ptr->successNotification->setPreviewSummary(summary);
             d_ptr->successNotification->setItemCount(sent);
             d_ptr->successNotification->publish();
         }
