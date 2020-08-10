@@ -6,8 +6,8 @@
  * Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
  * Author: Riku Halonen <riku.halonen@nokia.com>
  *
- * Copyright (C) 2013 Jolla Ltd.
- * Contact: Jakub Adam <jakub.adam@jollamobile.com>
+ * Copyright (C) 2013 - 2019 Jolla Ltd.
+ * Copyright (C) 2020 Open Mobile Platform LLC.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -182,9 +182,9 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
             CReporterUtils::applyNotificationStyle(&notification);
             notification.setIsTransient(true);
             //% "%1 has crashed again."
-            notification.setPreviewSummary(qtTrId("crash_reporter-notify-crashed_again").arg(appName));
+            notification.setSummary(qtTrId("crash_reporter-notify-crashed_again").arg(appName));
             //% "Duplicate crash report was deleted."
-            notification.setPreviewBody(qtTrId("crash_reporter-notify-duplicate_deleted"));
+            notification.setBody(qtTrId("crash_reporter-notify-duplicate_deleted"));
             notification.publish();
         }
         CReporterUtils::removeFile(filePath);
@@ -225,9 +225,7 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
             }
 
             crashNotification->setSummary(summary);
-            crashNotification->setPreviewSummary(summary);
             crashNotification->setBody(body);
-            crashNotification->setPreviewBody(body);
             crashNotification->setItemCount(crashCount);
             crashNotification->publish();
         }
