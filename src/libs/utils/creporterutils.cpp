@@ -278,10 +278,7 @@ void CReporterUtils::applyNotificationStyle(Notification *notification)
     //% "Crash reporter"
     notification->setAppName(qtTrId("crash_reporter-notify-app_name"));
     notification->setAppIcon(QLatin1String("icon-m-crash-reporter"));
-    QVariant action = Notification::remoteAction(QLatin1String("default"),
-                                                 //: Show Crash Reporter settings
-                                                 //% "Show settings"
-                                                 qtTrId("crash_reporter-la-show_settings"),
+    QVariant action = Notification::remoteAction(QLatin1String("default"), QString(),
                                                  QLatin1String("com.jolla.settings"),
                                                  QLatin1String("/com/jolla/settings/ui"),
                                                  QLatin1String("com.jolla.settings.ui"),
