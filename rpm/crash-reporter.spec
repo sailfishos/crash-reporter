@@ -122,20 +122,16 @@ install -m0644 -t %{buildroot}%{_docdir}/%{name}-%{version} README
 
 %post
 systemctl daemon-reload
-## on first install
-#if [ "$1" -eq 1 ]; then
-#	add-oneshot --user --now crash-reporter-service-default
-#fi
 
 %preun
 if [ "$1" = 0 ]; then
-  su nemo -c "systemctl --user stop crash-reporter.service"
+  systemctl-user stop crash-reporter.service
   systemctl stop crash-reporter-endurance.service
 fi
 
 %postun
 if [ "$1" = 0 ]; then
-  rm -rf /var/cache/core-dumps/{uploadlog,endurance-enabled-mark,endurance}
+  rm -rf /var/cache/core-dumps/uploadlog /var/cache/core-dumps/endurance-enabled-mark /var/cache/core-dumps/endurance
 fi
 
 %post -n libcrash-reporter0
