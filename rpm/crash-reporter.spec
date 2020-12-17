@@ -1,7 +1,7 @@
 # spec file for crash-reporter
 
 Summary:                Crash Reporting Tool for Sailfish OS
-License:                LGPLv2.1
+License:                LGPLv2
 Name:                   crash-reporter
 Version:                1.15.7
 Release:                0
