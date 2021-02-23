@@ -34,7 +34,8 @@ QT = \
     dbus
 
 CONFIG += link_pkgconfig
-PKGCONFIG += mce
+PKGCONFIG += mce \
+             usb-moded-qt5
 
 DEFINES += CREPORTER_EXPORTS
 

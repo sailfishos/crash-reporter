@@ -28,7 +28,7 @@
 #include <QDebug>
 #include <QNetworkConfiguration>
 #include <QNetworkConfigurationManager>
-
+#include <qusbmoded.h>
 
 #include "creporternwsessionmgr.h"
 #include "creporterutils.h"
@@ -48,8 +48,14 @@ public:
     //! @return Manager of the network configurations provided by the system.
     static QNetworkConfigurationManager &networkManager();
 
+    //! @return USB mode manager
+    static QUsbModed &usbModed();
+
     //! @return True if default connection is in disconnected state.
     static bool connectionIsActive();
+
+    //! @return True if USB developer mode is active
+    static bool developerModeIsActive();
 };
 
 QNetworkConfigurationManager &CReporterNwSessionMgrPrivate::networkManager()
@@ -58,12 +64,23 @@ QNetworkConfigurationManager &CReporterNwSessionMgrPrivate::networkManager()
     return manager;
 }
 
+QUsbModed &CReporterNwSessionMgrPrivate::usbModed()
+{
+    static QUsbModed usbModed;
+    return usbModed;
+}
+
 bool CReporterNwSessionMgrPrivate::connectionIsActive()
 {
     QNetworkConfiguration config =
         CReporterNwSessionMgrPrivate::networkManager().defaultConfiguration();
 
     return ((config.state() & QNetworkConfiguration::Active) == QNetworkConfiguration::Active);
+}
+
+bool CReporterNwSessionMgrPrivate::developerModeIsActive()
+{
+    return usbModed().available() && usbModed().currentMode() == QUsbModed::Mode::Developer;
 }
 
 CReporterNwSessionMgr::CReporterNwSessionMgr(QObject *parent)
@@ -122,7 +139,8 @@ bool CReporterNwSessionMgr::canUseNetworkConnection()
 
     return (config.bearerType() == QNetworkConfiguration::BearerWLAN) ||
            (config.bearerType() == QNetworkConfiguration::BearerEthernet) ||
-           !CReporterNwSessionMgrPrivate::connectionIsActive();
+           (!CReporterNwSessionMgrPrivate::connectionIsActive() &&
+            CReporterNwSessionMgrPrivate::developerModeIsActive());
 }
 
 bool CReporterNwSessionMgr::open()
@@ -134,7 +152,8 @@ bool CReporterNwSessionMgr::open()
          * If we detect the default connection is inactive, try to bypass
          * the manager and go on without QNetworkSession. If the  cable is
          * plugged in, connection has still a chance to succeed. */
-        if (!CReporterNwSessionMgrPrivate::connectionIsActive()) {
+        if (!CReporterNwSessionMgrPrivate::connectionIsActive() &&
+                CReporterNwSessionMgrPrivate::developerModeIsActive()) {
             qCDebug(cr) << "No active connection is available. "
                         "Going on, there still might be USB cable connected...";
             return true;
