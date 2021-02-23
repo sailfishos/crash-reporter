@@ -1,0 +1,11 @@
+[Unit]
+Description=Crash files storage usage monitor
+ConditionPathExists=!/tmp/os-update-running
+
+[Timer]
+# Daily between 8AM and 6PM
+OnCalendar=08:00:00
+RandomizedDelaySec=36000
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,9 @@
+[Unit]
+Description=Crash files storage usage monitor
+Requires=dbus.service
+After=user-session.target
+ConditionPathExists=!/tmp/os-update-running
+
+[Service]
+Type=simple
+ExecStart=/usr/libexec/crash-reporter-storagemon

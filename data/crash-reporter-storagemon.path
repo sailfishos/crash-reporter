@@ -1,0 +1,9 @@
+[Unit]
+Description=Crash files storage usage monitor
+ConditionPathExists=!/tmp/os-update-running
+
+[Path]
+PathChanged=/var/cache/core-dumps
+
+[Install]
+WantedBy=paths.target
