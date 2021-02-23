@@ -33,6 +33,9 @@ QT = \
     network \
     dbus
 
+CONFIG += link_pkgconfig
+PKGCONFIG += mce
+
 DEFINES += CREPORTER_EXPORTS
 
 CONFIG += link_pkgconfig

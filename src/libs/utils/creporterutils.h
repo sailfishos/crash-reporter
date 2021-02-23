@@ -119,6 +119,13 @@ public:
     static QString deviceModel();
 
     /*!
+     * @brief Determines whether running power-intensive tasks is appropriate
+     *
+     * @return @c true if not
+     */
+    static bool shouldSavePower();
+
+    /*!
      * Checks whether @c fileName is an application crash report.
      *
      * @return @c false if given filename is a quickie, or endurance pack,
@@ -130,13 +137,14 @@ public:
      * Sends a request for auto uploader daemon to add files into upload queue.
      *
      * @param filesToUpload A list of files we want to upload to the server.
-     * @param obeyNetworkRestrictions @c false if the files should be uploaded
-     *                                regardless of the network connection type,
-     *                                i.e. also over paid mobile/3G.
+     * @param obeyResourcesRestrictions @c false if the files should be uploaded
+     *                                  regardless of the network connection type,
+     *                                  i.e. also over paid mobile/3G, and battery
+     *                                  state.
      * @return @c true if files were successfully added, otherwise @c true.
      */
     Q_INVOKABLE static bool notifyAutoUploader(const QStringList &filesToUpload,
-            bool obeyNetworkRestrictions = true);
+            bool obeyResourcesRestrictions = true);
 
     /*!
      * Runs rich-core-dumper that subsequently collects system logs and creates

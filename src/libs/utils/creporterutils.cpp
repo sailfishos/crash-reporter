@@ -38,6 +38,8 @@
 #include <QFile>
 #include <QProcess>
 
+#include <mce/dbus-names.h>
+#include <mce/mode-names.h>
 #include <notification.h>
 
 #include "creporterutils.h"
@@ -45,6 +47,10 @@
 #include "creporternamespace.h"
 #include "../autouploader_interface.h" // generated
 #include "../ssu_interface.h" // generated
+
+#ifndef CREPORTER_UNIT_TEST
+#include "creporterprivacysettingsmodel.h"
+#endif
 
 namespace CReporter {
 namespace LoggingCategory {
@@ -206,6 +212,53 @@ QString CReporterUtils::deviceModel()
 #endif
 }
 
+bool CReporterUtils::shouldSavePower()
+{
+#ifndef CREPORTER_UNIT_TEST
+    auto *settings = CReporterPrivacySettingsModel::instance();
+
+    QDBusInterface mce(QLatin1String(MCE_SERVICE),
+            QLatin1String(MCE_REQUEST_PATH),
+            QLatin1String(MCE_REQUEST_IF),
+            QDBusConnection::systemBus());
+
+    QDBusReply<QString> batteryStatus = mce.call(QLatin1String(MCE_BATTERY_STATUS_GET));
+    if (!batteryStatus.isValid()) {
+        qCWarning(cr) << "Failed to query battery status" << batteryStatus.error().message();
+        return false;
+    }
+    QDBusReply<int> batteryLevel = mce.call(QLatin1String(MCE_BATTERY_LEVEL_GET));
+    if (!batteryLevel.isValid()) {
+        qCWarning(cr) << "Failed to query battery level" << batteryLevel.error().message();
+        return false;
+    }
+    QDBusReply<QString> chargerState = mce.call(QLatin1String(MCE_CHARGER_STATE_GET));
+    if (!chargerState.isValid()) {
+        qCWarning(cr) << "Failed to query charger state" << chargerState.error().message();
+        return false;
+    }
+
+    qCDebug(cr) << "Battery status:" << batteryStatus
+        << "level:" << batteryLevel
+        << "charger-state:" << chargerState;
+
+    if (batteryStatus == QLatin1String(MCE_BATTERY_STATUS_UNKNOWN))
+        return false;
+
+    if (batteryStatus == QLatin1String(MCE_BATTERY_STATUS_FULL)) {
+        return false;
+    } else if (chargerState != QLatin1String(MCE_CHARGER_STATE_OFF)) {
+        return settings->restrictWhenLowBattery()
+            && batteryStatus != QLatin1String(MCE_BATTERY_STATUS_OK);
+    } else {
+        return settings->restrictWhenDischarging()
+            && batteryLevel < settings->dischargingThreshold();
+    }
+#else
+    return false;
+#endif
+}
+
 bool CReporterUtils::reportIncludesCrash(const QString &fileName)
 {
     return !(fileName.contains(CReporter::QuickFeedbackPrefix) ||
@@ -219,7 +272,7 @@ bool CReporterUtils::reportIncludesCrash(const QString &fileName)
 }
 
 bool CReporterUtils::notifyAutoUploader(const QStringList &filesToUpload,
-                                        bool obeyNetworkRestrictions)
+                                        bool obeyResourcesRestrictions)
 {
     qCDebug(cr) << "Requesting crash-reporter-autouploader to upload"
                 << filesToUpload.size() << "files.";
@@ -228,7 +281,7 @@ bool CReporterUtils::notifyAutoUploader(const QStringList &filesToUpload,
             CReporter::AutoUploaderObjectPath, QDBusConnection::sessionBus());
 
     QDBusPendingReply <bool>reply =
-        proxy.uploadFiles(filesToUpload, obeyNetworkRestrictions);
+        proxy.uploadFiles(filesToUpload, obeyResourcesRestrictions);
     // This blocks.
     reply.waitForFinished();
 

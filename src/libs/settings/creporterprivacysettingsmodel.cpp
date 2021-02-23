@@ -52,6 +52,12 @@ const QString AutomaticSending("Settings/automaticsending");
 const QString NoticeAccepted("Settings/privacy-notice-accepted");
 //! When true, crash-reporter can use mobile connection for data transfers.
 const QString AllowMobileData("Settings/allow-mobile-data");
+//! When true, crash-reporter will not run power-intensive tasks when battery is low, regardless of charger presence
+const QString RestrictWhenLowBattery("Settings/restrict-when-low-battery");
+//! When true, crash-reporter will not run power-intensive tasks when discharging and battery is below DischargingThreshold
+const QString RestrictWhenDischarging("Settings/restrict-when-discharging");
+//! The minimum battery capacity (percentage) required when RestrictWhenDischarging is active
+const QString DischargingThreshold("Settings/discharging-threshold");
 }
 
 /*!
@@ -195,6 +201,21 @@ bool CReporterPrivacySettingsModel::allowMobileData() const
     return value(Settings::AllowMobileData, QVariant(false)).toBool();
 }
 
+bool CReporterPrivacySettingsModel::restrictWhenLowBattery() const
+{
+    return value(Settings::RestrictWhenLowBattery, QVariant(true)).toBool();
+}
+
+bool CReporterPrivacySettingsModel::restrictWhenDischarging() const
+{
+    return value(Settings::RestrictWhenDischarging, QVariant(true)).toBool();
+}
+
+int CReporterPrivacySettingsModel::dischargingThreshold() const
+{
+    return value(Settings::DischargingThreshold, QVariant(20)).toInt();
+}
+
 bool CReporterPrivacySettingsModel::reduceCore() const
 {
     return value(Privacy::ReduceCore, QVariant(true)).toBool();
@@ -296,6 +317,25 @@ void CReporterPrivacySettingsModel::setAllowMobileData(bool value)
 {
     if (setValue(Settings::AllowMobileData, QVariant(value)))
         emit allowMobileDataChanged();
+}
+
+void CReporterPrivacySettingsModel::setRestrictWhenLowBattery(bool value)
+{
+    if (setValue(Settings::RestrictWhenLowBattery, QVariant(value)))
+        emit restrictWhenLowBatteryChanged();
+}
+
+void CReporterPrivacySettingsModel::setRestrictWhenDischarging(bool value)
+{
+    if (setValue(Settings::RestrictWhenDischarging, QVariant(value)))
+        emit restrictWhenDischargingChanged();
+}
+
+void CReporterPrivacySettingsModel::setDischargingThreshold(int value)
+{
+    int bounded = qBound(0, value, 100);
+    if (setValue(Settings::DischargingThreshold, QVariant(bounded)))
+        emit dischargingThresholdChanged();
 }
 
 void CReporterPrivacySettingsModel::setReduceCore(bool value)

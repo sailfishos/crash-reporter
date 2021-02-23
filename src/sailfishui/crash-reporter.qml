@@ -157,6 +157,70 @@ Page {
             }
 
             SectionHeader {
+                //% "Battery care"
+                text: qsTrId("settings_crash-reporter_battery_care")
+            }
+
+            ComboBox {
+                id: dischargingThresholdComboBox
+
+                readonly property var options: [-1, 20, 40, 60, 80]
+                readonly property int effectiveDischargingThreshold: PrivacySettings.restrictWhenDischarging
+                    ? PrivacySettings.dischargingThreshold
+                    : -1
+
+                function thresholdText(threshold) {
+                    if (threshold < 0) {
+                        //% "Never"
+                        return qsTrId("settings_crash-reporter_disobey_discharging")
+                    }
+                    //% "Below %1%"
+                    return qsTrId("settings_crash-reporter_require_charger_below").arg(Math.min(threshold, 100))
+                }
+
+                function setThreshold(threshold) {
+                    if (threshold < 0) {
+                        PrivacySettings.restrictWhenDischarging = false
+                    } else {
+                        PrivacySettings.dischargingThreshold = threshold
+                        PrivacySettings.restrictWhenDischarging = true
+                    }
+                }
+
+                value: thresholdText(effectiveDischargingThreshold)
+                //% "Require charger"
+                label: qsTrId("settings_crash-reporter_restrict_when_discharging")
+                //% "Avoid power intensive tasks when discharging and battery level dropped too much."
+                description: qsTrId("settings_crash-reporter_restrict_when_discharging_description")
+
+                Binding {
+                    target: dischargingThresholdComboBox
+                    property: "currentIndex"
+                    value: dischargingThresholdComboBox.options.indexOf(dischargingThresholdComboBox.effectiveDischargingThreshold)
+                }
+
+                menu: ContextMenu {
+                    Repeater {
+                        model: dischargingThresholdComboBox.options
+                        MenuItem {
+                            text: dischargingThresholdComboBox.thresholdText(modelData)
+                            onClicked: dischargingThresholdComboBox.setThreshold(modelData)
+                        }
+                    }
+                }
+            }
+
+            TextSwitch {
+                automaticCheck: false
+                checked: !PrivacySettings.restrictWhenLowBattery
+                //% "Allow when battery is low"
+                text: qsTrId("settings_crash-reporter_disobey_low_battery")
+                //% "Power intensive tasks may drain your battery regardless of charger presence."
+                description: qsTrId("settings_crash-reporter_disobey_low_battery_descrition")
+                onClicked: PrivacySettings.restrictWhenLowBattery = !PrivacySettings.restrictWhenLowBattery
+            }
+
+            SectionHeader {
                 //% "Stack trace"
                 text: qsTrId("settings_crash-reporter_stack_trace")
             }
