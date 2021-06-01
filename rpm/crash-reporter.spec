@@ -1,11 +1,8 @@
-# spec file for crash-reporter
-
 Summary:                Crash Reporting Tool for Sailfish OS
 License:                LGPLv2
 Name:                   crash-reporter
 Version:                1.15.7
 Release:                0
-Prefix:                 /usr
 URL:                    https://github.com/mer-qa/crash-reporter
 BuildRequires:          qt5-qtdbus-devel
 BuildRequires:          qt5-qtdeclarative-devel
@@ -67,6 +64,12 @@ Requires:               %{name} = %{version}-%{release}
 %description doc
 Man pages for %{name}.
 
+%package ts-devel
+Summary: Translation source for crash reporter
+
+%description ts-devel
+%{summary}.
+
 %prep
 %setup -q -n %{name}-%{version}
 
@@ -99,7 +102,7 @@ install -m0644 -t %{buildroot}%{_docdir}/%{name}-%{version} README
 %defattr(-,root,root,-)
 %license COPYING
 %{_libdir}/*crash*.so.*
-%{_datadir}/translations/*
+%{_datadir}/translations/crash-reporter_eng_en.qm
 
 %files -n crash-reporter-config-nemo
 %defattr(-,root,root,-)
@@ -121,6 +124,10 @@ install -m0644 -t %{buildroot}%{_docdir}/%{name}-%{version} README
 %files doc
 %defattr(-,root,root,-)
 %{_docdir}/%{name}-%{version}
+
+%files ts-devel
+%defattr(-,root,root,-)
+%{_datadir}/translations/source/crash-reporter.ts
 
 %post
 systemctl daemon-reload
