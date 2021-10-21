@@ -18,7 +18,7 @@ BuildRequires:          pkgconfig(mce)
 BuildRequires:          pkgconfig(qt5-boostable)
 BuildRequires:          pkgconfig(nemonotifications-qt5)
 BuildRequires:          pkgconfig(usb-moded-qt5)
-BuildRequires:          systemd
+BuildRequires:          pkgconfig(systemd)
 Requires:               sp-rich-core >= 1.71.2
 Requires:               sp-endurance
 Requires:               oneshot
