@@ -26,6 +26,8 @@ Requires:               qt5-qttools-qdbus
 Requires:               sailfishsilica-qt5 >= 0.27.0
 Requires:               ssu
 Requires:               ssu-sysinfo
+Requires:               tar
+Requires:               xz
 Conflicts:              quick-feedback < 0.0.18
 %{_oneshot_requires_post}
 Source0:                %{name}-%{version}.tar.gz
