@@ -33,20 +33,61 @@ _section_boot_time()
   echo $boot_time
 }
 
+_section_endurance_snapshot_pack_single()
+{
+  local entry=$1
+  local fsize=
+  local fname=
+
+  if [[ "$entry" == "*.lzo" ]]; then
+    fsize="$(lzop --ls $entry 2>/dev/null | awk '{printf $5}')"
+    fname="$(lzop --ls $entry 2>/dev/null | awk '{printf $NF}')"
+
+    # Hole file for data
+    dd if=/dev/zero of=$fname bs=1 count=0 seek=$fsize 2>/dev/null
+  else
+    fsize=$(stat $entry -c "%s")
+    fname=$entry
+  fi
+
+  # Create header
+  tar cf - $fname | head -c 512 # Goes to stdout
+
+  if [[ "$entry" == "*.lzo" ]]; then
+    # Uncompress lzo file
+    lzop -c -d $entry # Goes to stdout
+  else
+    cat $entry
+  fi
+
+  # Padding
+  head /dev/zero -c $((512 - $fsize % 512)) # Goes to stdout
+
+  rm -f $fname
+  rm -f $entry
+}
+
+_section_endurance_snapshot_pack_dir()
+{
+    for entry in $(ls -d $1/* 2>/dev/null); do
+      if [ -d $entry ]; then
+        _section_endurance_snapshot_pack_dir $entry
+      else
+        _section_endurance_snapshot_pack_single $entry
+      fi
+    done
+}
+
 _section_endurance_snapshot_pack()
 {
   _print_header endurance-snapshot-pack.tar.xz
-  for snapshot in *; do
-    if [ -d $snapshot ]; then
-      SNAPSHOTS="$SNAPSHOTS $snapshot"
-      for lzofile in $(ls $snapshot/*.lzo 2>/dev/null); do
-        lzop -d $lzofile
-        rm -f $lzofile
-      done
-    fi
-  done
-
-  tar c $SNAPSHOTS | xz -0 --stdout
+  (
+    for snapshot in *; do
+      if [ -d $snapshot ]; then
+        _section_endurance_snapshot_pack_dir $snapshot
+      fi
+    done
+  ) | xz -0 --stdout
 }
 
 _create_endurance_package()
@@ -56,18 +97,20 @@ _create_endurance_package()
   mv $ENDURANCE_DIR/??? "$work_dir"
 
   hwid=$(ssu-sysinfo -m)
-  reportbasename=Endurance-${hwid}-$(date +%s)-${boot_time}
+  reportbasename="Endurance-${hwid}-$(date +%s)-${boot_time}"
+  local tmpfile="/tmp/${reportbasename}.tmp"
+  local endfile="$PWD/${reportbasename}.rcore.lzo"
 
   (
     cd $work_dir
     _section_device_uid
     _section_boot_time
     _section_endurance_snapshot_pack
-  ) | lzop > "${reportbasename}.tmp"
+  ) | lzop > "$tmpfile"
 
   rm -r $work_dir
 
-  mv "${reportbasename}.tmp" "${reportbasename}.rcore.lzo"
+  mv "$tmpfile" "$endfile"
 }
 
 cd $CORE_DIR
