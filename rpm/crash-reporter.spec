@@ -1,7 +1,7 @@
 Summary:                Crash Reporting Tool for Sailfish OS
 License:                LGPLv2
 Name:                   crash-reporter
-Version:                1.15.14
+Version:                1.15.15
 Release:                0
 URL:                    https://github.com/mer-qa/crash-reporter
 BuildRequires:          qt5-qtdbus-devel
