@@ -19,6 +19,7 @@ BuildRequires:          pkgconfig(qt5-boostable)
 BuildRequires:          pkgconfig(nemonotifications-qt5)
 BuildRequires:          pkgconfig(usb-moded-qt5)
 BuildRequires:          pkgconfig(systemd)
+BuildRequires:          oneshot
 Requires:               gawk
 Requires:               lzop
 Requires:               sp-rich-core >= 1.71.2
