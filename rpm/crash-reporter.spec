@@ -9,7 +9,6 @@ BuildRequires:          qt5-qtdeclarative-devel
 BuildRequires:          qt5-qtgui-devel
 BuildRequires:          qt5-qtnetwork-devel
 BuildRequires:          qt5-qttools-linguist
-BuildRequires:          ssu-devel
 BuildRequires:          pkgconfig(dbus-1)
 BuildRequires:          pkgconfig(libiphb)
 BuildRequires:          pkgconfig(libudev)
@@ -17,6 +16,7 @@ BuildRequires:          pkgconfig(libsystemd)
 BuildRequires:          pkgconfig(mce)
 BuildRequires:          pkgconfig(qt5-boostable)
 BuildRequires:          pkgconfig(nemonotifications-qt5)
+BuildRequires:          pkgconfig(systemsettings)
 BuildRequires:          pkgconfig(usb-moded-qt5)
 BuildRequires:          pkgconfig(systemd)
 BuildRequires:          oneshot
