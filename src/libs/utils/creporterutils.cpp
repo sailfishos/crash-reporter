@@ -29,7 +29,7 @@
 #include <sys/stat.h>
 
 #ifndef CREPORTER_UNIT_TEST
-#include <ssudeviceinfo.h>
+#include <deviceinfo.h>
 #endif
 
 #include <QDebug>
@@ -194,7 +194,7 @@ QString CReporterUtils::deviceUid()
     reply.waitForFinished();
     if (reply.isError()) {
         qCWarning(cr) << "DBus unavailable, UUID might be incorrect.";
-        return SsuDeviceInfo().deviceUid();
+        return DeviceInfo(true).deviceUid();
     } else {
         return reply.value();
     }
@@ -206,7 +206,7 @@ QString CReporterUtils::deviceUid()
 QString CReporterUtils::deviceModel()
 {
 #ifndef CREPORTER_UNIT_TEST
-    return SsuDeviceInfo().deviceModel();
+    return DeviceInfo(true).model();
 #else
     return "Device";
 #endif

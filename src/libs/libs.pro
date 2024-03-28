@@ -35,12 +35,11 @@ QT = \
 
 CONFIG += link_pkgconfig
 PKGCONFIG += mce \
-             usb-moded-qt5
+             usb-moded-qt5 \
+             nemonotifications-qt5 \
+             systemsettings
 
 DEFINES += CREPORTER_EXPORTS
-
-CONFIG += link_pkgconfig
-PKGCONFIG += nemonotifications-qt5
 
 message(Building architecture: $$system(uname -m))
 
@@ -109,8 +108,6 @@ HEADERS += $$PUBLIC_HEADERS \
             httpclient/creporteruploadengine_p.h \
             settings/creportersettingsbase_p.h \
             settings/creportersettingsinit_p.h \
-
-LIBS += -lssu
 
 TARGET = $$qtLibraryTarget(crashreporter)
 
