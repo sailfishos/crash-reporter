@@ -1,4 +1,4 @@
-#!/bin/sh                               
+#!/bin/sh
 #
 # This file is part of crash-reporter
 #
@@ -6,11 +6,11 @@
 #
 #  Contact: Ville Ilvonen <ville.p.ilvonen@nokia.com>
 #  Author: Riku Halonen <riku.halonen@nokia.com>
-# 
+#
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU Lesser General Public License
 #  version 2.1 as published by the Free Software Foundation.
-# 
+#
 #  This program is distributed in the hope that it will be useful, but
 #  WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
@@ -20,13 +20,11 @@
 #  License along with this program; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 #  02110-1301 USA
-#
-#  
 
-NAME=com.nokia.CrashReporter.Daemon 
-OBJECT_PATH=/com/nokia/crashreporter/daemon 
+NAME=com.nokia.CrashReporter.Daemon
+OBJECT_PATH=/com/nokia/crashreporter/daemon
 
-usage() {    
+usage() {
     echo "Script for requesting Crash Reporter to start or stop monitoring rich cores."
     echo "usage: $0 start | stop"
     exit
@@ -40,13 +38,13 @@ fi
 case "$1" in
     start)
         echo "Starting monitoring..."
-        @LIBDIR@/qt5/bin/qdbus $NAME $OBJECT_PATH com.nokia.CrashReporter.Daemon.startCoreMonitoring
+        dbus-send --dest=$NAME $OBJECT_PATH com.nokia.CrashReporter.Daemon.startCoreMonitoring
         ;;
     stop)
         echo "Stopping monitoring..."
-        @LIBDIR@/qt5/bin/qdbus $NAME $OBJECT_PATH com.nokia.CrashReporter.Daemon.stopCoreMonitoring
+        dbus-send --dest=$NAME $OBJECT_PATH com.nokia.CrashReporter.Daemon.stopCoreMonitoring
         ;;
-  
+
     *)
         ;;
 esac

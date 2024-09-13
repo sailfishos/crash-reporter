@@ -43,9 +43,6 @@ contains(DEFINES, CREPORTER_SDK_HOST) {
 
 scripts.path = $${CREPORTER_SYSTEM_SHARE}/crash-reporter
 scripts.files = scripts/crash-report-monitoring
-scripts.CONFIG = no_check_exist
-scripts.commands = \
-	$$QMAKE_STREAM_EDITOR 's~@LIBDIR@~$$[QT_INSTALL_LIBS]~' scripts/crash-report-monitoring.in > scripts/crash-report-monitoring
 
 settings.path = $$CREPORTER_SETTINGS_PATH
 settings.files += \
