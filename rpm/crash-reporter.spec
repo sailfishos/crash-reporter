@@ -32,7 +32,7 @@ Requires: tar
 Requires: xz
 Conflicts: quick-feedback < 0.0.18
 %{_oneshot_requires_post}
-Source0: name}-%{version}.tar.gz
+Source0: %{name}-%{version}.tar.gz
 
 %description
 Crash Reporting Tool allows users to easily upload crash reports provided by sp-rich-core to centralized location to help developers to fix issues.
