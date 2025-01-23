@@ -119,8 +119,8 @@ QString CReporterCoreDir::checkDirectoryForCores()
         iter.next();
         fi = iter.fileInfo();
 
-        if (!d->coresAtDirectory.contains(fi.fileName()) &&
-                CReporterUtils::validateCore(fi.fileName())) {
+        if (!d->coresAtDirectory.contains(fi.fileName())
+                && CReporterUtils::validateCore(fi.fileName())) {
             // This is valid rich core file, which hasn't been processed before.
             d->coresAtDirectory << fi.fileName();
             coreFilePath = fi.absoluteFilePath();
@@ -152,7 +152,7 @@ void CReporterCoreDir::createCoreDirectory()
             if (coreRoot.exists(d->directory.left(d->directory.lastIndexOf('/')))
                     && coreRoot.mkdir(d->directory)) {
                 qCDebug(cr) << "Created directory:" << d->directory;
-                chmod(CReporterUtils::qstringToChar(d->directory), FILE_PERMISSION);
+                chmod(qPrintable(d->directory), FILE_PERMISSION);
             } else {
                 qCWarning(cr) << "Error while creating directory:" << d->directory;
             }

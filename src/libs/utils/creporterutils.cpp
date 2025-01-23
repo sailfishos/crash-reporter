@@ -72,11 +72,6 @@ bool CReporterUtils::validateCore(const QString &path)
             path.endsWith(coreSuffixRcore, Qt::CaseInsensitive));
 }
 
-char *CReporterUtils::qstringToChar(const QString &str)
-{
-    return str.toLatin1().data();
-}
-
 bool CReporterUtils::isMounted(const QString &path)
 {
 #if defined(CREPORTER_SDK_HOST) || defined(CREPORTER_UNIT_TEST)
@@ -88,7 +83,7 @@ bool CReporterUtils::isMounted(const QString &path)
     struct stat st;
     memset(&st, 0, sizeof(st));
 
-    if (stat(CReporterUtils::qstringToChar(path), &st) == 0) {
+    if (stat(qPrintable(path), &st) == 0) {
         qCDebug(cr) << "Path:" << path << "is mounted. Device ID:" << st.st_dev;
         return true;
     }
@@ -171,7 +166,7 @@ bool CReporterUtils::appendToLzo(const QString &text, const QString &filePath)
 
     // Append to *.lzo.
     QString cmd = QString("/usr/bin/lzop -c %1 >> %2").arg(richCoreTmpNoteFile).arg(filePath) ;
-    int res = system(qstringToChar(cmd));
+    int res = system(qPrintable(cmd));
     qCDebug(cr) << "System returned:"  << res;
 
     // Remove temp file.

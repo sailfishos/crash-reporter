@@ -59,14 +59,6 @@ public:
     static bool validateCore(const QString &path);
 
     /*!
-     * @brief This function converts QString to char* format.
-     *
-     * @param str string to convert.
-     * @return string in char* format.
-     */
-    static char *qstringToChar(const QString &str);
-
-    /*!
      * @brief Checks the status of the path using stat().
      *
      * @param path Reference to path of which status is to be checked.
