@@ -41,7 +41,7 @@
 using CReporter::LoggingCategory::cr;
 
 #define NUM_ENV_MOUNTPOINTS 2
-#define NUM_STATIC_MOUNTPOINTS 1
+#define NUM_STATIC_MOUNTPOINTS 2
 #define MAX_CORE_DIRS (NUM_ENV_MOUNTPOINTS + NUM_STATIC_MOUNTPOINTS + 1)
 #define MAX_MOUNTPOINT_NAMELEN (128)
 
@@ -56,7 +56,8 @@ mountpoint_env_names[NUM_ENV_MOUNTPOINTS][MAX_MOUNTPOINT_NAMELEN] = {
 #ifndef CREPORTER_UNIT_TEST
 static const char
 mountpoint_static[NUM_STATIC_MOUNTPOINTS][MAX_MOUNTPOINT_NAMELEN] = {
-    "/var/cache"
+    "/var/cache", // must be first on the list
+    "/home/.crash-reporter"
 };
 #else
 static const char

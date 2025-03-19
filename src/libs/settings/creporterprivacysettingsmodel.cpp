@@ -42,6 +42,8 @@ namespace Settings {
 const QString CoreDumping("Settings/coredumping");
 //! When true, user notifications are displayed.
 const QString Notifications("Settings/notifications");
+//! When true, core dumps are saved to home partition.
+const QString UseHomePartition("Settings/use-home-partition");
 //! When true, duplicate rich cores are deleted automatically.
 const QString AutoDeleteDuplicates("Settings/avoid-dups");
 //! Stores how many similar core dumps are kept when avoid-dups is enabled.
@@ -144,6 +146,11 @@ bool CReporterPrivacySettingsModel::enduranceEnabled() const
 bool CReporterPrivacySettingsModel::journalSpyEnabled() const
 {
     return QFile::exists(journalSpyMark());
+}
+
+bool CReporterPrivacySettingsModel::useHomePartitionEnabled() const
+{
+    return value(Settings::UseHomePartition, QVariant(false)).toBool();
 }
 
 bool CReporterPrivacySettingsModel::notificationsEnabled() const
@@ -255,6 +262,12 @@ void CReporterPrivacySettingsModel::setJournalSpyEnabled(bool value)
     }
 
     emit journalSpyEnabledChanged();
+}
+
+void CReporterPrivacySettingsModel::setUseHomePartitionEnabled(bool value)
+{
+    if (setValue(Settings::UseHomePartition, QVariant(value)))
+        emit notificationsEnabledChanged();
 }
 
 void CReporterPrivacySettingsModel::setNotificationsEnabled(bool value)

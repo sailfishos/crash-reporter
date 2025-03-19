@@ -23,13 +23,13 @@
  */
 
 /*! @page conffiles Configuration files
-    
+
     @section conf_files_intro Description
     There are two kinds of setting groups used by the Crash Reporter; application and privacy settings.
     Crash Reporter uses <a href="http://doc.qt.nokia.com/4.6/qsettings.html">QSettings</a> class for
     read/ write operations and settings are stored as textual configuration files in INI format. For
     each configuration file and key/ value pair there can be a user-specified and system-wide version.
-    Value is first tried to find from user-specific location and if no found, then system-wide 
+    Value is first tried to find from user-specific location and if no found, then system-wide
     location is tried.
 
     For modifying settings, use @ref dcpapplet.
@@ -37,9 +37,9 @@
     <hr/>
 
     @section privacy_settings_desc Privacy settings
-    
+
     @subsection priv_user $HOME/.config/crash-reporter-settings/crash-reporter-privacy.conf
-    This file contains the privacy settings for Crash Reporter, controlling what kind of information 
+    This file contains the privacy settings for Crash Reporter, controlling what kind of information
     is included in the rich-core dumps.
 
     @subsection priv_sys /usr/share/crash-reporter-settings/crash-reporter-privacy.conf
@@ -59,6 +59,15 @@
     <tr>
     <td>avoid-dups</td><td>true or false</td><td>If true, duplicate core-dumps will be deleted automatically without notifying user.</td>
     </tr>
+    <tr>
+    <td>privacy-notice-accepted</td><td>true or false</td><td>Has the privacy notice has been shown to the user and been accepted. The user must accept the privacy notice before use.</td>
+    </tr>
+    <tr>
+    <td>notifications</td><td>true or false</td><td>If true, the user is notified about a crashed application.</td>
+    </tr>
+    <tr>
+    <td>use-home-partition</td><td>true or false</td><td>If true, and /home is a separate mount, core dumps are saved to /home/.crash-reporter/core-dumps directory. Otherwise, the default location /var/cache/core-dumps is used.</td>
+    </tr>
     </table>
 
     @subsection privacy_section_privacy Section - Privacy
@@ -71,6 +80,12 @@
     </tr>
     <tr>
     <td>INCLUDE_SYSLOG</td><td>true or false</td><td>If true, /var/log/syslog is included into crash-report.</td>
+    </tr>
+    <tr>
+    <td>INCLUDE_STACK_TRACE</td><td>true or false</td><td>If true, stack trace is included into crash-report.</td>
+    </tr>
+    <tr>
+    <td>INCLUDE_DEBUGINFO</td><td>true or false</td><td>If true, missing debuginfo packages are downloaded before generating the crash-report.</td>
     </tr>
     <tr>
     <td>INCLUDE_PKGLIST</td><td>true or false</td><td>If true, list of installed packaged is included into crash-report.</td>
@@ -86,10 +101,15 @@
     coredumping=true
     sending=true
     avoid-dups=true
+    privacy-notice-accepted=false
+    notifications=true
+    use-home-partition=false
 
     [Privacy]
     INCLUDE_CORE=true
     INCLUDE_SYSLOG=true
+    INCLUDE_STACK_TRACE=false
+    DOWNLOAD_DEBUGINFO=false
     INCLUDE_PKGLIST=true
     REDUCE_CORE=true
     @endverbatim
@@ -99,13 +119,13 @@
     @section app_settings_desc Application settings
 
     @subsection app_user $HOME/.config/crash-reporter-settings/crash-reporter.conf
-    This file contains Crash Reporter application settings e.g. communication settings needed for 
+    This file contains Crash Reporter application settings e.g. communication settings needed for
     uploading the dumps to a Crash Reporter server.
 
     @subsection app_sys /usr/share/crash-reporter-settings/crash-reporter.conf
-	The system-wide version of the application settings file described above.
-    
+    The system-wide version of the application settings file described above.
+
     @section priv_disclaimer /usr/share/crash-reporter-settings/privacy.txt
-	A document describing what kind of privacy user can expect when uploading dumps into a Crash Reporter server.
+    A document describing what kind of privacy user can expect when uploading dumps into a Crash Reporter server.
 
 */

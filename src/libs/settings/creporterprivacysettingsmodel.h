@@ -46,6 +46,7 @@ class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsB
     Q_PROPERTY(bool coreDumping READ coreDumpingEnabled WRITE setCoreDumpingEnabled NOTIFY coreDumpingEnabledChanged)
     Q_PROPERTY(bool endurance READ enduranceEnabled WRITE setEnduranceEnabled NOTIFY enduranceEnabledChanged)
     Q_PROPERTY(bool journalSpy READ journalSpyEnabled WRITE setJournalSpyEnabled NOTIFY journalSpyEnabledChanged)
+    Q_PROPERTY(bool useHomePartition READ useHomePartitionEnabled WRITE setUseHomePartitionEnabled NOTIFY useHomePartitionEnabledChanged)
     Q_PROPERTY(bool notifications READ notificationsEnabled WRITE setNotificationsEnabled NOTIFY notificationsEnabledChanged)
     Q_PROPERTY(bool autoDeleteDuplicates READ autoDeleteDuplicates WRITE setAutoDeleteDuplicates NOTIFY autoDeleteDuplicatesChanged)
     Q_PROPERTY(bool includeStackTrace READ includeStackTrace WRITE setIncludeStackTrace NOTIFY includeStackTraceChanged)
@@ -94,6 +95,13 @@ public:
      * @return @c true if journal spy is enabled, otherwise @c false.
      */
     bool journalSpyEnabled() const;
+
+    /**
+     * Checks whether the core dumps are saved to home partition.
+     *
+     * @return @c true if journal spy is enabled, otherwise @c false.
+     */
+    bool useHomePartitionEnabled() const;
 
     /*!
       * @brief Reads setting value for notifications and returns it.
@@ -242,6 +250,13 @@ public:
      */
     void setJournalSpyEnabled(bool value);
 
+    /**
+     * Enables or disables using home partition for storing core dumps.
+     *
+     * @param value @c true to enable, @c false to disable.
+     */
+    void setUseHomePartitionEnabled(bool value);
+
     /*!
        * @brief Enables or disables notifications.
        *
@@ -363,6 +378,7 @@ signals:
     void coreDumpingEnabledChanged();
     void enduranceEnabledChanged();
     void journalSpyEnabledChanged();
+    void useHomePartitionEnabledChanged();
     void notificationsEnabledChanged();
     void autoDeleteDuplicatesChanged();
     void automaticSendingEnabledChanged();
