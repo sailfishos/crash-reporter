@@ -59,6 +59,8 @@
     <tr>
     <td>avoid-dups</td><td>true or false</td><td>If true, duplicate core-dumps will be deleted automatically without notifying user.</td>
     </tr>
+    <td>use-home-partition</td><td>true or false</td><td>If true, and /home is a separate mount, core dumps are saved to /home/.crash-reporter/core-dumps directory. Otherwise, the default location /var/cache/core-dumps is used.</td>
+    </tr>
     </table>
 
     @subsection privacy_section_privacy Section - Privacy
@@ -86,6 +88,7 @@
     coredumping=true
     sending=true
     avoid-dups=true
+    use-home-partition=false
 
     [Privacy]
     INCLUDE_CORE=true
