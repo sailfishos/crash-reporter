@@ -144,7 +144,7 @@ Page {
             TextSwitch {
                 //% "Use home partition"
                 text: qsTrId("settings_crash-reporter_use_home_partition")
-                //% "Store core dumps in home partition. This can be useful for"
+                //% "Store core dumps in home partition. This can be useful for "
                 //% "capturing large core dumps or when root partition is low on free space."
                 description: qsTrId("settings_crash-reporter_use_home_partition_description")
                 automaticCheck: false
