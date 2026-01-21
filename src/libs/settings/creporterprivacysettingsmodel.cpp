@@ -267,7 +267,7 @@ void CReporterPrivacySettingsModel::setJournalSpyEnabled(bool value)
 void CReporterPrivacySettingsModel::setUseHomePartitionEnabled(bool value)
 {
     if (setValue(Settings::UseHomePartition, QVariant(value)))
-        emit notificationsEnabledChanged();
+        emit useHomePartitionEnabledChanged();
 }
 
 void CReporterPrivacySettingsModel::setNotificationsEnabled(bool value)
