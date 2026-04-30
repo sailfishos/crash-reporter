@@ -18,14 +18,14 @@ INCLUDEPATH += . \
 DEPENDPATH += $$INCLUDEPATH \
 
 # stubs
-TEST_STUBS += $${CREPORTER_STUBS_DIR}/mgconfitem_stub.cpp \
+TEST_STUBS += \
     $${CREPORTER_STUBS_DIR}/qnetworkconfiguration.cpp \
     $${CREPORTER_STUBS_DIR}/qnetworksession.cpp
 
 # unit
 TEST_SOURCES += $${DAEMON_SRC_DIR}/creporterdaemonmonitor.cpp \
 	
-HEADERS += $${CREPORTER_STUBS_DIR}/mgconfitem_stub.h \
+HEADERS += \
            $${CREPORTER_STUBS_DIR}/qnetworkconfigmanager.h \
            $${CREPORTER_STUBS_DIR}/qnetworksession.h \
            $${DAEMON_SRC_DIR}/creporterdaemonmonitor.h \

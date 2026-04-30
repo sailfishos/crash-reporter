@@ -42,7 +42,6 @@
 class CREPORTER_EXPORT CReporterPrivacySettingsModel : public CReporterSettingsBase
 {
     Q_OBJECT
-
     Q_PROPERTY(bool coreDumping READ coreDumpingEnabled WRITE setCoreDumpingEnabled NOTIFY coreDumpingEnabledChanged)
     Q_PROPERTY(bool endurance READ enduranceEnabled WRITE setEnduranceEnabled NOTIFY enduranceEnabledChanged)
     Q_PROPERTY(bool journalSpy READ journalSpyEnabled WRITE setJournalSpyEnabled NOTIFY journalSpyEnabledChanged)

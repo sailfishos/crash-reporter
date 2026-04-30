@@ -39,7 +39,6 @@ class CReporterUploadItem;
   */
 class CREPORTER_EXPORT CReporterUploadQueue : public QObject
 {
-
     Q_OBJECT
 
 public:

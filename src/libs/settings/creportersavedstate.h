@@ -32,7 +32,6 @@ class CReporterSavedStatePrivate;
 class CReporterSavedState: public CReporterSettingsBase
 {
     Q_OBJECT
-
     Q_PROPERTY(quint32 crashNotificationId READ crashNotificationId WRITE setCrashNotificationId NOTIFY crashNotificationIdChanged)
     Q_PROPERTY(quint32 storageUsageNotificationId READ storageUsageNotificationId WRITE setStorageUsageNotificationId NOTIFY storageUsageNotificationIdChanged)
     Q_PROPERTY(quint32 uploadSuccessNotificationId READ uploadSuccessNotificationId WRITE setUploadSuccessNotificationId NOTIFY uploadSuccessNotificationIdChanged)

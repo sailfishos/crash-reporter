@@ -14,12 +14,12 @@ INCLUDEPATH += . \
     $${CREPORTER_SRC_DIR}/libs/notification
 DEPENDPATH += $$INCLUDEPATH
 
-TEST_STUBS += $${CREPORTER_STUBS_DIR}/mgconfitem_stub.cpp \
+TEST_STUBS += \
     $${CREPORTER_STUBS_DIR}/qnetworkconfiguration.cpp \
     $${CREPORTER_STUBS_DIR}/qnetworksession.cpp
 
 TEST_SOURCES += $${DAEMON_SRC_DIR}/creporterdaemon.cpp
-HEADERS += $${CREPORTER_STUBS_DIR}/mgconfitem_stub.h \
+HEADERS += \
     $${CREPORTER_STUBS_DIR}/qnetworkconfigmanager.h \
     $${CREPORTER_STUBS_DIR}/qnetworkconfiguration.h \
     $${CREPORTER_STUBS_DIR}/qnetworksession.h \

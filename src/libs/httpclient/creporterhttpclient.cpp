@@ -89,9 +89,8 @@ void CReporterHttpClientPrivate::init(bool deleteAfterSending)
         QNetworkProxy::setApplicationProxy(proxy);
     }
 
-    if (m_manager == 0) {
+    if (m_manager == nullptr) {
         m_manager = new QNetworkAccessManager(q_ptr);
-        Q_CHECK_PTR(m_manager);
 
         connect(m_manager, SIGNAL(authenticationRequired(QNetworkReply *, QAuthenticator *)),
                 this, SLOT(handleAuthenticationRequired(QNetworkReply *, QAuthenticator *)));
@@ -108,13 +107,11 @@ bool CReporterHttpClientPrivate::createRequest(const QString &file)
         return false;
     }
 
-    QNetworkRequest request;
-    QByteArray dataToSend;
-
     // Set server URL and port.
     QUrl url(CReporterApplicationSettings::instance()->serverUrl());
-
     url.setPort(CReporterApplicationSettings::instance()->serverPort());
+
+    QNetworkRequest request;
 
     if (CReporterApplicationSettings::instance()->useSsl()) {
         qCDebug(cr) << "SSL is enabled.";
@@ -139,6 +136,8 @@ bool CReporterHttpClientPrivate::createRequest(const QString &file)
 
     request.setUrl(url);
     qCDebug(cr) << "Upload URL:" << url.toString();
+
+    QByteArray dataToSend;
 
     if (!createPutRequest(request, dataToSend)) {
         qCWarning(cr) << "Failed to create network request.";
@@ -366,7 +365,7 @@ CReporterHttpClient::State CReporterHttpClient::state() const
 
 QString CReporterHttpClient::stateToString(CReporterHttpClient::State state) const
 {
-    return  QString(clientstate_string[state]);
+    return QString(clientstate_string[state]);
 }
 
 bool CReporterHttpClient::upload(const QString &file)

@@ -40,12 +40,10 @@ class CReporterHttpCntx;
 class CREPORTER_EXPORT CReporterHttpClient : public QObject
 {
     Q_OBJECT
-
     Q_PROPERTY(State state READ state)
     Q_ENUMS(State)
 
 public:
-
     /*!
     * @enum Represent client's internal state.
     *
@@ -66,8 +64,7 @@ public:
         Aborting,
     };
 
-    CReporterHttpClient(QObject *parent = 0);
-
+    CReporterHttpClient(QObject *parent = nullptr);
     ~CReporterHttpClient();
 
     /*!
