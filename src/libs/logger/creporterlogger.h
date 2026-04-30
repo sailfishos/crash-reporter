@@ -46,7 +46,6 @@ class CReporterLoggerPrivate;
   */
 class CREPORTER_EXPORT CReporterLogger
 {
-
 public:
     /*!
      * @brief Class constructor.

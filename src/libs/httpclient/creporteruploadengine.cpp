@@ -46,7 +46,7 @@ static const char *error_string[] = {"NoError", "ProtocolError", "ConnectionNotA
 
 CReporterUploadEnginePrivate::CReporterUploadEnginePrivate()
 {
-    currentItem = 0;
+    currentItem = nullptr;
     errorMessage.clear();
     error = CReporterUploadEngine::NoError;
     sentFiles = 0;
@@ -100,6 +100,7 @@ void CReporterUploadEnginePrivate::uploadItem(CReporterUploadItem *item)
 void CReporterUploadEnginePrivate::queueDone()
 {
     qCDebug(cr) << "Queue is empty.";
+    currentItem = nullptr;
 
 #ifdef CREPORTER_LIBBEARER_ENABLED
     // Upload queue is empty. Close network session, if exists.

@@ -134,8 +134,6 @@ void CReporterDaemon::startCoreMonitoring(const bool fromDBus)
     if (!d->monitor) {
         // Create monitor instance and start monitoring cores.
         d->monitor = new CReporterDaemonMonitor(this);
-        Q_CHECK_PTR(d->monitor);
-
         qCDebug(cr) << "Core monitoring started.";
 
         if (fromDBus) {

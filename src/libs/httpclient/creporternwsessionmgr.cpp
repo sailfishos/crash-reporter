@@ -161,8 +161,7 @@ bool CReporterNwSessionMgr::open()
 
         qCDebug(cr) << "No existing network session.";
         // If there was no network session, create one.
-        d->networkSession =
-            new QNetworkSession(d->networkManager().defaultConfiguration());
+        d->networkSession = new QNetworkSession(d->networkManager().defaultConfiguration());
 
         connect(d->networkSession, SIGNAL(stateChanged(QNetworkSession::State)),
                 this, SLOT(networkStateChanged(QNetworkSession::State)));

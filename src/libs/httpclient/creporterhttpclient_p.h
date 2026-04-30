@@ -101,7 +101,6 @@ Q_SIGNALS:
     void stateChanged(CReporterHttpClient::State state);
 
 private Q_SLOTS:
-
     /*!
      * @brief Called, when server requests authentication.
      *
@@ -139,7 +138,6 @@ private Q_SLOTS:
     void handleUploadProgress(qint64 bytesSent, qint64 bytesTotal);
 
 private:
-
     /*!
      * @brief Changes client state to @a nextState.
      *

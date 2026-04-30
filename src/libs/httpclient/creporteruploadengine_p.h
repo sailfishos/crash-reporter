@@ -146,9 +146,9 @@ public:
     //! @arg Network session manager reference.
     CReporterNwSessionMgr *networkSession;
 #endif // CREPORTER_LIBBEARER_ENABLED
-    //! @arg Upload queue reference<s.
+    //! @arg Upload queue references.
     CReporterUploadQueue *queue;
-    //! @arg Crash report currently handeled.
+    //! @arg Crash report currently handled.
     CReporterUploadItem *currentItem;
     //! @arg Possible error message, if available.
     QString errorMessage;
