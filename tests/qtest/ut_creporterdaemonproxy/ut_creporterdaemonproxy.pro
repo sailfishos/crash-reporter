@@ -18,12 +18,10 @@ INCLUDEPATH += . \
 	
 DEPENDPATH += $$INCLUDEPATH \
 
-TEST_STUBS += $${CREPORTER_STUBS_DIR}/mgconfitem_stub.cpp \
-
 TEST_SOURCES += $${DAEMON_SRC_DIR}/creporterdaemonadaptor.cpp \
 
 	
-HEADERS += $${CREPORTER_STUBS_DIR}/mgconfitem_stub.h \
+HEADERS += \
 		   $${DAEMON_SRC_DIR}/creporterdaemon.h \
            $${DAEMON_SRC_DIR}/creporterdaemon_p.h \
            $${DAEMON_SRC_DIR}/creporterdaemonadaptor.h \
