@@ -5,7 +5,8 @@ ConditionPathExists=/var/cache/core-dumps/endurance-enabled-mark
 
 [Service]
 Type=simple
-ExecStart=/usr/libexec/endurance-collect-daemon
+EnvironmentFile=-/usr/share/crash-reporter-settings/crash-reporter-endurance.conf
+ExecStart=/usr/libexec/endurance-collect-daemon $ENDURANCE_COLLECT_OPTS
 Restart=always
 
 [Install]

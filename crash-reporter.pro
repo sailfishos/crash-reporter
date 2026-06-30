@@ -46,6 +46,7 @@ scripts.files = scripts/crash-report-monitoring
 
 settings.path = $$CREPORTER_SETTINGS_PATH
 settings.files += \
+	data/crash-reporter-endurance.conf \
 	data/crash-reporter-privacy.conf \
 	data/crash-reporter.conf \
 	data/journalspy-expressions.conf \

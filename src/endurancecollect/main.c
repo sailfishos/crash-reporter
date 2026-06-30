@@ -21,6 +21,7 @@
 
 #include <errno.h>
 #include <fcntl.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <syslog.h>
@@ -32,7 +33,8 @@
 #include <sys/timerfd.h>
 #include <sys/wait.h>
 
-static const time_t SNAPSHOT_INTERVAL = IPHB_GS_WAIT_1_HOUR; // seconds
+static const time_t SNAPSHOT_INTERVAL_NORMAL = IPHB_GS_WAIT_1_HOUR; // seconds
+static const time_t SNAPSHOT_INTERVAL_FAST = IPHB_GS_WAIT_10_MINS; // seconds
 static const time_t KEEPALIVE_TIMER = 30; // seconds
 static const time_t AFTER_BOOT_DELAY = 5 * 60; // seconds
 
@@ -174,12 +176,26 @@ static void after_boot_delay(iphb_t iphb)
     }
 }
 
-int main()
+int main(int argc, char **argv)
 {
     int result = EXIT_SUCCESS;
+    bool fast = false;
+
+    if (argc > 1 && strcmp(argv[1], "--fast") == 0) {
+         fast = true;
+    }
+
+    const time_t SNAPSHOT_INTERVAL = fast
+        ? SNAPSHOT_INTERVAL_FAST
+        : SNAPSHOT_INTERVAL_NORMAL;
 
     openlog("endurance-collect-daemon", LOG_PID, LOG_USER);
-    syslog(LOG_NOTICE, "Starting.");
+
+    if (fast) {
+        syslog(LOG_NOTICE, "Starting (fast mode).");
+    } else {
+        syslog(LOG_NOTICE, "Starting.");
+    }
 
     if (!dbus_connect()) {
         return EXIT_FAILURE;
