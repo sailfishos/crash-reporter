@@ -9,6 +9,7 @@ BOOT_MARK_FILE=/tmp/endurance-collect-boot-mark
 SNAPSHOTS_TO_PACK=12
 MIN_SESSION_LENGTH=2
 DELTA_FILE_SUFFIX=.vcdiff
+CHECKSUM_FILE_SUFFIX=.xxh3
 
 _print_header()
 {
@@ -42,14 +43,19 @@ _xdelta()
   xdelta3 -a -B 524288 -W 524288 -N -s "$old" "$now" "$out"
 }
 
-# Same as _xdelta but decompress the input files on the fly
+# Compared to _xdelta it decompresses the input files on the fly and stores
+# checksum of the (decompressed) "now" file.
 #
 # Known issue: All arguments must be shell-safe
-_xdelta_lzop()
+_xdelta_lzop_xxh3()
 {
   local old=$1
   local now=$2
   local out=$3
+  local out_checksum=$4
+
+  local now_plain=${now%.lzo}
+  now_plain=${now_plain##*/}
 
   (
     # Hack: While busybox supports process substitution, bash executing in posix
@@ -57,8 +63,23 @@ _xdelta_lzop()
     # error output as busybox does not know this option.  Use eval to avoid it
     # seeing the syntax until the posix mode is suppressed.
     set +o posix 2>/dev/null
-    eval "_xdelta <(lzop -c -d $old) <(lzop -c -d $now) $out"
+    set -o pipefail
+    eval "_xdelta <(lzop -c -d $old) \
+                  <(lzop -c -d $now \
+                      |tee >(_xxh3sum_stdin $now_plain > $out_checksum)) \
+                  $out"
   )
+}
+
+# Invoke xxh3sum in streaming mode and use the real_file_name in output (instead
+# of the magic string "stdin").
+_xxh3sum_stdin()
+{
+  local real_file_name=$1
+  local sum=
+  sum=$(xxh3sum -) || return
+  sum=${sum%% *}
+  printf '%s  %s\n' "$sum" "$real_file_name"
 }
 
 _section_device_uid()
@@ -101,8 +122,10 @@ _section_endurance_snapshot_pack_single()
 
   if [[ -n "$old_entry" ]]; then
     fname=${entry%.lzo}$DELTA_FILE_SUFFIX
-    _xdelta_lzop "$old_entry" "$entry" "$fname"
+    fname_checksum=${entry%.lzo}$CHECKSUM_FILE_SUFFIX
+    _xdelta_lzop_xxh3 "$old_entry" "$entry" "$fname" "$fname_checksum"
     fsize=$(stat "$fname" -c "%s")
+    _section_endurance_snapshot_pack_single "$fname_checksum" ""
   elif [[ "$entry" =~ \.lzo$ ]]; then
     fsize="$(lzop --ls $entry 2>/dev/null | awk '{printf $5}')"
     fname="$(lzop --ls $entry 2>/dev/null | awk '{printf $NF}')"
