@@ -168,7 +168,7 @@ _section_endurance_snapshot_pack()
         old_snapshot=$snapshot
       fi
     done
-  ) | xz -0 --stdout
+  ) | xz -1 --threads=1 --stdout
 }
 
 _create_endurance_package()
