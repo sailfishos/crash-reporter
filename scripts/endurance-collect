@@ -39,7 +39,7 @@ _section_endurance_snapshot_pack_single()
   local fsize=
   local fname=
 
-  if [[ "$entry" == "*.lzo" ]]; then
+  if [[ "$entry" =~ \.lzo$ ]]; then
     fsize="$(lzop --ls $entry 2>/dev/null | awk '{printf $5}')"
     fname="$(lzop --ls $entry 2>/dev/null | awk '{printf $NF}')"
 
@@ -53,7 +53,7 @@ _section_endurance_snapshot_pack_single()
   # Create header
   tar cf - $fname | head -c 512 # Goes to stdout
 
-  if [[ "$entry" == "*.lzo" ]]; then
+  if [[ "$entry" =~ \.lzo$ ]]; then
     # Uncompress lzo file
     lzop -c -d $entry # Goes to stdout
   else
