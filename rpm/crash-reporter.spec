@@ -29,6 +29,7 @@ Requires: sailfishsilica-qt5 >= 0.27.0
 Requires: ssu
 Requires: ssu-sysinfo
 Requires: tar
+Requires: xxhash
 Requires: xz
 Conflicts: quick-feedback < 0.0.18
 %{_oneshot_requires_post}

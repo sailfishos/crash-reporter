@@ -8,10 +8,78 @@ BOOT_TIME_FILE=$ENDURANCE_DIR/boot_time
 BOOT_MARK_FILE=/tmp/endurance-collect-boot-mark
 SNAPSHOTS_TO_PACK=12
 MIN_SESSION_LENGTH=2
+DELTA_FILE_SUFFIX=.vcdiff
+CHECKSUM_FILE_SUFFIX=.xxh3
 
 _print_header()
 {
   printf '\n[---rich-core: %s---]\n' "$@"
+}
+
+_xdelta()
+{
+  local old=$1
+  local now=$2
+  local out=$3
+
+  # Options passed to reduce memory usage:
+  #
+  # -B bytes
+  #   Source window size.  524288 is the minimum accepted value.
+  # -W bytes
+  #   Input window size.  With the data sample used, the minimum accepted value
+  #   16384 yields 5x bigger delta file compared to when 524288 (the minimum for
+  #   `-B') is used, while reducing the memory usage just slightly, so better
+  #   use 524288 here as well.
+  # -N
+  #   Disable small string-matching compression.  With the data sample used it
+  #   reduces memory usage 0.5x.  At the same time, without `-B/-W' increases
+  #   delta file size 2x, but with `-B/-W' no further delta file size increase
+  #   happened.
+  #
+  # Option '-a' passed to disable armor mode. Armor mode prevents streaming use
+  # as it needs to read the input files twice. Note that armor mode is currently
+  # disabled at compile time, so this option is implied.
+  xdelta3 -a -B 524288 -W 524288 -N -s "$old" "$now" "$out"
+}
+
+# Compared to _xdelta it decompresses the input files on the fly and stores
+# checksum of the (decompressed) "now" file.
+#
+# Known issue: All arguments must be shell-safe
+_xdelta_lzop_xxh3()
+{
+  local old=$1
+  local now=$2
+  local out=$3
+  local out_checksum=$4
+
+  local now_plain=${now%.lzo}
+  now_plain=${now_plain##*/}
+
+  (
+    # Hack: While busybox supports process substitution, bash executing in posix
+    # mode refuses that syntax. Temporarily turn off posix mode.  Suppress the
+    # error output as busybox does not know this option.  Use eval to avoid it
+    # seeing the syntax until the posix mode is suppressed.
+    set +o posix 2>/dev/null
+    set -o pipefail
+    eval "_xdelta <(lzop -c -d $old) \
+                  <(lzop -c -d $now \
+                      |tee >(_xxh3sum_stdin $now_plain > $out_checksum)) \
+                  $out"
+  )
+}
+
+# Invoke xxh3sum in streaming mode and use the real_file_name in output (instead
+# of the magic string "stdin").
+_xxh3sum_stdin()
+{
+  local real_file_name=$1
+  local sum=
+  sum=$(xxh3sum -) || return
+  sum=${sum%% *}
+  printf '%s  %s\n' "$sum" "$real_file_name"
 }
 
 _section_device_uid()
@@ -36,10 +104,29 @@ _section_boot_time()
 _section_endurance_snapshot_pack_single()
 {
   local entry=$1
+  local old_entry=$2
+
   local fsize=
   local fname=
 
-  if [[ "$entry" == "*.lzo" ]]; then
+  # Only apply delta compression to bigger files - those initially using LZO
+  # compression
+  if [[ -n "$old_entry" ]] && ! [[ "$entry" =~ \.lzo$ ]]; then
+    old_entry=
+  fi
+
+  # Skip files with no corresponding old entry
+  if [[ -n "$old_entry" ]] && ! [[ -f "$old_entry" ]]; then
+    old_entry=
+  fi
+
+  if [[ -n "$old_entry" ]]; then
+    fname=${entry%.lzo}$DELTA_FILE_SUFFIX
+    fname_checksum=${entry%.lzo}$CHECKSUM_FILE_SUFFIX
+    _xdelta_lzop_xxh3 "$old_entry" "$entry" "$fname" "$fname_checksum"
+    fsize=$(stat "$fname" -c "%s")
+    _section_endurance_snapshot_pack_single "$fname_checksum" ""
+  elif [[ "$entry" =~ \.lzo$ ]]; then
     fsize="$(lzop --ls $entry 2>/dev/null | awk '{printf $5}')"
     fname="$(lzop --ls $entry 2>/dev/null | awk '{printf $NF}')"
 
@@ -53,7 +140,9 @@ _section_endurance_snapshot_pack_single()
   # Create header
   tar cf - $fname | head -c 512 # Goes to stdout
 
-  if [[ "$entry" == "*.lzo" ]]; then
+  if [[ -n "$old_entry" ]]; then
+    cat "$fname"
+  elif [[ "$entry" =~ \.lzo$ ]]; then
     # Uncompress lzo file
     lzop -c -d $entry # Goes to stdout
   else
@@ -64,16 +153,29 @@ _section_endurance_snapshot_pack_single()
   head /dev/zero -c $((512 - $fsize % 512)) # Goes to stdout
 
   rm -f $fname
-  rm -f $entry
+
+  # Delay deletion of .lzo entries for next round when they are needed as the old entries
+  if [[ -n "$old_entry" ]]; then
+    rm -f "$old_entry"
+  elif ! [[ "$entry" =~ \.lzo$ ]]; then
+    rm -f "$entry"
+  fi
 }
 
 _section_endurance_snapshot_pack_dir()
 {
-    for entry in $(ls -d $1/* 2>/dev/null); do
+    local dir=$1
+    local old_dir=$2
+
+    for entry in $(ls -d $dir/* 2>/dev/null); do
+      old_entry=
+      if [ -n "$old_dir" ]; then
+        old_entry=$old_dir/${entry#"$dir/"}
+      fi
       if [ -d $entry ]; then
-        _section_endurance_snapshot_pack_dir $entry
+        _section_endurance_snapshot_pack_dir "$entry" "$old_entry"
       else
-        _section_endurance_snapshot_pack_single $entry
+        _section_endurance_snapshot_pack_single "$entry" "$old_entry"
       fi
     done
 }
@@ -82,12 +184,14 @@ _section_endurance_snapshot_pack()
 {
   _print_header endurance-snapshot-pack.tar.xz
   (
+    old_snapshot=
     for snapshot in *; do
       if [ -d $snapshot ]; then
-        _section_endurance_snapshot_pack_dir $snapshot
+        _section_endurance_snapshot_pack_dir "$snapshot" "$old_snapshot"
+        old_snapshot=$snapshot
       fi
     done
-  ) | xz -0 --stdout
+  ) | xz -1 --threads=1 --stdout
 }
 
 _create_endurance_package()
