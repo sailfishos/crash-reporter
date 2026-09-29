@@ -244,7 +244,7 @@ void CReporterAutoUploader::engineFinished(int error, int sent, int total)
         if (sent > 0) {
             sent += state->uploadSuccessCount();
 
-            //% "Report(s) uploaded"
+            //% "%n reports uploaded"
             QString summary = qtTrId("crash_reporter-notify-reports_uploaded", sent);
             d_ptr->successNotification->setSummary(summary);
             d_ptr->successNotification->setItemCount(sent);
