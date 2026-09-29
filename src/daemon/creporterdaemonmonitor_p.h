@@ -84,15 +84,11 @@ public Q_SLOTS:
     /*!
      * @brief Adds the "\core-dumps" -directory paths currently present in the file system.
      *     to the QFileSystemWatcher.
-     *
-     * @sa http://doc.trolltech.com/4.6/qfilesystemwatcher.html.
      */
     void addDirectoryWatcher();
 
     /*!
      * @brief Removes monitored directories from the QFileSystemWatcher.
-     *
-     * @sa http://doc.trolltech.com/4.6/qfilesystemwatcher.html.
      */
     void removeDirectoryWatcher();
 

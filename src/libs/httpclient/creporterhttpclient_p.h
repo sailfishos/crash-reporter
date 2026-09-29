@@ -63,22 +63,17 @@ public:
      * @brief Creates a new request sent over the network.
      *
      * @param file File to send.
-     * @sa <a href="http://doc.trolltech.com/4.6/qnetworkrequest.html">QNetworkRequest</a>
      */
     bool createRequest(const QString &file);
 
     /*!
      * @brief Cancels ongoing request.
-     *
-     * @sa <a href="http://doc.trolltech.com/4.6/qnetworkreply.html#abort">QNetworkRequest::abort()</a>
      */
     void cancel();
 
 Q_SIGNALS:
-
     /*!
-     * @brief Sent when <a href="http://doc.trolltech.com/4.6/qnetworkreply.html">QNetworkReply</a>
-     *  finishes.
+     * @brief Sent when QNetworkReply finishes.
      */
     void finished();
 
@@ -87,9 +82,6 @@ Q_SIGNALS:
      *
      * @param file File, which was uploaded when error occured.
      * @param errorString HTTP error string.
-     *
-     * @sa <a href="http://doc.trolltech.com/4.6/qnetworkreply.html#error-2">QNetworkReply::error()</a>
-     * @sa <a href="http://doc.trolltech.com/4.6/qnetworkreply.html#NetworkError-enum">QNetworkReply::NetworkError</a>
      */
     void uploadError(const QString &file, const QString &errorString);
 
