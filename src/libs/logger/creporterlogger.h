@@ -54,7 +54,7 @@ public:
      *
      * @sa CReporter::LogType
      */
-    CReporterLogger(const QString type = "none");
+    CReporterLogger(const QString &type = "none");
 
     ~CReporterLogger();
 

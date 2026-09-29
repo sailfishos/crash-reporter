@@ -79,7 +79,8 @@ void CReporterUploadEnginePrivate::uploadItem(CReporterUploadItem *item)
 {
     qCDebug(cr) << "Got new item to upload:" << item->filename();
 
-    connect(item, SIGNAL(uploadFinished()), this, SLOT(uploadFinished()));
+    connect(item, &CReporterUploadItem::uploadFinished,
+            this, &CReporterUploadEnginePrivate::uploadFinished);
 
     // Save item.
     currentItem = item;
@@ -123,8 +124,8 @@ void CReporterUploadEnginePrivate::uploadFinished()
         setErrorType(CReporterUploadEngine::ProtocolError);
         setErrorString(item->errorString());
         // Let's try to go on with other files if there was an error but the connection might work
-    } else if (item->status() == CReporterUploadItem::Error ||
-               item->status() == CReporterUploadItem::Cancelled) {
+    } else if (item->status() == CReporterUploadItem::Error
+               || item->status() == CReporterUploadItem::Cancelled) {
         // If failure was detected during upload or cancel was requested by the user,
         // cancel also all pending uploads.
         // Failure in upload means, HTTP level error of which we cannot recover.
@@ -210,7 +211,7 @@ void CReporterUploadEnginePrivate::setErrorType(CReporterUploadEngine::ErrorType
 }
 
 void CReporterUploadEnginePrivate::emitFinished(CReporterUploadEngine::ErrorType error,
-        int sent, int total)
+                                                int sent, int total)
 {
     qCDebug(cr) << "Signalling finished(). Error:" << error_string[error];
 
@@ -237,7 +238,7 @@ CReporterUploadEngine::CReporterUploadEngine(CReporterUploadQueue *queue, QObjec
 CReporterUploadEngine::~CReporterUploadEngine()
 {
     delete d_ptr;
-    d_ptr = 0;
+    d_ptr = nullptr;
 }
 
 QString CReporterUploadEngine::lastError() const

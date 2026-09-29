@@ -50,7 +50,7 @@ CReporterUploadItem::CReporterUploadItem(const QString &file)
     Q_D(CReporterUploadItem);
 
     d->filepath = file;
-    d->http = 0;
+    d->http = nullptr;
 
     QFileInfo fi(d->filepath);
     d->filename = fi.fileName();
@@ -63,7 +63,7 @@ CReporterUploadItem::CReporterUploadItem(const QString &file)
 CReporterUploadItem::~CReporterUploadItem()
 {
     delete d_ptr;
-    d_ptr = 0;
+    d_ptr = nullptr;
 }
 
 qint64 CReporterUploadItem::filesize() const
@@ -103,10 +103,12 @@ bool CReporterUploadItem::startUpload()
     qCDebug(cr) << "Starting upload of:" << d->filename;
 
     d->http = new CReporterHttpClient(this);
-    connect(d->http, SIGNAL(finished()), this, SLOT(emitUploadFinished()));
-    connect(d->http, SIGNAL(uploadError(QString, QString)),
-            this, SLOT(uploadError(QString, QString)));
-    connect(d->http, SIGNAL(updateProgress(int)), this, SIGNAL(updateProgress(int)));
+    connect(d->http, &CReporterHttpClient::finished,
+            this, &CReporterUploadItem::emitUploadFinished);
+    connect(d->http, &CReporterHttpClient::uploadError,
+            this, &CReporterUploadItem::uploadError);
+    connect(d->http, &CReporterHttpClient::updateProgress,
+            this, &CReporterUploadItem::updateProgress);
 
     d->http->initSession();
     if (d->http->upload(d->filepath)) {
@@ -126,7 +128,7 @@ void CReporterUploadItem::cancel()
     ItemStatus previousStatus = d->status;
     setStatus(Cancelled);
 
-    if (d->http != 0) {
+    if (d->http) {
         d->http->cancel();
     }
 
@@ -152,10 +154,12 @@ void CReporterUploadItem::uploadError(const QString &file, const QString &errorS
 
     qCWarning(cr) << "Upload failed:" << d->filename << errorString;
 
-    disconnect(d->http, SIGNAL(finished()), this, SLOT(emitUploadFinished()));
-    disconnect(d->http, SIGNAL(uploadError(QString, QString)),
-               this, SLOT(uploadError(QString, QString)));
-    disconnect(d->http, SIGNAL(updateProgress(int)), this, SIGNAL(updateProgress(int)));
+    disconnect(d->http, &CReporterHttpClient::finished,
+               this, &CReporterUploadItem::emitUploadFinished);
+    disconnect(d->http, &CReporterHttpClient::uploadError,
+               this, &CReporterUploadItem::uploadError);
+    disconnect(d->http, &CReporterHttpClient::updateProgress,
+               this, &CReporterUploadItem::updateProgress);
 
     setErrorString(errorString);
 

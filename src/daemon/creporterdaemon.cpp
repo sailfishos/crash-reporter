@@ -81,8 +81,6 @@ bool CReporterDaemon::initiateDaemon()
         return false;
     }
 
-    QString filename = CReporterPrivacySettingsModel::instance()->settingsFile();
-
     if (!startService()) {
         qCWarning(cr) << "Failed to start D-Bus service, exiting";
         return false;
@@ -104,10 +102,10 @@ bool CReporterDaemon::initiateDaemon()
     if (CReporterPrivacySettingsModel::instance()->automaticSendingEnabled()) {
         QStringList files = collectAllCoreFiles();
 
-        if (!files.isEmpty() &&
-                CReporterNwSessionMgr::canUseNetworkConnection() &&
-                !CReporterUtils::shouldSavePower() &&
-                !CReporterUtils::notifyAutoUploader(files)) {
+        if (!files.isEmpty()
+            && CReporterNwSessionMgr::canUseNetworkConnection()
+            && !CReporterUtils::shouldSavePower()
+            && !CReporterUtils::notifyAutoUploader(files)) {
             qCDebug(cr) << "Failed to add files to the queue.";
         }
     } else if (CReporterPrivacySettingsModel::instance()->notificationsEnabled()) {
@@ -152,7 +150,7 @@ void CReporterDaemon::stopCoreMonitoring(const bool fromDBus)
     if (d->monitor) {
         // Delete monitor instance and stop core monitoring.
         delete d->monitor;
-        d->monitor = 0;
+        d->monitor = nullptr;
 
         qCDebug(cr) << "Core monitoring stopped.";
 
@@ -222,26 +220,23 @@ void CReporterDaemon::stopService()
 }
 
 CReporterDaemonPrivate::CReporterDaemonPrivate(CReporterDaemon *parent)
-    : monitor(0), timerId(0), q_ptr(parent)
+    : monitor(nullptr), timerId(0), q_ptr(parent)
 {
     Q_Q(CReporterDaemon);
 
     QObject::connect(CReporterPrivacySettingsModel::instance(),
-                     SIGNAL(notificationsEnabledChanged()),
-                     q, SLOT(onNotificationsSettingChanged()));
+                     &CReporterPrivacySettingsModel::notificationsEnabledChanged,
+                     q, &CReporterDaemon::onNotificationsSettingChanged);
 }
 
-void CReporterDaemonPrivate::onNotificationsSettingChanged()
+void CReporterDaemon::onNotificationsSettingChanged()
 {
-    Q_Q(CReporterDaemon);
-
-    CReporterPrivacySettingsModel &settings =
-        *CReporterPrivacySettingsModel::instance();
+    CReporterPrivacySettingsModel &settings = *CReporterPrivacySettingsModel::instance();
 
     if (settings.notificationsEnabled()) {
-        q->startCoreMonitoring();
+        startCoreMonitoring();
     } else if (!settings.automaticSendingEnabled()) {
-        q->stopCoreMonitoring();
+        stopCoreMonitoring();
     }
 }
 

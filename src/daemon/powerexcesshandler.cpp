@@ -37,8 +37,6 @@ public:
     udev *udevHandle;
     udev_monitor *udevMonitor;
     QSocketNotifier *udevSocketNotifier;
-
-    void handleUdevNotification();
 };
 
 PowerExcessHandler::PowerExcessHandler(QObject *parent)
@@ -51,16 +49,18 @@ PowerExcessHandler::PowerExcessHandler(QObject *parent)
     udev_monitor_filter_add_match_subsystem_devtype(d->udevMonitor, "misc", 0);
     udev_monitor_enable_receiving(d->udevMonitor);
 
-    d->udevSocketNotifier =
-        new QSocketNotifier(udev_monitor_get_fd(d->udevMonitor),
-                            QSocketNotifier::Read, this);
-    connect(d->udevSocketNotifier, SIGNAL(activated(int)),
-            this, SLOT(handleUdevNotification()));
+    d->udevSocketNotifier = new QSocketNotifier(udev_monitor_get_fd(d->udevMonitor),
+                                                QSocketNotifier::Read, this);
+
+    connect(d->udevSocketNotifier, &QSocketNotifier::activated,
+            this, &PowerExcessHandler::handleUdevNotification);
 }
 
-void PowerExcessHandlerPrivate::handleUdevNotification()
+void PowerExcessHandler::handleUdevNotification()
 {
-    udev_device *dev = udev_monitor_receive_device(udevMonitor);
+    Q_D(PowerExcessHandler);
+
+    udev_device *dev = udev_monitor_receive_device(d->udevMonitor);
     if (!dev) {
         qCWarning(cr) << "udev_monitor_receive_device() failed";
         return;

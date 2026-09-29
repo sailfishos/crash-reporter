@@ -52,7 +52,7 @@ CReporterApplicationSettingsPrivate::CReporterApplicationSettingsPrivate(CReport
 
 int CReporterApplicationSettingsPrivate::intValue(const QString &key, const QVariant &defaultValue) const
 {
-    const Q_Q(CReporterApplicationSettings);
+    Q_Q(const CReporterApplicationSettings);
 
     bool ok;
     int result = q->value(key, defaultValue).toInt(&ok);
@@ -62,7 +62,7 @@ int CReporterApplicationSettingsPrivate::intValue(const QString &key, const QVar
 
 CReporterApplicationSettings *CReporterApplicationSettings::instance()
 {
-    if (sm_Instance == 0) {
+    if (sm_Instance == nullptr) {
         sm_Instance = new CReporterApplicationSettings();
     }
     return sm_Instance;
@@ -70,16 +70,14 @@ CReporterApplicationSettings *CReporterApplicationSettings::instance()
 
 void CReporterApplicationSettings::freeSingleton()
 {
-    if (sm_Instance != 0) {
-        delete sm_Instance;
-        sm_Instance = 0;
-    }
+    delete sm_Instance;
+    sm_Instance = nullptr;
 }
 
 CReporterApplicationSettings::~CReporterApplicationSettings()
 {
     delete d_ptr;
-    d_ptr = 0;
+    d_ptr = nullptr;
 }
 
 QString CReporterApplicationSettings::serverUrl() const
@@ -96,7 +94,7 @@ void CReporterApplicationSettings::setServerUrl(const QString &url)
 
 int CReporterApplicationSettings::serverPort() const
 {
-    const Q_D(CReporterApplicationSettings);
+    Q_D(const CReporterApplicationSettings);
 
     return d->intValue(Server::ValueServerPort, 8080);
 }

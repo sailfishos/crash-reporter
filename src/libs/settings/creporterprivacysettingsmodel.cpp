@@ -86,11 +86,11 @@ const QString ReduceCore("Privacy/REDUCE_CORE");
 const QString DownloadDebuginfo("Privacy/DOWNLOAD_DEBUGINFO");
 }
 
-CReporterPrivacySettingsModel *CReporterPrivacySettingsModel::sm_Instance = 0;
+CReporterPrivacySettingsModel *CReporterPrivacySettingsModel::sm_Instance = nullptr;
 
 CReporterPrivacySettingsModel *CReporterPrivacySettingsModel::instance()
 {
-    if (sm_Instance == 0) {
+    if (sm_Instance == nullptr) {
         // Get default settings, if not overriden by the user.
         QString home = QDir::homePath();
         if (!QFile::exists(home + CReporter::PrivacySettingsFileUser)) {
@@ -106,10 +106,8 @@ CReporterPrivacySettingsModel *CReporterPrivacySettingsModel::instance()
 
 void CReporterPrivacySettingsModel::freeSingleton()
 {
-    if (sm_Instance != 0) {
-        delete sm_Instance;
-        sm_Instance = 0;
-    }
+    delete sm_Instance;
+    sm_Instance = nullptr;
 }
 
 CReporterPrivacySettingsModel::CReporterPrivacySettingsModel()

@@ -156,19 +156,19 @@ void SystemdServicePrivate::propertiesChanged(const QString &interface,
 
     Q_ASSERT(unit);
 
-    if (changedProperties.contains("ActiveState") ||
-            invalidatedProperties.contains("ActiveState")) {
+    if (changedProperties.contains("ActiveState")
+        || invalidatedProperties.contains("ActiveState")) {
         QString state = unit->activeState();
         qCDebug(cr) << "ActiveState changed to:" << state;
         changeState(state);
     }
-    if (changedProperties.contains("UnitFileState") ||
-            invalidatedProperties.contains("UnitFileState")) {
+    if (changedProperties.contains("UnitFileState")
+        || invalidatedProperties.contains("UnitFileState")) {
         qCDebug(cr) << "UnitFileState changed to:" << unit->unitFileState();
         emit q->enabledChanged();
     }
-    if (changedProperties.contains("LoadState") ||
-            invalidatedProperties.contains("LoadState")) {
+    if (changedProperties.contains("LoadState")
+        || invalidatedProperties.contains("LoadState")) {
         qCDebug(cr) << "LoadState changed to:" << unit->loadState();
         emit q->maskedChanged();
     }
@@ -200,7 +200,7 @@ void SystemdServicePrivate::stateChanged(QDBusPendingCallWatcher *call)
     QDBusPendingReply<QDBusObjectPath> reply = *call;
     if (reply.isError()) {
         qCWarning(cr) << "Couldn't change systemd service state"
-                    << reply.error().name() << reply.error().message();
+                      << reply.error().name() << reply.error().message();
     }
 
     call->deleteLater();
@@ -211,7 +211,7 @@ void SystemdServicePrivate::unitFileStateChanged(QDBusPendingCallWatcher *call)
     QDBusPendingCall reply = *call;
     if (reply.isError()) {
         qCWarning(cr) << "Couldn't enable or disable a unit file"
-                    << reply.error().name() << reply.error().message();
+                      << reply.error().name() << reply.error().message();
     }
 
     call->deleteLater();
@@ -222,7 +222,7 @@ void SystemdServicePrivate::maskingChanged(QDBusPendingCallWatcher *call)
     QDBusPendingCall reply = *call;
     if (reply.isError()) {
         qCWarning(cr) << "Couldn't mask or unmask a unit file"
-                    << reply.error().name() << reply.error().message();
+                      << reply.error().name() << reply.error().message();
     } else {
         reload();
     }
@@ -267,7 +267,7 @@ void SystemdServicePrivate::changeState(const QString &state)
         newState = SystemdService::Active;
     } else if (state == "activating") {
         newState = SystemdService::Activating;
-    } else if (state ==  "deactivating") {
+    } else if (state == "deactivating") {
         newState = SystemdService::Deactivating;
     } else { /* "inactive", "failed", default */
         newState = SystemdService::Inactive;
@@ -287,8 +287,8 @@ SystemdService::SystemdService(QObject *parent)
     d->managerType = UserManager;
     d->state = Inactive;
 
-    d->manager = 0;
-    d->unit = 0;
+    d->manager = nullptr;
+    d->unit = nullptr;
     d->unitStateTimer.setSingleShot(true);
     d->unitStateTimer.setInterval(100);
     connect(&d->unitStateTimer, SIGNAL(timeout()),
@@ -400,8 +400,6 @@ void SystemdService::setEnabled(bool state)
 {
     Q_D(SystemdService);
 
-    QDBusPendingCallWatcher *watcher;
-
     if (!d->unit) {
         qCWarning(cr) << "Systemd unit proxy not initialized!";
         return;
@@ -409,6 +407,7 @@ void SystemdService::setEnabled(bool state)
 
     QStringList services;
     services.append(d->serviceName);
+    QDBusPendingCallWatcher *watcher;
 
     if (state) {
         watcher = new QDBusPendingCallWatcher(
@@ -429,8 +428,6 @@ void SystemdService::setMasked(bool state)
     if (masked() == state)
         return;
 
-    QDBusPendingCallWatcher *watcher;
-
     if (!d->unit) {
         qCWarning(cr) << "Systemd unit proxy not initialized!";
         return;
@@ -438,6 +435,7 @@ void SystemdService::setMasked(bool state)
 
     QStringList services;
     services.append(d->serviceName);
+    QDBusPendingCallWatcher *watcher;
 
     if (state) {
         watcher = new QDBusPendingCallWatcher(

@@ -68,8 +68,8 @@ CReporterHandledRichCore::~CReporterHandledRichCore()
 
 bool CReporterHandledRichCore::operator==(const CReporterHandledRichCore &other) const
 {
-    return (binaryName == other.binaryName) &&
-           (signalNumber == other.signalNumber);
+    return (binaryName == other.binaryName)
+           && (signalNumber == other.signalNumber);
 }
 
 
@@ -102,14 +102,14 @@ void CReporterDaemonMonitorPrivate::addDirectoryWatcher()
     qCDebug(cr) << "Adding core directory watcher...";
 
     // Subscribe to receive signals for changed directories.
-    connect(&watcher, SIGNAL(directoryChanged(const QString &)),
-            this, SLOT(handleDirectoryChanged(const QString &)));
+    connect(&watcher, &QFileSystemWatcher::directoryChanged,
+            this, &CReporterDaemonMonitorPrivate::handleDirectoryChanged);
 
     CReporterCoreRegistry *registry = CReporterCoreRegistry::instance();
 
     // Subscribe to receive signals for changes in core registry.
-    connect(registry, SIGNAL(coreLocationsUpdated()),
-            this, SLOT(addDirectoryWatcher()));
+    connect(registry, &CReporterCoreRegistry::coreLocationsUpdated,
+            this, &CReporterDaemonMonitorPrivate::addDirectoryWatcher);
 
     QStringList corePaths(registry->getCoreLocationPaths());
 
@@ -170,13 +170,12 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
 
     emit q_ptr->richCoreNotify(filePath);
 
-    CReporterPrivacySettingsModel &settings =
-        *CReporterPrivacySettingsModel::instance();
+    CReporterPrivacySettingsModel &settings = *CReporterPrivacySettingsModel::instance();
 
     /* Check for duplicates if auto-deleting is enabled. If Maximum number
      * of duplicates is exceeded, delete the file. */
-    if (!isUserTerminated && settings.autoDeleteDuplicates() &&
-            checkForDuplicates(filePath)) {
+    if (!isUserTerminated && settings.autoDeleteDuplicates()
+        && checkForDuplicates(filePath)) {
         if (settings.notificationsEnabled()) {
             Notification notification;
             CReporterUtils::applyNotificationStyle(&notification);
@@ -199,7 +198,6 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
          * actions so far. */
     } else {
         if (settings.notificationsEnabled()) {
-
             QString body;
             QString summary;
 
@@ -229,6 +227,7 @@ void CReporterDaemonMonitorPrivate::handleDirectoryChanged(const QString &path)
             crashNotification->setItemCount(crashCount);
             crashNotification->publish();
         }
+
         if (!CReporterNwSessionMgr::canUseNetworkConnection()) {
             qCDebug(cr) << "WiFi not available, not uploading now.";
         } else if (CReporterUtils::shouldSavePower()) {
@@ -350,7 +349,7 @@ CReporterDaemonMonitor::~CReporterDaemonMonitor()
     d_ptr->removeDirectoryWatcher();
 
     delete d_ptr;
-    d_ptr = 0;
+    d_ptr = nullptr;
 }
 
 int CReporterDaemonMonitor::autoDeleteMaxSimilarCores()
