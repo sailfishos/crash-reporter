@@ -32,7 +32,7 @@
 #include "creporternamespace.h"
 
 CReporterSettingsBasePrivate::CReporterSettingsBasePrivate()
-    : m_settings(0)
+    : m_settings(nullptr)
 {
 }
 
@@ -55,7 +55,7 @@ CReporterSettingsBase::CReporterSettingsBase(const QString &organization,
 CReporterSettingsBase::~CReporterSettingsBase()
 {
     delete d_ptr;
-    d_ptr = 0;
+    d_ptr = nullptr;
 }
 
 void CReporterSettingsBase::writeSettings()
@@ -69,7 +69,7 @@ QString CReporterSettingsBase::settingsFile() const
 {
     Q_D(const CReporterSettingsBase);
 
-    if (d->m_settings == 0) {
+    if (d->m_settings == nullptr) {
         return QString();
     }
     return d->m_settings->fileName();
@@ -79,13 +79,11 @@ bool CReporterSettingsBase::isValid() const
 {
     Q_D(const CReporterSettingsBase);
 
-    if (d->m_settings == 0) {
+    if (d->m_settings == nullptr) {
         return false;
-    } else if (!QFile::exists(d->m_settings->fileName())) {
-        return false;
-    } else {
-        return true;
     }
+
+    return QFile::exists(d->m_settings->fileName());
 }
 
 bool CReporterSettingsBase::setValue(const QString &key, const QVariant &value)

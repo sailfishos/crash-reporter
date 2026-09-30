@@ -92,6 +92,8 @@ private slots:
       */
     virtual void timerEvent(QTimerEvent *event);
 
+    void onNotificationsSettingChanged();
+
 private:
     /*!
       * @brief Starts D-Bus service and registers object.
@@ -109,8 +111,6 @@ private:
 private:
     Q_DECLARE_PRIVATE(CReporterDaemon)
     QScopedPointer<CReporterDaemonPrivate> d_ptr;
-
-    Q_PRIVATE_SLOT(d_func(), void onNotificationsSettingChanged())
 
 #ifdef CREPORTER_UNIT_TEST
     friend class Ut_CReporterDaemon;

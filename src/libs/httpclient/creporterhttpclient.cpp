@@ -50,8 +50,8 @@ static const int CONNECTION_TIMEOUT_MS = 2 * 60 * 1000;
 
 CReporterHttpClientPrivate::CReporterHttpClientPrivate(CReporterHttpClient *parent)
     : QObject(parent),
-      m_manager(0),
-      m_reply(0),
+      m_manager(nullptr),
+      m_reply(nullptr),
       m_connectionTimeout(this),
       q_ptr(parent)
 {
@@ -65,13 +65,13 @@ CReporterHttpClientPrivate::~CReporterHttpClientPrivate()
 {
     CReporterApplicationSettings::freeSingleton();
 
-    if (m_reply != 0) {
+    if (m_reply) {
         m_reply->abort();
-        m_reply = 0;
+        m_reply = nullptr;
     }
 
     delete m_manager;
-    m_manager = 0;
+    m_manager = nullptr;
 }
 
 void CReporterHttpClientPrivate::init(bool deleteAfterSending)
@@ -92,8 +92,8 @@ void CReporterHttpClientPrivate::init(bool deleteAfterSending)
     if (m_manager == nullptr) {
         m_manager = new QNetworkAccessManager(q_ptr);
 
-        connect(m_manager, SIGNAL(authenticationRequired(QNetworkReply *, QAuthenticator *)),
-                this, SLOT(handleAuthenticationRequired(QNetworkReply *, QAuthenticator *)));
+        connect(m_manager, &QNetworkAccessManager::authenticationRequired,
+                this, &CReporterHttpClientPrivate::handleAuthenticationRequired);
     }
     stateChange(CReporterHttpClient::Init);
 }
@@ -147,7 +147,7 @@ bool CReporterHttpClientPrivate::createRequest(const QString &file)
     // Send request and connect signal/ slots.
     m_reply = m_manager->put(request, dataToSend);
 
-    if (m_reply == 0) {
+    if (m_reply == nullptr) {
         return false;
     }
 
@@ -169,18 +169,18 @@ void CReporterHttpClientPrivate::cancel()
 {
     stateChange(CReporterHttpClient::Aborting);
 
-    if (m_reply != 0) {
+    if (m_reply) {
         qCDebug(cr) << "Canceling HTTP transaction.";
         // Abort ongoing transactions.
         m_reply->abort();
-        m_reply = 0;
+        m_reply = nullptr;
     }
     // Clean up.
     handleFinished();
 }
 
 void CReporterHttpClientPrivate::handleAuthenticationRequired(QNetworkReply *reply,
-        QAuthenticator *authenticator)
+                                                              QAuthenticator *authenticator)
 {
     Q_UNUSED(reply)
 

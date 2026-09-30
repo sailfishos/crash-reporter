@@ -34,12 +34,13 @@ public:
     PowerExcessHandler(QObject *parent = 0);
     ~PowerExcessHandler();
 
+private slots:
+    void handleUdevNotification();
+
 private:
     Q_DISABLE_COPY(PowerExcessHandler)
     Q_DECLARE_PRIVATE(PowerExcessHandler)
     QScopedPointer<PowerExcessHandlerPrivate> d_ptr;
-
-    Q_PRIVATE_SLOT(d_func(), void handleUdevNotification())
 };
 
 #endif // POWEREXCESSWATCH_H

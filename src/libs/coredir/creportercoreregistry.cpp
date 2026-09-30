@@ -123,7 +123,7 @@ QStringList CReporterCoreRegistry::getCoreLocationPaths()
 
     while (iter.hasNext()) {
         // Get paths for core locations.
-        CReporterCoreDir *pCoreDir =  (CReporterCoreDir *) iter.next();
+        CReporterCoreDir *pCoreDir = (CReporterCoreDir *) iter.next();
         QDir dir(pCoreDir->getDirectory());
 
         qCDebug(cr) << "Got directory:" << pCoreDir->getDirectory();
@@ -146,7 +146,7 @@ QString CReporterCoreRegistry::checkDirectoryForCores(const QString &path)
     QListIterator<CReporterCoreDir *> iter(d->coreDirs);
 
     while (iter.hasNext()) {
-        CReporterCoreDir *pCoreDir =  (CReporterCoreDir *) iter.next();
+        CReporterCoreDir *pCoreDir = (CReporterCoreDir *) iter.next();
         // Find the correct location.
         if (pCoreDir->getDirectory() == path) {
             coreFilePath = pCoreDir->checkDirectoryForCores();
@@ -165,7 +165,7 @@ void CReporterCoreRegistry::refreshRegistry()
 void CReporterCoreRegistry::mmcStateChanged(const QString &key)
 {
     qCDebug(cr) << "Key:" << key << "has changed.";
-    QTimer::singleShot(MMC_EVENT_TIMEOUT, this, SIGNAL(coreLocationsUpdated()));
+    QTimer::singleShot(MMC_EVENT_TIMEOUT, this, &CReporterCoreRegistry::coreLocationsUpdated);
 }
 
 void CReporterCoreRegistry::createCoreLocationRegistry()
@@ -222,7 +222,7 @@ void CReporterCoreRegistry::createCoreLocationRegistry()
 
 CReporterCoreRegistry *CReporterCoreRegistry::instance()
 {
-    static CReporterCoreRegistry *instance = 0;
+    static CReporterCoreRegistry *instance = nullptr;
     if (!instance) {
         instance = new CReporterCoreRegistry(qApp);
     }

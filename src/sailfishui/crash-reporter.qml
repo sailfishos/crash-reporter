@@ -80,6 +80,7 @@ Page {
 
             TextSwitch {
                 id: createReportsSwitch
+
                 automaticCheck: false
                 checked: PrivacySettings.coreDumping
                 //% "Create crash reports"
@@ -238,6 +239,7 @@ Page {
 
             TextSwitch {
                 id: includeStackTraceSwitch
+
                 enabled: createReportsSwitch.checked
                 automaticCheck: false
                 checked: PrivacySettings.includeStackTrace
@@ -267,7 +269,8 @@ Page {
             ComboBox {
                 //% "Log reporter activity"
                 label: qsTrId("settings_crash-reporter_logger_type")
-                //% "Debug logging of crash reporter activities to the device doesn't affect the data sent to a server. Change of this setting takes effect after crash reporter restart."
+                //% "Debug logging of crash reporter activities to the device doesn't affect the data sent to a server. "
+                //% "Change of this setting takes effect after crash reporter restart."
                 description: qsTrId("settings_crash-reporter_after_restart")
 
                 currentItem: {
@@ -286,15 +289,15 @@ Page {
                     var type
 
                     switch (currentItem) {
-                        case noneItem:
-                            type = "none"
-                            break
-                        case fileItem:
-                            type = "file"
-                            break
-                        case syslogItem:
-                            type = "syslog"
-                            break
+                    case noneItem:
+                        type = "none"
+                        break
+                    case fileItem:
+                        type = "file"
+                        break
+                    case syslogItem:
+                        type = "syslog"
+                        break
                     }
 
                     ApplicationSettings.loggerType = type
@@ -303,16 +306,19 @@ Page {
                 menu: ContextMenu {
                     MenuItem {
                         id: noneItem
+
                         //% "No logging"
                         text: qsTrId("settings_crash-reporter_logging_type_none")
                     }
                     MenuItem {
                         id: fileItem
+
                         //% "Into a file in /tmp"
                         text: qsTrId("settings_crash-reporter_logging_type_file")
                     }
                     MenuItem {
                         id: syslogItem
+
                         //% "Into systemd journal"
                         text: qsTrId("settings_crash-reporter_logging_type_syslog")
                     }

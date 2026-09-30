@@ -37,11 +37,11 @@
 #define CREPORTER_LOGGER_SYSLOG     "syslog"
 
 
-CReporterLogger *CReporterLogger::sm_Instance = 0;
+CReporterLogger *CReporterLogger::sm_Instance = nullptr;
 bool CReporterLogger::sm_Syslog = false;
 CReporter::LogType CReporterLogger::sm_LogType = CReporter::LogNone;
 
-CReporterLogger::CReporterLogger(const QString type)
+CReporterLogger::CReporterLogger(const QString &type)
 {
     // save ourself in a static variable
     CReporterLogger::sm_Instance = this;
@@ -86,7 +86,7 @@ CReporterLogger::CReporterLogger(const QString type)
     m_old_msg_handler = qInstallMessageHandler(CReporterLogger::messageHandler);
 }
 
-CReporterLogger::~CReporterLogger ()
+CReporterLogger::~CReporterLogger()
 {
     if (m_old_msg_handler) {
         qInstallMessageHandler(m_old_msg_handler);

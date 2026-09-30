@@ -72,7 +72,7 @@ public:
 CReporterAutoUploader::CReporterAutoUploader()
     : d_ptr(new CReporterAutoUploaderPrivate)
 {
-    d_ptr->engine = 0;
+    d_ptr->engine = nullptr;
     d_ptr->activated = false;
     d_ptr->progressNotification = new Notification(this);
     d_ptr->successNotification = new Notification(this);
@@ -96,7 +96,7 @@ CReporterAutoUploader::~CReporterAutoUploader()
 {
     quit();
     delete d_ptr;
-    d_ptr = 0;
+    d_ptr = nullptr;
 
     CReporterSavedState::freeSingleton();
 
@@ -114,20 +114,21 @@ bool CReporterAutoUploader::uploadFiles(const QStringList &fileList,
     if (!d_ptr->activated) {
         d_ptr->engine = new CReporterUploadEngine(&d_ptr->queue);
         d_ptr->activated = true;
-        connect(d_ptr->engine, SIGNAL(finished(int, int, int)), SLOT(engineFinished(int, int, int)));
+        connect(d_ptr->engine, &CReporterUploadEngine::finished,
+                this, &CReporterAutoUploader::engineFinished);
     }
 
-    if (obeyResourcesRestrictions &&
-            !CReporterNwSessionMgr::canUseNetworkConnection()) {
+    if (obeyResourcesRestrictions
+        && !CReporterNwSessionMgr::canUseNetworkConnection()) {
         qCDebug(cr) << "No unpaid network connection available, aborting crash report upload.";
-        QTimer::singleShot(0, this, SLOT(quit()));
+        QTimer::singleShot(0, this, &CReporterAutoUploader::quit);
         return false;
     }
 
-    if (obeyResourcesRestrictions &&
-            CReporterUtils::shouldSavePower()) {
+    if (obeyResourcesRestrictions
+        && CReporterUtils::shouldSavePower()) {
         qCDebug(cr) << "On low battery, aborting crash report upload.";
-        QTimer::singleShot(0, this, SLOT(quit()));
+        QTimer::singleShot(0, this, &CReporterAutoUploader::quit);
         return false;
     }
 
@@ -165,7 +166,8 @@ void CReporterAutoUploader::quit()
             d_ptr->engine->cancelAll();
         }
         qCDebug(cr) << "Deleting engine.";
-        disconnect(d_ptr->engine, SIGNAL(finished(int, int, int)), this, SLOT(engineFinished(int, int, int)));
+        disconnect(d_ptr->engine, &CReporterUploadEngine::finished,
+                   this, &CReporterAutoUploader::engineFinished);
         d_ptr->engine->deleteLater();
         d_ptr->engine = 0;
     }
@@ -244,7 +246,7 @@ void CReporterAutoUploader::engineFinished(int error, int sent, int total)
         if (sent > 0) {
             sent += state->uploadSuccessCount();
 
-            //% "Report(s) uploaded"
+            //% "%n reports uploaded"
             QString summary = qtTrId("crash_reporter-notify-reports_uploaded", sent);
             d_ptr->successNotification->setSummary(summary);
             d_ptr->successNotification->setItemCount(sent);

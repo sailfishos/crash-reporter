@@ -26,7 +26,7 @@
 
     @section conf_files_intro Description
     There are two kinds of setting groups used by the Crash Reporter; application and privacy settings.
-    Crash Reporter uses <a href="http://doc.qt.nokia.com/4.6/qsettings.html">QSettings</a> class for
+    Crash Reporter uses QSettings class for
     read/ write operations and settings are stored as textual configuration files in INI format. For
     each configuration file and key/ value pair there can be a user-specified and system-wide version.
     Value is first tried to find from user-specific location and if no found, then system-wide

@@ -66,7 +66,6 @@ public slots:
     void quit();
 
 private Q_SLOTS:
-
     /*!
       * @brief Called, when upload engine has finished uploading.
       *
@@ -87,4 +86,3 @@ private:
 };
 
 #endif // CREPORTERAUTOUPLOADER_H
-

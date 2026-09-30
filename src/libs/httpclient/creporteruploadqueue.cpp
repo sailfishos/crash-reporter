@@ -58,12 +58,12 @@ CReporterUploadQueue::~CReporterUploadQueue()
     clear();
 
     delete d_ptr;
-    d_ptr = 0;
+    d_ptr = nullptr;
 }
 
 void CReporterUploadQueue::enqueue(CReporterUploadItem *item)
 {
-    Q_ASSERT(item != 0);
+    Q_ASSERT(item);
     qCDebug(cr) << "Append new item to queue...";
 
     item->setParent(this);
@@ -71,7 +71,8 @@ void CReporterUploadQueue::enqueue(CReporterUploadItem *item)
 
     emit itemAdded(item);
 
-    connect(item, SIGNAL(done()), this, SLOT(itemFinished()));
+    connect(item, &CReporterUploadItem::done,
+            this, &CReporterUploadQueue::itemFinished);
 
     if (!d_ptr->notified) {
         d_ptr->nbrOfItems = 0;

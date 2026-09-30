@@ -49,7 +49,7 @@ const QString PrivacySettingsFileSystem =
     "/usr/share/crash-reporter-settings/crash-reporter-privacy.conf";
 
 //! Privacy disclaimer file.
-const QString PrivacyDisclaimerFile =  "/usr/share/crash-reporter-settings/privacy.txt";
+const QString PrivacyDisclaimerFile = "/usr/share/crash-reporter-settings/privacy.txt";
 
 //! Default log file.
 const QString DefaultLogFile = "/tmp/crash-reporter.log";
@@ -59,25 +59,25 @@ const QString DefaultLogFile = "/tmp/crash-reporter.log";
 const QString DaemonServiceName = "com.nokia.CrashReporter.Daemon";
 
 //! Daemon object path.
-const QString DaemonObjectPath =  "/com/nokia/crashreporter/daemon";
+const QString DaemonObjectPath = "/com/nokia/crashreporter/daemon";
 
 //! Auto uploader service name
 const QString AutoUploaderServiceName = "com.nokia.CrashReporter.AutoUploader";
 
 //! Auto uploader object path.
-const QString AutoUploaderObjectPath =  "/com/nokia/crashreporter/autouploader";
+const QString AutoUploaderObjectPath = "/com/nokia/crashreporter/autouploader";
 #else
 //! Daemon service name
 const QString DaemonServiceName = "com.nokia.CrashReporter.Daemon.Ut";
 
 //! Daemon object path.
-const QString DaemonObjectPath =  "/com/nokia/crashreporter/daemon/ut";
+const QString DaemonObjectPath = "/com/nokia/crashreporter/daemon/ut";
 
 //! Auto uploader service name
 const QString AutoUploaderServiceName = "com.nokia.CrashReporter.AutoUploader.Ut";
 
 //! Auto uploader object path.
-const QString AutoUploaderObjectPath =  "/com/nokia/crashreporter/autouploader/ut";
+const QString AutoUploaderObjectPath = "/com/nokia/crashreporter/autouploader/ut";
 #endif // CREPORTER_UNIT_TEST
 
 //! Crash Reporter daemon binary name.

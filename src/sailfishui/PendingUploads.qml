@@ -113,6 +113,7 @@ Page {
 
                 Label {
                     id: appLabel
+
                     anchors {
                         verticalCenter: parent.verticalCenter
                         verticalCenterOffset: crashDetails.visible ? -implicitHeight/2 : 0
@@ -125,6 +126,7 @@ Page {
                 }
                 Label {
                     id: dateLabel
+
                     anchors {
                         right: parent.right
                         verticalCenter: appLabel.verticalCenter
@@ -135,6 +137,7 @@ Page {
                 }
                 Row {
                     id: crashDetails
+
                     visible: Utils.reportIncludesCrash(model.application)
 
                     anchors.top: appLabel.bottom

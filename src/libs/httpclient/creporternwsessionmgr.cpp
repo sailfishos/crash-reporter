@@ -72,8 +72,8 @@ QUsbModed &CReporterNwSessionMgrPrivate::usbModed()
 
 bool CReporterNwSessionMgrPrivate::connectionIsActive()
 {
-    QNetworkConfiguration config =
-        CReporterNwSessionMgrPrivate::networkManager().defaultConfiguration();
+    QNetworkConfiguration config
+        = CReporterNwSessionMgrPrivate::networkManager().defaultConfiguration();
 
     return ((config.state() & QNetworkConfiguration::Active) == QNetworkConfiguration::Active);
 }
@@ -88,29 +88,27 @@ CReporterNwSessionMgr::CReporterNwSessionMgr(QObject *parent)
       d_ptr(new CReporterNwSessionMgrPrivate())
 {
     Q_D(CReporterNwSessionMgr);
-    d->networkSession = 0;
+    d->networkSession = nullptr;
 }
 
 CReporterNwSessionMgr::~CReporterNwSessionMgr()
 {
     Q_D(CReporterNwSessionMgr);
     delete d->networkSession;
-    d->networkSession = 0;
+    d->networkSession = nullptr;
     delete d_ptr;
-    d_ptr = 0;
+    d_ptr = nullptr;
 }
 
 bool CReporterNwSessionMgr::opened() const
 {
     Q_D(const CReporterNwSessionMgr);
 
-    if (d->networkSession == 0) {
-        return false;
-    } else if (d->networkSession->isOpen()) {
-        return true;
-    } else {
+    if (d->networkSession == nullptr) {
         return false;
     }
+
+    return d->networkSession->isOpen();
 }
 
 bool CReporterNwSessionMgr::canUseNetworkConnection()
@@ -137,23 +135,23 @@ bool CReporterNwSessionMgr::canUseNetworkConnection()
     qCDebug(cr) << "Default configuration:" << config.name();
 #endif
 
-    return (config.bearerType() == QNetworkConfiguration::BearerWLAN) ||
-           (config.bearerType() == QNetworkConfiguration::BearerEthernet) ||
-           (!CReporterNwSessionMgrPrivate::connectionIsActive() &&
-            CReporterNwSessionMgrPrivate::developerModeIsActive());
+    return (config.bearerType() == QNetworkConfiguration::BearerWLAN)
+           || (config.bearerType() == QNetworkConfiguration::BearerEthernet)
+           || (!CReporterNwSessionMgrPrivate::connectionIsActive()
+               && CReporterNwSessionMgrPrivate::developerModeIsActive());
 }
 
 bool CReporterNwSessionMgr::open()
 {
     Q_D(CReporterNwSessionMgr);
 
-    if (d->networkSession == 0) {
+    if (d->networkSession == nullptr) {
         /* Device USB network might not be reported by a configuration manager.
          * If we detect the default connection is inactive, try to bypass
          * the manager and go on without QNetworkSession. If the  cable is
          * plugged in, connection has still a chance to succeed. */
-        if (!CReporterNwSessionMgrPrivate::connectionIsActive() &&
-                CReporterNwSessionMgrPrivate::developerModeIsActive()) {
+        if (!CReporterNwSessionMgrPrivate::connectionIsActive()
+            && CReporterNwSessionMgrPrivate::developerModeIsActive()) {
             qCDebug(cr) << "No active connection is available. "
                         "Going on, there still might be USB cable connected...";
             return true;
@@ -188,7 +186,7 @@ void CReporterNwSessionMgr::close()
 {
     Q_D(CReporterNwSessionMgr);
 
-    if (d->networkSession != 0) {
+    if (d->networkSession) {
         qCDebug(cr) << "Close network session.";
         d->networkSession->close();
     }
@@ -198,7 +196,7 @@ void CReporterNwSessionMgr::stop()
 {
     Q_D(CReporterNwSessionMgr);
 
-    if (d->networkSession != 0) {
+    if (d->networkSession) {
         qCDebug(cr) << "Stop network session.";
         d->networkSession->stop();
     }
@@ -209,7 +207,7 @@ void CReporterNwSessionMgr::networkError(QNetworkSession::SessionError error)
     Q_D(CReporterNwSessionMgr);
     Q_UNUSED(error);
 
-    if (d->networkSession == 0) {
+    if (d->networkSession == nullptr) {
         return;
     }
 
@@ -246,7 +244,7 @@ void CReporterNwSessionMgr::networkStateChanged(QNetworkSession::State state)
         qCDebug(cr) << text << "Disconnected";
         emit sessionDisconnected();
         d->networkSession->deleteLater();
-        d->networkSession = 0;
+        d->networkSession = nullptr;
         break;
     case QNetworkSession::Roaming:
         qCDebug(cr) << text << "Roaming";

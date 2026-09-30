@@ -179,7 +179,7 @@ bool CReporterUtils::appendToLzo(const QString &text, const QString &filePath)
 QString CReporterUtils::deviceUid()
 {
 #ifndef CREPORTER_UNIT_TEST
-    static OrgNemoSsuInterface *ssuProxy = 0;
+    static OrgNemoSsuInterface *ssuProxy = nullptr;
     if (!ssuProxy) {
         ssuProxy = new OrgNemoSsuInterface("org.nemo.ssu", "/org/nemo/ssu",
                                            QDBusConnection::systemBus(), qApp);
@@ -190,9 +190,9 @@ QString CReporterUtils::deviceUid()
     if (reply.isError()) {
         qCWarning(cr) << "DBus unavailable, UUID might be incorrect.";
         return DeviceInfo(true).deviceUid();
-    } else {
-        return reply.value();
     }
+
+    return reply.value();
 #else
     return "1234";
 #endif
@@ -234,21 +234,21 @@ bool CReporterUtils::shouldSavePower()
     }
 
     qCDebug(cr) << "Battery status:" << batteryStatus
-        << "level:" << batteryLevel
-        << "charger-state:" << chargerState;
+                << "level:" << batteryLevel
+                << "charger-state:" << chargerState;
 
-    if (batteryStatus == QLatin1String(MCE_BATTERY_STATUS_UNKNOWN))
+    if (batteryStatus == QLatin1String(MCE_BATTERY_STATUS_UNKNOWN)
+        || batteryStatus == QLatin1String(MCE_BATTERY_STATUS_FULL)) {
         return false;
+    }
 
-    if (batteryStatus == QLatin1String(MCE_BATTERY_STATUS_FULL)) {
-        return false;
-    } else if (chargerState != QLatin1String(MCE_CHARGER_STATE_OFF)) {
+    if (chargerState != QLatin1String(MCE_CHARGER_STATE_OFF)) {
         return settings->restrictWhenLowBattery()
             && batteryStatus != QLatin1String(MCE_BATTERY_STATUS_OK);
-    } else {
-        return settings->restrictWhenDischarging()
-            && batteryLevel < settings->dischargingThreshold();
     }
+
+    return settings->restrictWhenDischarging()
+           && batteryLevel < settings->dischargingThreshold();
 #else
     return false;
 #endif
@@ -256,14 +256,14 @@ bool CReporterUtils::shouldSavePower()
 
 bool CReporterUtils::reportIncludesCrash(const QString &fileName)
 {
-    return !(fileName.contains(CReporter::QuickFeedbackPrefix) ||
-             fileName.contains(CReporter::EndurancePackagePrefix) ||
-             fileName.contains(CReporter::PowerExcessPrefix) ||
-             fileName.contains(CReporter::OneshotFailurePrefix) ||
-             fileName.contains(CReporter::HWrebootPrefix) ||
-             fileName.contains(CReporter::HWSMPLPrefix) ||
-             fileName.contains(CReporter::OverheatShutdownPrefix) ||
-             fileName.contains(CReporter::JournalSpyPrefix));
+    return !(fileName.contains(CReporter::QuickFeedbackPrefix)
+             || fileName.contains(CReporter::EndurancePackagePrefix)
+             || fileName.contains(CReporter::PowerExcessPrefix)
+             || fileName.contains(CReporter::OneshotFailurePrefix)
+             || fileName.contains(CReporter::HWrebootPrefix)
+             || fileName.contains(CReporter::HWSMPLPrefix)
+             || fileName.contains(CReporter::OverheatShutdownPrefix)
+             || fileName.contains(CReporter::JournalSpyPrefix));
 }
 
 bool CReporterUtils::notifyAutoUploader(const QStringList &filesToUpload,
@@ -296,7 +296,7 @@ QProcess *CReporterUtils::invokeLogCollection(const QString &label)
                           QStringList() << label);
     if (!richCoreHelper->waitForStarted()) {
         qCWarning(cr) << "Problem invoking rich-core-dumper.";
-        return 0;
+        return nullptr;
     }
 
     typedef void (QProcess::*FinishedSignal)(int, QProcess::ExitStatus);

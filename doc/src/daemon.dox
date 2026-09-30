@@ -47,7 +47,7 @@
     based on /proc/sys/kernel/core_pattern.
     @li rich-core-dumper produces rich core-dump in /home/user/MyDocs/core-dumps.
     @li @ref crash-reporter-daemon detects that content of core-dump directory has changed. Signal received from 
-    <a href="http://doc.trolltech.com/4.6/qfilesystemwatcher.html">QFileSystemWatcher</a>.
+    QFileSystemWatcher.
     @li If new rich-core dump is found, @crash-reporter-ui is launched via D-Bus (CReporterDialogServerProxy::requestDialog).
 
     <hr/>

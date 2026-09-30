@@ -52,7 +52,7 @@ CReporterSavedStatePrivate::CReporterSavedStatePrivate(CReporterSavedState *q)
 
 int CReporterSavedStatePrivate::intValue(const QString &key, const QVariant &defaultValue) const
 {
-    const Q_Q(CReporterSavedState);
+    Q_Q(const CReporterSavedState);
 
     bool ok;
     int result = q->value(key, defaultValue).toInt(&ok);
@@ -79,10 +79,8 @@ CReporterSavedState *CReporterSavedState::instance()
 
 void CReporterSavedState::freeSingleton()
 {
-    if (_instance) {
-        delete _instance;
-        _instance = 0;
-    }
+    delete _instance;
+    _instance = nullptr;
 }
 
 CReporterSavedState::~CReporterSavedState()
@@ -91,7 +89,7 @@ CReporterSavedState::~CReporterSavedState()
 
 quint32 CReporterSavedState::crashNotificationId() const
 {
-    const Q_D(CReporterSavedState);
+    Q_D(const CReporterSavedState);
 
     return d->intValue(SavedState::CrashNotificationId, 0);
 }
@@ -105,7 +103,7 @@ void CReporterSavedState::setCrashNotificationId(quint32 id)
 
 quint32 CReporterSavedState::storageUsageNotificationId() const
 {
-    const Q_D(CReporterSavedState);
+    Q_D(const CReporterSavedState);
 
     return d->intValue(SavedState::StorageUsageNotificationId, 0);
 }
@@ -119,7 +117,7 @@ void CReporterSavedState::setStorageUsageNotificationId(quint32 id)
 
 quint32 CReporterSavedState::uploadSuccessNotificationId() const
 {
-    const Q_D(CReporterSavedState);
+    Q_D(const CReporterSavedState);
 
     return d->intValue(SavedState::UploadSuccessNotificationId, 0);
 }
@@ -133,7 +131,7 @@ void CReporterSavedState::setUploadSuccessNotificationId(quint32 id)
 
 quint32 CReporterSavedState::uploadFailedNotificationId() const
 {
-    const Q_D(CReporterSavedState);
+    Q_D(const CReporterSavedState);
 
     return d->intValue(SavedState::UploadFailedNotificationId, 0);
 }
@@ -147,7 +145,7 @@ void CReporterSavedState::setUploadFailedNotificationId(quint32 id)
 
 int CReporterSavedState::uploadSuccessCount() const
 {
-    const Q_D(CReporterSavedState);
+    Q_D(const CReporterSavedState);
 
     return d->intValue(SavedState::UploadSuccessCount, 0);
 }
